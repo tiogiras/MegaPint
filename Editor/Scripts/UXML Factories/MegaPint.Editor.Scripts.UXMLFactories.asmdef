@@ -1,9 +1,7 @@
 {
-    "name": "MegaPint.Editor.Scripts",
+    "name": "MegaPint.Editor.Scripts.UXMLFactories",
     "rootNamespace": "",
-    "references": [
-        "GUID:d0e41fcd8435bf943b44438ce8611bbf"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

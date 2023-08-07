@@ -1,35 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Editor.Scripts.Base
+namespace Editor.Scripts
 {
     [Serializable]
     public class MegaPintSettingsBase
     {
         public string name;
         
-        
-        
-        public MegaPintSerializableDictionary<string, object> ObjectValues;
-        public Dictionary<string, string> StringValues;
-        public Dictionary<string, float> FloatValues;
-        public Dictionary<string, bool> BoolValues;
-        public Dictionary<string, int> IntValues;
+        public MegaPintSerializableDictionary<string, object> objectValues;
+        public MegaPintSerializableDictionary<string, string> stringValues;
+        public MegaPintSerializableDictionary<string, float> floatValues;
+        public MegaPintSerializableDictionary<string, bool> boolValues;
+        public MegaPintSerializableDictionary<string, int> intValues;
 
         public MegaPintSettingsBase(string name)
         {
             this.name = name;
-            ObjectValues = new Dictionary<string, object>();
-            StringValues = new Dictionary<string, string>();
-            FloatValues = new Dictionary<string, float>();
-            BoolValues = new Dictionary<string, bool>();
-            IntValues = new Dictionary<string, int>();
+            objectValues = new MegaPintSerializableDictionary<string, object>();
+            stringValues = new MegaPintSerializableDictionary<string, string>();
+            floatValues = new MegaPintSerializableDictionary<string, float>();
+            boolValues = new MegaPintSerializableDictionary<string, bool>();
+            intValues = new MegaPintSerializableDictionary<string, int>();
         }
 
         public object GetValue(string key, object defaultValue)
         {
-            ObjectValues ??= new Dictionary<string, object>();
-            if (ObjectValues.TryGetValue(key, out var value))
+            objectValues ??= new MegaPintSerializableDictionary<string, object>();
+            if (objectValues.TryGetValue(key, out var value))
                 return value;
             
             SetValue(key, defaultValue);
@@ -38,8 +35,8 @@ namespace Editor.Scripts.Base
 
         public string GetValue(string key, string defaultValue)
         {
-            StringValues ??= new Dictionary<string, string>();
-            if (StringValues.TryGetValue(key, out var value))
+            stringValues ??= new MegaPintSerializableDictionary<string, string>();
+            if (stringValues.TryGetValue(key, out var value))
                 return value;
             
             SetValue(key, defaultValue);
@@ -48,8 +45,8 @@ namespace Editor.Scripts.Base
         
         public float GetValue(string key, float defaultValue)
         {
-            FloatValues ??= new Dictionary<string, float>();
-            if (FloatValues.TryGetValue(key, out var value))
+            floatValues ??= new MegaPintSerializableDictionary<string, float>();
+            if (floatValues.TryGetValue(key, out var value))
                 return value;
             
             SetValue(key, defaultValue);
@@ -58,8 +55,8 @@ namespace Editor.Scripts.Base
         
         public bool GetValue(string key, bool defaultValue)
         {
-            BoolValues ??= new Dictionary<string, bool>();
-            if (BoolValues.TryGetValue(key, out var value))
+            boolValues ??= new MegaPintSerializableDictionary<string, bool>();
+            if (boolValues.TryGetValue(key, out var value))
                 return value;
             
             SetValue(key, defaultValue);
@@ -68,8 +65,8 @@ namespace Editor.Scripts.Base
         
         public int GetValue(string key, int defaultValue)
         {
-            IntValues ??= new Dictionary<string, int>();
-            if (IntValues.TryGetValue(key, out var value))
+            intValues ??= new MegaPintSerializableDictionary<string, int>();
+            if (intValues.TryGetValue(key, out var value))
                 return value;
             
             SetValue(key, defaultValue);
@@ -78,32 +75,32 @@ namespace Editor.Scripts.Base
         
         public void SetValue(string key, object value)
         {
-            ObjectValues ??= new Dictionary<string, object>();
-            ObjectValues[key] = value;
+            objectValues ??= new MegaPintSerializableDictionary<string, object>();
+            objectValues.SetValue(key, value);
         }
         
         public void SetValue(string key, string value)
         {
-            StringValues ??= new Dictionary<string, string>();
-            StringValues[key] = value;
+            stringValues ??= new MegaPintSerializableDictionary<string, string>();
+            stringValues.SetValue(key, value);
         }
         
         public void SetValue(string key, float value)
         {
-            FloatValues ??= new Dictionary<string, float>();
-            FloatValues[key] = value;
+            floatValues ??= new MegaPintSerializableDictionary<string, float>();
+            floatValues.SetValue(key, value);
         }
         
         public void SetValue(string key, bool value)
         {
-            BoolValues ??= new Dictionary<string, bool>();
-            BoolValues[key] = value;
+            boolValues ??= new MegaPintSerializableDictionary<string, bool>();
+            boolValues.SetValue(key, value);
         }
         
         public void SetValue(string key, int value)
         {
-            IntValues ??= new Dictionary<string, int>();
-            IntValues[key] = value;
+            intValues ??= new MegaPintSerializableDictionary<string, int>();
+            intValues.SetValue(key, value);
         }
     }
 }
