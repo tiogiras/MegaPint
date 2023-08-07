@@ -9,6 +9,7 @@ namespace Editor.Scripts
         public class MegaPintPackageData
         {
             public PackageKey PackageKey;
+            public string PackageName;
             public string PackageNiceName;
             public string GitUrl;
             public string Version;
@@ -25,6 +26,7 @@ namespace Editor.Scripts
             new MegaPintPackageData
             {
                 PackageKey = PackageKey.AutoSave,
+                PackageName = "com.tiogiras.megapint-autosave",
                 PackageNiceName = "Scene-AutoSave",
                 GitUrl = "https://github.com/tiogiras/MegaPint-AutoSave.git",
                 Version = "1.0.0",

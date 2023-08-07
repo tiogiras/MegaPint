@@ -64,30 +64,55 @@ namespace Editor.Scripts
             return request.Result.Where(packageInfo => packageInfo.name.ToLower().Contains("megapint")).ToList();
         }
 
-        public class CachedPackageProperties
+        public class CachedPackages
         {
-            private List<bool> _correctVersions = new();
+            private readonly List<PackageCache> _packages = new ();
 
-            public CachedPackageProperties()
-            {
-                Initialize();
-            }
+            public CachedPackages(Action action) => Initialize(action);
 
-            private async void Initialize()
+            private async void Initialize(Action action)
             {
+                var allPackages = MegaPintPackagesData.Packages;
                 var installedPackages = await GetInstalledPackages();
+                var installedPackagesNames = installedPackages.Select(installedPackage => installedPackage.name).ToList();
 
-                foreach (var installedPackage in installedPackages)
+                foreach (var package in allPackages)
                 {
-                    Debug.Log(installedPackage.name);
+                    var installed = installedPackagesNames.Contains(package.PackageName);
+                    var newestVersion = false;
+
+                    if (installed)
+                    {
+                        var index = installedPackagesNames.IndexOf(package.PackageName);
+                        newestVersion = installedPackages[index].version == package.Version;
+                    }
+                    
+                    _packages.Add(new PackageCache
+                    {
+                        Key = package.PackageKey,
+                        Installed = installed,
+                        NewestVersion = newestVersion
+                    });
                 }
+
+                action?.Invoke();
             }
 
-            public struct Properties
+            public struct PackageCache
             {
+                public MegaPintPackagesData.PackageKey Key;
                 public bool Installed;
                 public bool NewestVersion;
             }
+
+            public bool IsInstalled(MegaPintPackagesData.PackageKey key) =>
+                _packages.First(package => package.Key == key).Installed;
+
+            public bool NeedsUpdate(MegaPintPackagesData.PackageKey key) =>
+                !_packages.First(package => package.Key == key).NewestVersion;
+
+            public List<MegaPintPackagesData.MegaPintPackageData> ToDisplay() =>
+                _packages.Select(package => MegaPintPackagesData.PackageData(package.Key)).ToList();
         }
     }
 }

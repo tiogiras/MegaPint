@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Editor.Scripts.Base;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -21,6 +22,7 @@ namespace Editor.Scripts
         private Label _unityVersion;
         private Label _megaPintVersion;
 
+        private MegaPintPackageManager.CachedPackages _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
         private MegaPintPackagesData.MegaPintPackageData _selectedPackage;
 
@@ -52,17 +54,15 @@ namespace Editor.Scripts
 
             _list.onSelectedIndicesChange += _ => UpdateRightPane();
 
-            var cache = new MegaPintPackageManager.CachedPackageProperties();
-            _displayedPackages = MegaPintPackagesData.Packages;
-            _list.itemsSource = _displayedPackages;
-
             _rightPane = content.Q<GroupBox>("RightPane");
             _packageName = _rightPane.Q<Label>("PackageName");
             _lastUpdate = _rightPane.Q<Label>("LastUpdate");
             _unityVersion = _rightPane.Q<Label>("UnityVersion");
             _megaPintVersion = _rightPane.Q<Label>("MegaPintVersion");
-
+            
             UpdateRightPane();
+
+            InitializeList();
 
             root.Add(content);
         }
@@ -82,6 +82,8 @@ namespace Editor.Scripts
         {
             element.Q<Label>("PackageName").text = _displayedPackages[index].PackageNiceName;
             element.Q<Label>("Version").text = _displayedPackages[index].Version;
+            //TODO Apply color to version
+            //TODO gray out when already installed
         }
 
         private void UpdateRightPane()
@@ -102,6 +104,27 @@ namespace Editor.Scripts
             _lastUpdate.text = package.LastUpdate;
             _unityVersion.text = package.UnityVersion;
             _megaPintVersion.text = package.MegaPintVersion;
+            
+            // TODO display of buttons based on installed and correct version from cache
+            // TODO button functionality
+        }
+        
+        private void InitializeList()
+        {
+            _allPackages = new MegaPintPackageManager.CachedPackages(() =>
+            {
+                SetDisplayedPackages("");
+            });
+        }
+
+        private void SetDisplayedPackages(string searchString)
+        {
+            _displayedPackages = searchString.Equals("") ? 
+                _allPackages.ToDisplay() :
+                _allPackages.ToDisplay().Where(package => package.PackageNiceName.StartsWith(searchString)).ToList();
+            
+            _list.itemsSource = _displayedPackages;
+            _list.RefreshItems();
         }
     }
 }
