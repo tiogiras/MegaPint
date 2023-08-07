@@ -35,9 +35,9 @@
                     </ui:GroupBox>
                 </ui:GroupBox>
                 <ui:GroupBox style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row-reverse;">
-                    <ui:Button text="Import" display-tooltip-when-elided="true" name="BTN_Import" class="megapint-button" />
-                    <ui:Button text="Remove" display-tooltip-when-elided="true" name="BTN_Remove" class="megapint-button" />
-                    <ui:Button text="Update" display-tooltip-when-elided="true" name="BTN_Update" class="megapint-button" />
+                    <ui:Button text="Import" display-tooltip-when-elided="true" name="BTN_Import" class="megapint-button" style="height: 15px;" />
+                    <ui:Button text="Remove" display-tooltip-when-elided="true" name="BTN_Remove" class="megapint-button" style="height: 15px;" />
+                    <ui:Button text="Update" display-tooltip-when-elided="true" name="BTN_Update" class="megapint-button" style="height: 15px;" />
                 </ui:GroupBox>
             </ui:GroupBox>
         </ui:GroupBox>

@@ -33,12 +33,24 @@ namespace Editor.Scripts
                 LastUpdate = "07.08.2023",
                 UnityVersion = "2021.3.20f1 or higher",
                 MegaPintVersion = "1.0.0 or higher"
+            },
+            new MegaPintPackageData
+            {
+                PackageKey = PackageKey.Test,
+                PackageName = "com.tiogiras.test",
+                PackageNiceName = "Test",
+                GitUrl = "",
+                Version = "1.0.0",
+                LastUpdate = "07.08.2023",
+                UnityVersion = "2021.3.20f1 or higher",
+                MegaPintVersion = "1.0.0 or higher"
             }
         };
 
         public enum PackageKey
         {
-            AutoSave
+            AutoSave,
+            Test
         }
     }
 }

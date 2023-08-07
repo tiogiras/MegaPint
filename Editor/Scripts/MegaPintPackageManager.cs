@@ -105,7 +105,7 @@ namespace Editor.Scripts
                 public bool NewestVersion;
             }
 
-            public bool IsInstalled(MegaPintPackagesData.PackageKey key) =>
+            public bool IsImported(MegaPintPackagesData.PackageKey key) =>
                 _packages.First(package => package.Key == key).Installed;
 
             public bool NeedsUpdate(MegaPintPackagesData.PackageKey key) =>
