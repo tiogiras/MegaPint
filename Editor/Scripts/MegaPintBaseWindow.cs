@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using Editor.Scripts.Base;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -6,42 +8,42 @@ namespace Editor.Scripts
 {
     public class MegaPintBaseWindow : MegaPintEditorWindowBase
     {
-        private const string BasePath = "User Interface/MegaPintBaseWindow";
+        /// <summary> Loaded reference of the uxml </summary>
+        private VisualTreeAsset _baseWindow;
 
-        private static MegaPintBaseWindow _instance;
-        private static VisualTreeAsset _baseWindow;
+        #region Overrides
 
-        [MenuItem("MegaPint/Open")]
-        private static void ShowWindow()
+        protected override string BasePath() => "User Interface/MegaPintBaseWindow";
+        
+        public override MegaPintEditorWindowBase ShowWindow()
         {
-            if (!LoadResourceContent())
-                return;
-
-            _instance ??= CreateInstance<MegaPintBaseWindow>();
-            _instance.titleContent.text = "MegaPint";
-            _instance.Show();
+            titleContent.text = "MegaPint";
+            return this;
         }
 
-        private void OnDestroy()
+        protected override void CreateGUI()
         {
-            if (_instance == this)
-                _instance = null;
-        }
+            base.CreateGUI();
 
-        private static bool LoadResourceContent()
-        {
-            Debug.Log("loading...");
-            _baseWindow = Resources.Load<VisualTreeAsset>(BasePath);
-            return _baseWindow != null;
-        }
-
-        private void CreateGUI()
-        {
             var root = rootVisualElement;
 
             VisualElement content = _baseWindow.Instantiate();
 
             root.Add(content);
         }
+
+        protected override bool LoadResources()
+        {
+            _baseWindow = Resources.Load<VisualTreeAsset>(BasePath());
+            return _baseWindow != null;
+        }
+
+        protected override void LoadSettings() { }
+
+        #endregion
+
+        [MenuItem("MegaPint/Open")]
+        public static void Open() => GetWindow<MegaPintBaseWindow>().ShowWindow();
     }
 }
+#endif

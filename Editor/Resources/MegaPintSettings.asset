@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: effa5197b25d4b6c8f48ed3c4c36ff09, type: 3}
+  m_Name: MegaPintSettings
+  m_EditorClassIdentifier: 
+  _settings:
+  - name: MegaPint.AutoSave
+    objectValues:
+      entries: []
+    stringValues:
+      entries: []
+    floatValues:
+      entries: []
+    boolValues:
+      entries:
+      - key: warning
+        value: 1
+    intValues:
+      entries:
+      - key: interval
+        value: 20
+      - key: saveMode
+        value: 0
