@@ -52,6 +52,7 @@ namespace Editor.Scripts
 
             _list.onSelectedIndicesChange += _ => UpdateRightPane();
 
+            var cache = new MegaPintPackageManager.CachedPackageProperties();
             _displayedPackages = MegaPintPackagesData.Packages;
             _list.itemsSource = _displayedPackages;
 
