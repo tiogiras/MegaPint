@@ -29,6 +29,8 @@ namespace Editor.Scripts
 
             VisualElement content = _baseWindow.Instantiate();
 
+            content.Q<Button>("OpenImporter").clicked += OpenImporter;
+
             root.Add(content);
         }
 
@@ -44,6 +46,11 @@ namespace Editor.Scripts
 
         [MenuItem("MegaPint/Open")]
         public static void Open() => GetWindow<MegaPintBaseWindow>().ShowWindow();
+
+        private void OpenImporter()
+        {
+            GetWindow<MegaPintImportPackageWindow>(true).ShowWindow();
+        }
     }
 }
 #endif

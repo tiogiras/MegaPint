@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=2f2b50e0e132e3a4989e6dbb646711fa&amp;type=3#MegaPint" />
+    <ui:GroupBox style="margin-left: 3px; margin-right: 3px; margin-top: 2px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-bottom: 2px; flex-direction: row; justify-content: space-between; align-items: center;">
+        <ui:Label text="Package Name" display-tooltip-when-elided="true" name="PackageName" style="-unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); white-space: normal;" />
+        <ui:Label text="1.0.0" display-tooltip-when-elided="true" name="Version" style="-unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); white-space: nowrap;" />
+    </ui:GroupBox>
+</ui:UXML>
