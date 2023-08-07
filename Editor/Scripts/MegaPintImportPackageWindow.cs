@@ -161,17 +161,49 @@ namespace Editor.Scripts
         
         private void OnImport()
         {
+            MegaPintPackageManager.OnSuccess += OnImportSuccess;
+            MegaPintPackageManager.OnFailure += OnFailure;
             MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].GitUrl);
         }
-        
+
+        private static void OnImportSuccess()
+        {
+            MegaPintPackageManager.OnSuccess -= OnImportSuccess;
+            MegaPintPackageManager.OnFailure -= OnFailure;
+            
+            Debug.Log("Successfully imported package");
+        }
+
         private void OnRemove()
         {
+            MegaPintPackageManager.OnSuccess += OnRemoveSuccess;
+            MegaPintPackageManager.OnFailure += OnFailure;
             MegaPintPackageManager.Remove(_displayedPackages[_list.selectedIndex].GitUrl);
         }
-        
+
+        private static void OnRemoveSuccess()
+        {
+            MegaPintPackageManager.OnSuccess -= OnRemoveSuccess;
+            MegaPintPackageManager.OnFailure -= OnFailure;
+            
+            Debug.Log("Successfully removed package");
+        }
+
         private void OnUpdate()
         {
+            MegaPintPackageManager.OnSuccess += OnUpdateSuccess;
+            MegaPintPackageManager.OnFailure += OnFailure;
             MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].GitUrl);
         }
+
+        private static void OnUpdateSuccess()
+        {
+            MegaPintPackageManager.OnSuccess -= OnUpdateSuccess;
+            MegaPintPackageManager.OnFailure -= OnFailure;
+            
+            Debug.Log("Successfully updated package");
+        }
+
+        private static void OnFailure(string error) => Debug.LogError(error);
     }
 }
