@@ -1,4 +1,5 @@
-﻿using Editor.Scripts.Base;
+﻿#if UNITY_EDITOR
+using Editor.Scripts.Base;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,7 +8,6 @@ namespace Editor.Scripts
 {
     public class MegaPintBaseWindow : MegaPintEditorWindowBase
     {
-        /// <category> Loaded references </category>
         /// <summary> Loaded reference of the uxml </summary>
         private VisualTreeAsset _baseWindow;
 
@@ -44,8 +44,6 @@ namespace Editor.Scripts
 
         [MenuItem("MegaPint/Open")]
         public static void Open() => GetWindow<MegaPintBaseWindow>().ShowWindow();
-
-        [MenuItem("MegaPint/Show")]
-        public static void Shwo() => Debug.Log(GetWindow<MegaPintBaseWindow>());
     }
 }
+#endif

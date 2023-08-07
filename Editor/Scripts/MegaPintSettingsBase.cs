@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 
 namespace Editor.Scripts
 {
@@ -104,3 +105,4 @@ namespace Editor.Scripts
         }
     }
 }
+#endif

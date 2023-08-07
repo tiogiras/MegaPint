@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 using UnityEditor;
 
@@ -12,7 +13,7 @@ namespace Editor.Scripts.Base
         {
             if (!LoadResources())
                 return;
-            
+
             LoadSettings();
             OnCreate?.Invoke(this);
         }
@@ -24,3 +25,4 @@ namespace Editor.Scripts.Base
         protected abstract void LoadSettings();
     }
 }
+#endif
