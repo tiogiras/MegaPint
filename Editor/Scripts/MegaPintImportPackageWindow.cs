@@ -108,7 +108,7 @@ namespace Editor.Scripts
             element.Q<Label>("PackageName").text = package.PackageNiceName;
             
             var version = element.Q<Label>("Version");
-            version.text = package.Version;
+            version.text = _allPackages.CurrentVersion(package.PackageKey);
 
             version.style.display = _allPackages.IsImported(package.PackageKey) ? DisplayStyle.Flex : DisplayStyle.None;
             version.style.color = _allPackages.NeedsUpdate(package.PackageKey) ? _wrongVersionColor : _normalColor;

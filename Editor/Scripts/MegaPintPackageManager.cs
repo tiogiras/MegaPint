@@ -92,18 +92,21 @@ namespace Editor.Scripts
                 {
                     var installed = installedPackagesNames.Contains(package.PackageName);
                     var newestVersion = false;
-
+                    var currentVersion = "";
+                    
                     if (installed)
                     {
                         var index = installedPackagesNames.IndexOf(package.PackageName);
                         newestVersion = installedPackages[index].version == package.Version;
+                        currentVersion = installedPackages[index].version;
                     }
-                    
+
                     _packages.Add(new PackageCache
                     {
                         Key = package.PackageKey,
                         Installed = installed,
-                        NewestVersion = newestVersion
+                        NewestVersion = newestVersion,
+                        CurrentVersion = currentVersion
                     });
                 }
 
@@ -115,6 +118,7 @@ namespace Editor.Scripts
                 public MegaPintPackagesData.PackageKey Key;
                 public bool Installed;
                 public bool NewestVersion;
+                public string CurrentVersion;
             }
 
             public bool IsImported(MegaPintPackagesData.PackageKey key) =>
@@ -125,6 +129,9 @@ namespace Editor.Scripts
 
             public List<MegaPintPackagesData.MegaPintPackageData> ToDisplay() =>
                 _packages.Select(package => MegaPintPackagesData.PackageData(package.Key)).ToList();
+
+            public string CurrentVersion(MegaPintPackagesData.PackageKey key) =>
+                _packages.First(package => package.Key == key).CurrentVersion;
         }
     }
 }
