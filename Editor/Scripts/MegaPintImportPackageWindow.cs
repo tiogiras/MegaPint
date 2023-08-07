@@ -166,12 +166,12 @@ namespace Editor.Scripts
         
         private void OnRemove()
         {
-            
+            MegaPintPackageManager.Remove(_displayedPackages[_list.selectedIndex].GitUrl);
         }
         
         private void OnUpdate()
         {
-            
+            MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].GitUrl);
         }
     }
 }

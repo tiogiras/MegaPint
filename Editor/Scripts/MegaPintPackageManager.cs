@@ -22,6 +22,18 @@ namespace Editor.Scripts
                     OnSuccess?.Invoke();
         }
 
+        public static async void Remove(string packageName)
+        {
+            var request = Client.Remove(packageName);
+            while (!request.IsCompleted)
+            {
+                await Task.Delay(RefreshRate);
+            }
+            
+            if (request.Status >= StatusCode.Failure)
+                OnFailure?.Invoke(request.Error.message);
+        }
+        
         private static async Task<bool> Add(string packageName)
         {
             var request = Client.Add(packageName);
