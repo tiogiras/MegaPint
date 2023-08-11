@@ -170,8 +170,6 @@ namespace Editor.Scripts
         {
             MegaPintPackageManager.OnSuccess -= OnImportSuccess;
             MegaPintPackageManager.OnFailure -= OnFailure;
-            
-            Debug.Log("Successfully imported package");
         }
 
         private void OnRemove()
@@ -185,8 +183,6 @@ namespace Editor.Scripts
         {
             MegaPintPackageManager.OnSuccess -= OnRemoveSuccess;
             MegaPintPackageManager.OnFailure -= OnFailure;
-            
-            Debug.Log("Successfully removed package");
         }
 
         private void OnUpdate()
@@ -200,8 +196,6 @@ namespace Editor.Scripts
         {
             MegaPintPackageManager.OnSuccess -= OnUpdateSuccess;
             MegaPintPackageManager.OnFailure -= OnFailure;
-            
-            Debug.Log("Successfully updated package");
         }
 
         private static void OnFailure(string error) => Debug.LogError(error);
