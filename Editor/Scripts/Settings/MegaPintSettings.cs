@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Editor.Scripts
+namespace Editor.Scripts.Settings
 {
     [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/SettingsData", order = 1)]
     public class MegaPintSettings : ScriptableObject

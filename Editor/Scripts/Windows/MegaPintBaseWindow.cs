@@ -1,10 +1,8 @@
 ﻿#if UNITY_EDITOR
-using Editor.Scripts.Base;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Editor.Scripts
+namespace Editor.Scripts.Windows
 {
     public class MegaPintBaseWindow : MegaPintEditorWindowBase
     {
@@ -43,14 +41,8 @@ namespace Editor.Scripts
         protected override void LoadSettings() { }
 
         #endregion
-
-        [MenuItem("MegaPint/Open")]
-        public static void Open() => GetWindow<MegaPintBaseWindow>().ShowWindow();
-
-        private void OpenImporter()
-        {
-            GetWindow<MegaPintImportPackageWindow>(true).ShowWindow();
-        }
+        
+        public static void OpenImporter() => GetWindow<MegaPintPackageManagerWindow>(true).ShowWindow();
     }
 }
 #endif

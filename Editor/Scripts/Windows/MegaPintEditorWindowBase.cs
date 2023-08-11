@@ -2,7 +2,7 @@
 using System;
 using UnityEditor;
 
-namespace Editor.Scripts.Base
+namespace Editor.Scripts.Windows
 {
     public abstract class MegaPintEditorWindowBase : EditorWindow
     {

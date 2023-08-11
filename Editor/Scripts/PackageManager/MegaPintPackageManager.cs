@@ -1,13 +1,14 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
 using Task = System.Threading.Tasks.Task;
 
-namespace Editor.Scripts
+namespace Editor.Scripts.PackageManager
 {
-    public class MegaPintPackageManager
+    public static class MegaPintPackageManager
     {
         private const int RefreshRate = 10;
 
@@ -16,9 +17,9 @@ namespace Editor.Scripts
 
         public static async void AddEmbedded(string packageUrl)
         {
-            if (await Add(packageUrl))
-                if (await Embed(packageUrl))
-                    OnSuccess?.Invoke();
+            if (!await Add(packageUrl)) return;
+            if (await Embed(packageUrl))
+                OnSuccess?.Invoke();
         }
 
         public static async void Remove(string packageName)
@@ -112,7 +113,7 @@ namespace Editor.Scripts
                 action?.Invoke();
             }
 
-            public struct PackageCache
+            private struct PackageCache
             {
                 public MegaPintPackagesData.PackageKey Key;
                 public bool Installed;
@@ -134,3 +135,4 @@ namespace Editor.Scripts
         }
     }
 }
+#endif

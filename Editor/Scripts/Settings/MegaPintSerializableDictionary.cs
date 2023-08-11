@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Editor.Scripts
+namespace Editor.Scripts.Settings
 {
     [Serializable]
     public class MegaPintSerializableDictionary<TKey, TValue>

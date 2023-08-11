@@ -1,12 +1,13 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
-using Editor.Scripts.Base;
+using Editor.Scripts.PackageManager;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Editor.Scripts
+namespace Editor.Scripts.Windows
 {
-    public class MegaPintImportPackageWindow : MegaPintEditorWindowBase
+    public class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
     {
         private const string ListItemTemplate = "User Interface/Import/MegaPintPackageItem";
         
@@ -21,6 +22,7 @@ namespace Editor.Scripts
         private GroupBox _rightPane;
         private ListView _list;
         private Label _packageName;
+        private Label _version;
         private Label _lastUpdate;
         private Label _unityVersion;
         private Label _megaPintVersion;
@@ -63,6 +65,7 @@ namespace Editor.Scripts
 
             _rightPane = content.Q<GroupBox>("RightPane");
             _packageName = _rightPane.Q<Label>("PackageName");
+            _version = _rightPane.Q<Label>("CurrentVersion");
             _lastUpdate = _rightPane.Q<Label>("LastUpdate");
             _unityVersion = _rightPane.Q<Label>("UnityVersion");
             _megaPintVersion = _rightPane.Q<Label>("MegaPintVersion");
@@ -129,6 +132,7 @@ namespace Editor.Scripts
             
             var package = _displayedPackages[index];
             _packageName.text = package.PackageNiceName;
+            _version.text = _allPackages.CurrentVersion(package.PackageKey);
             _lastUpdate.text = package.LastUpdate;
             _unityVersion.text = package.UnityVersion;
             _megaPintVersion.text = package.MegaPintVersion;
@@ -201,3 +205,4 @@ namespace Editor.Scripts
         private static void OnFailure(string error) => Debug.LogError(error);
     }
 }
+#endif
