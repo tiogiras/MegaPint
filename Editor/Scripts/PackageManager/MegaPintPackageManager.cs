@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
+using UnityEngine.UIElements;
 using Task = System.Threading.Tasks.Task;
 
 namespace Editor.Scripts.PackageManager
@@ -11,7 +13,10 @@ namespace Editor.Scripts.PackageManager
     public static class MegaPintPackageManager
     {
         private const int RefreshRate = 10;
+        private const int LoadingLabelRefreshRate = 50;
 
+        private static int _currentLoadingLabelProgress;
+        
         public static Action OnSuccess;
         public static Action<string> OnFailure;
 
@@ -62,12 +67,32 @@ namespace Editor.Scripts.PackageManager
             return request.Status == StatusCode.Success;
         }
 
-        private static async Task<List<PackageInfo>> GetInstalledPackages()
+        private static async Task<List<PackageInfo>> GetInstalledPackages(Label loadingLabel)
         {
             var request = Client.List();
             while (!request.IsCompleted)
             {
                 await Task.Delay(RefreshRate);
+
+                if (_currentLoadingLabelProgress >= LoadingLabelRefreshRate)
+                {
+                    _currentLoadingLabelProgress = 0;
+
+                    var pointCount = loadingLabel.text.Count(c => c == '.');
+                    var loadingText = new StringBuilder("Loading");
+
+                    if (pointCount == 3)
+                        pointCount = 0;
+
+                    for (var i = 0; i < pointCount + 1; i++)
+                    {
+                        loadingText.Append(".");
+                    }
+
+                    loadingLabel.text = loadingText.ToString();
+                }
+                else
+                    _currentLoadingLabelProgress += RefreshRate;
             }
             
             if (request.Status >= StatusCode.Failure)
@@ -80,12 +105,12 @@ namespace Editor.Scripts.PackageManager
         {
             private readonly List<PackageCache> _packages = new ();
 
-            public CachedPackages(Action action) => Initialize(action);
+            public CachedPackages(Label loadingLabel, Action action) => Initialize(loadingLabel, action);
 
-            private async void Initialize(Action action)
+            private async void Initialize(Label loadingLabel, Action action)
             {
                 var allPackages = MegaPintPackagesData.Packages;
-                var installedPackages = await GetInstalledPackages();
+                var installedPackages = await GetInstalledPackages(loadingLabel);
                 var installedPackagesNames = installedPackages.Select(installedPackage => installedPackage.name).ToList();
 
                 foreach (var package in allPackages)

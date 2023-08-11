@@ -16,9 +16,11 @@ namespace Editor.Scripts.Windows
         
         /// <summary> Loaded reference of the uxml </summary>
         private VisualTreeAsset _baseWindow;
-
         private VisualTreeAsset _listItem;
 
+        private ScrollView _packages;
+        private Label _loading;
+        
         private GroupBox _rightPane;
         private ListView _list;
         private Label _packageName;
@@ -62,6 +64,12 @@ namespace Editor.Scripts.Windows
             _list.unbindItem = (element, _) => element.Clear();
 
             _list.onSelectedIndicesChange += _ => UpdateRightPane();
+
+            _packages = content.Q<ScrollView>("Packages");
+            _loading = content.Q<Label>("Loading");
+            
+            _loading.style.display = DisplayStyle.Flex;
+            _packages.style.display = DisplayStyle.None;
 
             _rightPane = content.Q<GroupBox>("RightPane");
             _packageName = _rightPane.Q<Label>("PackageName");
@@ -147,7 +155,7 @@ namespace Editor.Scripts.Windows
         
         private void InitializeList()
         {
-            _allPackages = new MegaPintPackageManager.CachedPackages(() =>
+            _allPackages = new MegaPintPackageManager.CachedPackages(_loading, () =>
             {
                 SetDisplayedPackages("");
             });
@@ -155,6 +163,9 @@ namespace Editor.Scripts.Windows
 
         private void SetDisplayedPackages(string searchString)
         {
+            _loading.style.display = DisplayStyle.None;
+            _packages.style.display = DisplayStyle.Flex;
+            
             _displayedPackages = searchString.Equals("") ? 
                 _allPackages.ToDisplay() :
                 _allPackages.ToDisplay().Where(package => package.PackageNiceName.StartsWith(searchString)).ToList();
