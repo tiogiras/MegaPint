@@ -37,7 +37,7 @@ namespace Editor.Scripts.Windows
 
         #region Overrides
 
-        protected override string BasePath() => "User Interface/Import/MegaPintImportPackageWindow";
+        protected override string BasePath() => "User Interface/Import/MegaPintPackageManager";
 
         public override MegaPintEditorWindowBase ShowWindow()
         {
@@ -65,7 +65,7 @@ namespace Editor.Scripts.Windows
 
             _rightPane = content.Q<GroupBox>("RightPane");
             _packageName = _rightPane.Q<Label>("PackageName");
-            _version = _rightPane.Q<Label>("CurrentVersion");
+            _version = _rightPane.Q<Label>("NewestVersion");
             _lastUpdate = _rightPane.Q<Label>("LastUpdate");
             _unityVersion = _rightPane.Q<Label>("UnityVersion");
             _megaPintVersion = _rightPane.Q<Label>("MegaPintVersion");
@@ -132,7 +132,7 @@ namespace Editor.Scripts.Windows
             
             var package = _displayedPackages[index];
             _packageName.text = package.PackageNiceName;
-            _version.text = _allPackages.CurrentVersion(package.PackageKey);
+            _version.text = package.Version;
             _lastUpdate.text = package.LastUpdate;
             _unityVersion.text = package.UnityVersion;
             _megaPintVersion.text = package.MegaPintVersion;
