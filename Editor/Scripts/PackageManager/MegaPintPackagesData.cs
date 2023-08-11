@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +7,7 @@ namespace Editor.Scripts.PackageManager
 {
     public static class MegaPintPackagesData
     {
-        public class MegaPintPackageData
+        public class MegaPintPackageData : IComparable<MegaPintPackageData>
         {
             public PackageKey PackageKey;
             public string PackageName;
@@ -16,6 +17,11 @@ namespace Editor.Scripts.PackageManager
             public string LastUpdate;
             public string UnityVersion;
             public string MegaPintVersion;
+
+            public int CompareTo(MegaPintPackageData other)
+            {
+                return string.Compare(PackageNiceName, other.PackageNiceName, StringComparison.Ordinal);
+            }
         }
 
         public static MegaPintPackageData PackageData(PackageKey packageKey) => 
