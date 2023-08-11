@@ -178,7 +178,7 @@ namespace Editor.Scripts
         {
             MegaPintPackageManager.OnSuccess += OnRemoveSuccess;
             MegaPintPackageManager.OnFailure += OnFailure;
-            MegaPintPackageManager.Remove(_displayedPackages[_list.selectedIndex].GitUrl);
+            MegaPintPackageManager.Remove(_displayedPackages[_list.selectedIndex].PackageName);
         }
 
         private static void OnRemoveSuccess()

@@ -29,7 +29,7 @@ namespace Editor.Scripts
                 PackageName = "com.tiogiras.megapint-autosave",
                 PackageNiceName = "Scene-AutoSave",
                 GitUrl = "https://github.com/tiogiras/MegaPint-AutoSave.git",
-                Version = "1.0.1",
+                Version = "1.0.0",
                 LastUpdate = "07.08.2023",
                 UnityVersion = "2021.3.20f1 or higher",
                 MegaPintVersion = "1.0.0 or higher"

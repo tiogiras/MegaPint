@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
-using UnityEngine;
 using Task = System.Threading.Tasks.Task;
 
 namespace Editor.Scripts
@@ -15,10 +14,10 @@ namespace Editor.Scripts
         public static Action OnSuccess;
         public static Action<string> OnFailure;
 
-        public static async void AddEmbedded(string packageName)
+        public static async void AddEmbedded(string packageUrl)
         {
-            if (await Add(packageName))
-                if (await Embed(packageName))
+            if (await Add(packageUrl))
+                if (await Embed(packageUrl))
                     OnSuccess?.Invoke();
         }
 
@@ -34,9 +33,9 @@ namespace Editor.Scripts
                 OnFailure?.Invoke(request.Error.message);
         }
         
-        private static async Task<bool> Add(string packageName)
+        private static async Task<bool> Add(string packageUrl)
         {
-            var request = Client.Add(packageName);
+            var request = Client.Add(packageUrl);
             while (!request.IsCompleted)
             {
                 await Task.Delay(RefreshRate);
