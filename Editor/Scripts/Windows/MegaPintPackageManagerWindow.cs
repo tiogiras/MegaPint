@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Editor.Scripts.PackageManager;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -28,6 +29,8 @@ namespace Editor.Scripts.Windows
         private Label _lastUpdate;
         private Label _unityVersion;
         private Label _megaPintVersion;
+
+        private ToolbarSearchField _packageSearch;
 
         private Button _btnImport;
         private Button _btnRemove;
@@ -61,7 +64,7 @@ namespace Editor.Scripts.Windows
 
             _list.bindItem = UpdateItem;
 
-            _list.unbindItem = (element, _) => element.Clear();
+            _list.destroyItem = element => element.Clear();
 
             _list.onSelectedIndicesChange += _ => UpdateRightPane();
 
@@ -78,6 +81,10 @@ namespace Editor.Scripts.Windows
             _unityVersion = _rightPane.Q<Label>("UnityVersion");
             _megaPintVersion = _rightPane.Q<Label>("MegaPintVersion");
 
+            _packageSearch = content.Q<ToolbarSearchField>("PackageSearch");
+
+            _packageSearch.RegisterValueChangedCallback(OnSearchStringChanged);
+            
             _btnImport = _rightPane.Q<Button>("BTN_Import");
             _btnRemove = _rightPane.Q<Button>("BTN_Remove");
             _btnUpdate = _rightPane.Q<Button>("BTN_Update");
@@ -96,6 +103,8 @@ namespace Editor.Scripts.Windows
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            _packageSearch.UnregisterValueChangedCallback(OnSearchStringChanged);
+            
             _btnImport.clicked -= OnImport;
             _btnRemove.clicked -= OnRemove;
             _btnUpdate.clicked -= OnUpdate;
@@ -108,14 +117,12 @@ namespace Editor.Scripts.Windows
             return _baseWindow != null && _listItem != null;
         }
 
-        protected override void LoadSettings() { }
-
         #endregion
 
         private void UpdateItem(VisualElement element, int index)
         {
             var package = _displayedPackages[index];
-
+            
             element.Q<Label>("PackageName").text = package.PackageNiceName;
             
             var version = element.Q<Label>("Version");
@@ -153,11 +160,13 @@ namespace Editor.Scripts.Windows
                 : DisplayStyle.None;
         }
         
+        private void OnSearchStringChanged(ChangeEvent<string> evt) => SetDisplayedPackages(_packageSearch.value);
+        
         private void InitializeList()
         {
             _allPackages = new MegaPintPackageManager.CachedPackages(_loading, () =>
             {
-                SetDisplayedPackages("");
+                SetDisplayedPackages(_packageSearch.value);
             });
         }
 
@@ -168,8 +177,10 @@ namespace Editor.Scripts.Windows
             
             _displayedPackages = searchString.Equals("") ? 
                 _allPackages.ToDisplay() :
-                _allPackages.ToDisplay().Where(package => package.PackageNiceName.StartsWith(searchString)).ToList();
+                _allPackages.ToDisplay().Where(package => package.PackageNiceName.ToLower().Contains(searchString.ToLower())).ToList();
             
+            _displayedPackages.Sort();
+
             _list.itemsSource = _displayedPackages;
             _list.RefreshItems();
         }

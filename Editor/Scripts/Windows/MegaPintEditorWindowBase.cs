@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System;
+using Editor.Scripts.Settings;
 using UnityEditor;
 
 namespace Editor.Scripts.Windows
@@ -22,7 +23,8 @@ namespace Editor.Scripts.Windows
         protected abstract string BasePath();
         public abstract MegaPintEditorWindowBase ShowWindow();
         protected abstract bool LoadResources();
-        protected abstract void LoadSettings();
+
+        protected virtual bool LoadSettings() => MegaPintSettings.Exists();
     }
 }
 #endif
