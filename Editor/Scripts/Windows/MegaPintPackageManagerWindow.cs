@@ -92,6 +92,8 @@ namespace Editor.Scripts.Windows
             _btnImport.clicked += OnImport;
             _btnRemove.clicked += OnRemove;
             _btnUpdate.clicked += OnUpdate;
+
+            MegaPintPackageManager.CachedPackages.OnRefreshed += Refresh;
             
             UpdateRightPane();
 
@@ -103,6 +105,9 @@ namespace Editor.Scripts.Windows
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            
+            MegaPintPackageManager.CachedPackages.OnRefreshed -= Refresh;
+            
             _packageSearch.UnregisterValueChangedCallback(OnSearchStringChanged);
             
             _btnImport.clicked -= OnImport;
@@ -161,11 +166,18 @@ namespace Editor.Scripts.Windows
         }
         
         private void OnSearchStringChanged(ChangeEvent<string> evt) => SetDisplayedPackages(_packageSearch.value);
+
+        private void Refresh(MegaPintPackageManager.CachedPackages packages)
+        {
+            _allPackages = packages;
+            SetDisplayedPackages(_packageSearch.value);
+        }
         
         private void InitializeList()
         {
-            _allPackages = new MegaPintPackageManager.CachedPackages(_loading, () =>
+            MegaPintPackageManager.CachedPackages.AllPackages(_loading, packages =>
             {
+                _allPackages = packages;
                 SetDisplayedPackages(_packageSearch.value);
             });
         }

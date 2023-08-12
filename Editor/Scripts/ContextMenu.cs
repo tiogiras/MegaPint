@@ -1,7 +1,9 @@
 ﻿#if UNITY_EDITOR
+using Editor.Scripts.PackageManager;
 using Editor.Scripts.Settings;
 using Editor.Scripts.Windows;
 using UnityEditor;
+using UnityEngine;
 
 namespace Editor.Scripts
 {
