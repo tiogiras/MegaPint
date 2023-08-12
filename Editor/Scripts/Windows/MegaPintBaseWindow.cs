@@ -82,7 +82,8 @@ namespace Editor.Scripts.Windows
 
             _searchField = content.Q<ToolbarSearchField>("SearchField");
             _searchField.RegisterValueChangedCallback(SearchFieldChange);
-            
+
+            MegaPintPackageManager.OnSuccess += UpdatePackages;
             UpdatePackages();
             
             root.Add(content);
@@ -91,6 +92,8 @@ namespace Editor.Scripts.Windows
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            
+            MegaPintPackageManager.OnSuccess -= UpdatePackages;
             
             _searchField.UnregisterValueChangedCallback(SearchFieldChange);
             
@@ -112,13 +115,18 @@ namespace Editor.Scripts.Windows
         public static void OpenImporter() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true);
 
         private void SearchFieldChange(ChangeEvent<string> evt) => SetDisplayedPackages(_searchField.value);
-        
-        public void UpdatePackages()
+
+        private void UpdatePackages()
         {
-            _allPackages = new MegaPintPackageManager.CachedPackages(_loading, () =>
+            if (_allPackages == null)
             {
+                _allPackages = new MegaPintPackageManager.CachedPackages(_loading, () =>
+                {
+                    SetDisplayedPackages(_searchField.value);
+                });
+            }
+            else
                 SetDisplayedPackages(_searchField.value);
-            });
         }
         
         private void SetDisplayedPackages(string searchString)
@@ -139,13 +147,13 @@ namespace Editor.Scripts.Windows
 
         public void UpdateSettings()
         {
-            
+            SwitchState(1);
         }
 
         private void SwitchState(int page)
         {
             _packagesList.style.display = page == 0 ? DisplayStyle.Flex : DisplayStyle.None;
-            _packagesList.style.display = page == 1 ? DisplayStyle.Flex : DisplayStyle.None;
+            _settingsList.style.display = page == 1 ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }
 }
