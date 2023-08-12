@@ -37,12 +37,13 @@ namespace Editor.Scripts.Windows
             _baseWindow = Resources.Load<VisualTreeAsset>(BasePath());
             return _baseWindow != null;
         }
+        
 
         protected override void LoadSettings() { }
 
         #endregion
         
-        public static void OpenImporter() => GetWindow<MegaPintPackageManagerWindow>(true).ShowWindow();
+        public static void OpenImporter() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true);
     }
 }
 #endif

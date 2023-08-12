@@ -1,6 +1,8 @@
 #if UNITY_EDITOR
 using System;
+using Editor.Scripts.Settings;
 using UnityEditor;
+using UnityEngine;
 
 namespace Editor.Scripts.Windows
 {

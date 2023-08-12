@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
+using UnityEditor;
 
 namespace Editor.Scripts.Settings
 {
@@ -29,7 +30,7 @@ namespace Editor.Scripts.Settings
             objectValues ??= new MegaPintSerializableDictionary<string, object>();
             if (objectValues.TryGetValue(key, out var value))
                 return value;
-            
+
             SetValue(key, defaultValue);
             return defaultValue;
         }
@@ -39,7 +40,7 @@ namespace Editor.Scripts.Settings
             stringValues ??= new MegaPintSerializableDictionary<string, string>();
             if (stringValues.TryGetValue(key, out var value))
                 return value;
-            
+
             SetValue(key, defaultValue);
             return defaultValue;
         }
@@ -49,7 +50,7 @@ namespace Editor.Scripts.Settings
             floatValues ??= new MegaPintSerializableDictionary<string, float>();
             if (floatValues.TryGetValue(key, out var value))
                 return value;
-            
+
             SetValue(key, defaultValue);
             return defaultValue;
         }
@@ -59,7 +60,7 @@ namespace Editor.Scripts.Settings
             boolValues ??= new MegaPintSerializableDictionary<string, bool>();
             if (boolValues.TryGetValue(key, out var value))
                 return value;
-            
+
             SetValue(key, defaultValue);
             return defaultValue;
         }
@@ -69,7 +70,7 @@ namespace Editor.Scripts.Settings
             intValues ??= new MegaPintSerializableDictionary<string, int>();
             if (intValues.TryGetValue(key, out var value))
                 return value;
-            
+
             SetValue(key, defaultValue);
             return defaultValue;
         }
@@ -78,30 +79,40 @@ namespace Editor.Scripts.Settings
         {
             objectValues ??= new MegaPintSerializableDictionary<string, object>();
             objectValues.SetValue(key, value);
+            
+            EditorUtility.SetDirty(MegaPintSettings.Instance);
         }
         
         public void SetValue(string key, string value)
         {
             stringValues ??= new MegaPintSerializableDictionary<string, string>();
             stringValues.SetValue(key, value);
+            
+            EditorUtility.SetDirty(MegaPintSettings.Instance);
         }
         
         public void SetValue(string key, float value)
         {
             floatValues ??= new MegaPintSerializableDictionary<string, float>();
             floatValues.SetValue(key, value);
+            
+            EditorUtility.SetDirty(MegaPintSettings.Instance);
         }
         
         public void SetValue(string key, bool value)
         {
             boolValues ??= new MegaPintSerializableDictionary<string, bool>();
             boolValues.SetValue(key, value);
+            
+            EditorUtility.SetDirty(MegaPintSettings.Instance);
         }
         
         public void SetValue(string key, int value)
         {
             intValues ??= new MegaPintSerializableDictionary<string, int>();
             intValues.SetValue(key, value);
+            
+            EditorUtility.SetDirty(MegaPintSettings.Instance);
         }
     }
 }
