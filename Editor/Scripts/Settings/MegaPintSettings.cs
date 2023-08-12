@@ -11,21 +11,21 @@ namespace Editor.Scripts.Settings
     {
         public static MegaPintSettings Instance;
         
-        private List<MegaPintSettingsBase> _settings;
+        [SerializeField] private List<MegaPintSettingsBase> settings;
 
         private void AddSetting(MegaPintSettingsBase setting)
         {
-            _settings.Add(setting);
+            settings.Add(setting);
             Save();
         }
 
         public MegaPintSettingsBase GetSetting(string settingName)
         {
-            _settings ??= new List<MegaPintSettingsBase>();
+            settings ??= new List<MegaPintSettingsBase>();
             
-            if (_settings.Count > 0)
+            if (settings.Count > 0)
             {
-                foreach (var setting in _settings.Where(setting => setting.name.Equals(settingName)))
+                foreach (var setting in settings.Where(setting => setting.name.Equals(settingName)))
                 {
                     return setting;
                 }
@@ -56,6 +56,15 @@ namespace Editor.Scripts.Settings
         {
             EditorUtility.SetDirty(Instance);
             AssetDatabase.SaveAssetIfDirty(Instance);
+        }
+    }
+
+    [CustomEditor(typeof(MegaPintSettings))]
+    public class MegaPintSettingsDrawer : UnityEditor.Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            EditorGUILayout.LabelField("This asset is used to store all MegaPint settings.");
         }
     }
 }

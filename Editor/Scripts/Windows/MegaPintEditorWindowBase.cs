@@ -2,7 +2,6 @@
 using System;
 using Editor.Scripts.Settings;
 using UnityEditor;
-using UnityEngine;
 
 namespace Editor.Scripts.Windows
 {
@@ -25,7 +24,7 @@ namespace Editor.Scripts.Windows
         public abstract MegaPintEditorWindowBase ShowWindow();
         protected abstract bool LoadResources();
 
-        protected virtual bool LoadSettings() => MegaPintSettings.Instance != null;
+        protected virtual bool LoadSettings() => MegaPintSettings.Exists();
     }
 }
 #endif
