@@ -14,7 +14,7 @@ namespace Editor.Scripts.Windows
         
         private readonly Color _normalColor = new (0.823529422f, 0.823529422f, 0.823529422f);
         private readonly Color _wrongVersionColor = new (0.688679218f,0.149910346f,0.12019401f);
-        
+
         /// <summary> Loaded reference of the uxml </summary>
         private VisualTreeAsset _baseWindow;
         private VisualTreeAsset _listItem;

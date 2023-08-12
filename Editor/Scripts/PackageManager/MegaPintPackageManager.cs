@@ -22,7 +22,9 @@ namespace Editor.Scripts.PackageManager
 
         public static async void AddEmbedded(string packageUrl)
         {
-            if (!await Add(packageUrl)) return;
+            if (!await Add(packageUrl))
+                return;
+            
             if (await Embed(packageUrl))
                 OnSuccess?.Invoke();
         }
@@ -37,6 +39,8 @@ namespace Editor.Scripts.PackageManager
             
             if (request.Status >= StatusCode.Failure)
                 OnFailure?.Invoke(request.Error.message);
+            else 
+                OnSuccess?.Invoke();
         }
         
         private static async Task<bool> Add(string packageUrl)
