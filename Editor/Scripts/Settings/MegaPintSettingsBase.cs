@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 using System;
-using UnityEditor;
 
 namespace Editor.Scripts.Settings
 {
@@ -80,7 +79,7 @@ namespace Editor.Scripts.Settings
             objectValues ??= new MegaPintSerializableDictionary<string, object>();
             objectValues.SetValue(key, value);
             
-            EditorUtility.SetDirty(MegaPintSettings.Instance);
+            MegaPintSettings.Save();
         }
         
         public void SetValue(string key, string value)
@@ -88,7 +87,7 @@ namespace Editor.Scripts.Settings
             stringValues ??= new MegaPintSerializableDictionary<string, string>();
             stringValues.SetValue(key, value);
             
-            EditorUtility.SetDirty(MegaPintSettings.Instance);
+            MegaPintSettings.Save();
         }
         
         public void SetValue(string key, float value)
@@ -96,7 +95,7 @@ namespace Editor.Scripts.Settings
             floatValues ??= new MegaPintSerializableDictionary<string, float>();
             floatValues.SetValue(key, value);
             
-            EditorUtility.SetDirty(MegaPintSettings.Instance);
+            MegaPintSettings.Save();
         }
         
         public void SetValue(string key, bool value)
@@ -104,7 +103,7 @@ namespace Editor.Scripts.Settings
             boolValues ??= new MegaPintSerializableDictionary<string, bool>();
             boolValues.SetValue(key, value);
             
-            EditorUtility.SetDirty(MegaPintSettings.Instance);
+            MegaPintSettings.Save();
         }
         
         public void SetValue(string key, int value)
@@ -112,7 +111,7 @@ namespace Editor.Scripts.Settings
             intValues ??= new MegaPintSerializableDictionary<string, int>();
             intValues.SetValue(key, value);
             
-            EditorUtility.SetDirty(MegaPintSettings.Instance);
+            MegaPintSettings.Save();
         }
     }
 }

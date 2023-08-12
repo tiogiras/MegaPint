@@ -117,8 +117,6 @@ namespace Editor.Scripts.Windows
             return _baseWindow != null && _listItem != null;
         }
 
-        protected override void LoadSettings() { }
-
         #endregion
 
         private void UpdateItem(VisualElement element, int index)

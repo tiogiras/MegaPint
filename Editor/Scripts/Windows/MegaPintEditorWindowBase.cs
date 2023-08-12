@@ -24,7 +24,8 @@ namespace Editor.Scripts.Windows
         protected abstract string BasePath();
         public abstract MegaPintEditorWindowBase ShowWindow();
         protected abstract bool LoadResources();
-        protected abstract void LoadSettings();
+
+        protected virtual bool LoadSettings() => MegaPintSettings.Instance != null;
     }
 }
 #endif

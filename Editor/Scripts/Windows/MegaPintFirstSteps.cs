@@ -50,8 +50,6 @@ namespace Editor.Scripts.Windows
             return _baseWindow != null;
         }
 
-        protected override void LoadSettings() { }
-
         #endregion
         
         private void CreateSettingsAsset()

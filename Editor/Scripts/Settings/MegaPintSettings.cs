@@ -16,7 +16,7 @@ namespace Editor.Scripts.Settings
         private void AddSetting(MegaPintSettingsBase setting)
         {
             _settings.Add(setting);
-            EditorUtility.SetDirty(this);
+            Save();
         }
 
         public MegaPintSettingsBase GetSetting(string settingName)
@@ -50,6 +50,12 @@ namespace Editor.Scripts.Settings
             Instance = AssetDatabase.LoadAssetAtPath<MegaPintSettings>(AssetDatabase.GUIDToAssetPath(search[0]));
 
             return Instance != null;
+        }
+
+        public static void Save()
+        {
+            EditorUtility.SetDirty(Instance);
+            AssetDatabase.SaveAssetIfDirty(Instance);
         }
     }
 }
