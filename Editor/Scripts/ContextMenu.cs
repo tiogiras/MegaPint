@@ -12,7 +12,7 @@ namespace Editor.Scripts
         private static void Open() => TryOpen<MegaPintBaseWindow>(false);
 
         [MenuItem("MegaPint/PackageManager", false, 11)]
-        private static void OpenImporter() => MegaPintBaseWindow.OpenImporter();
+        private static void OpenImporter() => MegaPintBaseWindow.OnOpenPackageManager();
 
         public static MegaPintEditorWindowBase TryOpen<T>(bool utility, string title = "") where T : MegaPintEditorWindowBase
         {

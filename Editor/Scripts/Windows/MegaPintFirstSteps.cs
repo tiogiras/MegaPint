@@ -8,12 +8,20 @@ namespace Editor.Scripts.Windows
 {
     public class MegaPintFirstSteps : MegaPintEditorWindowBase
     {
-        /// <summary> Loaded reference of the uxml </summary>
-        private VisualTreeAsset _baseWindow;
+        #region Visual References
 
         private Button _createAsset;
-        
-        #region Overrides
+
+        #endregion
+
+        #region Private
+
+        /// <summary> Loaded uxml references </summary>
+        private VisualTreeAsset _baseWindow;
+
+        #endregion
+
+        #region Override Methods
 
         protected override string BasePath() => "User Interface/First Steps/MegaPintFirstSteps";
 
@@ -31,17 +39,15 @@ namespace Editor.Scripts.Windows
 
             VisualElement content = _baseWindow.Instantiate();
 
-            _createAsset = content.Q<Button>("BTN_Create");
-            _createAsset.clicked += CreateSettingsAsset;
-            
-            root.Add(content);
-        }
+            #region References
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            
-            _createAsset.clicked -= CreateSettingsAsset;
+            _createAsset = content.Q<Button>("BTN_Create");
+
+            #endregion
+
+            RegisterCallbacks();
+
+            root.Add(content);
         }
 
         protected override bool LoadResources()
@@ -50,9 +56,15 @@ namespace Editor.Scripts.Windows
             return _baseWindow != null;
         }
 
+        protected override void RegisterCallbacks() => _createAsset.clicked += OnCreateSettingsAsset;
+
+        protected override void UnRegisterCallbacks() => _createAsset.clicked -= OnCreateSettingsAsset;
+
         #endregion
-        
-        private void CreateSettingsAsset()
+
+        #region Callback Methods
+
+        private void OnCreateSettingsAsset()
         {
             var path = EditorUtility.SaveFilePanel(
                 "MegaPint Settings", 
@@ -85,6 +97,8 @@ namespace Editor.Scripts.Windows
             
             Close();
         }
+
+        #endregion
     }
 }
 #endif
