@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
-using UnityEngine;
 using UnityEngine.UIElements;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 using Task = System.Threading.Tasks.Task;
@@ -15,10 +14,7 @@ namespace Editor.Scripts.PackageManager
     public static class MegaPintPackageManager
     {
         private const int RefreshRate = 10;
-        private const int LoadingLabelRefreshRate = 50;
 
-        private static int _currentLoadingLabelProgress;
-        
         public static Action OnSuccess;
         public static Action<string> OnFailure;
 
@@ -79,22 +75,145 @@ namespace Editor.Scripts.PackageManager
             return request.Status == StatusCode.Success;
         }
 
-        private static async Task<List<PackageInfo>> GetInstalledPackages(Label loadingLabel)
+        private static async Task<List<PackageInfo>> GetInstalledPackages()
         {
-            if (loadingLabel != null)
-                loadingLabel.style.display = DisplayStyle.Flex;
-            
             var request = Client.List();
             while (!request.IsCompleted)
             {
                 await Task.Delay(RefreshRate);
 
-                if (loadingLabel == null) 
+                if (CachedPackages.OnUpdateActions is not {Count: > 0})
                     continue;
-                
-                if (_currentLoadingLabelProgress >= LoadingLabelRefreshRate)
+
+                foreach (var action in CachedPackages.OnUpdateActions)
                 {
-                    _currentLoadingLabelProgress = 0;
+                    action?.Invoke();
+                }
+            }
+
+            if (request.Status >= StatusCode.Failure)
+                OnFailure?.Invoke(request.Error.message);
+
+            return request.Result.Where(packageInfo => packageInfo.name.ToLower().Contains("megapint")).ToList();
+        }
+
+        public class CachedPackages
+        {
+            private static CachedPackages _allPackages;
+            
+            private readonly List<PackageCache> _packages = new ();
+
+            #region Actions
+
+            public static List<ListableAction> OnUpdateActions = new();
+            public static List<ListableAction<CachedPackages>> OnCompleteActions = new();
+
+            public class ListableAction
+            {
+                public string Name;
+                private Action _action;
+
+                public ListableAction(Action action, string name)
+                {
+                    _action = action;
+                    Name = name;
+                }
+
+                public void Invoke() => _action.Invoke();
+            }
+
+            public class ListableAction<T>
+            {
+                public string Name;
+                private Action<T> _action;
+
+                public ListableAction(Action<T> action, string name)
+                {
+                    _action = action;
+                    Name = name;
+                }
+
+                public void Invoke(T value) => _action.Invoke(value);
+            }
+            
+            public static void RemoveUpdateAction(string name)
+            {
+                if (OnUpdateActions is not {Count: > 0})
+                    return;
+
+                for (var i = 0; i < OnUpdateActions.Count; i++)
+                {
+                    var action = OnUpdateActions[i];
+                    if (!action.Name.Equals(name))
+                        continue;
+                    
+                    OnUpdateActions.RemoveAt(i);
+                    return;
+                }
+            }
+
+            public static void RemoveCompleteAction(string name)
+            {
+                if (OnCompleteActions is not {Count: > 0})
+                    return;
+
+                for (var i = 0; i < OnCompleteActions.Count; i++)
+                {
+                    var action = OnCompleteActions[i];
+                    if (!action.Name.Equals(name))
+                        continue;
+                    
+                    OnCompleteActions.RemoveAt(i);
+                    return;
+                }
+            }
+            
+            #endregion
+
+            #region Public Methods
+
+            public static void RequestAllPackages()
+            {
+                if (_allPackages == null)
+                {
+                    var newInstance = new CachedPackages();
+                    _allPackages = newInstance;
+                }
+                else
+                {
+                    if (OnCompleteActions is not {Count: > 0})
+                        return;
+                    
+                    foreach (var action in OnCompleteActions)
+                    {
+                        action?.Invoke(_allPackages);
+                    }
+                }
+            }
+
+            public static void Refresh()
+            {
+                _allPackages = null;
+                RequestAllPackages();
+            }
+            
+            public bool IsImported(MegaPintPackagesData.PackageKey key) =>
+                _packages.First(package => package.Key == key).Installed;
+
+            public bool NeedsUpdate(MegaPintPackagesData.PackageKey key) =>
+                !_packages.First(package => package.Key == key).NewestVersion;
+
+            public List<MegaPintPackagesData.MegaPintPackageData> ToDisplay() =>
+                _packages.Select(package => MegaPintPackagesData.PackageData(package.Key)).ToList();
+
+            public string CurrentVersion(MegaPintPackagesData.PackageKey key) =>
+                _packages.First(package => package.Key == key).CurrentVersion;
+            
+            public static void UpdateLoadingLabel(Label loadingLabel, int currentProgress, int refreshRate, out int newProgress)
+            {
+                if (currentProgress >= refreshRate)
+                {
+                    currentProgress = 0;
 
                     var pointCount = loadingLabel.text.Count(c => c == '.');
                     var loadingText = new StringBuilder("Loading");
@@ -111,52 +230,21 @@ namespace Editor.Scripts.PackageManager
                     loadingLabel.text = loadingText.ToString();
                 }
                 else
-                    _currentLoadingLabelProgress += RefreshRate;
-            }
-            
-            if (loadingLabel != null)
-                loadingLabel.style.display = DisplayStyle.Flex;
-            
-            if (request.Status >= StatusCode.Failure)
-                OnFailure?.Invoke(request.Error.message);
+                    currentProgress += RefreshRate;
 
-            return request.Result.Where(packageInfo => packageInfo.name.ToLower().Contains("megapint")).ToList();
-        }
-
-        public class CachedPackages
-        {
-            private static CachedPackages _allPackages;
-
-            public static Action<CachedPackages> OnRefreshed;
-
-            public static void AllPackages(Label loadingLabel, Action<CachedPackages> action)
-            {
-                if (_allPackages == null)
-                {
-                    var newInstance = new CachedPackages(loadingLabel, action);
-                    _allPackages = newInstance;
-                }
-                else 
-                    action?.Invoke(_allPackages);
+                newProgress = currentProgress;
             }
 
-            public static void Refresh()
-            {
-                var _ = new CachedPackages(null, packages =>
-                {
-                    _allPackages = packages;
-                    OnRefreshed?.Invoke(_allPackages);
-                });
-            }
+            #endregion
 
-            private readonly List<PackageCache> _packages = new ();
+            #region Internal Methods
 
-            private CachedPackages(Label loadingLabel, Action<CachedPackages> action) => Initialize(loadingLabel, action);
+            private CachedPackages() => Initialize();
 
-            private async void Initialize(Label loadingLabel, Action<CachedPackages> action)
+            private async void Initialize()
             {
                 var allPackages = MegaPintPackagesData.Packages;
-                var installedPackages = await GetInstalledPackages(loadingLabel);
+                var installedPackages = await GetInstalledPackages();
                 var installedPackagesNames = installedPackages.Select(installedPackage => installedPackage.name).ToList();
 
                 foreach (var package in allPackages)
@@ -181,7 +269,13 @@ namespace Editor.Scripts.PackageManager
                     });
                 }
 
-                action?.Invoke(_allPackages);
+                if (OnCompleteActions is not {Count: > 0})
+                    return;
+                
+                foreach (var action in OnCompleteActions)
+                {
+                    action?.Invoke(_allPackages);
+                }
             }
 
             private struct PackageCache
@@ -192,17 +286,7 @@ namespace Editor.Scripts.PackageManager
                 public string CurrentVersion;
             }
 
-            public bool IsImported(MegaPintPackagesData.PackageKey key) =>
-                _packages.First(package => package.Key == key).Installed;
-
-            public bool NeedsUpdate(MegaPintPackagesData.PackageKey key) =>
-                !_packages.First(package => package.Key == key).NewestVersion;
-
-            public List<MegaPintPackagesData.MegaPintPackageData> ToDisplay() =>
-                _packages.Select(package => MegaPintPackagesData.PackageData(package.Key)).ToList();
-
-            public string CurrentVersion(MegaPintPackagesData.PackageKey key) =>
-                _packages.First(package => package.Key == key).CurrentVersion;
+            #endregion
         }
     }
 }

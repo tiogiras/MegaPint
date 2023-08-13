@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Editor.Scripts.PackageManager;
@@ -52,6 +53,8 @@ namespace Editor.Scripts.Windows
         private MegaPintPackageManager.CachedPackages _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
         private MegaPintPackagesData.MegaPintPackageData _selectedPackage;
+
+        private int _currentLoadingLabelProgress;
 
         #endregion
 
@@ -109,9 +112,9 @@ namespace Editor.Scripts.Windows
 
             _loading.style.display = DisplayStyle.Flex;
             _packages.style.display = DisplayStyle.None;
-
-            LoadPackages();
             
+            MegaPintPackageManager.CachedPackages.RequestAllPackages();
+
             OnUpdateRightPane();
 
             root.Add(content);
@@ -126,7 +129,11 @@ namespace Editor.Scripts.Windows
 
         protected override void RegisterCallbacks()
         {
-            MegaPintPackageManager.CachedPackages.OnRefreshed += OnRefresh;
+            MegaPintPackageManager.CachedPackages.OnUpdateActions.Add(
+                new MegaPintPackageManager.CachedPackages.ListableAction(OnLoadingPackages, "PackageManager"));
+            
+            MegaPintPackageManager.CachedPackages.OnCompleteActions
+                .Add(new MegaPintPackageManager.CachedPackages.ListableAction<MegaPintPackageManager.CachedPackages>(OnPackagesLoaded, "PackageManager"));
             
             _packageSearch.RegisterValueChangedCallback(OnSearchStringChanged);
             
@@ -139,7 +146,8 @@ namespace Editor.Scripts.Windows
 
         protected override void UnRegisterCallbacks()
         {
-            MegaPintPackageManager.CachedPackages.OnRefreshed -= OnRefresh;
+            MegaPintPackageManager.CachedPackages.RemoveUpdateAction("PackageManager");
+            MegaPintPackageManager.CachedPackages.RemoveCompleteAction("PackageManager");
             
             _packageSearch.UnregisterValueChangedCallback(OnSearchStringChanged);
             
@@ -154,12 +162,29 @@ namespace Editor.Scripts.Windows
 
         #region Callbacks
 
-        private void OnRefresh(MegaPintPackageManager.CachedPackages packages)
+        private Action OnLoadingPackages => () =>
         {
+            _loading.style.display = DisplayStyle.Flex;
+            _packages.style.display = DisplayStyle.None;
+            
+            MegaPintPackageManager.CachedPackages.UpdateLoadingLabel(
+                _loading, 
+                _currentLoadingLabelProgress, 
+                30, 
+                out _currentLoadingLabelProgress);
+        };
+
+        private Action<MegaPintPackageManager.CachedPackages> OnPackagesLoaded => packages =>
+        {
+            _loading.style.display = DisplayStyle.None;
+            _packages.style.display = DisplayStyle.Flex;
+            
+            _currentLoadingLabelProgress = 0;
+            
             _allPackages = packages;
             SetDisplayedPackages(_packageSearch.value);
-        }
-        
+        };
+
         private void OnSearchStringChanged(ChangeEvent<string> evt) => SetDisplayedPackages(_packageSearch.value);
         
         private void OnUpdateRightPane(IEnumerable<int> _ = null)
@@ -259,15 +284,6 @@ namespace Editor.Scripts.Windows
             version.style.color = _allPackages.NeedsUpdate(package.PackageKey) ? _wrongVersionColor : _normalColor;
         }
 
-        private void LoadPackages()
-        {
-            MegaPintPackageManager.CachedPackages.AllPackages(_loading, packages =>
-            {
-                _allPackages = packages;
-                SetDisplayedPackages(_packageSearch.value);
-            });
-        }
-        
         private void SetDisplayedPackages(string searchString)
         {
             _loading.style.display = DisplayStyle.None;
