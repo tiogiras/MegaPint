@@ -23,6 +23,7 @@ namespace Editor.Scripts.Windows
         private Label _loading;
         
         private GroupBox _rightPane;
+        private GroupBox _content;
         private ListView _list;
         private Label _packageName;
         private Label _version;
@@ -58,61 +59,48 @@ namespace Editor.Scripts.Windows
 
             VisualElement content = _baseWindow.Instantiate();
 
-            _list = content.Q<ListView>("MainList");
+            #region References
 
+            _packages = content.Q<ScrollView>("Packages");
+            _list = content.Q<ListView>("MainList");
+            _loading = content.Q<Label>("Loading");
+            
+            _rightPane = content.Q<GroupBox>("RightPane");
+            _packageName = _rightPane.Q<Label>("PackageName");
+            _content = _rightPane.Q<GroupBox>("Content");
+            _version = _content.Q<Label>("NewestVersion");
+            _lastUpdate = _content.Q<Label>("LastUpdate");
+            _unityVersion = _content.Q<Label>("UnityVersion");
+            _megaPintVersion = _content.Q<Label>("MegaPintVersion");
+
+            _btnImport = _rightPane.Q<Button>("BTN_Import");
+            _btnRemove = _rightPane.Q<Button>("BTN_Remove");
+            _btnUpdate = _rightPane.Q<Button>("BTN_Update");
+            
+            _packageSearch = content.Q<ToolbarSearchField>("PackageSearch");
+
+            #endregion
+            
+            #region List
+            
             _list.makeItem = () => _listItem.Instantiate();
 
             _list.bindItem = UpdateItem;
 
             _list.destroyItem = element => element.Clear();
 
-            _list.onSelectedIndicesChange += _ => UpdateRightPane();
+            #endregion
 
-            _packages = content.Q<ScrollView>("Packages");
-            _loading = content.Q<Label>("Loading");
+            RegisterCallbacks();
             
             _loading.style.display = DisplayStyle.Flex;
             _packages.style.display = DisplayStyle.None;
 
-            _rightPane = content.Q<GroupBox>("RightPane");
-            _packageName = _rightPane.Q<Label>("PackageName");
-            _version = _rightPane.Q<Label>("NewestVersion");
-            _lastUpdate = _rightPane.Q<Label>("LastUpdate");
-            _unityVersion = _rightPane.Q<Label>("UnityVersion");
-            _megaPintVersion = _rightPane.Q<Label>("MegaPintVersion");
-
-            _packageSearch = content.Q<ToolbarSearchField>("PackageSearch");
-
-            _packageSearch.RegisterValueChangedCallback(OnSearchStringChanged);
+            LoadPackages();
             
-            _btnImport = _rightPane.Q<Button>("BTN_Import");
-            _btnRemove = _rightPane.Q<Button>("BTN_Remove");
-            _btnUpdate = _rightPane.Q<Button>("BTN_Update");
-
-            _btnImport.clicked += OnImport;
-            _btnRemove.clicked += OnRemove;
-            _btnUpdate.clicked += OnUpdate;
-
-            MegaPintPackageManager.CachedPackages.OnRefreshed += Refresh;
-            
-            UpdateRightPane();
-
-            InitializeList();
+            OnUpdateRightPane();
 
             root.Add(content);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            
-            MegaPintPackageManager.CachedPackages.OnRefreshed -= Refresh;
-            
-            _packageSearch.UnregisterValueChangedCallback(OnSearchStringChanged);
-            
-            _btnImport.clicked -= OnImport;
-            _btnRemove.clicked -= OnRemove;
-            _btnUpdate.clicked -= OnUpdate;
         }
 
         protected override bool LoadResources()
@@ -122,7 +110,41 @@ namespace Editor.Scripts.Windows
             return _baseWindow != null && _listItem != null;
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            UnRegisterCallbacks();
+        }
+
         #endregion
+
+        #region Internal
+
+        private void RegisterCallbacks()
+        {
+            MegaPintPackageManager.CachedPackages.OnRefreshed += OnRefresh;
+            
+            _packageSearch.RegisterValueChangedCallback(OnSearchStringChanged);
+            
+            _list.onSelectedIndicesChange += OnUpdateRightPane;
+            
+            _btnImport.clicked += OnImport;
+            _btnRemove.clicked += OnRemove;
+            _btnUpdate.clicked += OnUpdate;
+        }
+
+        private void UnRegisterCallbacks()
+        {
+            MegaPintPackageManager.CachedPackages.OnRefreshed -= OnRefresh;
+            
+            _packageSearch.UnregisterValueChangedCallback(OnSearchStringChanged);
+            
+            _list.onSelectedIndicesChange -= OnUpdateRightPane;
+            
+            _btnImport.clicked -= OnImport;
+            _btnRemove.clicked -= OnRemove;
+            _btnUpdate.clicked -= OnUpdate;
+        }
 
         private void UpdateItem(VisualElement element, int index)
         {
@@ -137,51 +159,16 @@ namespace Editor.Scripts.Windows
             version.style.color = _allPackages.NeedsUpdate(package.PackageKey) ? _wrongVersionColor : _normalColor;
         }
 
-        private void UpdateRightPane()
-        {
-            var content = _rightPane.Q<GroupBox>("Content");
-            var index = _list.selectedIndex;
-
-            if (index < 0)
-            {
-                content.style.display = DisplayStyle.None;
-                return;
-            }
-            
-            content.style.display = DisplayStyle.Flex;
-            
-            var package = _displayedPackages[index];
-            _packageName.text = package.PackageNiceName;
-            _version.text = package.Version;
-            _lastUpdate.text = package.LastUpdate;
-            _unityVersion.text = package.UnityVersion;
-            _megaPintVersion.text = package.MegaPintVersion;
-
-            var isImported = _allPackages.IsImported(package.PackageKey);
-            _btnImport.style.display = isImported ? DisplayStyle.None : DisplayStyle.Flex;
-            _btnRemove.style.display = isImported ? DisplayStyle.Flex : DisplayStyle.None;
-            _btnUpdate.style.display = isImported && _allPackages.NeedsUpdate(package.PackageKey)
-                ? DisplayStyle.Flex 
-                : DisplayStyle.None;
-        }
-        
-        private void OnSearchStringChanged(ChangeEvent<string> evt) => SetDisplayedPackages(_packageSearch.value);
-
-        private void Refresh(MegaPintPackageManager.CachedPackages packages)
-        {
-            _allPackages = packages;
-            SetDisplayedPackages(_packageSearch.value);
-        }
-        
-        private void InitializeList()
+        private void LoadPackages()
         {
             MegaPintPackageManager.CachedPackages.AllPackages(_loading, packages =>
             {
+                Debug.Log("finished");
                 _allPackages = packages;
                 SetDisplayedPackages(_packageSearch.value);
             });
         }
-
+        
         private void SetDisplayedPackages(string searchString)
         {
             _loading.style.display = DisplayStyle.None;
@@ -197,6 +184,45 @@ namespace Editor.Scripts.Windows
             _list.RefreshItems();
         }
         
+        #region Callbacks
+
+        private void OnRefresh(MegaPintPackageManager.CachedPackages packages)
+        {
+            _allPackages = packages;
+            SetDisplayedPackages(_packageSearch.value);
+        }
+        
+        private void OnSearchStringChanged(ChangeEvent<string> evt) => SetDisplayedPackages(_packageSearch.value);
+        
+        private void OnUpdateRightPane(IEnumerable<int> _ = null)
+        {
+            var index = _list.selectedIndex;
+
+            if (index < 0)
+            {
+                _content.style.display = DisplayStyle.None;
+                return;
+            }
+            
+            _content.style.display = DisplayStyle.Flex;
+            
+            var package = _displayedPackages[index];
+            _packageName.text = package.PackageNiceName;
+            _version.text = package.Version;
+            _lastUpdate.text = package.LastUpdate;
+            _unityVersion.text = package.UnityVersion;
+            _megaPintVersion.text = package.MegaPintVersion;
+
+            var isImported = _allPackages.IsImported(package.PackageKey);
+            _btnImport.style.display = isImported ? DisplayStyle.None : DisplayStyle.Flex;
+            _btnRemove.style.display = isImported ? DisplayStyle.Flex : DisplayStyle.None;
+            _btnUpdate.style.display = isImported && _allPackages.NeedsUpdate(package.PackageKey)
+                ? DisplayStyle.Flex 
+                : DisplayStyle.None;
+        }
+
+        #region Import
+
         private void OnImport()
         {
             MegaPintPackageManager.OnSuccess += OnImportSuccess;
@@ -209,6 +235,10 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.OnSuccess -= OnImportSuccess;
             MegaPintPackageManager.OnFailure -= OnFailure;
         }
+
+        #endregion
+
+        #region Remove
 
         private void OnRemove()
         {
@@ -223,6 +253,10 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.OnFailure -= OnFailure;
         }
 
+        #endregion
+
+        #region Update
+
         private void OnUpdate()
         {
             MegaPintPackageManager.OnSuccess += OnUpdateSuccess;
@@ -236,7 +270,13 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.OnFailure -= OnFailure;
         }
 
+        #endregion
+
         private static void OnFailure(string error) => Debug.LogError(error);
+        
+        #endregion
+        
+        #endregion
     }
 }
 #endif
