@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Editor.Scripts.PackageManager;
@@ -45,6 +46,8 @@ namespace Editor.Scripts.Windows
 
         private MegaPintPackageManager.CachedPackages _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
+
+        private int _currentLoadingLabelProgress;
         
         #endregion
 
@@ -112,7 +115,7 @@ namespace Editor.Scripts.Windows
             _packagesList.style.display = DisplayStyle.None;
             _settingsList.style.display = DisplayStyle.None;
 
-            OnUpdatePackages();
+            MegaPintPackageManager.CachedPackages.RequestAllPackages();
             
             root.Add(content);
         }
@@ -128,28 +131,31 @@ namespace Editor.Scripts.Windows
 
         protected override void RegisterCallbacks()
         {
-            MegaPintPackageManager.OnSuccess += OnUpdatePackages;
-            MegaPintPackageManager.CachedPackages.OnRefreshed += OnRefresh;
+            MegaPintPackageManager.CachedPackages.OnUpdateActions.Add(
+                new MegaPintPackageManager.CachedPackages.ListableAction(OnLoadingPackages, "BaseWindow"));
             
+            MegaPintPackageManager.CachedPackages.OnCompleteActions
+                .Add(new MegaPintPackageManager.CachedPackages.ListableAction<MegaPintPackageManager.CachedPackages>(OnPackagesLoaded, "BaseWindow"));
+
             _searchField.RegisterValueChangedCallback(OnSearchFieldChange);
             
             _packagesList.onSelectedIndicesChange += OnUpdateRightPane;
             
-            _btnPackages.clicked += OnUpdatePackages;
+            _btnPackages.clicked += MegaPintPackageManager.CachedPackages.RequestAllPackages;
             _btnSettings.clicked += OnUpdateSettings;
             _btnOpenPackageManager.clicked += OnOpenPackageManager;
         }
 
         protected override void UnRegisterCallbacks()
         {
-            MegaPintPackageManager.OnSuccess -= OnUpdatePackages;
-            MegaPintPackageManager.CachedPackages.OnRefreshed -= OnRefresh;
+            MegaPintPackageManager.CachedPackages.RemoveUpdateAction("BaseWindow");
+            MegaPintPackageManager.CachedPackages.RemoveCompleteAction("BaseWindow");
 
             _searchField.UnregisterValueChangedCallback(OnSearchFieldChange);
             
             _packagesList.onSelectedIndicesChange -= OnUpdateRightPane;
             
-            _btnPackages.clicked -= OnUpdatePackages;
+            _btnPackages.clicked -= MegaPintPackageManager.CachedPackages.RequestAllPackages;
             _btnSettings.clicked -= OnUpdateSettings;
             _btnOpenPackageManager.clicked += OnOpenPackageManager;
         }
@@ -158,6 +164,23 @@ namespace Editor.Scripts.Windows
 
         #region Callback Methods
 
+        private Action OnLoadingPackages => () =>
+        {
+            MegaPintPackageManager.CachedPackages.UpdateLoadingLabel(
+                _loading, 
+                _currentLoadingLabelProgress, 
+                30, 
+                out _currentLoadingLabelProgress);
+        };
+
+        private Action<MegaPintPackageManager.CachedPackages> OnPackagesLoaded => packages =>
+        {
+            _currentLoadingLabelProgress = 0;
+            
+            _allPackages = packages;
+            SetDisplayedPackages(_searchField.value);
+        };
+        
         private void OnUpdateRightPane(IEnumerable<int> _)
         {
             _rightPane.Clear();
@@ -172,22 +195,7 @@ namespace Editor.Scripts.Windows
         public static void OnOpenPackageManager() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true, "Package Manager");
 
         private void OnSearchFieldChange(ChangeEvent<string> evt) => SetDisplayedPackages(_searchField.value);
-        
-        private void OnRefresh(MegaPintPackageManager.CachedPackages packages)
-        {
-            _allPackages = packages;
-            SetDisplayedPackages(_searchField.value);
-        }
-        
-        private void OnUpdatePackages()
-        {
-            MegaPintPackageManager.CachedPackages.AllPackages(_loading, packages =>
-            {
-                _allPackages = packages;
-                SetDisplayedPackages(_searchField.value);
-            });
-        }
-        
+
         private void OnUpdateSettings()
         {
             SwitchState(1);
