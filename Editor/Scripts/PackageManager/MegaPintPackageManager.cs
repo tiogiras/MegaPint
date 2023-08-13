@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
-using UnityEngine;
 using UnityEngine.UIElements;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 using Task = System.Threading.Tasks.Task;
@@ -15,10 +14,7 @@ namespace Editor.Scripts.PackageManager
     public static class MegaPintPackageManager
     {
         private const int RefreshRate = 10;
-        private const int LoadingLabelRefreshRate = 50;
 
-        private static int _currentLoadingLabelProgress;
-        
         public static Action OnSuccess;
         public static Action<string> OnFailure;
 
@@ -105,9 +101,13 @@ namespace Editor.Scripts.PackageManager
         {
             private static CachedPackages _allPackages;
             
+            private readonly List<PackageCache> _packages = new ();
+
+            #region Actions
+
             public static List<ListableAction> OnUpdateActions = new();
             public static List<ListableAction<CachedPackages>> OnCompleteActions = new();
-            
+
             public class ListableAction
             {
                 public string Name;
@@ -168,6 +168,10 @@ namespace Editor.Scripts.PackageManager
                 }
             }
             
+            #endregion
+
+            #region Public Methods
+
             public static void RequestAllPackages()
             {
                 if (_allPackages == null)
@@ -192,7 +196,19 @@ namespace Editor.Scripts.PackageManager
                 _allPackages = null;
                 RequestAllPackages();
             }
+            
+            public bool IsImported(MegaPintPackagesData.PackageKey key) =>
+                _packages.First(package => package.Key == key).Installed;
 
+            public bool NeedsUpdate(MegaPintPackagesData.PackageKey key) =>
+                !_packages.First(package => package.Key == key).NewestVersion;
+
+            public List<MegaPintPackagesData.MegaPintPackageData> ToDisplay() =>
+                _packages.Select(package => MegaPintPackagesData.PackageData(package.Key)).ToList();
+
+            public string CurrentVersion(MegaPintPackagesData.PackageKey key) =>
+                _packages.First(package => package.Key == key).CurrentVersion;
+            
             public static void UpdateLoadingLabel(Label loadingLabel, int currentProgress, int refreshRate, out int newProgress)
             {
                 if (currentProgress >= refreshRate)
@@ -219,7 +235,9 @@ namespace Editor.Scripts.PackageManager
                 newProgress = currentProgress;
             }
 
-            private readonly List<PackageCache> _packages = new ();
+            #endregion
+
+            #region Internal Methods
 
             private CachedPackages() => Initialize();
 
@@ -268,17 +286,7 @@ namespace Editor.Scripts.PackageManager
                 public string CurrentVersion;
             }
 
-            public bool IsImported(MegaPintPackagesData.PackageKey key) =>
-                _packages.First(package => package.Key == key).Installed;
-
-            public bool NeedsUpdate(MegaPintPackagesData.PackageKey key) =>
-                !_packages.First(package => package.Key == key).NewestVersion;
-
-            public List<MegaPintPackagesData.MegaPintPackageData> ToDisplay() =>
-                _packages.Select(package => MegaPintPackagesData.PackageData(package.Key)).ToList();
-
-            public string CurrentVersion(MegaPintPackagesData.PackageKey key) =>
-                _packages.First(package => package.Key == key).CurrentVersion;
+            #endregion
         }
     }
 }

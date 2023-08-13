@@ -166,6 +166,9 @@ namespace Editor.Scripts.Windows
 
         private Action OnLoadingPackages => () =>
         {
+            _loading.style.display = DisplayStyle.Flex;
+            _packagesList.style.display = DisplayStyle.None;
+            
             MegaPintPackageManager.CachedPackages.UpdateLoadingLabel(
                 _loading, 
                 _currentLoadingLabelProgress, 
@@ -175,6 +178,9 @@ namespace Editor.Scripts.Windows
 
         private Action<MegaPintPackageManager.CachedPackages> OnPackagesLoaded => packages =>
         {
+            _loading.style.display = DisplayStyle.None;
+            _packagesList.style.display = DisplayStyle.Flex;
+            
             _currentLoadingLabelProgress = 0;
             
             _allPackages = packages;
