@@ -10,38 +10,52 @@ namespace Editor.Scripts.Windows
 {
     public class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
     {
+        #region Const
+
         private const string ListItemTemplate = "User Interface/Import/MegaPintPackageItem";
         
         private readonly Color _normalColor = new (0.823529422f, 0.823529422f, 0.823529422f);
         private readonly Color _wrongVersionColor = new (0.688679218f,0.149910346f,0.12019401f);
 
-        /// <summary> Loaded reference of the uxml </summary>
-        private VisualTreeAsset _baseWindow;
-        private VisualTreeAsset _listItem;
+        #endregion
 
-        private ScrollView _packages;
-        private Label _loading;
-        
+        #region Visual References
+
         private GroupBox _rightPane;
         private GroupBox _content;
-        private ListView _list;
+        
+        private Label _loading;
         private Label _packageName;
         private Label _version;
         private Label _lastUpdate;
         private Label _unityVersion;
         private Label _megaPintVersion;
+        
+        private ScrollView _packages;
 
+        private ListView _list;
+        
         private ToolbarSearchField _packageSearch;
-
+        
         private Button _btnImport;
         private Button _btnRemove;
         private Button _btnUpdate;
+        
+        #endregion
+
+        #region Private
+
+        /// <summary> Loaded uxml references </summary>
+        private VisualTreeAsset _baseWindow;
+        private VisualTreeAsset _listItem;
 
         private MegaPintPackageManager.CachedPackages _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
         private MegaPintPackagesData.MegaPintPackageData _selectedPackage;
 
-        #region Overrides
+        #endregion
+
+        #region Override Methods
 
         protected override string BasePath() => "User Interface/Import/MegaPintPackageManager";
 
@@ -81,6 +95,8 @@ namespace Editor.Scripts.Windows
 
             #endregion
             
+            RegisterCallbacks();
+            
             #region List
             
             _list.makeItem = () => _listItem.Instantiate();
@@ -91,8 +107,6 @@ namespace Editor.Scripts.Windows
 
             #endregion
 
-            RegisterCallbacks();
-            
             _loading.style.display = DisplayStyle.Flex;
             _packages.style.display = DisplayStyle.None;
 
@@ -110,17 +124,7 @@ namespace Editor.Scripts.Windows
             return _baseWindow != null && _listItem != null;
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            UnRegisterCallbacks();
-        }
-
-        #endregion
-
-        #region Internal
-
-        private void RegisterCallbacks()
+        protected override void RegisterCallbacks()
         {
             MegaPintPackageManager.CachedPackages.OnRefreshed += OnRefresh;
             
@@ -133,7 +137,7 @@ namespace Editor.Scripts.Windows
             _btnUpdate.clicked += OnUpdate;
         }
 
-        private void UnRegisterCallbacks()
+        protected override void UnRegisterCallbacks()
         {
             MegaPintPackageManager.CachedPackages.OnRefreshed -= OnRefresh;
             
@@ -146,44 +150,8 @@ namespace Editor.Scripts.Windows
             _btnUpdate.clicked -= OnUpdate;
         }
 
-        private void UpdateItem(VisualElement element, int index)
-        {
-            var package = _displayedPackages[index];
-            
-            element.Q<Label>("PackageName").text = package.PackageNiceName;
-            
-            var version = element.Q<Label>("Version");
-            version.text = _allPackages.CurrentVersion(package.PackageKey);
+        #endregion
 
-            version.style.display = _allPackages.IsImported(package.PackageKey) ? DisplayStyle.Flex : DisplayStyle.None;
-            version.style.color = _allPackages.NeedsUpdate(package.PackageKey) ? _wrongVersionColor : _normalColor;
-        }
-
-        private void LoadPackages()
-        {
-            MegaPintPackageManager.CachedPackages.AllPackages(_loading, packages =>
-            {
-                Debug.Log("finished");
-                _allPackages = packages;
-                SetDisplayedPackages(_packageSearch.value);
-            });
-        }
-        
-        private void SetDisplayedPackages(string searchString)
-        {
-            _loading.style.display = DisplayStyle.None;
-            _packages.style.display = DisplayStyle.Flex;
-            
-            _displayedPackages = searchString.Equals("") ? 
-                _allPackages.ToDisplay() :
-                _allPackages.ToDisplay().Where(package => package.PackageNiceName.ToLower().Contains(searchString.ToLower())).ToList();
-            
-            _displayedPackages.Sort();
-
-            _list.itemsSource = _displayedPackages;
-            _list.RefreshItems();
-        }
-        
         #region Callbacks
 
         private void OnRefresh(MegaPintPackageManager.CachedPackages packages)
@@ -276,6 +244,45 @@ namespace Editor.Scripts.Windows
         
         #endregion
         
+        #region Internal Methods
+
+        private void UpdateItem(VisualElement element, int index)
+        {
+            var package = _displayedPackages[index];
+            
+            element.Q<Label>("PackageName").text = package.PackageNiceName;
+            
+            var version = element.Q<Label>("Version");
+            version.text = _allPackages.CurrentVersion(package.PackageKey);
+
+            version.style.display = _allPackages.IsImported(package.PackageKey) ? DisplayStyle.Flex : DisplayStyle.None;
+            version.style.color = _allPackages.NeedsUpdate(package.PackageKey) ? _wrongVersionColor : _normalColor;
+        }
+
+        private void LoadPackages()
+        {
+            MegaPintPackageManager.CachedPackages.AllPackages(_loading, packages =>
+            {
+                _allPackages = packages;
+                SetDisplayedPackages(_packageSearch.value);
+            });
+        }
+        
+        private void SetDisplayedPackages(string searchString)
+        {
+            _loading.style.display = DisplayStyle.None;
+            _packages.style.display = DisplayStyle.Flex;
+            
+            _displayedPackages = searchString.Equals("") ? 
+                _allPackages.ToDisplay() :
+                _allPackages.ToDisplay().Where(package => package.PackageNiceName.ToLower().Contains(searchString.ToLower())).ToList();
+            
+            _displayedPackages.Sort();
+
+            _list.itemsSource = _displayedPackages;
+            _list.RefreshItems();
+        }
+
         #endregion
     }
 }

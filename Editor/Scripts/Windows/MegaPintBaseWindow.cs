@@ -10,32 +10,45 @@ namespace Editor.Scripts.Windows
 {
     public class MegaPintBaseWindow : MegaPintEditorWindowBase
     {
+        #region Const
+
         private const string PackageItem = "User Interface/MegaPintBasePackageItem";
         private const string SettingItem = "User Interface/MegaPintBaseSettingItem";
 
         private const string RightPaneContentBase = "User Interface/xxxDisplayContent";
-        
-        /// <summary> Loaded reference of the uxml </summary>
-        private VisualTreeAsset _baseWindow;
-        private VisualTreeAsset _packageItem;
-        private VisualTreeAsset _settingItem;
+
+        #endregion
+
+        #region Visual References
 
         private VisualElement _rightPane;
         
-        private Button _btnPackages;
-        private Button _btnSettings;
-
+        private Label _loading;
+        
         private ListView _packagesList;
         private ListView _settingsList;
 
         private ToolbarSearchField _searchField;
         
-        private Label _loading;
+        private Button _btnPackages;
+        private Button _btnSettings;
+        private Button _btnOpenPackageManager;
+        
+        #endregion
+
+        #region Private
+
+        /// <summary> Loaded uxml references </summary>
+        private VisualTreeAsset _baseWindow;
+        private VisualTreeAsset _packageItem;
+        private VisualTreeAsset _settingItem;
 
         private MegaPintPackageManager.CachedPackages _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
+        
+        #endregion
 
-        #region Overrides
+        #region Override Methods
 
         protected override string BasePath() => "User Interface/MegaPintBaseWindow";
         
@@ -53,62 +66,55 @@ namespace Editor.Scripts.Windows
 
             VisualElement content = _baseWindow.Instantiate();
 
-            content.Q<Button>("OpenImporter").clicked += OpenImporter;
+            #region References
 
+            _btnOpenPackageManager = content.Q<Button>("OpenImporter");
+            
             _rightPane = content.Q<VisualElement>("RightPane");
 
             _btnPackages = content.Q<Button>("BTN_Packages");
             _btnSettings = content.Q<Button>("BTN_Settings");
 
-            _btnPackages.clicked += UpdatePackages;
-            _btnSettings.clicked += UpdateSettings;
-
             _packagesList = content.Q<ListView>("PackagesList");
             _settingsList = content.Q<ListView>("SettingsList");
             
-            _packagesList.makeItem = () => _packageItem.Instantiate();
-            _settingsList.makeItem = () => _settingItem.Instantiate();
+            _searchField = content.Q<ToolbarSearchField>("SearchField");
+            _loading = content.Q<Label>("Loading");
 
+            #endregion
+            
+            RegisterCallbacks();
+
+            #region Packages List
+
+            _packagesList.makeItem = () => _packageItem.Instantiate();
+            
             _packagesList.bindItem = (element, i) =>
             {
                 element.Q<Label>("PackageName").text = _displayedPackages[i].PackageNiceName;
             };
             
-            _settingsList.bindItem = (element, i) => { };
-
             _packagesList.destroyItem = element => element.Clear();
+
+            #endregion
+
+            #region Settings List
+
+            _settingsList.makeItem = () => _settingItem.Instantiate();
+            
+            _settingsList.bindItem = (element, i) => { };
+            
             _settingsList.destroyItem = element => element.Clear();
-            
-            _packagesList.onSelectedIndicesChange += _ => UpdateRightPane();
-            
-            _loading = content.Q<Label>("Loading");
+
+            #endregion
             
             _loading.style.display = DisplayStyle.Flex;
             _packagesList.style.display = DisplayStyle.None;
             _settingsList.style.display = DisplayStyle.None;
 
-            _searchField = content.Q<ToolbarSearchField>("SearchField");
-            _searchField.RegisterValueChangedCallback(SearchFieldChange);
-
-            MegaPintPackageManager.OnSuccess += UpdatePackages;
-            MegaPintPackageManager.CachedPackages.OnRefreshed += Refresh;
-            
-            UpdatePackages();
+            OnUpdatePackages();
             
             root.Add(content);
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            
-            MegaPintPackageManager.OnSuccess -= UpdatePackages;
-            MegaPintPackageManager.CachedPackages.OnRefreshed -= Refresh;
-            
-            _searchField.UnregisterValueChangedCallback(SearchFieldChange);
-            
-            _btnPackages.clicked -= UpdatePackages;
-            _btnSettings.clicked -= UpdateSettings;
         }
 
         protected override bool LoadResources()
@@ -120,9 +126,39 @@ namespace Editor.Scripts.Windows
             return _baseWindow != null && _packageItem != null && _settingItem != null;
         }
 
+        protected override void RegisterCallbacks()
+        {
+            MegaPintPackageManager.OnSuccess += OnUpdatePackages;
+            MegaPintPackageManager.CachedPackages.OnRefreshed += OnRefresh;
+            
+            _searchField.RegisterValueChangedCallback(OnSearchFieldChange);
+            
+            _packagesList.onSelectedIndicesChange += OnUpdateRightPane;
+            
+            _btnPackages.clicked += OnUpdatePackages;
+            _btnSettings.clicked += OnUpdateSettings;
+            _btnOpenPackageManager.clicked += OnOpenPackageManager;
+        }
+
+        protected override void UnRegisterCallbacks()
+        {
+            MegaPintPackageManager.OnSuccess -= OnUpdatePackages;
+            MegaPintPackageManager.CachedPackages.OnRefreshed -= OnRefresh;
+
+            _searchField.UnregisterValueChangedCallback(OnSearchFieldChange);
+            
+            _packagesList.onSelectedIndicesChange -= OnUpdateRightPane;
+            
+            _btnPackages.clicked -= OnUpdatePackages;
+            _btnSettings.clicked -= OnUpdateSettings;
+            _btnOpenPackageManager.clicked += OnOpenPackageManager;
+        }
+
         #endregion
-        
-        private void UpdateRightPane()
+
+        #region Callback Methods
+
+        private void OnUpdateRightPane(IEnumerable<int> _)
         {
             _rightPane.Clear();
 
@@ -133,17 +169,17 @@ namespace Editor.Scripts.Windows
             _rightPane.Add(content.Instantiate());
         }
         
-        public static void OpenImporter() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true, "Package Manager");
+        public static void OnOpenPackageManager() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true, "Package Manager");
 
-        private void SearchFieldChange(ChangeEvent<string> evt) => SetDisplayedPackages(_searchField.value);
-
-        private void Refresh(MegaPintPackageManager.CachedPackages packages)
+        private void OnSearchFieldChange(ChangeEvent<string> evt) => SetDisplayedPackages(_searchField.value);
+        
+        private void OnRefresh(MegaPintPackageManager.CachedPackages packages)
         {
             _allPackages = packages;
             SetDisplayedPackages(_searchField.value);
         }
         
-        private void UpdatePackages()
+        private void OnUpdatePackages()
         {
             MegaPintPackageManager.CachedPackages.AllPackages(_loading, packages =>
             {
@@ -152,6 +188,15 @@ namespace Editor.Scripts.Windows
             });
         }
         
+        private void OnUpdateSettings()
+        {
+            SwitchState(1);
+        }
+        
+        #endregion
+
+        #region Internal Methods
+
         private void SetDisplayedPackages(string searchString)
         {
             _loading.style.display = DisplayStyle.None;
@@ -168,11 +213,6 @@ namespace Editor.Scripts.Windows
             _packagesList.RefreshItems();
         }
 
-        public void UpdateSettings()
-        {
-            SwitchState(1);
-        }
-
         private void SwitchState(int page)
         {
             _packagesList.style.display = page == 0
@@ -181,6 +221,8 @@ namespace Editor.Scripts.Windows
             
             _settingsList.style.display = page == 1 ? DisplayStyle.Flex : DisplayStyle.None;
         }
+        
+        #endregion
     }
 }
 #endif
