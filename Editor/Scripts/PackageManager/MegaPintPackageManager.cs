@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
+using UnityEngine;
 using UnityEngine.UIElements;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 using Task = System.Threading.Tasks.Task;
@@ -80,6 +81,9 @@ namespace Editor.Scripts.PackageManager
 
         private static async Task<List<PackageInfo>> GetInstalledPackages(Label loadingLabel)
         {
+            if (loadingLabel != null)
+                loadingLabel.style.display = DisplayStyle.Flex;
+            
             var request = Client.List();
             while (!request.IsCompleted)
             {
@@ -103,11 +107,15 @@ namespace Editor.Scripts.PackageManager
                         loadingText.Append(".");
                     }
 
+                    loadingLabel.style.display = DisplayStyle.Flex;
                     loadingLabel.text = loadingText.ToString();
                 }
                 else
                     _currentLoadingLabelProgress += RefreshRate;
             }
+            
+            if (loadingLabel != null)
+                loadingLabel.style.display = DisplayStyle.Flex;
             
             if (request.Status >= StatusCode.Failure)
                 OnFailure?.Invoke(request.Error.message);

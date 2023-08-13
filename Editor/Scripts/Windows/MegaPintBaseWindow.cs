@@ -175,7 +175,10 @@ namespace Editor.Scripts.Windows
 
         private void SwitchState(int page)
         {
-            _packagesList.style.display = page == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            _packagesList.style.display = page == 0
+                ? _allPackages == null ? DisplayStyle.None : DisplayStyle.Flex
+                : DisplayStyle.None;
+            
             _settingsList.style.display = page == 1 ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }

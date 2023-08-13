@@ -30,6 +30,12 @@ namespace Editor.Scripts
         {
             Debug.Log(MegaPintSettings.Instance);
         }
+        
+        [MenuItem("MegaPint/RESET", false, 11)]
+        private static void RESET()
+        {
+            MegaPintSettings.Instance = null;
+        }
     }
 }
 #endif
