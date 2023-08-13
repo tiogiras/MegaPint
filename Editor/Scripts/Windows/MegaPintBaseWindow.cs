@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Editor.Scripts.PackageManager;
@@ -134,7 +133,7 @@ namespace Editor.Scripts.Windows
             _rightPane.Add(content.Instantiate());
         }
         
-        public static void OpenImporter() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true);
+        public static void OpenImporter() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true, "Package Manager");
 
         private void SearchFieldChange(ChangeEvent<string> evt) => SetDisplayedPackages(_searchField.value);
 

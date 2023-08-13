@@ -46,7 +46,7 @@ namespace Editor.Scripts.Windows
 
         public override MegaPintEditorWindowBase ShowWindow()
         {
-            titleContent.text = "Import Package";
+            titleContent.text = "Package Manager";
             return this;
         }
         

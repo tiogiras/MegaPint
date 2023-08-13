@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using Editor.Scripts.PackageManager;
 using Editor.Scripts.Settings;
 using Editor.Scripts.Windows;
 using UnityEditor;
@@ -15,15 +14,21 @@ namespace Editor.Scripts
         [MenuItem("MegaPint/PackageManager", false, 11)]
         private static void OpenImporter() => MegaPintBaseWindow.OpenImporter();
 
-        public static MegaPintEditorWindowBase TryOpen<T>(bool utility) where T : MegaPintEditorWindowBase
+        public static MegaPintEditorWindowBase TryOpen<T>(bool utility, string title = "") where T : MegaPintEditorWindowBase
         {
-            if (typeof(T) == typeof(MegaPintFirstSteps)) return EditorWindow.GetWindow<T>(utility).ShowWindow();
+            if (typeof(T) == typeof(MegaPintFirstSteps)) return EditorWindow.GetWindow<T>(utility, title).ShowWindow();
 
             var exists = MegaPintSettings.Exists();
             
             return ! exists
-                ? EditorWindow.GetWindow<MegaPintFirstSteps>(utility).ShowWindow() 
-                : EditorWindow.GetWindow<T>(utility).ShowWindow();
+                ? EditorWindow.GetWindow<MegaPintFirstSteps>(utility, title).ShowWindow() 
+                : EditorWindow.GetWindow<T>(utility, title).ShowWindow();
+        }
+
+        [MenuItem("MegaPint/TEST", false, 11)]
+        private static void TEST()
+        {
+            Debug.Log(MegaPintSettings.Instance);
         }
     }
 }
