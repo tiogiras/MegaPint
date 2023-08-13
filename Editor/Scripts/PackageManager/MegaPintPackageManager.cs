@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
+using UnityEngine;
 using UnityEngine.UIElements;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 using Task = System.Threading.Tasks.Task;
 
 namespace Editor.Scripts.PackageManager
@@ -24,9 +26,12 @@ namespace Editor.Scripts.PackageManager
         {
             if (!await Add(packageUrl))
                 return;
+
+            if (!await Embed(packageUrl)) 
+                return;
             
-            if (await Embed(packageUrl))
-                OnSuccess?.Invoke();
+            OnSuccess?.Invoke();  
+            CachedPackages.Refresh();
         }
 
         public static async void Remove(string packageName)
@@ -39,8 +44,11 @@ namespace Editor.Scripts.PackageManager
             
             if (request.Status >= StatusCode.Failure)
                 OnFailure?.Invoke(request.Error.message);
-            else 
-                OnSuccess?.Invoke();
+            else
+            {
+                OnSuccess?.Invoke();   
+                CachedPackages.Refresh();
+            }
         }
         
         private static async Task<bool> Add(string packageUrl)
@@ -73,11 +81,17 @@ namespace Editor.Scripts.PackageManager
 
         private static async Task<List<PackageInfo>> GetInstalledPackages(Label loadingLabel)
         {
+            if (loadingLabel != null)
+                loadingLabel.style.display = DisplayStyle.Flex;
+            
             var request = Client.List();
             while (!request.IsCompleted)
             {
                 await Task.Delay(RefreshRate);
 
+                if (loadingLabel == null) 
+                    continue;
+                
                 if (_currentLoadingLabelProgress >= LoadingLabelRefreshRate)
                 {
                     _currentLoadingLabelProgress = 0;
@@ -93,11 +107,15 @@ namespace Editor.Scripts.PackageManager
                         loadingText.Append(".");
                     }
 
+                    loadingLabel.style.display = DisplayStyle.Flex;
                     loadingLabel.text = loadingText.ToString();
                 }
                 else
                     _currentLoadingLabelProgress += RefreshRate;
             }
+            
+            if (loadingLabel != null)
+                loadingLabel.style.display = DisplayStyle.Flex;
             
             if (request.Status >= StatusCode.Failure)
                 OnFailure?.Invoke(request.Error.message);
@@ -107,11 +125,35 @@ namespace Editor.Scripts.PackageManager
 
         public class CachedPackages
         {
+            private static CachedPackages _allPackages;
+
+            public static Action<CachedPackages> OnRefreshed;
+
+            public static void AllPackages(Label loadingLabel, Action<CachedPackages> action)
+            {
+                if (_allPackages == null)
+                {
+                    var newInstance = new CachedPackages(loadingLabel, action);
+                    _allPackages = newInstance;
+                }
+                
+                action?.Invoke(_allPackages);
+            }
+
+            public static void Refresh()
+            {
+                var _ = new CachedPackages(null, packages =>
+                {
+                    _allPackages = packages;
+                    OnRefreshed?.Invoke(_allPackages);
+                });
+            }
+
             private readonly List<PackageCache> _packages = new ();
 
-            public CachedPackages(Label loadingLabel, Action action) => Initialize(loadingLabel, action);
+            private CachedPackages(Label loadingLabel, Action<CachedPackages> action) => Initialize(loadingLabel, action);
 
-            private async void Initialize(Label loadingLabel, Action action)
+            private async void Initialize(Label loadingLabel, Action<CachedPackages> action)
             {
                 var allPackages = MegaPintPackagesData.Packages;
                 var installedPackages = await GetInstalledPackages(loadingLabel);
@@ -139,7 +181,7 @@ namespace Editor.Scripts.PackageManager
                     });
                 }
 
-                action?.Invoke();
+                action?.Invoke(_allPackages);
             }
 
             private struct PackageCache

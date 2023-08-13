@@ -12,12 +12,16 @@ namespace Editor.Scripts.Windows
     {
         private const string PackageItem = "User Interface/MegaPintBasePackageItem";
         private const string SettingItem = "User Interface/MegaPintBaseSettingItem";
+
+        private const string RightPaneContentBase = "User Interface/xxxDisplayContent";
         
         /// <summary> Loaded reference of the uxml </summary>
         private VisualTreeAsset _baseWindow;
         private VisualTreeAsset _packageItem;
         private VisualTreeAsset _settingItem;
 
+        private VisualElement _rightPane;
+        
         private Button _btnPackages;
         private Button _btnSettings;
 
@@ -30,7 +34,6 @@ namespace Editor.Scripts.Windows
 
         private MegaPintPackageManager.CachedPackages _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
-        private MegaPintPackagesData.MegaPintPackageData _selectedPackage;
 
         #region Overrides
 
@@ -51,6 +54,8 @@ namespace Editor.Scripts.Windows
             VisualElement content = _baseWindow.Instantiate();
 
             content.Q<Button>("OpenImporter").clicked += OpenImporter;
+
+            _rightPane = content.Q<VisualElement>("RightPane");
 
             _btnPackages = content.Q<Button>("BTN_Packages");
             _btnSettings = content.Q<Button>("BTN_Settings");
@@ -74,6 +79,8 @@ namespace Editor.Scripts.Windows
             _packagesList.destroyItem = element => element.Clear();
             _settingsList.destroyItem = element => element.Clear();
             
+            _packagesList.onSelectedIndicesChange += _ => UpdateRightPane();
+            
             _loading = content.Q<Label>("Loading");
             
             _loading.style.display = DisplayStyle.Flex;
@@ -84,6 +91,8 @@ namespace Editor.Scripts.Windows
             _searchField.RegisterValueChangedCallback(SearchFieldChange);
 
             MegaPintPackageManager.OnSuccess += UpdatePackages;
+            MegaPintPackageManager.CachedPackages.OnRefreshed += Refresh;
+            
             UpdatePackages();
             
             root.Add(content);
@@ -94,6 +103,7 @@ namespace Editor.Scripts.Windows
             base.OnDestroy();
             
             MegaPintPackageManager.OnSuccess -= UpdatePackages;
+            MegaPintPackageManager.CachedPackages.OnRefreshed -= Refresh;
             
             _searchField.UnregisterValueChangedCallback(SearchFieldChange);
             
@@ -112,21 +122,34 @@ namespace Editor.Scripts.Windows
 
         #endregion
         
-        public static void OpenImporter() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true);
+        private void UpdateRightPane()
+        {
+            _rightPane.Clear();
+
+            var currentPackageKey = ((MegaPintPackagesData.MegaPintPackageData)_packagesList.selectedItem).PackageKey;
+            var contentPath = RightPaneContentBase.Replace("xxx", currentPackageKey.ToString());
+            var content = Resources.Load<VisualTreeAsset>(contentPath);
+            
+            _rightPane.Add(content.Instantiate());
+        }
+        
+        public static void OpenImporter() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true, "Package Manager");
 
         private void SearchFieldChange(ChangeEvent<string> evt) => SetDisplayedPackages(_searchField.value);
 
+        private void Refresh(MegaPintPackageManager.CachedPackages packages)
+        {
+            _allPackages = packages;
+            SetDisplayedPackages(_searchField.value);
+        }
+        
         private void UpdatePackages()
         {
-            if (_allPackages == null)
+            MegaPintPackageManager.CachedPackages.AllPackages(_loading, packages =>
             {
-                _allPackages = new MegaPintPackageManager.CachedPackages(_loading, () =>
-                {
-                    SetDisplayedPackages(_searchField.value);
-                });
-            }
-            else
+                _allPackages = packages;
                 SetDisplayedPackages(_searchField.value);
+            });
         }
         
         private void SetDisplayedPackages(string searchString)
@@ -152,7 +175,10 @@ namespace Editor.Scripts.Windows
 
         private void SwitchState(int page)
         {
-            _packagesList.style.display = page == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            _packagesList.style.display = page == 0
+                ? _allPackages == null ? DisplayStyle.None : DisplayStyle.Flex
+                : DisplayStyle.None;
+            
             _settingsList.style.display = page == 1 ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }
