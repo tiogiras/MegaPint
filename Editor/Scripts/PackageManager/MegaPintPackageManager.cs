@@ -136,8 +136,8 @@ namespace Editor.Scripts.PackageManager
                     var newInstance = new CachedPackages(loadingLabel, action);
                     _allPackages = newInstance;
                 }
-                
-                action?.Invoke(_allPackages);
+                else 
+                    action?.Invoke(_allPackages);
             }
 
             public static void Refresh()
