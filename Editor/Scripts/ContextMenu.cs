@@ -2,7 +2,6 @@
 using Editor.Scripts.Settings;
 using Editor.Scripts.Windows;
 using UnityEditor;
-using UnityEngine;
 
 namespace Editor.Scripts
 {
@@ -23,18 +22,6 @@ namespace Editor.Scripts
             return ! exists
                 ? EditorWindow.GetWindow<MegaPintFirstSteps>(utility, title).ShowWindow() 
                 : EditorWindow.GetWindow<T>(utility, title).ShowWindow();
-        }
-
-        [MenuItem("MegaPint/TEST", false, 11)]
-        private static void TEST()
-        {
-            Debug.Log(MegaPintSettings.Instance);
-        }
-        
-        [MenuItem("MegaPint/RESET", false, 11)]
-        private static void RESET()
-        {
-            MegaPintSettings.Instance = null;
         }
     }
 }
