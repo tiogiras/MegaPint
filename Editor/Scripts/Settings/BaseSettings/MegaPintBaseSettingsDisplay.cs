@@ -7,9 +7,6 @@ namespace Editor.Scripts.Settings.BaseSettings
 {
     public static class MegaPintBaseSettingsDisplay
     {
-        //TODO actual content for the interactablility if needed
-        //TODO use actions for registering and unregistering of the callbacks
-
         private const string BasePath = "User Interface/MegaPint Base Settings/xxxDisplay";
 
         private static VisualElement _element;

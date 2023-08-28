@@ -41,14 +41,20 @@ namespace Editor.Scripts.Settings.BaseSettings
                         {
                             new ()
                             {
+                                SettingKey = SettingKey.UpdateBasePackage,
+                                SettingName = "How To: Update Base Package",
+                                IntendLevel = 2
+                            },
+                            new ()
+                            {
                                 SettingKey = SettingKey.ManagePackages,
-                                SettingName = "Manage Packages",
+                                SettingName = "How To: Manage Packages",
                                 IntendLevel = 2
                             },
                             new ()
                             {
                                 SettingKey = SettingKey.UsePackages,
-                                SettingName = "Use Packages",
+                                SettingName = "How To: Use Packages",
                                 IntendLevel = 2
                             }
                         }
@@ -59,7 +65,7 @@ namespace Editor.Scripts.Settings.BaseSettings
         
         public enum SettingKey
         {
-            Contact, ManagePackages, UsePackages,
+            Contact, UpdateBasePackage, ManagePackages, UsePackages
         }
     }
 }
