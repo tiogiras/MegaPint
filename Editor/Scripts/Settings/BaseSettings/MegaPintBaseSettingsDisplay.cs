@@ -29,18 +29,10 @@ namespace Editor.Scripts.Settings.BaseSettings
         {
             switch (key)
             {
-                case MegaPintBaseSettingsData.SettingKey.Contact:
-
-                    RegisterCallbacksContact();
-                    
-                    break;
-                
-                case MegaPintBaseSettingsData.SettingKey.ManagePackages:
-                    break;
-                
-                case MegaPintBaseSettingsData.SettingKey.UsePackages:
-                    break;
-                
+                case MegaPintBaseSettingsData.SettingKey.Contact: RegisterCallbacksContact(); break;
+                case MegaPintBaseSettingsData.SettingKey.ManagePackages: break;
+                case MegaPintBaseSettingsData.SettingKey.UsePackages: break;
+                case MegaPintBaseSettingsData.SettingKey.UpdateBasePackage: break;
                 default: return;
             }
         }
