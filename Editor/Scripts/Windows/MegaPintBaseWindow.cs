@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Editor.Scripts.PackageManager;
+using Editor.Scripts.Settings.BaseSettings;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -47,9 +48,24 @@ namespace Editor.Scripts.Windows
         private MegaPintPackageManager.CachedPackages _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
 
+        private VisualElement _currentVisualElementPackages;
+        private List<VisualElement> _visualElementsPackages;
+        
+        private VisualElement _currentVisualElementSettings;
+        private List<VisualElement> _visualElementsSettings;
+
+        private List<MegaPintBaseSettingsData.Setting> _openSettings;
+        private List<MegaPintBaseSettingsData.Setting> _displayedSettings;
+        private List<MegaPintBaseSettingsData.Setting> _allSettings;
+
         private int _currentLoadingLabelProgress;
+
+        private bool _inSearch;
         
         #endregion
+
+        public static Action OnRightPaneInitialization;
+        public static Action OnRightPaneClose;
 
         #region Override Methods
 
@@ -94,10 +110,23 @@ namespace Editor.Scripts.Windows
             
             _packagesList.bindItem = (element, i) =>
             {
-                element.Q<Label>("PackageName").text = _displayedPackages[i].PackageNiceName;
+                _visualElementsPackages ??= new List<VisualElement>();
+                _visualElementsPackages.Add(element);
+                
+                var packageNameLabel = element.Q<Label>("PackageName");
+                packageNameLabel.text = _displayedPackages[i].PackageNiceName;
+                packageNameLabel.style.borderLeftWidth = 0;
             };
             
-            _packagesList.destroyItem = element => element.Clear();
+            _packagesList.destroyItem = element =>
+            {
+                _visualElementsPackages ??= new List<VisualElement>();
+                
+                if (_visualElementsPackages.Contains(element))
+                    _visualElementsPackages.Remove(element);
+                
+                element.Clear();
+            };
 
             #endregion
 
@@ -105,9 +134,47 @@ namespace Editor.Scripts.Windows
 
             _settingsList.makeItem = () => _settingItem.Instantiate();
             
-            _settingsList.bindItem = (element, i) => { };
+            _settingsList.bindItem = (element, i) =>
+            {
+                _openSettings ??= new List<MegaPintBaseSettingsData.Setting>();
+                
+                _visualElementsSettings ??= new List<VisualElement>();
+
+                if (!_visualElementsSettings.Contains(element))
+                    _visualElementsSettings.Add(element);
+
+                var setting = _displayedSettings[i];
+
+                var nameLabel = element.Q<Label>("Name");
+                nameLabel.text = setting.SettingName;
+                nameLabel.style.borderLeftWidth = _currentVisualElementSettings == element 
+                    ? 2.5f
+                    : 0;
+                
+                element.style.marginLeft = _inSearch 
+                    ? 0
+                    : setting.IntendLevel * 10;
+
+                element.Q<VisualElement>("Open").style.display = _openSettings.Contains(setting) 
+                    ? DisplayStyle.Flex 
+                    : DisplayStyle.None;
+                
+                element.Q<VisualElement>("Closed").style.display = setting.SubSettings is { Count: > 0 }
+                    ? _openSettings.Contains(setting) 
+                        ? DisplayStyle.None 
+                        : DisplayStyle.Flex
+                    : DisplayStyle.None;
+            };
             
-            _settingsList.destroyItem = element => element.Clear();
+            _settingsList.destroyItem = element =>
+            {
+                _visualElementsSettings ??= new List<VisualElement>();
+
+                if (_visualElementsSettings.Contains(element))
+                    _visualElementsSettings.Remove(element);
+
+                element.Clear();
+            };
 
             #endregion
             
@@ -140,7 +207,8 @@ namespace Editor.Scripts.Windows
             _searchField.RegisterValueChangedCallback(OnSearchFieldChange);
             
             _packagesList.onSelectedIndicesChange += OnUpdateRightPane;
-            
+            _settingsList.onSelectedIndicesChange += OnRefreshSettings;
+
             _btnPackages.clicked += MegaPintPackageManager.CachedPackages.RequestAllPackages;
             _btnSettings.clicked += OnUpdateSettings;
             _btnOpenPackageManager.clicked += OnOpenPackageManager;
@@ -154,10 +222,13 @@ namespace Editor.Scripts.Windows
             _searchField.UnregisterValueChangedCallback(OnSearchFieldChange);
             
             _packagesList.onSelectedIndicesChange -= OnUpdateRightPane;
+            _settingsList.onSelectedIndicesChange -= OnRefreshSettings;
             
             _btnPackages.clicked -= MegaPintPackageManager.CachedPackages.RequestAllPackages;
             _btnSettings.clicked -= OnUpdateSettings;
             _btnOpenPackageManager.clicked += OnOpenPackageManager;
+            
+            OnRightPaneClose?.Invoke();
         }
 
         #endregion
@@ -186,30 +257,137 @@ namespace Editor.Scripts.Windows
             _allPackages = packages;
             SetDisplayedPackages(_searchField.value);
         };
-        
+
         private void OnUpdateRightPane(IEnumerable<int> _)
         {
-            _rightPane.Clear();
+            ClearRightPane();
+            
+            if (_packagesList.selectedItem == null)
+                return;
+
+            if (_currentVisualElementPackages != null)
+                _currentVisualElementPackages.style.borderLeftWidth = 0;
+
+            var visualElement = _visualElementsPackages[_packagesList.selectedIndex].Q<Label>("PackageName");
+            visualElement.style.borderLeftWidth = 2.5f;
+            _currentVisualElementPackages = visualElement;
 
             var currentPackageKey = ((MegaPintPackagesData.MegaPintPackageData)_packagesList.selectedItem).PackageKey;
             var contentPath = RightPaneContentBase.Replace("xxx", currentPackageKey.ToString());
             var content = Resources.Load<VisualTreeAsset>(contentPath);
             
+            DisplayContent.DisplayRightPane(currentPackageKey);
+            
             _rightPane.Add(content.Instantiate());
+            
+            OnRightPaneInitialization?.Invoke();
         }
         
         public static void OnOpenPackageManager() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true, "Package Manager");
 
-        private void OnSearchFieldChange(ChangeEvent<string> evt) => SetDisplayedPackages(_searchField.value);
+        private void OnSearchFieldChange(ChangeEvent<string> evt)
+        {
+            if (_packagesList.style.display == DisplayStyle.Flex)
+                SetDisplayedPackages(_searchField.value);
+
+            if (_settingsList.style.display == DisplayStyle.Flex)
+                SetDisplayedSettings(_searchField.value);
+        }
 
         private void OnUpdateSettings()
         {
+            _displayedSettings = MegaPintBaseSettingsData.Settings;
+            _openSettings = new List<MegaPintBaseSettingsData.Setting>();
+            _visualElementsSettings = new List<VisualElement>();
+
+            _inSearch = false;
+            
+            _settingsList.itemsSource = _displayedSettings;
+            _settingsList.RefreshItems();
+            
             SwitchState(1);
+            
+            if (_allSettings != null) 
+                return;
+            
+            _allSettings = new List<MegaPintBaseSettingsData.Setting>();
+                
+            foreach (var setting in MegaPintBaseSettingsData.Settings)
+            {
+                _allSettings.AddRange(GetAllSettings(setting));
+            }
+        }
+
+        private void OnRefreshSettings(IEnumerable<int> _)
+        {
+            ClearRightPane();
+
+            if (_settingsList.selectedItem == null)
+                return;
+
+            var castedItem = (MegaPintBaseSettingsData.Setting)_settingsList.selectedItem;
+
+            if (_currentVisualElementSettings != null)
+            {
+                _currentVisualElementSettings.Q<Label>("Name").style.borderLeftWidth = 0;
+                _currentVisualElementSettings = null;
+            }
+
+            if (castedItem.SubSettings is { Count: > 0 })
+            {
+                _displayedSettings = new List<MegaPintBaseSettingsData.Setting>();
+
+                _openSettings ??= new List<MegaPintBaseSettingsData.Setting>();
+
+                _visualElementsSettings = new List<VisualElement>();
+                
+                if (_openSettings.Contains(castedItem))
+                    _openSettings.Remove(castedItem);
+                else
+                    _openSettings.Add(castedItem);
+                
+                foreach (var setting in MegaPintBaseSettingsData.Settings)
+                {
+                    AddSetting(setting);
+                }
+
+                _settingsList.itemsSource = _displayedSettings;
+                _settingsList.RefreshItems();
+            }
+            else
+            {
+                _currentVisualElementSettings = _visualElementsSettings[_settingsList.selectedIndex];
+                _currentVisualElementSettings.Q<Label>("Name").style.borderLeftWidth = 2.5f;
+
+                // TODO update Settings right pane   
+            }
         }
         
         #endregion
 
         #region Internal Methods
+
+        private void AddSetting(MegaPintBaseSettingsData.Setting setting)
+        {
+            _displayedSettings.Add(setting);
+
+            if (setting.SubSettings is not {Count: > 0})
+                return;
+            
+            if (!_openSettings.Contains(setting))
+                return;
+
+            foreach (var subSetting in setting.SubSettings)
+            {
+                AddSetting(subSetting);
+            }
+        }
+        
+        private void ClearRightPane()
+        {
+            OnRightPaneClose?.Invoke();
+            _rightPane.Clear();
+        }
 
         private void SetDisplayedPackages(string searchString)
         {
@@ -226,9 +404,54 @@ namespace Editor.Scripts.Windows
             _packagesList.itemsSource = _displayedPackages;
             _packagesList.RefreshItems();
         }
+        
+        private void SetDisplayedSettings(string searchString)
+        {
+            _displayedSettings = searchString.Equals("")
+                ? MegaPintBaseSettingsData.Settings
+                : _allSettings.Where(setting => setting.SettingName.ToLower().Contains(searchString.ToLower())).ToList();
+
+            if (!searchString.Equals(""))
+            {
+                _inSearch = true;
+                _displayedSettings.Sort();
+            }
+            else
+                _inSearch = false;
+
+            _openSettings = new List<MegaPintBaseSettingsData.Setting>();
+            _visualElementsSettings = new List<VisualElement>();
+            
+            _settingsList.ClearSelection();
+            _currentVisualElementSettings = null;
+
+            _settingsList.itemsSource = _displayedSettings;
+            _settingsList.RefreshItems();
+        }
+
+        private List<MegaPintBaseSettingsData.Setting> GetAllSettings(MegaPintBaseSettingsData.Setting setting)
+        {
+            var result = new List<MegaPintBaseSettingsData.Setting>();
+            var isCategory = setting.SubSettings is { Count: > 0 };
+            
+            if (!isCategory)
+                result.Add(setting);
+            else
+            {
+                foreach (var subSetting in setting.SubSettings)
+                {
+                    result.AddRange(GetAllSettings(subSetting));
+                }
+            }
+            
+            return result;
+        }
 
         private void SwitchState(int page)
         {
+            _packagesList.ClearSelection();
+            _settingsList.ClearSelection();
+            
             _packagesList.style.display = page == 0
                 ? _allPackages == null ? DisplayStyle.None : DisplayStyle.Flex
                 : DisplayStyle.None;

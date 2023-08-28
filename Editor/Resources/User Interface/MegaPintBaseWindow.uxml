@@ -15,8 +15,8 @@
             </uie:Toolbar>
             <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: space-between; height: auto; flex-grow: 1;">
                 <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="flex-shrink: 1; flex-basis: auto; flex-grow: 0; flex-direction: column;">
-                    <ui:ListView focusable="true" name="PackagesList" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="ContentOnly" />
-                    <ui:ListView focusable="true" name="SettingsList" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="ContentOnly" />
+                    <ui:ListView focusable="true" name="PackagesList" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None" style="margin-left: 5px; margin-right: 0;" />
+                    <ui:ListView focusable="true" name="SettingsList" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None" style="margin-left: 5px; margin-right: 0;" />
                     <ui:Label text="Loading..." display-tooltip-when-elided="true" name="Loading" style="-unity-text-align: upper-left; -unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); -unity-font-style: bold; font-size: 12.5px; margin-top: 3px; margin-bottom: 3px; margin-left: 10px; margin-right: 0;" />
                 </ui:ScrollView>
                 <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 0; flex-basis: auto;">

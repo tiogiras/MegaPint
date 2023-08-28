@@ -1,0 +1,68 @@
+﻿#if UNITY_EDITOR
+using System;
+using System.Collections.Generic;
+
+namespace Editor.Scripts.Settings.BaseSettings
+{
+    public static class MegaPintBaseSettingsData
+    {
+        public struct Setting : IComparable<Setting>
+        {
+            public SettingKey SettingKey;
+            public string SettingName;
+            public int IntendLevel;
+            public List<Setting> SubSettings;
+            
+            public int CompareTo(Setting other)
+            {
+                return string.Compare(SettingName, other.SettingName, StringComparison.Ordinal);
+            }
+        }
+
+        public static readonly List<Setting> Settings = new()
+        {
+            new Setting
+            {
+                SettingKey = SettingKey.Help,
+                SettingName = "Help",
+                IntendLevel = 0,
+                SubSettings = new List<Setting>
+                {
+                    new()
+                    {
+                        SettingKey = SettingKey.Contact,
+                        SettingName = "Contact",
+                        IntendLevel = 1
+                    },
+                    new()
+                    {
+                        SettingKey = SettingKey.HowTo,
+                        SettingName = "How To's",
+                        IntendLevel = 1,
+                        SubSettings = new List<Setting>
+                        {
+                            new ()
+                            {
+                                SettingKey = SettingKey.ManagePackages,
+                                SettingName = "Manage Packages",
+                                IntendLevel = 2
+                            },
+                            new ()
+                            {
+                                SettingKey = SettingKey.UsePackages,
+                                SettingName = "Use Packages",
+                                IntendLevel = 2
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        
+        public enum SettingKey
+        {
+            Help, Contact, HowTo, ManagePackages, UsePackages,
+        }
+    }
+}
+#endif
