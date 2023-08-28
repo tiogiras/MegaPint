@@ -261,24 +261,36 @@ namespace Editor.Scripts.Windows
         private void OnUpdateRightPane(IEnumerable<int> _)
         {
             ClearRightPane();
-            
-            if (_packagesList.selectedItem == null)
-                return;
 
-            if (_currentVisualElementPackages != null)
-                _currentVisualElementPackages.style.borderLeftWidth = 0;
+            if (_packagesList.style.display == DisplayStyle.Flex)
+            {
+                if (_packagesList.selectedItem == null)
+                    return;
 
-            var visualElement = _visualElementsPackages[_packagesList.selectedIndex].Q<Label>("PackageName");
-            visualElement.style.borderLeftWidth = 2.5f;
-            _currentVisualElementPackages = visualElement;
+                if (_currentVisualElementPackages != null)
+                    _currentVisualElementPackages.style.borderLeftWidth = 0;
 
-            var currentPackageKey = ((MegaPintPackagesData.MegaPintPackageData)_packagesList.selectedItem).PackageKey;
-            var contentPath = RightPaneContentBase.Replace("xxx", currentPackageKey.ToString());
-            var content = Resources.Load<VisualTreeAsset>(contentPath);
+                var visualElement = _visualElementsPackages[_packagesList.selectedIndex].Q<Label>("PackageName");
+                visualElement.style.borderLeftWidth = 2.5f;
+                _currentVisualElementPackages = visualElement;
+
+                var currentPackageKey = ((MegaPintPackagesData.MegaPintPackageData)_packagesList.selectedItem).PackageKey;
+                var contentPath = RightPaneContentBase.Replace("xxx", currentPackageKey.ToString());
+                var content = Resources.Load<VisualTreeAsset>(contentPath);
             
-            DisplayContent.DisplayRightPane(currentPackageKey);
+                DisplayContent.DisplayRightPane(currentPackageKey);
             
-            _rightPane.Add(content.Instantiate());
+                _rightPane.Add(content.Instantiate());
+            }
+
+            if (_settingsList.style.display == DisplayStyle.Flex)
+            {
+                if (_settingsList.selectedItem == null)
+                    return;
+
+                var currentSettingKey = ((MegaPintBaseSettingsData.Setting)_settingsList.selectedItem).SettingKey;
+                MegaPintBaseSettingsDisplay.Display(_rightPane, currentSettingKey);
+            }
             
             OnRightPaneInitialization?.Invoke();
         }
@@ -320,8 +332,6 @@ namespace Editor.Scripts.Windows
 
         private void OnRefreshSettings(IEnumerable<int> _)
         {
-            ClearRightPane();
-
             if (_settingsList.selectedItem == null)
                 return;
 
@@ -359,7 +369,7 @@ namespace Editor.Scripts.Windows
                 _currentVisualElementSettings = _visualElementsSettings[_settingsList.selectedIndex];
                 _currentVisualElementSettings.Q<Label>("Name").style.borderLeftWidth = 2.5f;
 
-                // TODO update Settings right pane   
+                OnUpdateRightPane(_); 
             }
         }
         

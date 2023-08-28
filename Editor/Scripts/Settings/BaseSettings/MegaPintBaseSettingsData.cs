@@ -23,7 +23,6 @@ namespace Editor.Scripts.Settings.BaseSettings
         {
             new Setting
             {
-                SettingKey = SettingKey.Help,
                 SettingName = "Help",
                 IntendLevel = 0,
                 SubSettings = new List<Setting>
@@ -36,7 +35,6 @@ namespace Editor.Scripts.Settings.BaseSettings
                     },
                     new()
                     {
-                        SettingKey = SettingKey.HowTo,
                         SettingName = "How To's",
                         IntendLevel = 1,
                         SubSettings = new List<Setting>
@@ -61,7 +59,7 @@ namespace Editor.Scripts.Settings.BaseSettings
         
         public enum SettingKey
         {
-            Help, Contact, HowTo, ManagePackages, UsePackages,
+            Contact, ManagePackages, UsePackages,
         }
     }
 }
