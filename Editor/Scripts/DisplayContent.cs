@@ -15,6 +15,9 @@ namespace Editor.Scripts
         private static readonly List <string> s_tabsContentLocations = new();
         private static readonly List <VisualElement> s_tabsContainer = new();
 
+        private static readonly Color s_inactiveTabColor = new(.34f, .34f, .34f);
+        private static readonly Color s_activeTabColor = new(.19f, .19f, .19f);
+
         public static void DisplayRightPane(MegaPintPackagesData.PackageKey key, VisualElement root)
         {
             switch (key)
@@ -42,11 +45,15 @@ namespace Editor.Scripts
                         
                         s_tabsContainer[i] = content;
                     }
+
+                    s_tabs[i].style.backgroundColor = s_activeTabColor;
                 }
                 else
                 {
                     if (contentInstantiated)
                         s_tabsContainer[i].style.display = DisplayStyle.None;
+
+                    s_tabs[i].style.backgroundColor = s_inactiveTabColor;
                 }
             }
             
@@ -76,6 +83,7 @@ namespace Editor.Scripts
                 var tab = root.Q <Button>($"Tab{i}");
                 
                 s_tabs.Add(tab);
+                tab.style.backgroundColor = s_inactiveTabColor;
                 tab.clickable = new Clickable(() => {SwitchTab(tabContentParent, index);});
             }
         }
