@@ -276,11 +276,11 @@ namespace Editor.Scripts.Windows
 
                 var currentPackageKey = ((MegaPintPackagesData.MegaPintPackageData)_packagesList.selectedItem).PackageKey;
                 var contentPath = RightPaneContentBase.Replace("xxx", currentPackageKey.ToString());
-                var content = Resources.Load<VisualTreeAsset>(contentPath);
+                var content = Resources.Load<VisualTreeAsset>(contentPath).Instantiate();
             
-                DisplayContent.DisplayRightPane(currentPackageKey);
+                DisplayContent.DisplayRightPane(currentPackageKey, content);
             
-                _rightPane.Add(content.Instantiate());
+                _rightPane.Add(content);
             }
 
             if (_settingsList.style.display == DisplayStyle.Flex)
