@@ -1,9 +1,7 @@
 {
-    "name": "tiogiras.megapint.Editor",
+    "name": "tiogiras.megapint-validators.Runtime.Scripts",
     "rootNamespace": "",
-    "references": [
-        "GUID:0e40976153628db4fbfccfcc6ab8f1bf"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

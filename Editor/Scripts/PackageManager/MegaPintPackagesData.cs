@@ -36,29 +36,18 @@ namespace Editor.Scripts.PackageManager
                 PackageNiceName = "Scene-AutoSave",
                 GitUrl = "https://github.com/tiogiras/MegaPint-AutoSave.git",
                 Version = "1.0.0",
-                LastUpdate = "12.08.2023",
+                LastUpdate = "28.08.2023",
                 UnityVersion = "2021.3.20f1 or higher",
                 MegaPintVersion = "1.0.0 or higher"
             },
             new MegaPintPackageData
             {
-                PackageKey = PackageKey.Test1,
-                PackageName = "com.tiogiras.megapint-autosave",
-                PackageNiceName = "Test1",
-                GitUrl = "https://github.com/tiogiras/MegaPint-AutoSave.git",
+                PackageKey = PackageKey.Validators,
+                PackageName = "com.tiogiras.megapint-validators",
+                PackageNiceName = "Validators",
+                GitUrl = "https://github.com/tiogiras/MegaPint-Validators.git",
                 Version = "1.0.0",
-                LastUpdate = "12.08.2023",
-                UnityVersion = "2021.3.20f1 or higher",
-                MegaPintVersion = "1.0.0 or higher"
-            },
-            new MegaPintPackageData
-            {
-                PackageKey = PackageKey.Test2,
-                PackageName = "com.tiogiras.megapint-autosave",
-                PackageNiceName = "Test2",
-                GitUrl = "https://github.com/tiogiras/MegaPint-AutoSave.git",
-                Version = "1.0.0",
-                LastUpdate = "12.08.2023",
+                LastUpdate = "28.08.2023",
                 UnityVersion = "2021.3.20f1 or higher",
                 MegaPintVersion = "1.0.0 or higher"
             }
@@ -66,7 +55,7 @@ namespace Editor.Scripts.PackageManager
 
         public enum PackageKey
         {
-            AutoSave, Test1, Test2
+            AutoSave, Validators
         }
     }
 }
