@@ -6,11 +6,11 @@ using UnityEngine;
 
 namespace Editor.Scripts.Settings
 {
-    [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/SettingsData", order = 1)]
+    //[CreateAssetMenu(fileName = "Data", menuName = "MegaPint/SettingsData", order = 1)]
     public class MegaPintSettings : ScriptableObject
     {
         public static MegaPintSettings Instance;
-        
+
         [SerializeField] private List<MegaPintSettingsBase> settings;
 
         private void AddSetting(MegaPintSettingsBase setting)
