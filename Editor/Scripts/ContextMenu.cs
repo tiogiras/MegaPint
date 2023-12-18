@@ -5,12 +5,15 @@ using UnityEditor;
 
 namespace Editor.Scripts
 {
-    public static partial class ContextMenu
+    internal static partial class ContextMenu
     {
-        [MenuItem("MegaPint/Open", false, 0)]
+        private const string MenuItemMegaPint = "MegaPint";
+        private const string MenuItemPackages = MenuItemMegaPint + "/Packages";
+
+        [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
         private static void Open() => TryOpen<MegaPintBaseWindow>(false);
 
-        [MenuItem("MegaPint/PackageManager", false, 11)]
+        [MenuItem(MenuItemMegaPint + "/PackageManager", false, 11)]
         private static void OpenImporter() => MegaPintBaseWindow.OnOpenPackageManager();
 
         public static MegaPintEditorWindowBase TryOpen<T>(bool utility, string title = "") where T : MegaPintEditorWindowBase

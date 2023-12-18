@@ -31,6 +31,7 @@ namespace Editor.Scripts.Windows
         private Label _lastUpdate;
         private Label _unityVersion;
         private Label _megaPintVersion;
+        private Label _infoText;
         
         private ScrollView _packages;
 
@@ -89,6 +90,7 @@ namespace Editor.Scripts.Windows
             _lastUpdate = _content.Q<Label>("LastUpdate");
             _unityVersion = _content.Q<Label>("UnityVersion");
             _megaPintVersion = _content.Q<Label>("MegaPintVersion");
+            _infoText = content.Q <Label>("InfoText");
 
             _btnImport = _rightPane.Q<Button>("BTN_Import");
             _btnRemove = _rightPane.Q<Button>("BTN_Remove");
@@ -205,6 +207,7 @@ namespace Editor.Scripts.Windows
             _lastUpdate.text = package.LastUpdate;
             _unityVersion.text = package.UnityVersion;
             _megaPintVersion.text = package.MegaPintVersion;
+            _infoText.text = package.InfoText;
 
             var isImported = _allPackages.IsImported(package.PackageKey);
             _btnImport.style.display = isImported ? DisplayStyle.None : DisplayStyle.Flex;
