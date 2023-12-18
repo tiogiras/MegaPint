@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace Editor.Scripts
 {
-    public static partial class ContextMenu
+    internal static partial class ContextMenu
     {
         private const string MenuItemMegaPint = "MegaPint";
         private const string MenuItemPackages = MenuItemMegaPint + "/Packages";

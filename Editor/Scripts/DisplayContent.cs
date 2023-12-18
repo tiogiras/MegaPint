@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Editor.Scripts
 {
-    public static partial class DisplayContent
+    internal static partial class DisplayContent
     {
         private static Action <int, VisualElement> s_onSelectedTabChanged;
         private static Action s_onSelectedPackageChanged;

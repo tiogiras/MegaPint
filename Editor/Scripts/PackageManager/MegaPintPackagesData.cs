@@ -45,7 +45,7 @@ public static class MegaPintPackagesData
             GitUrl = "https://github.com/tiogiras/MegaPint-AutoSave.git",
             Version = "1.0.0",
             LastUpdate = "28.08.2023",
-            UnityVersion = "2021.3.20f1 or higher",
+            UnityVersion = "2022.3.15f1 or higher",
             MegaPintVersion = "1.0.0 or higher",
             InfoText = ""
         },
@@ -56,8 +56,8 @@ public static class MegaPintPackagesData
             PackageNiceName = "Validators",
             GitUrl = "https://github.com/tiogiras/MegaPint-Validators.git",
             Version = "1.0.0",
-            LastUpdate = "28.08.2023",
-            UnityVersion = "2021.3.20f1 or higher",
+            LastUpdate = "18.12.2023",
+            UnityVersion = "2022.3.15f1 or higher",
             MegaPintVersion = "1.0.0 or higher",
             InfoText = "Validators adds a system to create validatable MonoBehaviours, which can be extended with your own requirements.\n" +
                        "See the status and occured issues on all GameObjects with validatable MonoBehaviours in one window and automatically fix any occuring issue."
