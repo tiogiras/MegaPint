@@ -23,9 +23,16 @@ namespace Editor.Scripts.PackageManager
             if (!await Add(packageUrl))
                 return;
 
-            if (!await Embed(packageUrl)) 
-                return;
-            
+            try
+            {
+                if (!await Embed(packageUrl)) 
+                    return;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
             onSuccess?.Invoke();  
             CachedPackages.Refresh();
         }
