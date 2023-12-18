@@ -64,8 +64,8 @@ namespace Editor.Scripts.Windows
         
         #endregion
 
-        public static Action OnRightPaneInitialization;
-        public static Action OnRightPaneClose;
+        public static Action onRightPaneInitialization;
+        public static Action onRightPaneClose;
 
         #region Override Methods
 
@@ -146,20 +146,20 @@ namespace Editor.Scripts.Windows
                 var setting = _displayedSettings[i];
 
                 var nameLabel = element.Q<Label>("Name");
-                nameLabel.text = setting.SettingName;
+                nameLabel.text = setting.settingName;
                 nameLabel.style.borderLeftWidth = _currentVisualElementSettings == element 
                     ? 2.5f
                     : 0;
                 
                 element.style.marginLeft = _inSearch 
                     ? 0
-                    : setting.IntendLevel * 10;
+                    : setting.intendLevel * 10;
 
                 element.Q<VisualElement>("Open").style.display = _openSettings.Contains(setting) 
                     ? DisplayStyle.Flex 
                     : DisplayStyle.None;
                 
-                element.Q<VisualElement>("Closed").style.display = setting.SubSettings is { Count: > 0 }
+                element.Q<VisualElement>("Closed").style.display = setting.subSettings is { Count: > 0 }
                     ? _openSettings.Contains(setting) 
                         ? DisplayStyle.None 
                         : DisplayStyle.Flex
@@ -199,15 +199,15 @@ namespace Editor.Scripts.Windows
         protected override void RegisterCallbacks()
         {
             MegaPintPackageManager.CachedPackages.OnUpdateActions.Add(
-                new MegaPintPackageManager.CachedPackages.ListableAction(OnLoadingPackages, "BaseWindow"));
+                new MegaPintPackageManager.CachedPackages.ListableAction(_onLoadingPackages, "BaseWindow"));
             
             MegaPintPackageManager.CachedPackages.OnCompleteActions
-                .Add(new MegaPintPackageManager.CachedPackages.ListableAction<MegaPintPackageManager.CachedPackages>(OnPackagesLoaded, "BaseWindow"));
+                .Add(new MegaPintPackageManager.CachedPackages.ListableAction<MegaPintPackageManager.CachedPackages>(_onPackagesLoaded, "BaseWindow"));
 
             _searchField.RegisterValueChangedCallback(OnSearchFieldChange);
             
-            _packagesList.onSelectedIndicesChange += OnUpdateRightPane;
-            _settingsList.onSelectedIndicesChange += OnRefreshSettings;
+            _packagesList.selectedIndicesChanged += OnUpdateRightPane;
+            _settingsList.selectedIndicesChanged += OnRefreshSettings;
 
             _btnPackages.clicked += MegaPintPackageManager.CachedPackages.RequestAllPackages;
             _btnSettings.clicked += OnUpdateSettings;
@@ -221,21 +221,21 @@ namespace Editor.Scripts.Windows
 
             _searchField.UnregisterValueChangedCallback(OnSearchFieldChange);
             
-            _packagesList.onSelectedIndicesChange -= OnUpdateRightPane;
-            _settingsList.onSelectedIndicesChange -= OnRefreshSettings;
+            _packagesList.selectedIndicesChanged -= OnUpdateRightPane;
+            _settingsList.selectedIndicesChanged -= OnRefreshSettings;
             
             _btnPackages.clicked -= MegaPintPackageManager.CachedPackages.RequestAllPackages;
             _btnSettings.clicked -= OnUpdateSettings;
             _btnOpenPackageManager.clicked += OnOpenPackageManager;
             
-            OnRightPaneClose?.Invoke();
+            onRightPaneClose?.Invoke();
         }
 
         #endregion
 
         #region Callback Methods
 
-        private Action OnLoadingPackages => () =>
+        private Action _onLoadingPackages => () =>
         {
             _loading.style.display = DisplayStyle.Flex;
             _packagesList.style.display = DisplayStyle.None;
@@ -247,7 +247,7 @@ namespace Editor.Scripts.Windows
                 out _currentLoadingLabelProgress);
         };
 
-        private Action<MegaPintPackageManager.CachedPackages> OnPackagesLoaded => packages =>
+        private Action<MegaPintPackageManager.CachedPackages> _onPackagesLoaded => packages =>
         {
             _loading.style.display = DisplayStyle.None;
             _packagesList.style.display = DisplayStyle.Flex;
@@ -288,11 +288,11 @@ namespace Editor.Scripts.Windows
                 if (_settingsList.selectedItem == null)
                     return;
 
-                var currentSettingKey = ((MegaPintBaseSettingsData.Setting)_settingsList.selectedItem).SettingKey;
+                var currentSettingKey = ((MegaPintBaseSettingsData.Setting)_settingsList.selectedItem).settingKey;
                 MegaPintBaseSettingsDisplay.Display(_rightPane, currentSettingKey);
             }
             
-            OnRightPaneInitialization?.Invoke();
+            onRightPaneInitialization?.Invoke();
         }
         
         public static void OnOpenPackageManager() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true, "Package Manager");
@@ -343,7 +343,7 @@ namespace Editor.Scripts.Windows
                 _currentVisualElementSettings = null;
             }
 
-            if (castedItem.SubSettings is { Count: > 0 })
+            if (castedItem.subSettings is { Count: > 0 })
             {
                 _displayedSettings = new List<MegaPintBaseSettingsData.Setting>();
 
@@ -381,13 +381,13 @@ namespace Editor.Scripts.Windows
         {
             _displayedSettings.Add(setting);
 
-            if (setting.SubSettings is not {Count: > 0})
+            if (setting.subSettings is not {Count: > 0})
                 return;
             
             if (!_openSettings.Contains(setting))
                 return;
 
-            foreach (var subSetting in setting.SubSettings)
+            foreach (var subSetting in setting.subSettings)
             {
                 AddSetting(subSetting);
             }
@@ -395,7 +395,7 @@ namespace Editor.Scripts.Windows
         
         private void ClearRightPane()
         {
-            OnRightPaneClose?.Invoke();
+            onRightPaneClose?.Invoke();
             _rightPane.Clear();
         }
 
@@ -419,7 +419,7 @@ namespace Editor.Scripts.Windows
         {
             _displayedSettings = searchString.Equals("")
                 ? MegaPintBaseSettingsData.Settings
-                : _allSettings.Where(setting => setting.SettingName.ToLower().Contains(searchString.ToLower())).ToList();
+                : _allSettings.Where(setting => setting.settingName.ToLower().Contains(searchString.ToLower())).ToList();
 
             if (!searchString.Equals(""))
             {
@@ -442,13 +442,13 @@ namespace Editor.Scripts.Windows
         private List<MegaPintBaseSettingsData.Setting> GetAllSettings(MegaPintBaseSettingsData.Setting setting)
         {
             var result = new List<MegaPintBaseSettingsData.Setting>();
-            var isCategory = setting.SubSettings is { Count: > 0 };
+            var isCategory = setting.subSettings is { Count: > 0 };
             
             if (!isCategory)
                 result.Add(setting);
             else
             {
-                foreach (var subSetting in setting.SubSettings)
+                foreach (var subSetting in setting.subSettings)
                 {
                     result.AddRange(GetAllSettings(subSetting));
                 }

@@ -85,12 +85,12 @@ namespace Editor.Scripts.Windows
 
             path = path.Replace(Application.dataPath, "Assets");
             
-            MegaPintSettings.Instance = CreateInstance<MegaPintSettings>();
-            AssetDatabase.CreateAsset(MegaPintSettings.Instance, path);
+            MegaPintSettings.instance = CreateInstance<MegaPintSettings>();
+            AssetDatabase.CreateAsset(MegaPintSettings.instance, path);
 
             EditorUtility.DisplayDialog(
                 "MegaPint settings asset",
-                MegaPintSettings.Instance != null
+                MegaPintSettings.instance != null
                     ? $"Successfully created a new MegaPint settings asset at {path}."
                     : "Could not connect asset due to an unknown issue.",
                 "OK");
