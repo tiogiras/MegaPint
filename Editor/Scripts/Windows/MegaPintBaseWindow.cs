@@ -17,7 +17,7 @@ namespace Editor.Scripts.Windows
         private const string PackageItem = "User Interface/MegaPintBasePackageItem";
         private const string SettingItem = "User Interface/MegaPintBaseSettingItem";
 
-        private const string RightPaneContentBase = "User Interface/xxxDisplayContent";
+        private const string RightPaneContentBase = "xxx/User Interface/DisplayContent";
 
         #endregion
 
