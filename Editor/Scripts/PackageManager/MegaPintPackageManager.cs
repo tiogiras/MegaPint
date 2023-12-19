@@ -15,18 +15,25 @@ namespace Editor.Scripts.PackageManager
     {
         private const int RefreshRate = 10;
 
-        public static Action OnSuccess;
-        public static Action<string> OnFailure;
+        public static Action onSuccess;
+        public static Action<string> onFailure;
 
         public static async void AddEmbedded(string packageUrl)
         {
             if (!await Add(packageUrl))
                 return;
 
-            if (!await Embed(packageUrl)) 
-                return;
-            
-            OnSuccess?.Invoke();  
+            try
+            {
+                if (!await Embed(packageUrl)) 
+                    return;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            onSuccess?.Invoke();  
             CachedPackages.Refresh();
         }
 
@@ -39,10 +46,10 @@ namespace Editor.Scripts.PackageManager
             }
             
             if (request.Status >= StatusCode.Failure)
-                OnFailure?.Invoke(request.Error.message);
+                onFailure?.Invoke(request.Error.message);
             else
             {
-                OnSuccess?.Invoke();   
+                onSuccess?.Invoke();   
                 CachedPackages.Refresh();
             }
         }
@@ -56,7 +63,7 @@ namespace Editor.Scripts.PackageManager
             }
 
             if (request.Status >= StatusCode.Failure)
-                OnFailure?.Invoke(request.Error.message);
+                onFailure?.Invoke(request.Error.message);
 
             return request.Status == StatusCode.Success;
         }
@@ -70,7 +77,7 @@ namespace Editor.Scripts.PackageManager
             }
             
             if (request.Status >= StatusCode.Failure)
-                OnFailure?.Invoke(request.Error.message);
+                onFailure?.Invoke(request.Error.message);
             
             return request.Status == StatusCode.Success;
         }
@@ -92,31 +99,31 @@ namespace Editor.Scripts.PackageManager
             }
 
             if (request.Status >= StatusCode.Failure)
-                OnFailure?.Invoke(request.Error.message);
+                onFailure?.Invoke(request.Error.message);
 
             return request.Result.Where(packageInfo => packageInfo.name.ToLower().Contains("megapint")).ToList();
         }
 
         public class CachedPackages
         {
-            private static CachedPackages _allPackages;
+            private static CachedPackages s_allPackages;
             
             private readonly List<PackageCache> _packages = new ();
 
             #region Actions
 
-            public static List<ListableAction> OnUpdateActions = new();
-            public static List<ListableAction<CachedPackages>> OnCompleteActions = new();
+            public static readonly List<ListableAction> OnUpdateActions = new();
+            public static readonly List<ListableAction<CachedPackages>> OnCompleteActions = new();
 
             public class ListableAction
             {
-                public string Name;
-                private Action _action;
+                public readonly string name;
+                private readonly Action _action;
 
                 public ListableAction(Action action, string name)
                 {
                     _action = action;
-                    Name = name;
+                    this.name = name;
                 }
 
                 public void Invoke() => _action.Invoke();
@@ -124,13 +131,13 @@ namespace Editor.Scripts.PackageManager
 
             public class ListableAction<T>
             {
-                public string Name;
-                private Action<T> _action;
+                public readonly string name;
+                private readonly Action<T> _action;
 
                 public ListableAction(Action<T> action, string name)
                 {
                     _action = action;
-                    Name = name;
+                    this.name = name;
                 }
 
                 public void Invoke(T value) => _action.Invoke(value);
@@ -144,7 +151,7 @@ namespace Editor.Scripts.PackageManager
                 for (var i = 0; i < OnUpdateActions.Count; i++)
                 {
                     var action = OnUpdateActions[i];
-                    if (!action.Name.Equals(name))
+                    if (!action.name.Equals(name))
                         continue;
                     
                     OnUpdateActions.RemoveAt(i);
@@ -160,7 +167,7 @@ namespace Editor.Scripts.PackageManager
                 for (var i = 0; i < OnCompleteActions.Count; i++)
                 {
                     var action = OnCompleteActions[i];
-                    if (!action.Name.Equals(name))
+                    if (!action.name.Equals(name))
                         continue;
                     
                     OnCompleteActions.RemoveAt(i);
@@ -174,10 +181,10 @@ namespace Editor.Scripts.PackageManager
 
             public static void RequestAllPackages()
             {
-                if (_allPackages == null)
+                if (s_allPackages == null)
                 {
                     var newInstance = new CachedPackages();
-                    _allPackages = newInstance;
+                    s_allPackages = newInstance;
                 }
                 else
                 {
@@ -186,28 +193,28 @@ namespace Editor.Scripts.PackageManager
                     
                     foreach (var action in OnCompleteActions)
                     {
-                        action?.Invoke(_allPackages);
+                        action?.Invoke(s_allPackages);
                     }
                 }
             }
 
             public static void Refresh()
             {
-                _allPackages = null;
+                s_allPackages = null;
                 RequestAllPackages();
             }
             
             public bool IsImported(MegaPintPackagesData.PackageKey key) =>
-                _packages.First(package => package.Key == key).Installed;
+                _packages.First(package => package.key == key).installed;
 
             public bool NeedsUpdate(MegaPintPackagesData.PackageKey key) =>
-                !_packages.First(package => package.Key == key).NewestVersion;
+                !_packages.First(package => package.key == key).newestVersion;
 
             public List<MegaPintPackagesData.MegaPintPackageData> ToDisplay() =>
-                _packages.Select(package => MegaPintPackagesData.PackageData(package.Key)).ToList();
+                _packages.Select(package => MegaPintPackagesData.PackageData(package.key)).ToList();
 
             public string CurrentVersion(MegaPintPackagesData.PackageKey key) =>
-                _packages.First(package => package.Key == key).CurrentVersion;
+                _packages.First(package => package.key == key).currentVersion;
             
             public static void UpdateLoadingLabel(Label loadingLabel, int currentProgress, int refreshRate, out int newProgress)
             {
@@ -262,10 +269,10 @@ namespace Editor.Scripts.PackageManager
 
                     _packages.Add(new PackageCache
                     {
-                        Key = package.PackageKey,
-                        Installed = installed,
-                        NewestVersion = newestVersion,
-                        CurrentVersion = currentVersion
+                        key = package.PackageKey,
+                        installed = installed,
+                        newestVersion = newestVersion,
+                        currentVersion = currentVersion
                     });
                 }
 
@@ -274,16 +281,16 @@ namespace Editor.Scripts.PackageManager
                 
                 foreach (var action in OnCompleteActions)
                 {
-                    action?.Invoke(_allPackages);
+                    action?.Invoke(s_allPackages);
                 }
             }
 
             private struct PackageCache
             {
-                public MegaPintPackagesData.PackageKey Key;
-                public bool Installed;
-                public bool NewestVersion;
-                public string CurrentVersion;
+                public MegaPintPackagesData.PackageKey key;
+                public bool installed;
+                public bool newestVersion;
+                public string currentVersion;
             }
 
             #endregion

@@ -8,14 +8,14 @@ namespace Editor.Scripts.Settings.BaseSettings
     {
         public struct Setting : IComparable<Setting>
         {
-            public SettingKey SettingKey;
-            public string SettingName;
-            public int IntendLevel;
-            public List<Setting> SubSettings;
+            public SettingKey settingKey;
+            public string settingName;
+            public int intendLevel;
+            public List<Setting> subSettings;
             
             public int CompareTo(Setting other)
             {
-                return string.Compare(SettingName, other.SettingName, StringComparison.Ordinal);
+                return string.Compare(settingName, other.settingName, StringComparison.Ordinal);
             }
         }
 
@@ -23,39 +23,39 @@ namespace Editor.Scripts.Settings.BaseSettings
         {
             new Setting
             {
-                SettingName = "Help",
-                IntendLevel = 0,
-                SubSettings = new List<Setting>
+                settingName = "Help",
+                intendLevel = 0,
+                subSettings = new List<Setting>
                 {
                     new()
                     {
-                        SettingKey = SettingKey.Contact,
-                        SettingName = "Contact",
-                        IntendLevel = 1
+                        settingKey = SettingKey.Contact,
+                        settingName = "Contact",
+                        intendLevel = 1
                     },
                     new()
                     {
-                        SettingName = "How To's",
-                        IntendLevel = 1,
-                        SubSettings = new List<Setting>
+                        settingName = "How To's",
+                        intendLevel = 1,
+                        subSettings = new List<Setting>
                         {
                             new ()
                             {
-                                SettingKey = SettingKey.UpdateBasePackage,
-                                SettingName = "How To: Update Base Package",
-                                IntendLevel = 2
+                                settingKey = SettingKey.UpdateBasePackage,
+                                settingName = "How To: Update Base Package",
+                                intendLevel = 2
                             },
                             new ()
                             {
-                                SettingKey = SettingKey.ManagePackages,
-                                SettingName = "How To: Manage Packages",
-                                IntendLevel = 2
+                                settingKey = SettingKey.ManagePackages,
+                                settingName = "How To: Manage Packages",
+                                intendLevel = 2
                             },
                             new ()
                             {
-                                SettingKey = SettingKey.UsePackages,
-                                SettingName = "How To: Use Packages",
-                                IntendLevel = 2
+                                settingKey = SettingKey.UsePackages,
+                                settingName = "How To: Use Packages",
+                                intendLevel = 2
                             }
                         }
                     }

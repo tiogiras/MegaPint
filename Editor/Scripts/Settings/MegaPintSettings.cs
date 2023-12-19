@@ -9,23 +9,23 @@ namespace Editor.Scripts.Settings
     //[CreateAssetMenu(fileName = "Data", menuName = "MegaPint/SettingsData", order = 1)]
     public class MegaPintSettings : ScriptableObject
     {
-        public static MegaPintSettings Instance;
+        public static MegaPintSettings instance;
 
-        [SerializeField] private List<MegaPintSettingsBase> settings;
+        [SerializeField] private List<MegaPintSettingsBase> _settings;
 
         private void AddSetting(MegaPintSettingsBase setting)
         {
-            settings.Add(setting);
+            _settings.Add(setting);
             Save();
         }
 
         public MegaPintSettingsBase GetSetting(string settingName)
         {
-            settings ??= new List<MegaPintSettingsBase>();
+            _settings ??= new List<MegaPintSettingsBase>();
             
-            if (settings.Count > 0)
+            if (_settings.Count > 0)
             {
-                foreach (var setting in settings.Where(setting => setting.name.Equals(settingName)))
+                foreach (var setting in _settings.Where(setting => setting.name.Equals(settingName)))
                 {
                     return setting;
                 }
@@ -39,7 +39,7 @@ namespace Editor.Scripts.Settings
         
         public static bool Exists()
         {
-            if (Instance != null)
+            if (instance != null)
                 return true;
             
             var search = AssetDatabase.FindAssets("t:MegaPintSettings", new[] { "Assets" });
@@ -47,15 +47,15 @@ namespace Editor.Scripts.Settings
             if (search.Length == 0)
                 return false;
             
-            Instance = AssetDatabase.LoadAssetAtPath<MegaPintSettings>(AssetDatabase.GUIDToAssetPath(search[0]));
+            instance = AssetDatabase.LoadAssetAtPath<MegaPintSettings>(AssetDatabase.GUIDToAssetPath(search[0]));
 
-            return Instance != null;
+            return instance != null;
         }
 
         public static void Save()
         {
-            EditorUtility.SetDirty(Instance);
-            AssetDatabase.SaveAssetIfDirty(Instance);
+            EditorUtility.SetDirty(instance);
+            AssetDatabase.SaveAssetIfDirty(instance);
         }
     }
 

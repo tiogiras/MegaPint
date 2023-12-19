@@ -9,8 +9,8 @@ namespace Editor.Scripts.Windows
     {
         #region Public
 
-        public Action<MegaPintEditorWindowBase> OnCreate;
-        public Action<MegaPintEditorWindowBase> OnClose;
+        public Action<MegaPintEditorWindowBase> onCreate;
+        public Action<MegaPintEditorWindowBase> onClose;
 
         #endregion
 
@@ -20,13 +20,13 @@ namespace Editor.Scripts.Windows
                 return;
 
             LoadSettings();
-            OnCreate?.Invoke(this);
+            onCreate?.Invoke(this);
         }
 
         protected virtual void OnDestroy()
         {
             UnRegisterCallbacks();
-            OnClose?.Invoke(this);
+            onClose?.Invoke(this);
         }
         
         protected abstract string BasePath();
