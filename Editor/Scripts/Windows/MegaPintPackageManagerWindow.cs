@@ -132,14 +132,14 @@ namespace Editor.Scripts.Windows
         protected override void RegisterCallbacks()
         {
             MegaPintPackageManager.CachedPackages.OnUpdateActions.Add(
-                new MegaPintPackageManager.CachedPackages.ListableAction(OnLoadingPackages, "PackageManager"));
+                new MegaPintPackageManager.CachedPackages.ListableAction(_onLoadingPackages, "PackageManager"));
             
             MegaPintPackageManager.CachedPackages.OnCompleteActions
-                .Add(new MegaPintPackageManager.CachedPackages.ListableAction<MegaPintPackageManager.CachedPackages>(OnPackagesLoaded, "PackageManager"));
+                .Add(new MegaPintPackageManager.CachedPackages.ListableAction<MegaPintPackageManager.CachedPackages>(_onPackagesLoaded, "PackageManager"));
             
             _packageSearch.RegisterValueChangedCallback(OnSearchStringChanged);
             
-            _list.onSelectedIndicesChange += OnUpdateRightPane;
+            _list.selectedIndicesChanged += OnUpdateRightPane;
             
             _btnImport.clicked += OnImport;
             _btnRemove.clicked += OnRemove;
@@ -153,7 +153,7 @@ namespace Editor.Scripts.Windows
             
             _packageSearch.UnregisterValueChangedCallback(OnSearchStringChanged);
             
-            _list.onSelectedIndicesChange -= OnUpdateRightPane;
+            _list.selectedIndicesChanged -= OnUpdateRightPane;
             
             _btnImport.clicked -= OnImport;
             _btnRemove.clicked -= OnRemove;
@@ -164,7 +164,7 @@ namespace Editor.Scripts.Windows
 
         #region Callbacks
 
-        private Action OnLoadingPackages => () =>
+        private Action _onLoadingPackages => () =>
         {
             _loading.style.display = DisplayStyle.Flex;
             _packages.style.display = DisplayStyle.None;
@@ -176,7 +176,7 @@ namespace Editor.Scripts.Windows
                 out _currentLoadingLabelProgress);
         };
 
-        private Action<MegaPintPackageManager.CachedPackages> OnPackagesLoaded => packages =>
+        private Action<MegaPintPackageManager.CachedPackages> _onPackagesLoaded => packages =>
         {
             _loading.style.display = DisplayStyle.None;
             _packages.style.display = DisplayStyle.Flex;
@@ -201,7 +201,7 @@ namespace Editor.Scripts.Windows
             
             _content.style.display = DisplayStyle.Flex;
             
-            var package = _displayedPackages[index];
+            MegaPintPackagesData.MegaPintPackageData package = _displayedPackages[index];
             _packageName.text = package.PackageNiceName;
             _version.text = package.Version;
             _lastUpdate.text = package.LastUpdate;
@@ -221,15 +221,15 @@ namespace Editor.Scripts.Windows
 
         private void OnImport()
         {
-            MegaPintPackageManager.OnSuccess += OnImportSuccess;
-            MegaPintPackageManager.OnFailure += OnFailure;
+            MegaPintPackageManager.onSuccess += OnImportSuccess;
+            MegaPintPackageManager.onFailure += OnFailure;
             MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].GitUrl);
         }
 
         private static void OnImportSuccess()
         {
-            MegaPintPackageManager.OnSuccess -= OnImportSuccess;
-            MegaPintPackageManager.OnFailure -= OnFailure;
+            MegaPintPackageManager.onSuccess -= OnImportSuccess;
+            MegaPintPackageManager.onFailure -= OnFailure;
         }
 
         #endregion
@@ -238,15 +238,15 @@ namespace Editor.Scripts.Windows
 
         private void OnRemove()
         {
-            MegaPintPackageManager.OnSuccess += OnRemoveSuccess;
-            MegaPintPackageManager.OnFailure += OnFailure;
+            MegaPintPackageManager.onSuccess += OnRemoveSuccess;
+            MegaPintPackageManager.onFailure += OnFailure;
             MegaPintPackageManager.Remove(_displayedPackages[_list.selectedIndex].PackageName);
         }
 
         private static void OnRemoveSuccess()
         {
-            MegaPintPackageManager.OnSuccess -= OnRemoveSuccess;
-            MegaPintPackageManager.OnFailure -= OnFailure;
+            MegaPintPackageManager.onSuccess -= OnRemoveSuccess;
+            MegaPintPackageManager.onFailure -= OnFailure;
         }
 
         #endregion
@@ -255,15 +255,15 @@ namespace Editor.Scripts.Windows
 
         private void OnUpdate()
         {
-            MegaPintPackageManager.OnSuccess += OnUpdateSuccess;
-            MegaPintPackageManager.OnFailure += OnFailure;
+            MegaPintPackageManager.onSuccess += OnUpdateSuccess;
+            MegaPintPackageManager.onFailure += OnFailure;
             MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].GitUrl);
         }
 
         private static void OnUpdateSuccess()
         {
-            MegaPintPackageManager.OnSuccess -= OnUpdateSuccess;
-            MegaPintPackageManager.OnFailure -= OnFailure;
+            MegaPintPackageManager.onSuccess -= OnUpdateSuccess;
+            MegaPintPackageManager.onFailure -= OnFailure;
         }
 
         #endregion

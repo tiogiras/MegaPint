@@ -9,12 +9,12 @@ namespace Editor.Scripts.Settings.BaseSettings
     {
         private const string BasePath = "User Interface/MegaPint Base Settings/xxxDisplay";
 
-        private static VisualElement _element;
+        private static VisualElement s_element;
         
         public static void Display(VisualElement root, MegaPintBaseSettingsData.SettingKey key)
         {
-            _element = Load(key).Instantiate();
-            root.Add(_element);
+            s_element = Load(key).Instantiate();
+            root.Add(s_element);
 
             ActivateLogic(key);
         }
@@ -41,22 +41,22 @@ namespace Editor.Scripts.Settings.BaseSettings
 
         private static void RegisterCallbacksContact()
         {
-            MegaPintBaseWindow.OnRightPaneClose += UnRegisterCallbacksContact;
+            MegaPintBaseWindow.onRightPaneClose += UnRegisterCallbacksContact;
 
-            _element.Q<Button>("BTN_Mail").clicked += ContactMail;
-            _element.Q<Button>("BTN_Discord1").clicked += ContactDiscord;
-            _element.Q<Button>("BTN_Discord2").clicked += ContactDiscord;
-            _element.Q<Button>("BTN_Website").clicked += ContactWebsite;
+            s_element.Q<Button>("BTN_Mail").clicked += ContactMail;
+            s_element.Q<Button>("BTN_Discord1").clicked += ContactDiscord;
+            s_element.Q<Button>("BTN_Discord2").clicked += ContactDiscord;
+            s_element.Q<Button>("BTN_Website").clicked += ContactWebsite;
         }
         
         private static void UnRegisterCallbacksContact()
         {
-            MegaPintBaseWindow.OnRightPaneClose -= UnRegisterCallbacksContact;
+            MegaPintBaseWindow.onRightPaneClose -= UnRegisterCallbacksContact;
             
-            _element.Q<Button>("BTN_Mail").clicked -= ContactMail;
-            _element.Q<Button>("BTN_Discord1").clicked -= ContactDiscord;
-            _element.Q<Button>("BTN_Discord2").clicked -= ContactDiscord;
-            _element.Q<Button>("BTN_Website").clicked -= ContactWebsite;
+            s_element.Q<Button>("BTN_Mail").clicked -= ContactMail;
+            s_element.Q<Button>("BTN_Discord1").clicked -= ContactDiscord;
+            s_element.Q<Button>("BTN_Discord2").clicked -= ContactDiscord;
+            s_element.Q<Button>("BTN_Website").clicked -= ContactWebsite;
         }
 
         #region Callbacks
