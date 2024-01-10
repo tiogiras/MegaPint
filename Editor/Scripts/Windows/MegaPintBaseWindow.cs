@@ -187,6 +187,11 @@ namespace Editor.Scripts.Windows
             root.Add(content);
         }
 
+        private void OnGUI()
+        {
+            DisplayContent.onRightPaneGUI?.Invoke(rootVisualElement.Q<VisualElement>("RightPane"));
+        }
+
         protected override bool LoadResources()
         {
             _baseWindow = Resources.Load<VisualTreeAsset>(BasePath());
@@ -371,6 +376,8 @@ namespace Editor.Scripts.Windows
 
                 OnUpdateRightPane(_); 
             }
+            
+            _settingsList.ClearSelection();
         }
         
         #endregion

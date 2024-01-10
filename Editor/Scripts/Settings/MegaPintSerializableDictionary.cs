@@ -15,7 +15,7 @@ namespace Editor.Scripts.Settings
             public TValue value;
         }
 
-        public List<KeyValueEntry> entries;
+        public List<KeyValueEntry> entries = new();
         public int Count => entries.Count;
 
         public List<TKey> Keys => entries.Select(keyValueEntry => keyValueEntry.key).ToList();
@@ -59,6 +59,24 @@ namespace Editor.Scripts.Settings
             }
 
             return false;
+        }
+
+        public bool HasKey(TKey key) => Keys.Contains(key);
+
+        public void RemoveEntry(TKey key)
+        {
+            entries ??= new List<KeyValueEntry>();
+
+            for (var i = 0; i < entries.Count; i++)
+            {
+                KeyValueEntry keyValueEntry = entries[i];
+
+                if (!keyValueEntry.key.Equals(key))
+                    continue;
+                
+                entries.RemoveAt(i);
+                return;
+            }
         }
     }
 }
