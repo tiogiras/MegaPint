@@ -13,6 +13,7 @@ internal static partial class DisplayContent
 {
     private static Action <int, VisualElement> s_onSelectedTabChanged;
     private static Action s_onSelectedPackageChanged;
+    public static Action<VisualElement> onRightPaneGUI;
 
     private static readonly List <Button> s_tabs = new();
     private static readonly List <string> s_tabsContentLocations = new();
