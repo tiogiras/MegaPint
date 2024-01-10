@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 
 namespace Editor.Scripts.Settings
 {
@@ -69,6 +70,38 @@ public class MegaPintSettingsStruct
         return defaultValue;
     }
 
+    public void RemoveBoolEntry(string key)
+    {
+        boolValues ??= new MegaPintSerializableDictionary <string, bool>();
+        boolValues.RemoveEntry(key);
+
+        MegaPintSettings.Save();
+    }
+
+    public void RemoveFloatEntry(string key)
+    {
+        floatValues ??= new MegaPintSerializableDictionary <string, float>();
+        floatValues.RemoveEntry(key);
+
+        MegaPintSettings.Save();
+    }
+
+    public void RemoveIntEntry(string key)
+    {
+        intValues ??= new MegaPintSerializableDictionary <string, int>();
+        intValues.RemoveEntry(key);
+
+        MegaPintSettings.Save();
+    }
+
+    public void RemoveStringEntry(string key)
+    {
+        stringValues ??= new MegaPintSerializableDictionary <string, string>();
+        stringValues.RemoveEntry(key);
+
+        MegaPintSettings.Save();
+    }
+
     public void SetValue(string key, string value)
     {
         stringValues ??= new MegaPintSerializableDictionary <string, string>();
@@ -101,39 +134,8 @@ public class MegaPintSettingsStruct
         MegaPintSettings.Save();
     }
 
-    public void RemoveStringEntry(string key)
-    {
-        stringValues ??= new MegaPintSerializableDictionary <string, string>();
-        stringValues.RemoveEntry(key);
-        
-        MegaPintSettings.Save();
-    }
-
-    public void RemoveFloatEntry(string key)
-    {
-        floatValues ??= new MegaPintSerializableDictionary <string, float>();
-        floatValues.RemoveEntry(key);
-        
-        MegaPintSettings.Save();
-    }
-
-    public void RemoveBoolEntry(string key)
-    {
-        boolValues ??= new MegaPintSerializableDictionary <string, bool>();
-        boolValues.RemoveEntry(key);
-        
-        MegaPintSettings.Save();
-    }
-
-    public void RemoveIntEntry(string key)
-    {
-        intValues ??= new MegaPintSerializableDictionary <string, int>();
-        intValues.RemoveEntry(key);
-        
-        MegaPintSettings.Save();
-    }
-
     #endregion
 }
 
 }
+#endif
