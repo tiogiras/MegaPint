@@ -376,6 +376,8 @@ namespace Editor.Scripts.Windows
 
                 OnUpdateRightPane(_); 
             }
+            
+            _settingsList.ClearSelection();
         }
         
         #endregion
