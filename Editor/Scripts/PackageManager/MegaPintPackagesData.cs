@@ -79,12 +79,12 @@ public static class MegaPintPackagesData
             PackageKey = PackageKey.PlayModeStartScene,
             PackageName = "com.tiogiras.megapint-playmodestartscene",
             PackageNiceName = "PlayMode Start Scene",
-            GitUrl = "",
+            GitUrl = "https://github.com/tiogiras/megapint-playmodestartscene.git#b3aa4eea16ae258f5a08a4dc3c6ae52776e46f92",
             Version = "1.0.0",
-            LastUpdate = "14.01.2024",
+            LastUpdate = "15.01.2024",
             UnityVersion = "2022.3.15f1 or higher",
             MegaPintVersion = "1.1.0 or higher",
-            InfoText = ""
+            InfoText = "This package allows you to select a starting scene for entering playmode. This makes entering the game from a main menu much easier."
         }
     };
 
