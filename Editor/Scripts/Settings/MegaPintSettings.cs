@@ -1,17 +1,35 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Task = System.Threading.Tasks.Task;
 
 namespace Editor.Scripts.Settings
 {
-    //[CreateAssetMenu(fileName = "Data", menuName = "MegaPint/SettingsData", order = 1)]
+    [InitializeOnLoad]
     public class MegaPintSettings : ScriptableObject
     {
         public static MegaPintSettings instance;
 
+        public static Action onLoaded;
+
         [SerializeField] private List<MegaPintSettingsBase> _settings;
+
+        static MegaPintSettings()
+        {
+            Initialize();
+        }
+
+        private static async void Initialize()
+        {
+            await Task.Delay(10);
+
+            if(Exists())
+                onLoaded?.Invoke();
+        }
+        
 
         private void AddSetting(MegaPintSettingsBase setting)
         {
