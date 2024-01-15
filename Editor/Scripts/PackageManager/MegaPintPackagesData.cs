@@ -32,7 +32,7 @@ public static class MegaPintPackagesData
 
     public enum PackageKey
     {
-        AutoSave, Validators
+        AutoSave, Validators, AlphaButton, PlayModeStartScene
     }
 
     public static readonly List <MegaPintPackageData> Packages = new()
@@ -61,6 +61,30 @@ public static class MegaPintPackagesData
             MegaPintVersion = "1.0.0 or higher",
             InfoText = "Validators adds a system to create validatable MonoBehaviours, which can be extended with your own requirements.\n" +
                        "See the status and occured issues on all GameObjects with validatable MonoBehaviours in one window and automatically fix any occuring issue."
+        },
+        new MegaPintPackageData
+        {
+            PackageKey = PackageKey.AlphaButton,
+            PackageName = "com.tiogiras.megapint-alphabutton",
+            PackageNiceName = "Alpha Button",
+            GitUrl = "",
+            Version = "1.0.0",
+            LastUpdate = "10.01.2024",
+            UnityVersion = "2022.3.15f1 or higher",
+            MegaPintVersion = "1.1.0 or higher",
+            InfoText = ""
+        },
+        new MegaPintPackageData
+        {
+            PackageKey = PackageKey.PlayModeStartScene,
+            PackageName = "com.tiogiras.megapint-playmodestartscene",
+            PackageNiceName = "PlayMode Start Scene",
+            GitUrl = "https://github.com/tiogiras/megapint-playmodestartscene.git#b3aa4eea16ae258f5a08a4dc3c6ae52776e46f92",
+            Version = "1.0.0",
+            LastUpdate = "15.01.2024",
+            UnityVersion = "2022.3.15f1 or higher",
+            MegaPintVersion = "1.1.0 or higher",
+            InfoText = "This package allows you to select a starting scene for entering playmode. This makes entering the game from a main menu much easier."
         }
     };
 
