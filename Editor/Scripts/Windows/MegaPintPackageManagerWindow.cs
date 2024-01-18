@@ -269,7 +269,9 @@ namespace Editor.Scripts.Windows
 
         private void OnImportSuccess()
         {
+            var index = _list.selectedIndex;
             _list.ClearSelection();
+            _list.selectedIndex = index;
             
             MegaPintPackageManager.onSuccess -= OnImportSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
@@ -293,6 +295,10 @@ namespace Editor.Scripts.Windows
 
         private void OnRemoveSuccess()
         {
+            var index = _list.selectedIndex;
+            _list.ClearSelection();
+            _list.selectedIndex = index;
+            
             MegaPintPackageManager.onSuccess -= OnRemoveSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
@@ -317,6 +323,10 @@ namespace Editor.Scripts.Windows
 
         private void OnUpdateSuccess()
         {
+            var index = _list.selectedIndex;
+            _list.ClearSelection();
+            _list.selectedIndex = index;
+            
             MegaPintPackageManager.onSuccess -= OnUpdateSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
