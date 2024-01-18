@@ -114,7 +114,7 @@ namespace Editor.Scripts.Windows
                 _visualElementsPackages.Add(element);
                 
                 var packageNameLabel = element.Q<Label>("PackageName");
-                packageNameLabel.text = _displayedPackages[i].PackageNiceName;
+                packageNameLabel.text = _displayedPackages[i].packageNiceName;
                 packageNameLabel.style.borderLeftWidth = 0;
             };
             
@@ -279,7 +279,7 @@ namespace Editor.Scripts.Windows
                 visualElement.style.borderLeftWidth = 2.5f;
                 _currentVisualElementPackages = visualElement;
 
-                var currentPackageKey = ((MegaPintPackagesData.MegaPintPackageData)_packagesList.selectedItem).PackageKey;
+                var currentPackageKey = ((MegaPintPackagesData.MegaPintPackageData)_packagesList.selectedItem).packageKey;
                 var contentPath = RightPaneContentBase.Replace("xxx", currentPackageKey.ToString());
                 var content = Resources.Load<VisualTreeAsset>(contentPath).Instantiate();
             
@@ -412,9 +412,9 @@ namespace Editor.Scripts.Windows
             SwitchState(0);
             
             _displayedPackages = searchString.Equals("") ? 
-                _allPackages.ToDisplay().Where(package => _allPackages.IsImported(package.PackageKey)).ToList() :
-                _allPackages.ToDisplay().Where(package => _allPackages.IsImported(package.PackageKey))
-                    .Where(package => package.PackageNiceName.ToLower().Contains(searchString.ToLower())).ToList();
+                _allPackages.ToDisplay().Where(package => _allPackages.IsImported(package.packageKey)).ToList() :
+                _allPackages.ToDisplay().Where(package => _allPackages.IsImported(package.packageKey))
+                    .Where(package => package.packageNiceName.ToLower().Contains(searchString.ToLower())).ToList();
             
             _displayedPackages.Sort();
 
