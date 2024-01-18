@@ -218,8 +218,18 @@ namespace Editor.Scripts.PackageManager
 
             public bool NeedsVariationUpdate(MegaPintPackagesData.PackageKey key, string niceName)
             {
-                VariationsCache variation = _packages.First(package => package.key == key)
-                                                     .variations.First(variation => variation.niceName.Equals(niceName));
+                Debug.Log(niceName);
+
+                PackageCache package = _packages.First(package => package.key == key);
+                
+                foreach (var v in package.variations)   
+                {
+                    Debug.Log(v.niceName);
+                }
+
+                Debug.Log("CACHE END");
+                
+                VariationsCache variation = package.variations.First(variation => variation.niceName.Equals(niceName));
 
                 return !variation.newestVersion;
             }
@@ -276,7 +286,7 @@ namespace Editor.Scripts.PackageManager
                     var currentVersion = "";
                     var hash = "";
 
-                    List <VariationsCache> variations = new();
+                    List <VariationsCache> variations = null;
                     
                     if (installed)
                     {
