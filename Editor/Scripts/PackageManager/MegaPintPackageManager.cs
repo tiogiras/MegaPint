@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
+using UnityEngine;
 using UnityEngine.UIElements;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 using Task = System.Threading.Tasks.Task;
@@ -18,23 +19,45 @@ namespace Editor.Scripts.PackageManager
         public static Action onSuccess;
         public static Action<string> onFailure;
 
-        public static async void AddEmbedded(string packageUrl)
+        public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
+        {
+#pragma warning disable CS4014
+            AddEmbedded(package.gitUrl, package.dependencies);
+#pragma warning restore CS4014
+        }
+
+        public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
+        {
+#pragma warning disable CS4014
+            AddEmbedded(variation.gitURL, variation.dependencies);
+#pragma warning restore CS4014
+        }
+        
+        private static async Task AddEmbedded(string gitUrl, List <MegaPintPackagesData.MegaPintPackageData.Dependency> dependencies)
+        {
+            if (dependencies is {Count: > 0})
+            {
+                foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in dependencies)
+                {
+                    MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(dependency.packageKey);
+                    
+                    await AddEmbedded(package.gitUrl, package.dependencies);
+                }
+            }
+
+            await AddEmbedded(gitUrl);
+
+            onSuccess?.Invoke();  
+            CachedPackages.Refresh();
+        }
+
+        private static async Task AddEmbedded(string packageUrl)
         {
             if (!await Add(packageUrl))
                 return;
 
-            try
-            {
-                if (!await Embed(packageUrl)) 
-                    return;
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
-            onSuccess?.Invoke();  
-            CachedPackages.Refresh();
+            try { await Embed(packageUrl); }
+            catch (Exception) { /* ignored */}
         }
 
         public static async void Remove(string packageName)
@@ -203,19 +226,42 @@ namespace Editor.Scripts.PackageManager
                 s_allPackages = null;
                 RequestAllPackages();
             }
-            
+
             public bool IsImported(MegaPintPackagesData.PackageKey key) =>
                 _packages.First(package => package.key == key).installed;
 
             public bool NeedsUpdate(MegaPintPackagesData.PackageKey key) =>
                 !_packages.First(package => package.key == key).newestVersion;
+            
+            public bool IsVariation(MegaPintPackagesData.PackageKey key, string gitHash)
+            {
+                return _packages.First(package => package.key == key).currentVariation.Equals(gitHash);
+            }
 
+            public bool NeedsVariationUpdate(MegaPintPackagesData.PackageKey key, string niceName)
+            {
+                Debug.Log(niceName);
+
+                PackageCache package = _packages.First(package => package.key == key); // <- package.variations is null
+                
+                foreach (var v in package.variations)   
+                {
+                    Debug.Log(v.niceName);
+                }
+
+                Debug.Log("CACHE END");
+                
+                VariationsCache variation = package.variations.First(variation => variation.niceName.Equals(niceName));
+
+                return !variation.newestVersion;
+            }
+            
             public List<MegaPintPackagesData.MegaPintPackageData> ToDisplay() =>
                 _packages.Select(package => MegaPintPackagesData.PackageData(package.key)).ToList();
 
             public string CurrentVersion(MegaPintPackagesData.PackageKey key) =>
                 _packages.First(package => package.key == key).currentVersion;
-            
+
             public static void UpdateLoadingLabel(Label loadingLabel, int currentProgress, int refreshRate, out int newProgress)
             {
                 if (currentProgress >= refreshRate)
@@ -256,15 +302,35 @@ namespace Editor.Scripts.PackageManager
 
                 foreach (var package in allPackages)
                 {
+                    // TODO Variations
                     var installed = installedPackagesNames.Contains(package.packageName);
                     var newestVersion = false;
                     var currentVersion = "";
+                    var hash = "";
+
+                    List <VariationsCache> variations = null;
                     
                     if (installed)
                     {
-                        var index = installedPackagesNames.IndexOf(package.packageName);
-                        newestVersion = installedPackages[index].version == package.version;
-                        currentVersion = installedPackages[index].version;
+                        PackageInfo installedPackage = installedPackages[installedPackagesNames.IndexOf(package.packageName)];
+                        newestVersion = installedPackage.version == package.version;
+                        currentVersion = installedPackage.version;
+                        hash = installedPackage.git?.hash;
+
+                        if (package.variations is {Count: > 0})
+                        {
+                            variations = new List <VariationsCache>();
+                        
+                            foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
+                            {
+                                variations.Add(new VariationsCache
+                                {
+                                    niceName = variation.niceName,
+                                    newestVersion = installedPackage.version == variation.version,
+                                    currentVersion = installedPackage.version
+                                });   
+                            }
+                        }
                     }
 
                     _packages.Add(new PackageCache
@@ -272,7 +338,9 @@ namespace Editor.Scripts.PackageManager
                         key = package.packageKey,
                         installed = installed,
                         newestVersion = newestVersion,
-                        currentVersion = currentVersion
+                        currentVersion = currentVersion,
+                        currentVariation = hash,
+                        variations = variations
                     });
                 }
 
@@ -289,6 +357,15 @@ namespace Editor.Scripts.PackageManager
             {
                 public MegaPintPackagesData.PackageKey key;
                 public bool installed;
+                public bool newestVersion;
+                public string currentVersion;
+                public List <VariationsCache> variations;
+                public string currentVariation;
+            }
+
+            public struct VariationsCache
+            {
+                public string niceName;
                 public bool newestVersion;
                 public string currentVersion;
             }

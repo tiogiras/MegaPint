@@ -15,7 +15,7 @@ public static class PackageDataAlphaButton
             packageKey = MegaPintPackagesData.PackageKey.AlphaButton,
             packageName = "com.tiogiras.megapint-alphabutton",
             packageNiceName = "Alpha Button",
-            gitUrl = "",
+            gitUrl = "https://github.com/tiogiras/MegaPint-AlphaButton.git",
             version = "1.0.0",
             lastUpdate = "18.01.2024",
             unityVersion = "2022.3.15f1 or higher",
@@ -23,14 +23,21 @@ public static class PackageDataAlphaButton
             infoText =
                 "This package adds a new button component that makes use of the build in alpha-threshold of a image component, " +
                 "so that a button is only clickable where it's alpha is greater than the specified value.",
-            subPackages = new List <MegaPintPackagesData.MegaPintPackageData.SubPackage>
+            variations = new List <MegaPintPackagesData.MegaPintPackageData.PackageVariation>
             {
                 new()
                 {
                     niceName = "MegaPint Validators Integration",
-                    gitURL = "",
-                    version = "1.0.0",
-                    installationMode = MegaPintPackagesData.MegaPintPackageData.SubPackage.InstallationMode.Replace
+                    gitURL = "https://github.com/tiogiras/MegaPint-AlphaButton.git#d0456c5c8b1bb747a88b224578f12a15312ec202",
+                    version = "1.1.0"
+                }
+            },
+            dependencies = new List <MegaPintPackagesData.MegaPintPackageData.Dependency>
+            {
+                new()
+                {
+                    niceName = "Validators",
+                    packageKey = MegaPintPackagesData.PackageKey.Validators
                 }
             }
         };

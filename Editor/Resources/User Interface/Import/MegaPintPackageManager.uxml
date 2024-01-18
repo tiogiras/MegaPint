@@ -14,8 +14,8 @@
         </ui:GroupBox>
         <ui:GroupBox name="RightPane" style="background-image: resource(&apos;Images/Background/Background 3&apos;); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: auto; min-width: 40%;">
             <ui:GroupBox name="Content" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: space-between; flex-grow: 1; flex-shrink: 0; height: 100%; flex-basis: auto;">
-                <ui:GroupBox style="flex-grow: 0;">
-                    <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="flex-grow: 1;">
+                <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="ScrollView" style="flex-grow: 1;">
+                    <ui:GroupBox style="flex-grow: 0;">
                         <ui:Label text="Package Name" display-tooltip-when-elided="true" name="PackageName" style="-unity-text-align: upper-center; -unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); -unity-font-style: bold; font-size: 20px; margin-top: 10px; margin-bottom: 10px;" />
                         <ui:IMGUIContainer style="background-image: none; height: 1.5px; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; background-color: rgb(88, 88, 88);" />
                         <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row;">
@@ -34,10 +34,13 @@
                             <ui:Label text="Compatible MegaPint Version:" display-tooltip-when-elided="true" style="-unity-text-align: upper-left; -unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); -unity-font-style: bold; font-size: 12.5px; margin-top: 3px; margin-bottom: 3px; margin-left: 10px; margin-right: 0;" />
                             <ui:Label text="x.x.x" display-tooltip-when-elided="true" name="MegaPintVersion" style="-unity-text-align: upper-left; -unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); -unity-font-style: normal; font-size: 12px; margin-top: 3px; margin-bottom: 3px; margin-left: 5px; margin-right: 0;" />
                         </ui:GroupBox>
-                        <ui:Label text="Info Text ..." display-tooltip-when-elided="true" name="InfoText" style="-unity-text-align: upper-left; -unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); -unity-font-style: normal; font-size: 12.5px; margin-top: 50px; margin-bottom: 3px; margin-left: 10px; margin-right: 0; white-space: normal; text-overflow: clip;" />
-                    </ui:ScrollView>
-                </ui:GroupBox>
-                <ui:GroupBox name="GroupBox" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row-reverse;">
+                        <ui:GroupBox name="PackageVariationsParent" style="margin-top: 10px; margin-right: 20px; margin-bottom: 0; margin-left: 20px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; background-color: rgb(37, 37, 37);">
+                            <ui:ListView name="PackageVariations" virtualization-method="DynamicHeight" selection-type="None" focusable="false" style="border-left-color: rgb(101, 101, 101); border-right-color: rgb(101, 101, 101); border-top-color: rgb(101, 101, 101); border-bottom-color: rgb(101, 101, 101); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 0; border-left-width: 1px;" />
+                        </ui:GroupBox>
+                        <ui:Label text="Info Text ..." display-tooltip-when-elided="true" name="InfoText" style="-unity-text-align: upper-left; -unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); -unity-font-style: normal; font-size: 12.5px; margin-top: 30px; margin-bottom: 3px; margin-left: 10px; margin-right: 0; white-space: normal; text-overflow: clip;" />
+                    </ui:GroupBox>
+                </ui:ScrollView>
+                <ui:GroupBox style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row-reverse;">
                     <ui:Button text="Import" display-tooltip-when-elided="true" name="BTN_Import" class="megapint-button" style="height: 15px;" />
                     <ui:Button text="Remove" display-tooltip-when-elided="true" name="BTN_Remove" class="megapint-button" style="height: 15px;" />
                     <ui:Button text="Update" display-tooltip-when-elided="true" name="BTN_Update" class="megapint-button" style="height: 15px;" />
