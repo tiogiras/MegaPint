@@ -202,17 +202,17 @@ namespace Editor.Scripts.Windows
             _content.style.display = DisplayStyle.Flex;
             
             MegaPintPackagesData.MegaPintPackageData package = _displayedPackages[index];
-            _packageName.text = package.PackageNiceName;
-            _version.text = package.Version;
-            _lastUpdate.text = package.LastUpdate;
-            _unityVersion.text = package.UnityVersion;
-            _megaPintVersion.text = package.MegaPintVersion;
-            _infoText.text = package.InfoText;
+            _packageName.text = package.packageNiceName;
+            _version.text = package.version;
+            _lastUpdate.text = package.lastUpdate;
+            _unityVersion.text = package.unityVersion;
+            _megaPintVersion.text = package.megaPintVersion;
+            _infoText.text = package.infoText;
 
-            var isImported = _allPackages.IsImported(package.PackageKey);
+            var isImported = _allPackages.IsImported(package.packageKey);
             _btnImport.style.display = isImported ? DisplayStyle.None : DisplayStyle.Flex;
             _btnRemove.style.display = isImported ? DisplayStyle.Flex : DisplayStyle.None;
-            _btnUpdate.style.display = isImported && _allPackages.NeedsUpdate(package.PackageKey)
+            _btnUpdate.style.display = isImported && _allPackages.NeedsUpdate(package.packageKey)
                 ? DisplayStyle.Flex 
                 : DisplayStyle.None;
         }
@@ -223,7 +223,7 @@ namespace Editor.Scripts.Windows
         {
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
-            MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].GitUrl);
+            MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].gitUrl);
         }
 
         private static void OnImportSuccess()
@@ -240,7 +240,7 @@ namespace Editor.Scripts.Windows
         {
             MegaPintPackageManager.onSuccess += OnRemoveSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
-            MegaPintPackageManager.Remove(_displayedPackages[_list.selectedIndex].PackageName);
+            MegaPintPackageManager.Remove(_displayedPackages[_list.selectedIndex].packageName);
         }
 
         private static void OnRemoveSuccess()
@@ -257,7 +257,7 @@ namespace Editor.Scripts.Windows
         {
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
-            MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].GitUrl);
+            MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].gitUrl);
         }
 
         private static void OnUpdateSuccess()
@@ -278,13 +278,13 @@ namespace Editor.Scripts.Windows
         {
             var package = _displayedPackages[index];
             
-            element.Q<Label>("PackageName").text = package.PackageNiceName;
+            element.Q<Label>("PackageName").text = package.packageNiceName;
             
             var version = element.Q<Label>("Version");
-            version.text = _allPackages.CurrentVersion(package.PackageKey);
+            version.text = _allPackages.CurrentVersion(package.packageKey);
 
-            version.style.display = _allPackages.IsImported(package.PackageKey) ? DisplayStyle.Flex : DisplayStyle.None;
-            version.style.color = _allPackages.NeedsUpdate(package.PackageKey) ? _wrongVersionColor : _normalColor;
+            version.style.display = _allPackages.IsImported(package.packageKey) ? DisplayStyle.Flex : DisplayStyle.None;
+            version.style.color = _allPackages.NeedsUpdate(package.packageKey) ? _wrongVersionColor : _normalColor;
         }
 
         private void SetDisplayedPackages(string searchString)
@@ -294,7 +294,7 @@ namespace Editor.Scripts.Windows
             
             _displayedPackages = searchString.Equals("") ? 
                 _allPackages.ToDisplay() :
-                _allPackages.ToDisplay().Where(package => package.PackageNiceName.ToLower().Contains(searchString.ToLower())).ToList();
+                _allPackages.ToDisplay().Where(package => package.packageNiceName.ToLower().Contains(searchString.ToLower())).ToList();
             
             _displayedPackages.Sort();
 

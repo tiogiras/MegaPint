@@ -256,20 +256,20 @@ namespace Editor.Scripts.PackageManager
 
                 foreach (var package in allPackages)
                 {
-                    var installed = installedPackagesNames.Contains(package.PackageName);
+                    var installed = installedPackagesNames.Contains(package.packageName);
                     var newestVersion = false;
                     var currentVersion = "";
                     
                     if (installed)
                     {
-                        var index = installedPackagesNames.IndexOf(package.PackageName);
-                        newestVersion = installedPackages[index].version == package.Version;
+                        var index = installedPackagesNames.IndexOf(package.packageName);
+                        newestVersion = installedPackages[index].version == package.version;
                         currentVersion = installedPackages[index].version;
                     }
 
                     _packages.Add(new PackageCache
                     {
-                        key = package.PackageKey,
+                        key = package.packageKey,
                         installed = installed,
                         newestVersion = newestVersion,
                         currentVersion = currentVersion
