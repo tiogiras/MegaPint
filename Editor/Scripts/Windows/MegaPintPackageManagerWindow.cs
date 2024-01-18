@@ -1,6 +1,5 @@
 #if UNITY_EDITOR
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -260,14 +259,14 @@ namespace Editor.Scripts.Windows
         {
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
-            MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].gitUrl);
+            MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex]);
         }
 
-        private void OnImportVariation(string gitUrl)
+        private void OnImportVariation(MegaPintPackagesData.MegaPintPackageData.PackageVariation package)
         {
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
-            MegaPintPackageManager.AddEmbedded(gitUrl);
+            MegaPintPackageManager.AddEmbedded(package);
         }
 
         private void OnImportSuccess()
@@ -312,14 +311,14 @@ namespace Editor.Scripts.Windows
         {
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
-            MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].gitUrl);
+            MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex]);
         }
         
-        private void OnUpdateVariation(string gitUrl)
+        private void OnUpdateVariation(MegaPintPackagesData.MegaPintPackageData.PackageVariation package)
         {
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
-            MegaPintPackageManager.AddEmbedded(gitUrl);
+            MegaPintPackageManager.AddEmbedded(package);
         }
 
         private void OnUpdateSuccess()
@@ -395,11 +394,11 @@ namespace Editor.Scripts.Windows
                 btnRemove.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
                 btnUpdate.style.display = isVariation && needsUpdate ? DisplayStyle.Flex : DisplayStyle.None;
 
-                btnImport.clickable = new Clickable(() => {OnImportVariation(variation.gitURL);});
+                btnImport.clickable = new Clickable(() => {OnImportVariation(variation);});
                 
                 btnRemove.clickable = new Clickable(OnRemoveVariation);
                 
-                btnUpdate.clickable = new Clickable(() => {OnUpdateVariation(variation.gitURL);});
+                btnUpdate.clickable = new Clickable(() => {OnUpdateVariation(variation);});
             }
         }
 

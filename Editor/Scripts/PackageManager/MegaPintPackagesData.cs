@@ -32,6 +32,8 @@ public static class MegaPintPackagesData
             public string niceName;
             public string version;
 
+            public List <Dependency> dependencies;
+
             #region Public Methods
 
             public int CompareTo(PackageVariation other)
