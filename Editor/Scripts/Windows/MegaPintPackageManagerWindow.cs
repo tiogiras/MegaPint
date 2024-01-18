@@ -1,7 +1,9 @@
 #if UNITY_EDITOR
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Editor.Scripts.PackageManager;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -269,9 +271,8 @@ namespace Editor.Scripts.Windows
 
         private void OnImportSuccess()
         {
-            var index = _list.selectedIndex;
+            ReselectItem(_list.selectedIndex);
             _list.ClearSelection();
-            _list.selectedIndex = index;
             
             MegaPintPackageManager.onSuccess -= OnImportSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
@@ -295,9 +296,8 @@ namespace Editor.Scripts.Windows
 
         private void OnRemoveSuccess()
         {
-            var index = _list.selectedIndex;
+            ReselectItem(_list.selectedIndex);
             _list.ClearSelection();
-            _list.selectedIndex = index;
             
             MegaPintPackageManager.onSuccess -= OnRemoveSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
@@ -323,10 +323,9 @@ namespace Editor.Scripts.Windows
 
         private void OnUpdateSuccess()
         {
-            var index = _list.selectedIndex;
+            ReselectItem(_list.selectedIndex);
             _list.ClearSelection();
-            _list.selectedIndex = index;
-            
+
             MegaPintPackageManager.onSuccess -= OnUpdateSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
@@ -336,6 +335,12 @@ namespace Editor.Scripts.Windows
         private static void OnFailure(string error) => Debug.LogError(error);
         
         #endregion
+
+        private async void ReselectItem(int index)
+        {
+            await Task.Delay(250);
+            _list.selectedIndex = index;
+        }
         
         #region Internal Methods
 
