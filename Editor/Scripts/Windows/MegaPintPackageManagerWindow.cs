@@ -1,7 +1,9 @@
 #if UNITY_EDITOR
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Editor.Scripts.PackageManager;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -58,11 +60,12 @@ namespace Editor.Scripts.Windows
 
         private MegaPintPackageManager.CachedPackages _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
-        private MegaPintPackagesData.MegaPintPackageData _selectedPackage;
 
         private List <MegaPintPackagesData.MegaPintPackageData.PackageVariation> _displayedPackageVariations;
 
         private MegaPintPackagesData.MegaPintPackageData _currentPackage;
+        private int _currentIndex;
+        
         private int _currentLoadingLabelProgress;
 
         #endregion
@@ -214,9 +217,9 @@ namespace Editor.Scripts.Windows
         
         private void OnUpdateRightPane(IEnumerable<int> _ = null)
         {
-            var index = _list.selectedIndex;
+            _currentIndex = _list.selectedIndex;
 
-            if (index < 0)
+            if (_currentIndex < 0)
             {
                 _content.style.display = DisplayStyle.None;
                 return;
@@ -224,7 +227,7 @@ namespace Editor.Scripts.Windows
             
             _content.style.display = DisplayStyle.Flex;
             
-            MegaPintPackagesData.MegaPintPackageData package = _displayedPackages[index];
+            MegaPintPackagesData.MegaPintPackageData package = _displayedPackages[_currentIndex];
             _packageName.text = package.packageNiceName;
             _version.text = package.version;
             _lastUpdate.text = package.lastUpdate;
@@ -267,8 +270,11 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.AddEmbedded(gitUrl);
         }
 
-        private static void OnImportSuccess()
+        private void OnImportSuccess()
         {
+            ReselectItem(_currentIndex);
+            _list.ClearSelection();
+            
             MegaPintPackageManager.onSuccess -= OnImportSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
@@ -289,8 +295,11 @@ namespace Editor.Scripts.Windows
             OnImport();
         }
 
-        private static void OnRemoveSuccess()
+        private void OnRemoveSuccess()
         {
+            ReselectItem(_currentIndex);
+            _list.ClearSelection();
+            
             MegaPintPackageManager.onSuccess -= OnRemoveSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
@@ -313,8 +322,11 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.AddEmbedded(gitUrl);
         }
 
-        private static void OnUpdateSuccess()
+        private void OnUpdateSuccess()
         {
+            ReselectItem(_currentIndex);
+            _list.ClearSelection();
+
             MegaPintPackageManager.onSuccess -= OnUpdateSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
@@ -324,6 +336,12 @@ namespace Editor.Scripts.Windows
         private static void OnFailure(string error) => Debug.LogError(error);
         
         #endregion
+
+        private async void ReselectItem(int index)
+        {
+            await Task.Delay(250);
+            _list.selectedIndex = index;
+        }
         
         #region Internal Methods
 
@@ -344,6 +362,7 @@ namespace Editor.Scripts.Windows
         private void UpdateVariationItem(VisualElement element, int index)
         {
             MegaPintPackagesData.MegaPintPackageData.PackageVariation variation = _displayedPackageVariations[index];
+            _currentPackage = _displayedPackages[_list.selectedIndex];
             
             element.Q<Label>("PackageName").text = variation.niceName;
 
@@ -351,12 +370,9 @@ namespace Editor.Scripts.Windows
             var btnImport = element.Q <Button>("BTN_Import");
             var btnRemove = element.Q<Button>("BTN_Remove");
             var btnUpdate = element.Q<Button>("BTN_Update");
-
-            Debug.Log(_currentPackage);
-
+            
             if (!_allPackages.IsImported(_currentPackage.packageKey))
             {
-                Debug.Log("NOT IMPORTED");
                 version.style.display = DisplayStyle.None;
                 btnImport.style.display = DisplayStyle.None;
                 btnRemove.style.display = DisplayStyle.None;
@@ -364,14 +380,11 @@ namespace Editor.Scripts.Windows
             }
             else
             {
-                Debug.Log("IMPORTED");
                 version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
 
                 var i = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
                 var hash = variation.gitURL[(i + 1)..];
 
-                Debug.Log(hash);
-                
                 var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, hash);
                 var needsUpdate = _allPackages.NeedsVariationUpdate(_currentPackage.packageKey, variation.niceName);
             
@@ -380,10 +393,12 @@ namespace Editor.Scripts.Windows
                 
                 btnImport.style.display = isVariation ? DisplayStyle.None : DisplayStyle.Flex;
                 btnRemove.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
-                btnUpdate.style.display = needsUpdate ? DisplayStyle.Flex : DisplayStyle.None;
+                btnUpdate.style.display = isVariation && needsUpdate ? DisplayStyle.Flex : DisplayStyle.None;
 
                 btnImport.clickable = new Clickable(() => {OnImportVariation(variation.gitURL);});
+                
                 btnRemove.clickable = new Clickable(OnRemoveVariation);
+                
                 btnUpdate.clickable = new Clickable(() => {OnUpdateVariation(variation.gitURL);});
             }
         }
