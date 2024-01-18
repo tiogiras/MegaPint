@@ -269,8 +269,10 @@ namespace Editor.Scripts.Windows
             Debug.Log($"Installed: {gitUrl}");
         }
 
-        private static void OnImportSuccess()
+        private void OnImportSuccess()
         {
+            OnUpdateRightPane();
+            
             MegaPintPackageManager.onSuccess -= OnImportSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
@@ -383,20 +385,17 @@ namespace Editor.Scripts.Windows
                     () =>
                     {
                         OnImportVariation(variation.gitURL);
-                        OnUpdateRightPane();
                     });
                 
                 btnRemove.clickable = new Clickable(() =>
                     {
                         OnRemoveVariation();
-                        OnUpdateRightPane();
                     });
                 
                 btnUpdate.clickable = new Clickable(
                     () =>
                     {
                         OnUpdateVariation(variation.gitURL);
-                        OnUpdateRightPane();
                     });
             }
         }
