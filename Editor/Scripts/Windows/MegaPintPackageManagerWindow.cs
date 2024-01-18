@@ -260,6 +260,13 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].gitUrl);
         }
 
+        private void OnImportVariation(string gitUrl)
+        {
+            MegaPintPackageManager.onSuccess += OnImportSuccess;
+            MegaPintPackageManager.onFailure += OnFailure;
+            MegaPintPackageManager.AddEmbedded(gitUrl);
+        }
+
         private static void OnImportSuccess()
         {
             MegaPintPackageManager.onSuccess -= OnImportSuccess;
@@ -275,6 +282,11 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.onSuccess += OnRemoveSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
             MegaPintPackageManager.Remove(_displayedPackages[_list.selectedIndex].packageName);
+        }
+        
+        private void OnRemoveVariation()
+        {
+            OnImport();
         }
 
         private static void OnRemoveSuccess()
@@ -292,6 +304,13 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
             MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].gitUrl);
+        }
+        
+        private void OnUpdateVariation(string gitUrl)
+        {
+            MegaPintPackageManager.onSuccess += OnUpdateSuccess;
+            MegaPintPackageManager.onFailure += OnFailure;
+            MegaPintPackageManager.AddEmbedded(gitUrl);
         }
 
         private static void OnUpdateSuccess()
@@ -329,30 +348,39 @@ namespace Editor.Scripts.Windows
             element.Q<Label>("PackageName").text = variation.niceName;
 
             var version = element.Q <Label>("Version");
-            
-            version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
-
-            var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, variation.gitURL);
-            var needsUpdate = _allPackages.NeedsVariationUpdate(_currentPackage.packageKey, variation.niceName);
-            
-            version.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
-            version.style.color = needsUpdate ? _wrongVersionColor : _normalColor;
-
             var btnImport = element.Q <Button>("BTN_Import");
             var btnRemove = element.Q<Button>("BTN_Remove");
             var btnUpdate = element.Q<Button>("BTN_Update");
 
             if (!_allPackages.IsImported(_currentPackage.packageKey))
             {
+                version.style.display = DisplayStyle.None;
                 btnImport.style.display = DisplayStyle.None;
                 btnRemove.style.display = DisplayStyle.None;
                 btnUpdate.style.display = DisplayStyle.None;
             }
             else
             {
+                version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
+
+                var i = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
+                var hash = variation.gitURL[i..];
+
+                Debug.Log(hash);
+                
+                var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, hash);
+                var needsUpdate = _allPackages.NeedsVariationUpdate(_currentPackage.packageKey, variation.niceName);
+            
+                version.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
+                version.style.color = needsUpdate ? _wrongVersionColor : _normalColor;
+                
                 btnImport.style.display = isVariation ? DisplayStyle.None : DisplayStyle.Flex;
                 btnRemove.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
-                btnRemove.style.display = needsUpdate ? DisplayStyle.Flex : DisplayStyle.None;
+                btnUpdate.style.display = needsUpdate ? DisplayStyle.Flex : DisplayStyle.None;
+
+                btnImport.clickable = new Clickable(() => {OnImportVariation(variation.gitURL);});
+                btnRemove.clickable = new Clickable(OnRemoveVariation);
+                btnUpdate.clickable = new Clickable(() => {OnUpdateVariation(variation.gitURL);});
             }
         }
 

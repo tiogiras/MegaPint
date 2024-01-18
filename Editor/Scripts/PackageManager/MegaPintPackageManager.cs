@@ -211,9 +211,9 @@ namespace Editor.Scripts.PackageManager
             public bool NeedsUpdate(MegaPintPackagesData.PackageKey key) =>
                 !_packages.First(package => package.key == key).newestVersion;
             
-            public bool IsVariation(MegaPintPackagesData.PackageKey key, string gitURL)
+            public bool IsVariation(MegaPintPackagesData.PackageKey key, string gitHash)
             {
-                return _packages.First(package => package.key == key).currentVariation.Equals(gitURL);
+                return _packages.First(package => package.key == key).currentVariation.Equals(gitHash);
             }
 
             public bool NeedsVariationUpdate(MegaPintPackagesData.PackageKey key, string niceName)
@@ -274,7 +274,7 @@ namespace Editor.Scripts.PackageManager
                     var installed = installedPackagesNames.Contains(package.packageName);
                     var newestVersion = false;
                     var currentVersion = "";
-                    var url = "";
+                    var hash = "";
 
                     List <VariationsCache> variations = null;
                     
@@ -283,10 +283,7 @@ namespace Editor.Scripts.PackageManager
                         PackageInfo installedPackage = installedPackages[installedPackagesNames.IndexOf(package.packageName)];
                         newestVersion = installedPackage.version == package.version;
                         currentVersion = installedPackage.version;
-                        url = installedPackage.repository?.url;
-
-                        Debug.Log(installedPackage.repository?.url);
-                        Debug.Log(installedPackage.git.hash);
+                        hash = installedPackage.git.hash;
 
                         if (package.variations is {Count: > 0})
                         {
@@ -310,7 +307,7 @@ namespace Editor.Scripts.PackageManager
                         installed = installed,
                         newestVersion = newestVersion,
                         currentVersion = currentVersion,
-                        currentVariation = url,
+                        currentVariation = hash,
                         variations = variations
                     });
                 }
