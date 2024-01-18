@@ -352,7 +352,7 @@ namespace Editor.Scripts.Windows
             var btnRemove = element.Q<Button>("BTN_Remove");
             var btnUpdate = element.Q<Button>("BTN_Update");
 
-            Debug.Log(_currentPackage);
+            Debug.Log(_currentPackage.packageKey);
 
             if (!_allPackages.IsImported(_currentPackage.packageKey))
             {
