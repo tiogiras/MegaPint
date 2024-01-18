@@ -220,7 +220,7 @@ namespace Editor.Scripts.PackageManager
             {
                 Debug.Log(niceName);
 
-                PackageCache package = _packages.First(package => package.key == key);
+                PackageCache package = _packages.First(package => package.key == key); // <- package.variations is null
                 
                 foreach (var v in package.variations)   
                 {
@@ -293,7 +293,7 @@ namespace Editor.Scripts.PackageManager
                         PackageInfo installedPackage = installedPackages[installedPackagesNames.IndexOf(package.packageName)];
                         newestVersion = installedPackage.version == package.version;
                         currentVersion = installedPackage.version;
-                        hash = installedPackage.git.hash;
+                        hash = installedPackage.git?.hash;
 
                         if (package.variations is {Count: > 0})
                         {
