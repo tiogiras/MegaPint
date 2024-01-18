@@ -354,6 +354,7 @@ namespace Editor.Scripts.Windows
 
             if (!_allPackages.IsImported(_currentPackage.packageKey))
             {
+                Debug.Log("NOT IMPORTED");
                 version.style.display = DisplayStyle.None;
                 btnImport.style.display = DisplayStyle.None;
                 btnRemove.style.display = DisplayStyle.None;
@@ -361,6 +362,7 @@ namespace Editor.Scripts.Windows
             }
             else
             {
+                Debug.Log("IMPORTED");
                 version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
 
                 var i = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
