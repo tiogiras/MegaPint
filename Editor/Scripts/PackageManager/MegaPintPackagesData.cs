@@ -26,22 +26,15 @@ public static class MegaPintPackagesData
             #endregion
         }
 
-        public class SubPackage : IComparable <SubPackage>
+        public class PackageVariation : IComparable <PackageVariation>
         {
-            public enum InstallationMode
-            {
-                Additional, Replace
-            }
-
             public string gitURL;
-
-            public InstallationMode installationMode;
             public string niceName;
             public string version;
 
             #region Public Methods
 
-            public int CompareTo(SubPackage other)
+            public int CompareTo(PackageVariation other)
             {
                 return string.Compare(niceName, other.niceName, StringComparison.Ordinal);
             }
@@ -59,7 +52,7 @@ public static class MegaPintPackagesData
         public string unityVersion;
         public string version;
         
-        public List <SubPackage> subPackages;
+        public List <PackageVariation> variations;
         public List <Dependency> dependencies;
         
         #region Public Methods

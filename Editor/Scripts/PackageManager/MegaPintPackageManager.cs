@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
+using UnityEngine;
 using UnityEngine.UIElements;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 using Task = System.Threading.Tasks.Task;
@@ -209,13 +210,26 @@ namespace Editor.Scripts.PackageManager
 
             public bool NeedsUpdate(MegaPintPackagesData.PackageKey key) =>
                 !_packages.First(package => package.key == key).newestVersion;
+            
+            public bool IsVariation(MegaPintPackagesData.PackageKey key, string gitURL)
+            {
+                return _packages.First(package => package.key == key).currentVariation.Equals(gitURL);
+            }
 
+            public bool NeedsVariationUpdate(MegaPintPackagesData.PackageKey key, string niceName)
+            {
+                VariationsCache variation = _packages.First(package => package.key == key)
+                                                     .variations.First(variation => variation.niceName.Equals(niceName));
+
+                return !variation.newestVersion;
+            }
+            
             public List<MegaPintPackagesData.MegaPintPackageData> ToDisplay() =>
                 _packages.Select(package => MegaPintPackagesData.PackageData(package.key)).ToList();
 
             public string CurrentVersion(MegaPintPackagesData.PackageKey key) =>
                 _packages.First(package => package.key == key).currentVersion;
-            
+
             public static void UpdateLoadingLabel(Label loadingLabel, int currentProgress, int refreshRate, out int newProgress)
             {
                 if (currentProgress >= refreshRate)
@@ -256,15 +270,35 @@ namespace Editor.Scripts.PackageManager
 
                 foreach (var package in allPackages)
                 {
+                    // TODO Variations
                     var installed = installedPackagesNames.Contains(package.packageName);
                     var newestVersion = false;
                     var currentVersion = "";
+                    var url = "";
+
+                    List <VariationsCache> variations = null;
                     
                     if (installed)
                     {
-                        var index = installedPackagesNames.IndexOf(package.packageName);
-                        newestVersion = installedPackages[index].version == package.version;
-                        currentVersion = installedPackages[index].version;
+                        PackageInfo installedPackage = installedPackages[installedPackagesNames.IndexOf(package.packageName)];
+                        newestVersion = installedPackage.version == package.version;
+                        currentVersion = installedPackage.version;
+                        url = installedPackage.repository?.url;
+                        
+                        if (package.variations is {Count: > 0})
+                        {
+                            variations = new List <VariationsCache>();
+                        
+                            foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
+                            {
+                                variations.Add(new VariationsCache
+                                {
+                                    niceName = variation.niceName,
+                                    newestVersion = installedPackage.version == variation.version,
+                                    currentVersion = installedPackage.version
+                                });   
+                            }
+                        }
                     }
 
                     _packages.Add(new PackageCache
@@ -272,7 +306,9 @@ namespace Editor.Scripts.PackageManager
                         key = package.packageKey,
                         installed = installed,
                         newestVersion = newestVersion,
-                        currentVersion = currentVersion
+                        currentVersion = currentVersion,
+                        currentVariation = url,
+                        variations = variations
                     });
                 }
 
@@ -289,6 +325,15 @@ namespace Editor.Scripts.PackageManager
             {
                 public MegaPintPackagesData.PackageKey key;
                 public bool installed;
+                public bool newestVersion;
+                public string currentVersion;
+                public List <VariationsCache> variations;
+                public string currentVariation;
+            }
+
+            public struct VariationsCache
+            {
+                public string niceName;
                 public bool newestVersion;
                 public string currentVersion;
             }

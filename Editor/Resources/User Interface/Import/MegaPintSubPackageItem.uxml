@@ -4,7 +4,8 @@
         <ui:Label text="Package Name" display-tooltip-when-elided="true" name="PackageName" style="-unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); white-space: normal; color: rgb(255, 255, 255);" />
         <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row;">
             <ui:Label text="1.0.0" display-tooltip-when-elided="true" name="Version" style="-unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); white-space: nowrap; color: rgb(176, 38, 31);" />
-            <ui:Button text="Install" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Install" class="megapint-button-nomargin" />
+            <ui:Button text="Import" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Import" class="megapint-button-nomargin" style="margin-right: 0;" />
+            <ui:Button text="Update" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Update" class="megapint-button-nomargin" style="margin-right: 5px;" />
             <ui:Button text="Remove" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Remove" class="megapint-button-nomargin" />
         </ui:GroupBox>
     </ui:GroupBox>

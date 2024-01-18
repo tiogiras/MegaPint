@@ -34,8 +34,8 @@ namespace Editor.Scripts.Windows
         private Label _megaPintVersion;
         private Label _infoText;
 
-        private GroupBox _subPackagesParent;
-        private ListView _subPackages;
+        private GroupBox _packageVariationsParent;
+        private ListView _packageVariations;
 
         private ScrollView _packages;
 
@@ -60,8 +60,9 @@ namespace Editor.Scripts.Windows
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
         private MegaPintPackagesData.MegaPintPackageData _selectedPackage;
 
-        private List <MegaPintPackagesData.MegaPintPackageData.SubPackage> _displayedSubPackages;
+        private List <MegaPintPackagesData.MegaPintPackageData.PackageVariation> _displayedPackageVariations;
 
+        private MegaPintPackagesData.MegaPintPackageData _currentPackage;
         private int _currentLoadingLabelProgress;
 
         #endregion
@@ -99,8 +100,8 @@ namespace Editor.Scripts.Windows
             _megaPintVersion = _content.Q<Label>("MegaPintVersion");
             _infoText = _content.Q <Label>("InfoText");
 
-            _subPackagesParent = _content.Q <GroupBox>("SubPackagesParent");
-            _subPackages = _content.Q <ListView>("SubPackages");
+            _packageVariationsParent = _content.Q <GroupBox>("PackageVariationsParent");
+            _packageVariations = _content.Q <ListView>("PackageVariations");
 
             _btnImport = _rightPane.Q<Button>("BTN_Import");
             _btnRemove = _rightPane.Q<Button>("BTN_Remove");
@@ -124,11 +125,11 @@ namespace Editor.Scripts.Windows
 
             #region SubPackages List
 
-            _subPackages.makeItem = () => _subPackagesListItem.Instantiate();
+            _packageVariations.makeItem = () => _subPackagesListItem.Instantiate();
 
-            _subPackages.bindItem = UpdateSubPackageItem;
+            _packageVariations.bindItem = UpdateVariationItem;
 
-            _subPackages.destroyItem = element => element.Clear();
+            _packageVariations.destroyItem = element => element.Clear();
 
             #endregion
 
@@ -231,16 +232,16 @@ namespace Editor.Scripts.Windows
             _megaPintVersion.text = package.megaPintVersion;
             _infoText.text = package.infoText;
 
-            if (package.subPackages is {Count: > 0})
+            if (package.variations is {Count: > 0})
             {
-                _subPackagesParent.style.display = DisplayStyle.Flex;
+                _packageVariationsParent.style.display = DisplayStyle.Flex;
 
-                _displayedSubPackages = package.subPackages;
-                _subPackages.itemsSource = _displayedSubPackages;
-                _subPackages.RefreshItems();
+                _displayedPackageVariations = package.variations;
+                _packageVariations.itemsSource = _displayedPackageVariations;
+                _packageVariations.RefreshItems();
             }
             else 
-                _subPackagesParent.style.display = DisplayStyle.None;
+                _packageVariationsParent.style.display = DisplayStyle.None;
 
             var isImported = _allPackages.IsImported(package.packageKey);
             _btnImport.style.display = isImported ? DisplayStyle.None : DisplayStyle.Flex;
@@ -310,6 +311,7 @@ namespace Editor.Scripts.Windows
         private void UpdateItem(VisualElement element, int index)
         {
             MegaPintPackagesData.MegaPintPackageData package = _displayedPackages[index];
+            _currentPackage = package;
             
             element.Q<Label>("PackageName").text = package.packageNiceName;
             
@@ -320,24 +322,38 @@ namespace Editor.Scripts.Windows
             version.style.color = _allPackages.NeedsUpdate(package.packageKey) ? _wrongVersionColor : _normalColor;
         }
         
-        private void UpdateSubPackageItem(VisualElement element, int index)
+        private void UpdateVariationItem(VisualElement element, int index)
         {
-            // TODO
-            MegaPintPackagesData.MegaPintPackageData.SubPackage package = _displayedSubPackages[index];
+            MegaPintPackagesData.MegaPintPackageData.PackageVariation variation = _displayedPackageVariations[index];
             
-            element.Q<Label>("PackageName").text = package.niceName;
+            element.Q<Label>("PackageName").text = variation.niceName;
 
             var version = element.Q <Label>("Version");
             
-            // TODO
-            /*version.text = _allPackages.CurrentVersion(package.packageKey);
+            version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
 
-            version.style.display = _allPackages.IsImported(package.packageKey) ? DisplayStyle.Flex : DisplayStyle.None;
-            version.style.color = _allPackages.NeedsUpdate(package.packageKey) ? _wrongVersionColor : _normalColor;*/
+            var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, variation.gitURL);
+            var needsUpdate = _allPackages.NeedsVariationUpdate(_currentPackage.packageKey, variation.niceName);
             
-            // TODO Buttons
-            
-            // TODO Only show buttons when parent package is installed
+            version.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
+            version.style.color = needsUpdate ? _wrongVersionColor : _normalColor;
+
+            var btnImport = element.Q <Button>("BTN_Import");
+            var btnRemove = element.Q<Button>("BTN_Remove");
+            var btnUpdate = element.Q<Button>("BTN_Update");
+
+            if (!_allPackages.IsImported(_currentPackage.packageKey))
+            {
+                btnImport.style.display = DisplayStyle.None;
+                btnRemove.style.display = DisplayStyle.None;
+                btnUpdate.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                btnImport.style.display = isVariation ? DisplayStyle.None : DisplayStyle.Flex;
+                btnRemove.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
+                btnRemove.style.display = needsUpdate ? DisplayStyle.Flex : DisplayStyle.None;
+            }
         }
 
         private void SetDisplayedPackages(string searchString)
