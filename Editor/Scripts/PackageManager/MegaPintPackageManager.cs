@@ -42,9 +42,11 @@ namespace Editor.Scripts.PackageManager
                     MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(dependency.packageKey);
                     
                     await AddEmbedded(package.gitUrl, package.dependencies);
+                    await Task.Delay(250);
                 }
             }
 
+            await Task.Delay(250);
             await AddEmbedded(gitUrl);
 
             onSuccess?.Invoke();  
@@ -53,8 +55,11 @@ namespace Editor.Scripts.PackageManager
 
         private static async Task AddEmbedded(string packageUrl)
         {
+            Debug.Log($"Adding {packageUrl}");
             if (!await Add(packageUrl))
                 return;
+
+            Debug.Log($"Embedding {packageUrl}");
 
             try { await Embed(packageUrl); }
             catch (Exception) { /* ignored */}
