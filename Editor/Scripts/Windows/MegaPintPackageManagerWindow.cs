@@ -269,7 +269,7 @@ namespace Editor.Scripts.Windows
 
         private void OnImportSuccess()
         {
-            OnUpdateRightPane();
+            _list.ClearSelection();
             
             MegaPintPackageManager.onSuccess -= OnImportSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
@@ -293,8 +293,6 @@ namespace Editor.Scripts.Windows
 
         private void OnRemoveSuccess()
         {
-            OnUpdateRightPane();
-            
             MegaPintPackageManager.onSuccess -= OnRemoveSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
@@ -319,8 +317,6 @@ namespace Editor.Scripts.Windows
 
         private void OnUpdateSuccess()
         {
-            OnUpdateRightPane();
-            
             MegaPintPackageManager.onSuccess -= OnUpdateSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
