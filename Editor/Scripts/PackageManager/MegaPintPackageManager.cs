@@ -284,7 +284,10 @@ namespace Editor.Scripts.PackageManager
                         newestVersion = installedPackage.version == package.version;
                         currentVersion = installedPackage.version;
                         url = installedPackage.repository?.url;
-                        
+
+                        Debug.Log(installedPackage.repository?.url);
+                        Debug.Log(installedPackage.git.hash);
+
                         if (package.variations is {Count: > 0})
                         {
                             variations = new List <VariationsCache>();
