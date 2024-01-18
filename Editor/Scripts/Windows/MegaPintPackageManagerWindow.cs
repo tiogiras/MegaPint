@@ -258,7 +258,6 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
             MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].gitUrl);
-            Debug.Log($"Installed: {_displayedPackages[_list.selectedIndex].gitUrl}");
         }
 
         private void OnImportVariation(string gitUrl)
@@ -266,7 +265,6 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
             MegaPintPackageManager.AddEmbedded(gitUrl);
-            Debug.Log($"Installed: {gitUrl}");
         }
 
         private void OnImportSuccess()
@@ -293,8 +291,10 @@ namespace Editor.Scripts.Windows
             OnImport();
         }
 
-        private static void OnRemoveSuccess()
+        private void OnRemoveSuccess()
         {
+            OnUpdateRightPane();
+            
             MegaPintPackageManager.onSuccess -= OnRemoveSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
@@ -317,8 +317,10 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.AddEmbedded(gitUrl);
         }
 
-        private static void OnUpdateSuccess()
+        private void OnUpdateSuccess()
         {
+            OnUpdateRightPane();
+            
             MegaPintPackageManager.onSuccess -= OnUpdateSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
@@ -379,24 +381,13 @@ namespace Editor.Scripts.Windows
                 
                 btnImport.style.display = isVariation ? DisplayStyle.None : DisplayStyle.Flex;
                 btnRemove.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
-                btnUpdate.style.display = needsUpdate ? DisplayStyle.Flex : DisplayStyle.None;
+                btnUpdate.style.display = isVariation && needsUpdate ? DisplayStyle.Flex : DisplayStyle.None;
 
-                btnImport.clickable = new Clickable(
-                    () =>
-                    {
-                        OnImportVariation(variation.gitURL);
-                    });
+                btnImport.clickable = new Clickable(() => {OnImportVariation(variation.gitURL);});
                 
-                btnRemove.clickable = new Clickable(() =>
-                    {
-                        OnRemoveVariation();
-                    });
+                btnRemove.clickable = new Clickable(OnRemoveVariation);
                 
-                btnUpdate.clickable = new Clickable(
-                    () =>
-                    {
-                        OnUpdateVariation(variation.gitURL);
-                    });
+                btnUpdate.clickable = new Clickable(() => {OnUpdateVariation(variation.gitURL);});
             }
         }
 
