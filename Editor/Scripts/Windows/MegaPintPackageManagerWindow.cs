@@ -60,11 +60,12 @@ namespace Editor.Scripts.Windows
 
         private MegaPintPackageManager.CachedPackages _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
-        private MegaPintPackagesData.MegaPintPackageData _selectedPackage;
 
         private List <MegaPintPackagesData.MegaPintPackageData.PackageVariation> _displayedPackageVariations;
 
         private MegaPintPackagesData.MegaPintPackageData _currentPackage;
+        private int _currentIndex;
+        
         private int _currentLoadingLabelProgress;
 
         #endregion
@@ -216,9 +217,9 @@ namespace Editor.Scripts.Windows
         
         private void OnUpdateRightPane(IEnumerable<int> _ = null)
         {
-            var index = _list.selectedIndex;
+            _currentIndex = _list.selectedIndex;
 
-            if (index < 0)
+            if (_currentIndex < 0)
             {
                 _content.style.display = DisplayStyle.None;
                 return;
@@ -226,7 +227,7 @@ namespace Editor.Scripts.Windows
             
             _content.style.display = DisplayStyle.Flex;
             
-            MegaPintPackagesData.MegaPintPackageData package = _displayedPackages[index];
+            MegaPintPackagesData.MegaPintPackageData package = _displayedPackages[_currentIndex];
             _packageName.text = package.packageNiceName;
             _version.text = package.version;
             _lastUpdate.text = package.lastUpdate;
@@ -271,7 +272,7 @@ namespace Editor.Scripts.Windows
 
         private void OnImportSuccess()
         {
-            ReselectItem(_list.selectedIndex);
+            ReselectItem(_currentIndex);
             _list.ClearSelection();
             
             MegaPintPackageManager.onSuccess -= OnImportSuccess;
@@ -296,7 +297,7 @@ namespace Editor.Scripts.Windows
 
         private void OnRemoveSuccess()
         {
-            ReselectItem(_list.selectedIndex);
+            ReselectItem(_currentIndex);
             _list.ClearSelection();
             
             MegaPintPackageManager.onSuccess -= OnRemoveSuccess;
@@ -323,7 +324,7 @@ namespace Editor.Scripts.Windows
 
         private void OnUpdateSuccess()
         {
-            ReselectItem(_list.selectedIndex);
+            ReselectItem(_currentIndex);
             _list.ClearSelection();
 
             MegaPintPackageManager.onSuccess -= OnUpdateSuccess;
