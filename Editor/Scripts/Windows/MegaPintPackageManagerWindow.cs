@@ -14,6 +14,7 @@ namespace Editor.Scripts.Windows
         #region Const
 
         private const string ListItemTemplate = "User Interface/Import/MegaPintPackageItem";
+        private const string SubPackagesListItemTemplate = "User Interface/Import/MegaPintSubPackageItem";
         
         private readonly Color _normalColor = new (0.823529422f, 0.823529422f, 0.823529422f);
         private readonly Color _wrongVersionColor = new (0.688679218f,0.149910346f,0.12019401f);
@@ -32,7 +33,10 @@ namespace Editor.Scripts.Windows
         private Label _unityVersion;
         private Label _megaPintVersion;
         private Label _infoText;
-        
+
+        private GroupBox _subPackagesParent;
+        private ListView _subPackages;
+
         private ScrollView _packages;
 
         private ListView _list;
@@ -50,10 +54,13 @@ namespace Editor.Scripts.Windows
         /// <summary> Loaded uxml references </summary>
         private VisualTreeAsset _baseWindow;
         private VisualTreeAsset _listItem;
+        private VisualTreeAsset _subPackagesListItem;
 
         private MegaPintPackageManager.CachedPackages _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
         private MegaPintPackagesData.MegaPintPackageData _selectedPackage;
+
+        private List <MegaPintPackagesData.MegaPintPackageData.SubPackage> _displayedSubPackages;
 
         private int _currentLoadingLabelProgress;
 
@@ -90,7 +97,10 @@ namespace Editor.Scripts.Windows
             _lastUpdate = _content.Q<Label>("LastUpdate");
             _unityVersion = _content.Q<Label>("UnityVersion");
             _megaPintVersion = _content.Q<Label>("MegaPintVersion");
-            _infoText = content.Q <Label>("InfoText");
+            _infoText = _content.Q <Label>("InfoText");
+
+            _subPackagesParent = _content.Q <GroupBox>("SubPackagesParent");
+            _subPackages = _content.Q <ListView>("SubPackages");
 
             _btnImport = _rightPane.Q<Button>("BTN_Import");
             _btnRemove = _rightPane.Q<Button>("BTN_Remove");
@@ -112,6 +122,16 @@ namespace Editor.Scripts.Windows
 
             #endregion
 
+            #region SubPackages List
+
+            _subPackages.makeItem = () => _subPackagesListItem.Instantiate();
+
+            _subPackages.bindItem = UpdateSubPackageItem;
+
+            _subPackages.destroyItem = element => element.Clear();
+
+            #endregion
+
             _loading.style.display = DisplayStyle.Flex;
             _packages.style.display = DisplayStyle.None;
             
@@ -126,7 +146,9 @@ namespace Editor.Scripts.Windows
         {
             _baseWindow = Resources.Load<VisualTreeAsset>(BasePath());
             _listItem = Resources.Load<VisualTreeAsset>(ListItemTemplate);
-            return _baseWindow != null && _listItem != null;
+            _subPackagesListItem = Resources.Load <VisualTreeAsset>(SubPackagesListItemTemplate);
+            
+            return _baseWindow != null && _listItem != null && _subPackagesListItem != null;
         }
 
         protected override void RegisterCallbacks()
@@ -209,6 +231,17 @@ namespace Editor.Scripts.Windows
             _megaPintVersion.text = package.megaPintVersion;
             _infoText.text = package.infoText;
 
+            if (package.subPackages is {Count: > 0})
+            {
+                _subPackagesParent.style.display = DisplayStyle.Flex;
+
+                _displayedSubPackages = package.subPackages;
+                _subPackages.itemsSource = _displayedSubPackages;
+                _subPackages.RefreshItems();
+            }
+            else 
+                _subPackagesParent.style.display = DisplayStyle.None;
+
             var isImported = _allPackages.IsImported(package.packageKey);
             _btnImport.style.display = isImported ? DisplayStyle.None : DisplayStyle.Flex;
             _btnRemove.style.display = isImported ? DisplayStyle.Flex : DisplayStyle.None;
@@ -276,7 +309,7 @@ namespace Editor.Scripts.Windows
 
         private void UpdateItem(VisualElement element, int index)
         {
-            var package = _displayedPackages[index];
+            MegaPintPackagesData.MegaPintPackageData package = _displayedPackages[index];
             
             element.Q<Label>("PackageName").text = package.packageNiceName;
             
@@ -285,6 +318,26 @@ namespace Editor.Scripts.Windows
 
             version.style.display = _allPackages.IsImported(package.packageKey) ? DisplayStyle.Flex : DisplayStyle.None;
             version.style.color = _allPackages.NeedsUpdate(package.packageKey) ? _wrongVersionColor : _normalColor;
+        }
+        
+        private void UpdateSubPackageItem(VisualElement element, int index)
+        {
+            // TODO
+            MegaPintPackagesData.MegaPintPackageData.SubPackage package = _displayedSubPackages[index];
+            
+            element.Q<Label>("PackageName").text = package.niceName;
+
+            var version = element.Q <Label>("Version");
+            
+            // TODO
+            /*version.text = _allPackages.CurrentVersion(package.packageKey);
+
+            version.style.display = _allPackages.IsImported(package.packageKey) ? DisplayStyle.Flex : DisplayStyle.None;
+            version.style.color = _allPackages.NeedsUpdate(package.packageKey) ? _wrongVersionColor : _normalColor;*/
+            
+            // TODO Buttons
+            
+            // TODO Only show buttons when parent package is installed
         }
 
         private void SetDisplayedPackages(string searchString)
