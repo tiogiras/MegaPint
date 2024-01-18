@@ -344,6 +344,7 @@ namespace Editor.Scripts.Windows
         private void UpdateVariationItem(VisualElement element, int index)
         {
             MegaPintPackagesData.MegaPintPackageData.PackageVariation variation = _displayedPackageVariations[index];
+            _currentPackage = _displayedPackages[_list.selectedIndex];
             
             element.Q<Label>("PackageName").text = variation.niceName;
 
@@ -352,7 +353,7 @@ namespace Editor.Scripts.Windows
             var btnRemove = element.Q<Button>("BTN_Remove");
             var btnUpdate = element.Q<Button>("BTN_Update");
 
-            Debug.Log(_currentPackage.packageKey);
+            Debug.Log(_currentPackage.packageKey); // currentPACKAGE IS FUCKING WRONG
 
             if (!_allPackages.IsImported(_currentPackage.packageKey))
             {
