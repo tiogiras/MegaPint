@@ -276,7 +276,7 @@ namespace Editor.Scripts.PackageManager
                     var currentVersion = "";
                     var hash = "";
 
-                    List <VariationsCache> variations = null;
+                    List <VariationsCache> variations = new();
                     
                     if (installed)
                     {

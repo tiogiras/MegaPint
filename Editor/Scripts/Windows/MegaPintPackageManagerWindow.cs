@@ -364,7 +364,7 @@ namespace Editor.Scripts.Windows
                 version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
 
                 var i = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
-                var hash = variation.gitURL[i..];
+                var hash = variation.gitURL[(i + 1)..];
 
                 Debug.Log(hash);
                 
