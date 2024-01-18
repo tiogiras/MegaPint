@@ -258,6 +258,7 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
             MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex].gitUrl);
+            Debug.Log($"Installed: {_displayedPackages[_list.selectedIndex].gitUrl}");
         }
 
         private void OnImportVariation(string gitUrl)
@@ -265,6 +266,7 @@ namespace Editor.Scripts.Windows
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
             MegaPintPackageManager.AddEmbedded(gitUrl);
+            Debug.Log($"Installed: {gitUrl}");
         }
 
         private static void OnImportSuccess()
@@ -352,12 +354,9 @@ namespace Editor.Scripts.Windows
             var btnImport = element.Q <Button>("BTN_Import");
             var btnRemove = element.Q<Button>("BTN_Remove");
             var btnUpdate = element.Q<Button>("BTN_Update");
-
-            Debug.Log(_currentPackage.packageKey); // currentPACKAGE IS FUCKING WRONG
-
+            
             if (!_allPackages.IsImported(_currentPackage.packageKey))
             {
-                Debug.Log("NOT IMPORTED");
                 version.style.display = DisplayStyle.None;
                 btnImport.style.display = DisplayStyle.None;
                 btnRemove.style.display = DisplayStyle.None;
@@ -365,14 +364,11 @@ namespace Editor.Scripts.Windows
             }
             else
             {
-                Debug.Log("IMPORTED");
                 version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
 
                 var i = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
                 var hash = variation.gitURL[(i + 1)..];
 
-                Debug.Log(hash);
-                
                 var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, hash);
                 var needsUpdate = _allPackages.NeedsVariationUpdate(_currentPackage.packageKey, variation.niceName);
             
@@ -383,9 +379,25 @@ namespace Editor.Scripts.Windows
                 btnRemove.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
                 btnUpdate.style.display = needsUpdate ? DisplayStyle.Flex : DisplayStyle.None;
 
-                btnImport.clickable = new Clickable(() => {OnImportVariation(variation.gitURL);});
-                btnRemove.clickable = new Clickable(OnRemoveVariation);
-                btnUpdate.clickable = new Clickable(() => {OnUpdateVariation(variation.gitURL);});
+                btnImport.clickable = new Clickable(
+                    () =>
+                    {
+                        OnImportVariation(variation.gitURL);
+                        OnUpdateRightPane();
+                    });
+                
+                btnRemove.clickable = new Clickable(() =>
+                    {
+                        OnRemoveVariation();
+                        OnUpdateRightPane();
+                    });
+                
+                btnUpdate.clickable = new Clickable(
+                    () =>
+                    {
+                        OnUpdateVariation(variation.gitURL);
+                        OnUpdateRightPane();
+                    });
             }
         }
 
