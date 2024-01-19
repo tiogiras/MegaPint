@@ -311,6 +311,8 @@ namespace Editor.Scripts.Windows
             ReselectItem(_currentIndex);
             _list.ClearSelection();
             
+            // TODO only works if variation has no dependency 
+            
             MegaPintPackageManager.onSuccess -= OnImportSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
@@ -385,7 +387,7 @@ namespace Editor.Scripts.Windows
 
         private async void ReselectItem(int index)
         {
-            await Task.Delay(250);
+            await Task.Delay(500);
             _list.selectedIndex = index;
         }
         
