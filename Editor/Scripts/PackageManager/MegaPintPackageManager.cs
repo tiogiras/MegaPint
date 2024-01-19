@@ -164,12 +164,25 @@ public static class MegaPintPackageManager
                                                      newestVersion = installedPackage.version == variation.version,
                                                  }).
                                              ToList();
+                    }
 
-                        foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
-                            RegisterDependencies(package.packageKey, variation.niceName, variation.dependencies);
+                    MegaPintPackagesData.MegaPintPackageData.PackageVariation installedVariation = null;
+
+                    foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
+                    {
+                        var index = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
+
+                        if (!variation.gitURL[(index + 1)..].Equals(hash))
+                            continue;
+
+                        installedVariation = variation;
+                        break;
                     }
                     
-                    RegisterDependencies(package.packageKey, "", package.dependencies);
+                    RegisterDependencies(
+                        package.packageKey,
+                        installedVariation == null ? "" : installedVariation.niceName,
+                        installedVariation == null ? package.dependencies : installedVariation.dependencies);
                 }
 
                 _packages.Add(
