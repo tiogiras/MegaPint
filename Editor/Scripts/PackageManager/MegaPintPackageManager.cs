@@ -35,6 +35,8 @@ public static class MegaPintPackageManager
 
         private readonly List <PackageCache> _packages = new();
 
+        private Dictionary <MegaPintPackagesData.PackageKey, List<string>> _dependencies = new();
+
         private CachedPackages()
         {
             Initialize();
@@ -132,7 +134,9 @@ public static class MegaPintPackageManager
             List <MegaPintPackagesData.MegaPintPackageData> allPackages = MegaPintPackagesData.Packages;
             List <PackageInfo> installedPackages = await GetInstalledPackages();
             List <string> installedPackagesNames = installedPackages.Select(installedPackage => installedPackage.name).ToList();
-
+            
+            _dependencies.Clear();
+            
             foreach (MegaPintPackagesData.MegaPintPackageData package in allPackages)
             {
                 var installed = installedPackagesNames.Contains(package.packageName);
@@ -150,6 +154,7 @@ public static class MegaPintPackageManager
                     hash = installedPackage.git?.hash;
 
                     if (package.variations is {Count: > 0})
+                    {
                         variations = package.variations.Select(
                                                  variation => new VariationsCache
                                                  {
@@ -157,6 +162,12 @@ public static class MegaPintPackageManager
                                                      newestVersion = installedPackage.version == variation.version,
                                                  }).
                                              ToList();
+
+                        foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
+                            RegisterDependencies(package.packageKey, variation.niceName, variation.dependencies);
+                    }
+                    
+                    RegisterDependencies(package.packageKey, "", package.dependencies);
                 }
 
                 _packages.Add(
@@ -176,6 +187,27 @@ public static class MegaPintPackageManager
 
             foreach (ListableAction <CachedPackages> action in OnCompleteActions)
                 action?.Invoke(s_allPackages);
+        }
+
+        private void RegisterDependencies(MegaPintPackagesData.PackageKey key, string variation, List <MegaPintPackagesData.MegaPintPackageData.Dependency> dependencies)
+        {
+            var name = $"{key}{(string.IsNullOrEmpty(variation) ? "" : $"/{variation}")}";
+
+            foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in dependencies)
+            {
+                if (_dependencies.TryGetValue(dependency.packageKey, out List <string> list))
+                {
+                    list.Add(name);
+                    continue;
+                }
+                
+                _dependencies.Add(dependency.packageKey, new List <string>{name});
+            }
+        }
+
+        public bool CanBeRemoved(MegaPintPackagesData.PackageKey key, out List <string> packages)
+        {
+            return !_dependencies.TryGetValue(key, out packages);
         }
 
         #endregion

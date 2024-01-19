@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Editor.Scripts.PackageManager;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -320,9 +321,19 @@ namespace Editor.Scripts.Windows
 
         private void OnRemove()
         {
-            MegaPintPackageManager.onSuccess += OnRemoveSuccess;
-            MegaPintPackageManager.onFailure += OnFailure;
-            MegaPintPackageManager.Remove(_displayedPackages[_list.selectedIndex].packageName);
+            MegaPintPackagesData.MegaPintPackageData package = _displayedPackages[_list.selectedIndex];
+
+            if (_allPackages.CanBeRemoved(package.packageKey, out List <string> dependants))
+            {
+                MegaPintPackageManager.onSuccess += OnRemoveSuccess;
+                MegaPintPackageManager.onFailure += OnFailure;
+                MegaPintPackageManager.Remove(package.packageName);
+            }
+            else
+            {
+                var str = string.Join(", ", dependants);
+                EditorUtility.DisplayDialog("Remove Failed", $"Cannot remove the package because [{str}] depend on it!", "Ok");
+            }
         }
         
         private void OnRemoveVariation()
