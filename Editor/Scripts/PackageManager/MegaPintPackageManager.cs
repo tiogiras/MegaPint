@@ -155,6 +155,8 @@ public static class MegaPintPackageManager
                     currentVersion = installedPackage.version;
                     hash = installedPackage.git?.hash;
 
+                    MegaPintPackagesData.MegaPintPackageData.PackageVariation installedVariation = null;
+                    
                     if (package.variations is {Count: > 0})
                     {
                         variations = package.variations.Select(
@@ -164,21 +166,19 @@ public static class MegaPintPackageManager
                                                      newestVersion = installedPackage.version == variation.version,
                                                  }).
                                              ToList();
+                        
+                        foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
+                        {
+                            var index = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
+
+                            if (!variation.gitURL[(index + 1)..].Equals(hash))
+                                continue;
+
+                            installedVariation = variation;
+                            break;
+                        }
                     }
 
-                    MegaPintPackagesData.MegaPintPackageData.PackageVariation installedVariation = null;
-
-                    foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
-                    {
-                        var index = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
-
-                        if (!variation.gitURL[(index + 1)..].Equals(hash))
-                            continue;
-
-                        installedVariation = variation;
-                        break;
-                    }
-                    
                     RegisterDependencies(
                         package.packageKey,
                         installedVariation == null ? "" : installedVariation.niceName,
