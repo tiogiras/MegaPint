@@ -137,8 +137,7 @@ public static class MegaPintPackageManager
             List <string> installedPackagesNames = installedPackages.Select(installedPackage => installedPackage.name).ToList();
             
             _dependencies.Clear();
-            Debug.Log("Cleared Deps");
-            
+
             foreach (MegaPintPackagesData.MegaPintPackageData package in allPackages)
             {
                 var installed = installedPackagesNames.Contains(package.packageName);
@@ -219,12 +218,10 @@ public static class MegaPintPackageManager
                 if (_dependencies.TryGetValue(dependency.packageKey, out List <string> list))
                 {
                     list.Add(name);
-                    Debug.Log($"Added Dep {dependency.packageKey}|{name}");
                     continue;
                 }
                 
                 _dependencies.Add(dependency.packageKey, new List <string>{name});
-                Debug.Log($"Added Dep {dependency.packageKey}|{name}");
             }
         }
 

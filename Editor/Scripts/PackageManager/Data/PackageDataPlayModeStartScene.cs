@@ -13,7 +13,7 @@ public static class PackageDataPlayModeStartScene
             packageKey = MegaPintPackagesData.PackageKey.PlayModeStartScene,
             packageName = "com.tiogiras.megapint-playmodestartscene",
             packageNiceName = "PlayMode Start Scene",
-            gitUrl = "https://github.com/tiogiras/megapint-playmodestartscene.git#b3aa4eea16ae258f5a08a4dc3c6ae52776e46f92",
+            gitUrl = "https://github.com/tiogiras/megapint-playmodestartscene.git#v1.0.0",
             version = "1.0.0",
             lastUpdate = "15.01.2024",
             unityVersion = "2022.3.15f1 or higher",

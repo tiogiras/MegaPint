@@ -15,7 +15,7 @@ public static class PackageDataAutoSave
             packageKey = MegaPintPackagesData.PackageKey.AutoSave,
             packageName = "com.tiogiras.megapint-autosave",
             packageNiceName = "Scene-AutoSave",
-            gitUrl = "https://github.com/tiogiras/MegaPint-AutoSave.git#febb86f0c4921218a96d973b8359bf419c7ff8ce",
+            gitUrl = "https://github.com/tiogiras/MegaPint-AutoSave.git#v1.0.0",
             version = "1.0.0",
             lastUpdate = "10.01.2024",
             unityVersion = "2022.3.15f1 or higher",
