@@ -193,6 +193,9 @@ public static class MegaPintPackageManager
         {
             var name = $"{key}{(string.IsNullOrEmpty(variation) ? "" : $"/{variation}")}";
 
+            if (dependencies is not {Count: > 0})
+                return;
+
             foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in dependencies)
             {
                 if (_dependencies.TryGetValue(dependency.packageKey, out List <string> list))
