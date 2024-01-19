@@ -29,15 +29,15 @@ public static class PackageDataAlphaButton
                 {
                     niceName = "MegaPint Validators Integration",
                     gitURL = "https://github.com/tiogiras/MegaPint-AlphaButton.git#d0456c5c8b1bb747a88b224578f12a15312ec202",
-                    version = "1.1.0",
-                    dependencies = new List <MegaPintPackagesData.MegaPintPackageData.Dependency>
+                    version = "1.0.0",
+                    /*dependencies = new List <MegaPintPackagesData.MegaPintPackageData.Dependency>
                     {
                         new()
                         {
                             niceName = "Validators",
                             packageKey = MegaPintPackagesData.PackageKey.Validators
                         }
-                    }
+                    }*/
                 }
             }
         };
