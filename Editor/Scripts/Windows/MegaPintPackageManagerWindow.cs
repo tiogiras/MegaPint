@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Editor.Scripts.PackageManager;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -15,7 +16,8 @@ namespace Editor.Scripts.Windows
         #region Const
 
         private const string ListItemTemplate = "User Interface/Import/MegaPintPackageItem";
-        private const string SubPackagesListItemTemplate = "User Interface/Import/MegaPintSubPackageItem";
+        private const string VariationsListItemTemplate = "User Interface/Import/MegaPintVariationItem";
+        private const string DependencyItemTemplate = "User Interface/Import/MegaPintDependencyItem";
         
         private readonly Color _normalColor = new (0.823529422f, 0.823529422f, 0.823529422f);
         private readonly Color _wrongVersionColor = new (0.688679218f,0.149910346f,0.12019401f);
@@ -38,6 +40,9 @@ namespace Editor.Scripts.Windows
         private GroupBox _packageVariationsParent;
         private ListView _packageVariations;
 
+        private Foldout _dependencies;
+        private VisualElement _separator;
+
         private ScrollView _packages;
 
         private ListView _list;
@@ -55,7 +60,8 @@ namespace Editor.Scripts.Windows
         /// <summary> Loaded uxml references </summary>
         private VisualTreeAsset _baseWindow;
         private VisualTreeAsset _listItem;
-        private VisualTreeAsset _subPackagesListItem;
+        private VisualTreeAsset _variationsListItem;
+        private VisualTreeAsset _dependencyItem;
 
         private MegaPintPackageManager.CachedPackages _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
@@ -105,6 +111,9 @@ namespace Editor.Scripts.Windows
             _packageVariationsParent = _content.Q <GroupBox>("PackageVariationsParent");
             _packageVariations = _content.Q <ListView>("PackageVariations");
 
+            _dependencies = _content.Q <Foldout>("Dependencies");
+            _separator = _content.Q <VisualElement>("Separator");
+
             _btnImport = _rightPane.Q<Button>("BTN_Import");
             _btnRemove = _rightPane.Q<Button>("BTN_Remove");
             _btnUpdate = _rightPane.Q<Button>("BTN_Update");
@@ -127,7 +136,7 @@ namespace Editor.Scripts.Windows
 
             #region SubPackages List
 
-            _packageVariations.makeItem = () => _subPackagesListItem.Instantiate();
+            _packageVariations.makeItem = () => _variationsListItem.Instantiate();
 
             _packageVariations.bindItem = UpdateVariationItem;
 
@@ -149,9 +158,10 @@ namespace Editor.Scripts.Windows
         {
             _baseWindow = Resources.Load<VisualTreeAsset>(BasePath());
             _listItem = Resources.Load<VisualTreeAsset>(ListItemTemplate);
-            _subPackagesListItem = Resources.Load <VisualTreeAsset>(SubPackagesListItemTemplate);
+            _variationsListItem = Resources.Load <VisualTreeAsset>(VariationsListItemTemplate);
+            _dependencyItem = Resources.Load <VisualTreeAsset>(DependencyItemTemplate);
             
-            return _baseWindow != null && _listItem != null && _subPackagesListItem != null;
+            return _baseWindow != null && _listItem != null && _variationsListItem != null && _dependencyItem != null;
         }
 
         protected override void RegisterCallbacks()
@@ -234,7 +244,12 @@ namespace Editor.Scripts.Windows
             _megaPintVersion.text = package.megaPintVersion;
             _infoText.text = package.infoText;
 
-            if (package.variations is {Count: > 0})
+            var hasVariation = package.variations is {Count: > 0};
+            var hasDependency = package.dependencies is {Count: > 0};
+
+            _separator.style.display = hasVariation || hasDependency ? DisplayStyle.Flex : DisplayStyle.None;
+            
+            if (hasVariation)
             {
                 _packageVariationsParent.style.display = DisplayStyle.Flex;
 
@@ -244,6 +259,28 @@ namespace Editor.Scripts.Windows
             }
             else 
                 _packageVariationsParent.style.display = DisplayStyle.None;
+
+            if (hasDependency)
+            {
+                _dependencies.Clear();
+
+                foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in package.dependencies)
+                {
+                    TemplateContainer item = _dependencyItem.Instantiate();
+                    item.Q <Label>("PackageName").text = dependency.niceName;
+
+                    var imported = _allPackages.IsImported(dependency.packageKey);
+
+                    item.Q <Label>("Missing").style.display = imported ? DisplayStyle.None : DisplayStyle.Flex;
+                    item.Q <Label>("Imported").style.display = imported ? DisplayStyle.Flex : DisplayStyle.None;
+                    
+                    _dependencies.Add(item);
+                }
+                
+                _dependencies.style.display = DisplayStyle.Flex;
+            }
+            else
+                _dependencies.style.display = DisplayStyle.None;
 
             var isImported = _allPackages.IsImported(package.packageKey);
             _btnImport.style.display = isImported ? DisplayStyle.None : DisplayStyle.Flex;
@@ -284,9 +321,19 @@ namespace Editor.Scripts.Windows
 
         private void OnRemove()
         {
-            MegaPintPackageManager.onSuccess += OnRemoveSuccess;
-            MegaPintPackageManager.onFailure += OnFailure;
-            MegaPintPackageManager.Remove(_displayedPackages[_list.selectedIndex].packageName);
+            MegaPintPackagesData.MegaPintPackageData package = _displayedPackages[_list.selectedIndex];
+
+            if (_allPackages.CanBeRemoved(package.packageKey, out List <string> dependants))
+            {
+                MegaPintPackageManager.onSuccess += OnRemoveSuccess;
+                MegaPintPackageManager.onFailure += OnFailure;
+                MegaPintPackageManager.Remove(package.packageName);
+            }
+            else
+            {
+                var str = string.Join(", ", dependants);
+                EditorUtility.DisplayDialog("Remove Failed", $"Cannot remove the package because [{str}] depend on it!", "Ok");
+            }
         }
         
         private void OnRemoveVariation()
@@ -369,6 +416,30 @@ namespace Editor.Scripts.Windows
             var btnImport = element.Q <Button>("BTN_Import");
             var btnRemove = element.Q<Button>("BTN_Remove");
             var btnUpdate = element.Q<Button>("BTN_Update");
+
+            var dependencies = element.Q <Foldout>("Dependencies");
+            
+            if (variation.dependencies is {Count: > 0})
+            {
+                dependencies.Clear();
+
+                foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in variation.dependencies)
+                {
+                    TemplateContainer item = _dependencyItem.Instantiate();
+                    item.Q <Label>("PackageName").text = dependency.niceName;
+
+                    var imported = _allPackages.IsImported(dependency.packageKey);
+
+                    item.Q <Label>("Missing").style.display = imported ? DisplayStyle.None : DisplayStyle.Flex;
+                    item.Q <Label>("Imported").style.display = imported ? DisplayStyle.Flex : DisplayStyle.None;
+                    
+                    dependencies.Add(item);
+                }
+                
+                dependencies.style.display = DisplayStyle.Flex;
+            }
+            else
+                dependencies.style.display = DisplayStyle.None;
             
             if (!_allPackages.IsImported(_currentPackage.packageKey))
             {

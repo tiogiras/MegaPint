@@ -5,335 +5,188 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.UIElements;
-using PackageInfo = UnityEditor.PackageManager.PackageInfo;
-using Task = System.Threading.Tasks.Task;
 
 namespace Editor.Scripts.PackageManager
 {
-    public static class MegaPintPackageManager
+
+public static class MegaPintPackageManager
+{
+    public class CachedPackages
     {
-        private const int RefreshRate = 10;
-
-        public static Action onSuccess;
-        public static Action<string> onFailure;
-
-        public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
+        private struct VariationsCache
         {
-#pragma warning disable CS4014
-            AddEmbedded(package.gitUrl, package.dependencies);
-#pragma warning restore CS4014
+            public string niceName;
+            public bool newestVersion;
         }
 
-        public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
+        private struct PackageCache
         {
-#pragma warning disable CS4014
-            AddEmbedded(variation.gitURL, variation.dependencies);
-#pragma warning restore CS4014
+            public MegaPintPackagesData.PackageKey key;
+            public bool installed;
+            public bool newestVersion;
+            public string currentVersion;
+            public List <VariationsCache> variations;
+            public string currentVariation;
         }
-        
-        private static async Task AddEmbedded(string gitUrl, List <MegaPintPackagesData.MegaPintPackageData.Dependency> dependencies)
+
+        private static CachedPackages s_allPackages;
+
+        private readonly List <PackageCache> _packages = new();
+
+        private Dictionary <MegaPintPackagesData.PackageKey, List<string>> _dependencies = new();
+
+        private CachedPackages()
         {
-            if (dependencies is {Count: > 0})
+            Initialize();
+        }
+
+        #region Public Methods
+
+        public static void Refresh()
+        {
+            s_allPackages = null;
+            RequestAllPackages();
+        }
+
+        public static void RequestAllPackages()
+        {
+            if (s_allPackages == null)
             {
-                foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in dependencies)
-                {
-                    MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(dependency.packageKey);
-                    
-                    await AddEmbedded(package.gitUrl, package.dependencies);
-                }
+                var newInstance = new CachedPackages();
+                s_allPackages = newInstance;
             }
-
-            await AddEmbedded(gitUrl);
-
-            onSuccess?.Invoke();  
-            CachedPackages.Refresh();
-        }
-
-        private static async Task AddEmbedded(string packageUrl)
-        {
-            if (!await Add(packageUrl))
-                return;
-
-            try { await Embed(packageUrl); }
-            catch (Exception) { /* ignored */}
-        }
-
-        public static async void Remove(string packageName)
-        {
-            var request = Client.Remove(packageName);
-            while (!request.IsCompleted)
-            {
-                await Task.Delay(RefreshRate);
-            }
-            
-            if (request.Status >= StatusCode.Failure)
-                onFailure?.Invoke(request.Error.message);
             else
-            {
-                onSuccess?.Invoke();   
-                CachedPackages.Refresh();
-            }
-        }
-        
-        private static async Task<bool> Add(string packageUrl)
-        {
-            var request = Client.Add(packageUrl);
-            while (!request.IsCompleted)
-            {
-                await Task.Delay(RefreshRate);
-            }
-
-            if (request.Status >= StatusCode.Failure)
-                onFailure?.Invoke(request.Error.message);
-
-            return request.Status == StatusCode.Success;
-        }
-
-        private static async Task<bool> Embed(string packageName)
-        {
-            var request = Client.Embed(packageName);
-            while (!request.IsCompleted)
-            {
-                await Task.Delay(RefreshRate);
-            }
-            
-            if (request.Status >= StatusCode.Failure)
-                onFailure?.Invoke(request.Error.message);
-            
-            return request.Status == StatusCode.Success;
-        }
-
-        private static async Task<List<PackageInfo>> GetInstalledPackages()
-        {
-            var request = Client.List();
-            while (!request.IsCompleted)
-            {
-                await Task.Delay(RefreshRate);
-
-                if (CachedPackages.OnUpdateActions is not {Count: > 0})
-                    continue;
-
-                foreach (var action in CachedPackages.OnUpdateActions)
-                {
-                    action?.Invoke();
-                }
-            }
-
-            if (request.Status >= StatusCode.Failure)
-                onFailure?.Invoke(request.Error.message);
-
-            return request.Result.Where(packageInfo => packageInfo.name.ToLower().Contains("megapint")).ToList();
-        }
-
-        public class CachedPackages
-        {
-            private static CachedPackages s_allPackages;
-            
-            private readonly List<PackageCache> _packages = new ();
-
-            #region Actions
-
-            public static readonly List<ListableAction> OnUpdateActions = new();
-            public static readonly List<ListableAction<CachedPackages>> OnCompleteActions = new();
-
-            public class ListableAction
-            {
-                public readonly string name;
-                private readonly Action _action;
-
-                public ListableAction(Action action, string name)
-                {
-                    _action = action;
-                    this.name = name;
-                }
-
-                public void Invoke() => _action.Invoke();
-            }
-
-            public class ListableAction<T>
-            {
-                public readonly string name;
-                private readonly Action<T> _action;
-
-                public ListableAction(Action<T> action, string name)
-                {
-                    _action = action;
-                    this.name = name;
-                }
-
-                public void Invoke(T value) => _action.Invoke(value);
-            }
-            
-            public static void RemoveUpdateAction(string name)
-            {
-                if (OnUpdateActions is not {Count: > 0})
-                    return;
-
-                for (var i = 0; i < OnUpdateActions.Count; i++)
-                {
-                    var action = OnUpdateActions[i];
-                    if (!action.name.Equals(name))
-                        continue;
-                    
-                    OnUpdateActions.RemoveAt(i);
-                    return;
-                }
-            }
-
-            public static void RemoveCompleteAction(string name)
             {
                 if (OnCompleteActions is not {Count: > 0})
                     return;
 
-                for (var i = 0; i < OnCompleteActions.Count; i++)
-                {
-                    var action = OnCompleteActions[i];
-                    if (!action.name.Equals(name))
-                        continue;
-                    
-                    OnCompleteActions.RemoveAt(i);
-                    return;
-                }
+                foreach (ListableAction <CachedPackages> action in OnCompleteActions)
+                    action?.Invoke(s_allPackages);
             }
+        }
+
+        public static void UpdateLoadingLabel(Label loadingLabel, int currentProgress, int refreshRate, out int newProgress)
+        {
+            if (currentProgress >= refreshRate)
+            {
+                currentProgress = 0;
+
+                var pointCount = loadingLabel.text.Count(c => c == '.');
+                var loadingText = new StringBuilder("Loading");
+
+                if (pointCount == 3)
+                    pointCount = 0;
+
+                for (var i = 0; i < pointCount + 1; i++)
+                    loadingText.Append(".");
+
+                loadingLabel.style.display = DisplayStyle.Flex;
+                loadingLabel.text = loadingText.ToString();
+            }
+            else
+                currentProgress += RefreshRate;
+
+            newProgress = currentProgress;
+        }
+
+        public string CurrentVersion(MegaPintPackagesData.PackageKey key)
+        {
+            return _packages.First(package => package.key == key).currentVersion;
+        }
+
+        public bool IsImported(MegaPintPackagesData.PackageKey key)
+        {
+            return _packages.First(package => package.key == key).installed;
+        }
+
+        public bool IsVariation(MegaPintPackagesData.PackageKey key, string gitHash)
+        {
+            return _packages.First(package => package.key == key).currentVariation.Equals(gitHash);
+        }
+
+        public bool NeedsUpdate(MegaPintPackagesData.PackageKey key)
+        {
+            return !_packages.First(package => package.key == key).newestVersion;
+        }
+
+        public bool NeedsVariationUpdate(MegaPintPackagesData.PackageKey key, string niceName)
+        {
+            PackageCache package = _packages.First(package => package.key == key); // <- package.variations is null
+
+            VariationsCache variation = package.variations.First(variation => variation.niceName.Equals(niceName));
+
+            return !variation.newestVersion;
+        }
+
+        public List <MegaPintPackagesData.MegaPintPackageData> ToDisplay()
+        {
+            return _packages.Select(package => MegaPintPackagesData.PackageData(package.key)).ToList();
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private async void Initialize()
+        {
+            List <MegaPintPackagesData.MegaPintPackageData> allPackages = MegaPintPackagesData.Packages;
+            List <PackageInfo> installedPackages = await GetInstalledPackages();
+            List <string> installedPackagesNames = installedPackages.Select(installedPackage => installedPackage.name).ToList();
             
-            #endregion
-
-            #region Public Methods
-
-            public static void RequestAllPackages()
-            {
-                if (s_allPackages == null)
-                {
-                    var newInstance = new CachedPackages();
-                    s_allPackages = newInstance;
-                }
-                else
-                {
-                    if (OnCompleteActions is not {Count: > 0})
-                        return;
-                    
-                    foreach (var action in OnCompleteActions)
-                    {
-                        action?.Invoke(s_allPackages);
-                    }
-                }
-            }
-
-            public static void Refresh()
-            {
-                s_allPackages = null;
-                RequestAllPackages();
-            }
-
-            public bool IsImported(MegaPintPackagesData.PackageKey key) =>
-                _packages.First(package => package.key == key).installed;
-
-            public bool NeedsUpdate(MegaPintPackagesData.PackageKey key) =>
-                !_packages.First(package => package.key == key).newestVersion;
+            _dependencies.Clear();
+            Debug.Log("Cleared Deps");
             
-            public bool IsVariation(MegaPintPackagesData.PackageKey key, string gitHash)
+            foreach (MegaPintPackagesData.MegaPintPackageData package in allPackages)
             {
-                return _packages.First(package => package.key == key).currentVariation.Equals(gitHash);
-            }
+                var installed = installedPackagesNames.Contains(package.packageName);
+                var newestVersion = false;
+                var currentVersion = "";
+                var hash = "";
 
-            public bool NeedsVariationUpdate(MegaPintPackagesData.PackageKey key, string niceName)
-            {
-                Debug.Log(niceName);
+                List <VariationsCache> variations = null;
 
-                PackageCache package = _packages.First(package => package.key == key); // <- package.variations is null
-                
-                foreach (var v in package.variations)   
+                if (installed)
                 {
-                    Debug.Log(v.niceName);
-                }
+                    PackageInfo installedPackage = installedPackages[installedPackagesNames.IndexOf(package.packageName)];
+                    newestVersion = installedPackage.version == package.version;
+                    currentVersion = installedPackage.version;
+                    hash = installedPackage.git?.hash;
 
-                Debug.Log("CACHE END");
-                
-                VariationsCache variation = package.variations.First(variation => variation.niceName.Equals(niceName));
-
-                return !variation.newestVersion;
-            }
-            
-            public List<MegaPintPackagesData.MegaPintPackageData> ToDisplay() =>
-                _packages.Select(package => MegaPintPackagesData.PackageData(package.key)).ToList();
-
-            public string CurrentVersion(MegaPintPackagesData.PackageKey key) =>
-                _packages.First(package => package.key == key).currentVersion;
-
-            public static void UpdateLoadingLabel(Label loadingLabel, int currentProgress, int refreshRate, out int newProgress)
-            {
-                if (currentProgress >= refreshRate)
-                {
-                    currentProgress = 0;
-
-                    var pointCount = loadingLabel.text.Count(c => c == '.');
-                    var loadingText = new StringBuilder("Loading");
-
-                    if (pointCount == 3)
-                        pointCount = 0;
-
-                    for (var i = 0; i < pointCount + 1; i++)
-                    {
-                        loadingText.Append(".");
-                    }
-
-                    loadingLabel.style.display = DisplayStyle.Flex;
-                    loadingLabel.text = loadingText.ToString();
-                }
-                else
-                    currentProgress += RefreshRate;
-
-                newProgress = currentProgress;
-            }
-
-            #endregion
-
-            #region Internal Methods
-
-            private CachedPackages() => Initialize();
-
-            private async void Initialize()
-            {
-                var allPackages = MegaPintPackagesData.Packages;
-                var installedPackages = await GetInstalledPackages();
-                var installedPackagesNames = installedPackages.Select(installedPackage => installedPackage.name).ToList();
-
-                foreach (var package in allPackages)
-                {
-                    // TODO Variations
-                    var installed = installedPackagesNames.Contains(package.packageName);
-                    var newestVersion = false;
-                    var currentVersion = "";
-                    var hash = "";
-
-                    List <VariationsCache> variations = null;
+                    MegaPintPackagesData.MegaPintPackageData.PackageVariation installedVariation = null;
                     
-                    if (installed)
+                    if (package.variations is {Count: > 0})
                     {
-                        PackageInfo installedPackage = installedPackages[installedPackagesNames.IndexOf(package.packageName)];
-                        newestVersion = installedPackage.version == package.version;
-                        currentVersion = installedPackage.version;
-                        hash = installedPackage.git?.hash;
-
-                        if (package.variations is {Count: > 0})
-                        {
-                            variations = new List <VariationsCache>();
+                        variations = package.variations.Select(
+                                                 variation => new VariationsCache
+                                                 {
+                                                     niceName = variation.niceName,
+                                                     newestVersion = installedPackage.version == variation.version,
+                                                 }).
+                                             ToList();
                         
-                            foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
-                            {
-                                variations.Add(new VariationsCache
-                                {
-                                    niceName = variation.niceName,
-                                    newestVersion = installedPackage.version == variation.version,
-                                    currentVersion = installedPackage.version
-                                });   
-                            }
+                        foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
+                        {
+                            var index = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
+
+                            if (!variation.gitURL[(index + 1)..].Equals(hash))
+                                continue;
+
+                            installedVariation = variation;
+                            break;
                         }
                     }
 
-                    _packages.Add(new PackageCache
+                    RegisterDependencies(
+                        package.packageKey,
+                        installedVariation == null ? "" : installedVariation.niceName,
+                        installedVariation == null ? package.dependencies : installedVariation.dependencies);
+                }
+
+                _packages.Add(
+                    new PackageCache
                     {
                         key = package.packageKey,
                         installed = installed,
@@ -342,36 +195,272 @@ namespace Editor.Scripts.PackageManager
                         currentVariation = hash,
                         variations = variations
                     });
-                }
+            }
 
-                if (OnCompleteActions is not {Count: > 0})
-                    return;
-                
-                foreach (var action in OnCompleteActions)
+            if (OnCompleteActions is not {Count: > 0})
+                return;
+
+            foreach (ListableAction <CachedPackages> action in OnCompleteActions)
+                action?.Invoke(s_allPackages);
+        }
+
+        private void RegisterDependencies(
+            MegaPintPackagesData.PackageKey key, 
+            string variation, 
+            List <MegaPintPackagesData.MegaPintPackageData.Dependency> dependencies)
+        {
+            var name = $"{key}{(string.IsNullOrEmpty(variation) ? "" : $"/{variation}")}";
+
+            if (dependencies is not {Count: > 0})
+                return;
+
+            foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in dependencies)
+            {
+                if (_dependencies.TryGetValue(dependency.packageKey, out List <string> list))
                 {
-                    action?.Invoke(s_allPackages);
+                    list.Add(name);
+                    Debug.Log($"Added Dep {dependency.packageKey}|{name}");
+                    continue;
                 }
+                
+                _dependencies.Add(dependency.packageKey, new List <string>{name});
+                Debug.Log($"Added Dep {dependency.packageKey}|{name}");
+            }
+        }
+
+        private void UnRegisterDependencies(
+            MegaPintPackagesData.PackageKey key,
+            string variation,
+            List <MegaPintPackagesData.MegaPintPackageData.Dependency> dependencies)
+        {
+            var name = $"{key}{(string.IsNullOrEmpty(variation) ? "" : $"/{variation}")}";
+
+            if (dependencies is not {Count: > 0})
+                return;
+            
+            foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in dependencies)
+            {
+                if (_dependencies.TryGetValue(dependency.packageKey, out List <string> list))
+                    list.Remove(name);
+            }
+        }
+
+        public bool CanBeRemoved(MegaPintPackagesData.PackageKey key, out List <string> packages)
+        {
+            return !_dependencies.TryGetValue(key, out packages);
+        }
+
+        #endregion
+
+        #region Actions
+
+        public static readonly List <ListableAction> OnUpdateActions = new();
+        public static readonly List <ListableAction <CachedPackages>> OnCompleteActions = new();
+
+        public class ListableAction
+        {
+            public readonly string name;
+            private readonly Action _action;
+
+            public ListableAction(Action action, string name)
+            {
+                _action = action;
+                this.name = name;
             }
 
-            private struct PackageCache
-            {
-                public MegaPintPackagesData.PackageKey key;
-                public bool installed;
-                public bool newestVersion;
-                public string currentVersion;
-                public List <VariationsCache> variations;
-                public string currentVariation;
-            }
+            #region Public Methods
 
-            public struct VariationsCache
+            public void Invoke()
             {
-                public string niceName;
-                public bool newestVersion;
-                public string currentVersion;
+                _action.Invoke();
             }
 
             #endregion
         }
+
+        public class ListableAction <T>
+        {
+            public readonly string name;
+            private readonly Action <T> _action;
+
+            public ListableAction(Action <T> action, string name)
+            {
+                _action = action;
+                this.name = name;
+            }
+
+            #region Public Methods
+
+            public void Invoke(T value)
+            {
+                _action.Invoke(value);
+            }
+
+            #endregion
+        }
+
+        public static void RemoveUpdateAction(string name)
+        {
+            if (OnUpdateActions is not {Count: > 0})
+                return;
+
+            for (var i = 0; i < OnUpdateActions.Count; i++)
+            {
+                ListableAction action = OnUpdateActions[i];
+
+                if (!action.name.Equals(name))
+                    continue;
+
+                OnUpdateActions.RemoveAt(i);
+
+                return;
+            }
+        }
+
+        public static void RemoveCompleteAction(string name)
+        {
+            if (OnCompleteActions is not {Count: > 0})
+                return;
+
+            for (var i = 0; i < OnCompleteActions.Count; i++)
+            {
+                ListableAction <CachedPackages> action = OnCompleteActions[i];
+
+                if (!action.name.Equals(name))
+                    continue;
+
+                OnCompleteActions.RemoveAt(i);
+
+                return;
+            }
+        }
+
+        #endregion
     }
+
+    private const int RefreshRate = 10;
+
+    public static Action onSuccess;
+    public static Action <string> onFailure;
+
+    #region Public Methods
+
+    public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
+    {
+#pragma warning disable CS4014
+        AddEmbedded(package.gitUrl, package.dependencies);
+#pragma warning restore CS4014
+    }
+
+    public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
+    {
+#pragma warning disable CS4014
+        AddEmbedded(variation.gitURL, variation.dependencies);
+#pragma warning restore CS4014
+    }
+
+    public static async void Remove(string packageName)
+    {
+        RemoveRequest request = Client.Remove(packageName);
+
+        while (!request.IsCompleted)
+            await Task.Delay(RefreshRate);
+
+        if (request.Status >= StatusCode.Failure)
+            onFailure?.Invoke(request.Error.message);
+        else
+        {
+            onSuccess?.Invoke();
+            CachedPackages.Refresh();
+        }
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private static async Task <bool> Add(string packageUrl)
+    {
+        AddRequest request = Client.Add(packageUrl);
+
+        while (!request.IsCompleted)
+            await Task.Delay(RefreshRate);
+
+        if (request.Status >= StatusCode.Failure)
+            onFailure?.Invoke(request.Error.message);
+
+        return request.Status == StatusCode.Success;
+    }
+
+    private static async Task AddEmbedded(string gitUrl, List <MegaPintPackagesData.MegaPintPackageData.Dependency> dependencies)
+    {
+        if (dependencies is {Count: > 0})
+        {
+            foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in dependencies)
+            {
+                MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(dependency.packageKey);
+
+                await AddEmbedded(package.gitUrl, package.dependencies);
+                await Task.Delay(250);
+            }
+        }
+
+        await Task.Delay(250);
+        await AddEmbedded(gitUrl);
+
+        onSuccess?.Invoke();
+        CachedPackages.Refresh();
+    }
+
+    private static async Task AddEmbedded(string packageUrl)
+    {
+        if (!await Add(packageUrl))
+            return;
+
+        try
+        {
+            await Embed(packageUrl);
+        }
+        catch (Exception)
+        {
+            /* ignored */
+        }
+    }
+
+    private static async Task Embed(string packageName)
+    {
+        EmbedRequest request = Client.Embed(packageName);
+
+        while (!request.IsCompleted)
+            await Task.Delay(RefreshRate);
+
+        if (request.Status >= StatusCode.Failure)
+            onFailure?.Invoke(request.Error.message);
+    }
+
+    private static async Task <List <PackageInfo>> GetInstalledPackages()
+    {
+        ListRequest request = Client.List();
+
+        while (!request.IsCompleted)
+        {
+            await Task.Delay(RefreshRate);
+
+            if (CachedPackages.OnUpdateActions is not {Count: > 0})
+                continue;
+
+            foreach (CachedPackages.ListableAction action in CachedPackages.OnUpdateActions)
+                action?.Invoke();
+        }
+
+        if (request.Status >= StatusCode.Failure)
+            onFailure?.Invoke(request.Error.message);
+
+        return request.Result.Where(packageInfo => packageInfo.name.ToLower().Contains("megapint")).ToList();
+    }
+
+    #endregion
+}
+
 }
 #endif
