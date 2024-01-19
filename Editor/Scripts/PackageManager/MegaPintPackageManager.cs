@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.PackageManager
@@ -136,6 +137,7 @@ public static class MegaPintPackageManager
             List <string> installedPackagesNames = installedPackages.Select(installedPackage => installedPackage.name).ToList();
             
             _dependencies.Clear();
+            Debug.Log("Cleared Deps");
             
             foreach (MegaPintPackagesData.MegaPintPackageData package in allPackages)
             {
@@ -189,7 +191,10 @@ public static class MegaPintPackageManager
                 action?.Invoke(s_allPackages);
         }
 
-        private void RegisterDependencies(MegaPintPackagesData.PackageKey key, string variation, List <MegaPintPackagesData.MegaPintPackageData.Dependency> dependencies)
+        private void RegisterDependencies(
+            MegaPintPackagesData.PackageKey key, 
+            string variation, 
+            List <MegaPintPackagesData.MegaPintPackageData.Dependency> dependencies)
         {
             var name = $"{key}{(string.IsNullOrEmpty(variation) ? "" : $"/{variation}")}";
 
@@ -201,10 +206,29 @@ public static class MegaPintPackageManager
                 if (_dependencies.TryGetValue(dependency.packageKey, out List <string> list))
                 {
                     list.Add(name);
+                    Debug.Log($"Added Dep {dependency.packageKey}|{name}");
                     continue;
                 }
                 
                 _dependencies.Add(dependency.packageKey, new List <string>{name});
+                Debug.Log($"Added Dep {dependency.packageKey}|{name}");
+            }
+        }
+
+        private void UnRegisterDependencies(
+            MegaPintPackagesData.PackageKey key,
+            string variation,
+            List <MegaPintPackagesData.MegaPintPackageData.Dependency> dependencies)
+        {
+            var name = $"{key}{(string.IsNullOrEmpty(variation) ? "" : $"/{variation}")}";
+
+            if (dependencies is not {Count: > 0})
+                return;
+            
+            foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in dependencies)
+            {
+                if (_dependencies.TryGetValue(dependency.packageKey, out List <string> list))
+                    list.Remove(name);
             }
         }
 
