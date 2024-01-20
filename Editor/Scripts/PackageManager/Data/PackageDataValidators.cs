@@ -13,7 +13,7 @@ public static class PackageDataValidators
             packageKey = MegaPintPackagesData.PackageKey.Validators,
             packageName = "com.tiogiras.megapint-validators",
             packageNiceName = "Validators",
-            gitUrl = "https://github.com/tiogiras/MegaPint-Validators.git#v1.0.0",
+            gitUrl = "https://github.com/tiogiras/MegaPint-Validators.git#development",
             version = "1.0.0",
             lastUpdate = "10.01.2024",
             unityVersion = "2022.3.15f1 or higher",
