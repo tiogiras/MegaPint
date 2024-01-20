@@ -16,10 +16,10 @@ public static class PackageDataAutoSave
             packageName = "com.tiogiras.megapint-autosave",
             packageNiceName = "Scene-AutoSave",
             gitUrl = "https://github.com/tiogiras/MegaPint-AutoSave.git#v1.0.0",
-            version = "1.0.0",
-            lastUpdate = "10.01.2024",
+            version = "1.0.1",
+            lastUpdate = "20.01.2024",
             unityVersion = "2022.3.15f1 or higher",
-            megaPintVersion = "1.0.0 or higher",
+            megaPintVersion = "1.1.0 or higher",
             infoText =
                 "Scene-AutoSave is a small tool that provides you with an additional layer of protection when it comes to saving your scenes."
         };
