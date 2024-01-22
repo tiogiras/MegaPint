@@ -170,6 +170,8 @@ public static class MegaPintPackageManager
                         {
                             var index = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
 
+                            Debug.Log($"Hash: {hash} | VariationURL: {variation.gitURL[(index + 1)..]}");
+
                             if (!variation.gitURL[(index + 1)..].Equals(hash))
                                 continue;
 
