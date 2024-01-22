@@ -143,7 +143,7 @@ public static class MegaPintPackageManager
                 var installed = installedPackagesNames.Contains(package.packageName);
                 var newestVersion = false;
                 var currentVersion = "";
-                var hash = "";
+                var currentVariation = "";
 
                 List <VariationsCache> variations = null;
 
@@ -152,7 +152,9 @@ public static class MegaPintPackageManager
                     PackageInfo installedPackage = installedPackages[installedPackagesNames.IndexOf(package.packageName)];
                     newestVersion = installedPackage.version == package.version;
                     currentVersion = installedPackage.version;
-                    hash = installedPackage.git?.hash;
+                    
+                    var commitHash = installedPackage.git?.hash;
+                    var branch = installedPackage.git?.revision;
 
                     MegaPintPackagesData.MegaPintPackageData.PackageVariation installedVariation = null;
                     
@@ -170,11 +172,20 @@ public static class MegaPintPackageManager
                         {
                             var index = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
 
-                            if (!variation.gitURL[(index + 1)..].Equals(hash))
+                            var importedUrlHash = variation.gitURL[(index + 1)..];
+
+                            if (importedUrlHash.Equals(commitHash))
+                            {
+                                currentVariation = commitHash;
+                                installedVariation = variation;
+                                break;
+                            }
+
+                            if (!importedUrlHash.Equals(branch))
                                 continue;
 
+                            currentVariation = branch;
                             installedVariation = variation;
-                            break;
                         }
                     }
 
@@ -191,7 +202,7 @@ public static class MegaPintPackageManager
                         installed = installed,
                         newestVersion = newestVersion,
                         currentVersion = currentVersion,
-                        currentVariation = hash,
+                        currentVariation = currentVariation,
                         variations = variations
                     });
             }
@@ -222,23 +233,6 @@ public static class MegaPintPackageManager
                 }
                 
                 _dependencies.Add(dependency.packageKey, new List <string>{name});
-            }
-        }
-
-        private void UnRegisterDependencies(
-            MegaPintPackagesData.PackageKey key,
-            string variation,
-            List <MegaPintPackagesData.MegaPintPackageData.Dependency> dependencies)
-        {
-            var name = $"{key}{(string.IsNullOrEmpty(variation) ? "" : $"/{variation}")}";
-
-            if (dependencies is not {Count: > 0})
-                return;
-            
-            foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in dependencies)
-            {
-                if (_dependencies.TryGetValue(dependency.packageKey, out List <string> list))
-                    list.Remove(name);
             }
         }
 
