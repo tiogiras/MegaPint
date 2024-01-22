@@ -154,6 +154,8 @@ public static class MegaPintPackageManager
                     currentVersion = installedPackage.version;
                     hash = installedPackage.git?.hash;
 
+                    Debug.Log(installedPackage.git?.revision);
+
                     MegaPintPackagesData.MegaPintPackageData.PackageVariation installedVariation = null;
                     
                     if (package.variations is {Count: > 0})
@@ -169,9 +171,7 @@ public static class MegaPintPackageManager
                         foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
                         {
                             var index = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
-
-                            Debug.Log($"Hash: {hash} | VariationURL: {variation.gitURL[(index + 1)..]}");
-
+                            
                             if (!variation.gitURL[(index + 1)..].Equals(hash))
                                 continue;
 
