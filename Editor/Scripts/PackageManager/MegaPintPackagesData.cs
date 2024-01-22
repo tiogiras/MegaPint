@@ -28,11 +28,10 @@ public static class MegaPintPackagesData
 
         public class PackageVariation : IComparable <PackageVariation>
         {
+            public List <Dependency> dependencies;
             public string gitURL;
             public string niceName;
             public string version;
-
-            public List <Dependency> dependencies;
 
             #region Public Methods
 
@@ -44,6 +43,8 @@ public static class MegaPintPackagesData
             #endregion
         }
 
+        public List <Dependency> dependencies;
+
         public string gitUrl;
         public string infoText;
         public string lastUpdate;
@@ -52,11 +53,10 @@ public static class MegaPintPackagesData
         public string packageName;
         public string packageNiceName;
         public string unityVersion;
-        public string version;
-        
+
         public List <PackageVariation> variations;
-        public List <Dependency> dependencies;
-        
+        public string version;
+
         #region Public Methods
 
         public int CompareTo(MegaPintPackageData other)
@@ -69,12 +69,16 @@ public static class MegaPintPackagesData
 
     public enum PackageKey
     {
-        AutoSave, Validators, AlphaButton, PlayModeStartScene
+        AutoSave, Validators, AlphaButton, PlayModeStartScene, NotePad
     }
 
     public static readonly List <MegaPintPackageData> Packages = new()
     {
-        PackageDataAutoSave.Get(), PackageDataValidators.Get(), PackageDataAlphaButton.Get(), PackageDataPlayModeStartScene.Get()
+        PackageDataAutoSave.Get(),
+        PackageDataValidators.Get(),
+        PackageDataAlphaButton.Get(),
+        PackageDataPlayModeStartScene.Get(),
+        PackageDataNotePad.Get()
     };
 
     #region Public Methods
