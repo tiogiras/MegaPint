@@ -369,10 +369,10 @@ internal static class MegaPintPackageManager
 
     #region Private Methods
 
-    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData package) => $"{package.gitUrl}#{package.version}"; 
+    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData package) => $"{package.gitUrl}#v{package.version}"; 
     
     private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
-        => $"{variation.gitUrl}#{variation.version}{variation.variationTag}"; 
+        => $"{variation.gitUrl}#v{variation.version}{variation.variationTag}"; 
     
     private static async Task <bool> Add(string packageUrl)
     {
