@@ -15,7 +15,7 @@ public static class PackageDataAlphaButton
             packageKey = MegaPintPackagesData.PackageKey.AlphaButton,
             packageName = "com.tiogiras.megapint-alphabutton",
             packageNiceName = "Alpha Button",
-            gitUrl = "https://github.com/tiogiras/MegaPint-AlphaButton.git#development",
+            gitUrl = "https://github.com/tiogiras/MegaPint-AlphaButton.git#v1.0.0",
             version = "1.0.0",
             lastUpdate = "20.01.2024",
             unityVersion = "2022.3.15f1 or higher",
@@ -28,7 +28,7 @@ public static class PackageDataAlphaButton
                 new()
                 {
                     niceName = "MegaPint Validators Integration",
-                    gitURL = "https://github.com/tiogiras/MegaPint-AlphaButton.git#validatorsIntegration/development",
+                    gitURL = "https://github.com/tiogiras/MegaPint-AlphaButton.git#v1.0.0a",
                     version = "1.0.0",
                     dependencies = new List <MegaPintPackagesData.MegaPintPackageData.Dependency>
                     {
