@@ -310,9 +310,7 @@ namespace Editor.Scripts.Windows
         {
             ReselectItem(_currentIndex);
             _list.ClearSelection();
-            
-            // TODO only works if variation has no dependency 
-            
+
             MegaPintPackageManager.onSuccess -= OnImportSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }

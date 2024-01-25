@@ -393,7 +393,7 @@ internal static class MegaPintPackageManager
             {
                 MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(dependency.packageKey);
 
-                await AddEmbedded(package.gitUrl, package.dependencies);
+                await AddEmbedded(GetPackageUrl(package), package.dependencies);
                 await Task.Delay(250);
             }
         }
