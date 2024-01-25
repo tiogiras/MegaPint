@@ -9,7 +9,7 @@ using Task = System.Threading.Tasks.Task;
 namespace Editor.Scripts.Settings
 {
     [InitializeOnLoad]
-    public class MegaPintSettings : ScriptableObject
+    internal class MegaPintSettings : ScriptableObject
     {
         public static MegaPintSettings instance;
 

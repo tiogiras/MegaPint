@@ -5,7 +5,7 @@ namespace Editor.Scripts.Settings
 {
 
 [Serializable]
-public class MegaPintSettingsBase
+internal class MegaPintSettingsBase
 {
     public string name;
 

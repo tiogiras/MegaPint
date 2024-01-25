@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Editor.Scripts.PackageManager.Data
 {
 
-public static class PackageDataAlphaButton
+internal static class PackageDataAlphaButton
 {
     #region Public Methods
 
@@ -12,31 +12,41 @@ public static class PackageDataAlphaButton
     {
         return new MegaPintPackagesData.MegaPintPackageData
         {
+            // Git Info & Identification
+            gitUrl = "https://github.com/tiogiras/MegaPint-AlphaButton.git",
             packageKey = MegaPintPackagesData.PackageKey.AlphaButton,
-            packageName = "com.tiogiras.megapint-alphabutton",
-            packageNiceName = "Alpha Button",
-            gitUrl = "https://github.com/tiogiras/MegaPint-AlphaButton.git#v1.0.0",
+        
+            // Versions
             version = "1.0.0",
-            lastUpdate = "20.01.2024",
             unityVersion = "2022.3.15f1 or higher",
             megaPintVersion = "1.1.0 or higher",
+        
+            // Metadata
             infoText =
                 "This package adds a new button component that makes use of the build in alpha-threshold of a image component, " +
-                "so that a button is only clickable where it's alpha is greater than the specified value.",
+                "so that a button is only clickable where it's alpha is greater than the specified value.",            
+            lastUpdate = "20.01.2024",
+            packageName = "com.tiogiras.megapint-alphabutton",
+            packageNiceName = "Alpha Button",
+
+            // Dependencies & Variations
             variations = new List <MegaPintPackagesData.MegaPintPackageData.PackageVariation>
             {
                 new()
                 {
-                    niceName = "MegaPint Validators Integration",
-                    gitURL = "https://github.com/tiogiras/MegaPint-AlphaButton.git#v1.0.0a",
+                    // Git Info & Identification
+                    gitUrl = "https://github.com/tiogiras/MegaPint-AlphaButton.git",
+                    variationTag = "a",
+            
+                    // Version
                     version = "1.0.0",
+            
+                    // Metadata
+                    niceName = "MegaPint Validators Integration",
+
                     dependencies = new List <MegaPintPackagesData.MegaPintPackageData.Dependency>
                     {
-                        new()
-                        {
-                            niceName = "Validators",
-                            packageKey = MegaPintPackagesData.PackageKey.Validators
-                        }
+                        new() {niceName = "Validators", packageKey = MegaPintPackagesData.PackageKey.Validators}
                     }
                 }
             }

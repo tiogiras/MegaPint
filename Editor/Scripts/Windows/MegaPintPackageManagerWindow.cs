@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 
 namespace Editor.Scripts.Windows
 {
-    public class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
+    internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
     {
         #region Const
 
@@ -310,9 +310,7 @@ namespace Editor.Scripts.Windows
         {
             ReselectItem(_currentIndex);
             _list.ClearSelection();
-            
-            // TODO only works if variation has no dependency 
-            
+
             MegaPintPackageManager.onSuccess -= OnImportSuccess;
             MegaPintPackageManager.onFailure -= OnFailure;
         }
@@ -453,9 +451,8 @@ namespace Editor.Scripts.Windows
             else
             {
                 version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
-
-                var i = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
-                var hash = variation.gitURL[(i + 1)..];
+                
+                var hash = $"v{variation.version}{variation.variationTag}";
 
                 var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, hash);
                 var needsUpdate = _allPackages.NeedsVariationUpdate(_currentPackage.packageKey, variation.niceName);

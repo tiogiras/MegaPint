@@ -2,7 +2,7 @@
 namespace Editor.Scripts.PackageManager.Data
 {
 
-public static class PackageDataNotePad
+internal static class PackageDataNotePad
 {
     #region Public Methods
 
@@ -10,15 +10,20 @@ public static class PackageDataNotePad
     {
         return new MegaPintPackagesData.MegaPintPackageData
         {
+            // Git Info & Identification
+            gitUrl = "https://github.com/tiogiras/MegaPint-NotePad.git",
             packageKey = MegaPintPackagesData.PackageKey.NotePad,
-            packageName = "com.tiogiras.megapint-notepad",
-            packageNiceName = "NotePad",
-            gitUrl = "https://github.com/tiogiras/MegaPint-NotePad.git#v1.0.0",
+        
+            // Versions
             version = "1.0.0",
-            lastUpdate = "25.01.2024",
             unityVersion = "2022.3.15f1 or higher",
             megaPintVersion = "1.1.0 or higher",
-            infoText = "NotePad allows you to make and edit notes directly on a GameObjects MonoBehaviour."
+        
+            // Metadata
+            infoText = "NotePad allows you to make and edit notes directly on a GameObjects MonoBehaviour.",            
+            lastUpdate = "25.01.2024",
+            packageName = "com.tiogiras.megapint-notepad",
+            packageNiceName = "NotePad"
         };
     }
 

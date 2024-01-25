@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Editor.Scripts.Settings.BaseSettings
 {
-    public static class MegaPintBaseSettingsData
+    internal static class MegaPintBaseSettingsData
     {
         public struct Setting : IComparable<Setting>
         {
