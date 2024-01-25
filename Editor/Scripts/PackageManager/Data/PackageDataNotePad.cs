@@ -13,9 +13,9 @@ public static class PackageDataNotePad
             packageKey = MegaPintPackagesData.PackageKey.NotePad,
             packageName = "com.tiogiras.megapint-notepad",
             packageNiceName = "NotePad",
-            gitUrl = "https://github.com/tiogiras/MegaPint-NotePad.git",
+            gitUrl = "https://github.com/tiogiras/MegaPint-NotePad.git#v1.0.0",
             version = "1.0.0",
-            lastUpdate = "22.01.2024",
+            lastUpdate = "25.01.2024",
             unityVersion = "2022.3.15f1 or higher",
             megaPintVersion = "1.1.0 or higher",
             infoText = "NotePad allows you to make and edit notes directly on a GameObjects MonoBehaviour."
