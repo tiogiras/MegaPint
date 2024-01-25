@@ -453,9 +453,8 @@ namespace Editor.Scripts.Windows
             else
             {
                 version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
-
-                var i = variation.gitUrl.IndexOf("#", StringComparison.Ordinal);
-                var hash = variation.gitUrl[(i + 1)..];
+                
+                var hash = $"v{variation.version}{variation.variationTag}";
 
                 var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, hash);
                 var needsUpdate = _allPackages.NeedsVariationUpdate(_currentPackage.packageKey, variation.niceName);
