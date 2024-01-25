@@ -13,7 +13,7 @@ public static class PackageDataNotePad
             packageKey = MegaPintPackagesData.PackageKey.NotePad,
             packageName = "com.tiogiras.megapint-notepad",
             packageNiceName = "NotePad",
-            gitUrl = "", // TODO
+            gitUrl = "https://github.com/tiogiras/MegaPint-NotePad.git",
             version = "1.0.0",
             lastUpdate = "22.01.2024",
             unityVersion = "2022.3.15f1 or higher",
