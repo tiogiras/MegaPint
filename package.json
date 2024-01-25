@@ -1,13 +1,9 @@
 {
   "name": "com.tiogiras.megapint",
-  "displayName": "megapint",
-  "version": "1.0.0",
+  "displayName": "Megapint",
+  "author": "Tiogiras",
+  "version": "1.1.0",
   "unity": "2022.3",
-  "keywords": [
-    "2d",
-    "sprite",
-    "sprite editor window"
-  ],
-  "category": "2D",
+  "category": "Tools",
   "description": "Base package for the MegaPint collection"
 }
