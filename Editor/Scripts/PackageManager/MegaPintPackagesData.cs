@@ -7,11 +7,11 @@ using Editor.Scripts.PackageManager.Data;
 namespace Editor.Scripts.PackageManager
 {
 
-public static class MegaPintPackagesData
+internal static class MegaPintPackagesData
 {
-    public class MegaPintPackageData : IComparable <MegaPintPackageData>
+    internal class MegaPintPackageData : IComparable <MegaPintPackageData>
     {
-        public class Dependency : IComparable <Dependency>
+        internal class Dependency : IComparable <Dependency>
         {
             public string niceName;
             public PackageKey packageKey;
@@ -26,12 +26,19 @@ public static class MegaPintPackagesData
             #endregion
         }
 
-        public class PackageVariation : IComparable <PackageVariation>
+        internal class PackageVariation : IComparable <PackageVariation>
         {
-            public List <Dependency> dependencies;
-            public string gitURL;
-            public string niceName;
+            // Git Info & Identification
+            public string gitUrl;
+            public string variationTag;
+            
+            // Version
             public string version;
+            
+            // Metadata
+            public string niceName;
+            
+            public List <Dependency> dependencies;
 
             #region Public Methods
 
@@ -43,19 +50,24 @@ public static class MegaPintPackagesData
             #endregion
         }
 
-        public List <Dependency> dependencies;
-
+        // Git Info & Identification
         public string gitUrl;
+        public PackageKey packageKey;
+        
+        // Versions
+        public string version;
+        public string unityVersion;
+        public string megaPintVersion;
+        
+        // Metadata
         public string infoText;
         public string lastUpdate;
-        public string megaPintVersion;
-        public PackageKey packageKey;
         public string packageName;
         public string packageNiceName;
-        public string unityVersion;
 
+        // Dependencies & Variations
+        public List <Dependency> dependencies;
         public List <PackageVariation> variations;
-        public string version;
 
         #region Public Methods
 
@@ -67,12 +79,12 @@ public static class MegaPintPackagesData
         #endregion
     }
 
-    public enum PackageKey
+    internal enum PackageKey
     {
         AutoSave, Validators, AlphaButton, PlayModeStartScene, NotePad
     }
 
-    public static readonly List <MegaPintPackageData> Packages = new()
+    internal static readonly List <MegaPintPackageData> Packages = new()
     {
         PackageDataAutoSave.Get(),
         PackageDataValidators.Get(),

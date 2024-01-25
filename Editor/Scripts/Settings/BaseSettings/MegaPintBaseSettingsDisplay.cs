@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Editor.Scripts.Settings.BaseSettings
 {
-    public static class MegaPintBaseSettingsDisplay
+    internal static class MegaPintBaseSettingsDisplay
     {
         private const string BasePath = "User Interface/MegaPint Base Settings/xxxDisplay";
 

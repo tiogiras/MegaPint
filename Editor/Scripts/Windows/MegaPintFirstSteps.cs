@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Editor.Scripts.Windows
 {
-    public class MegaPintFirstSteps : MegaPintEditorWindowBase
+    internal class MegaPintFirstSteps : MegaPintEditorWindowBase
     {
         #region Visual References
 

@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 namespace Editor.Scripts.Windows
 {
-    public class MegaPintBaseWindow : MegaPintEditorWindowBase
+    internal class MegaPintBaseWindow : MegaPintEditorWindowBase
     {
         #region Const
 

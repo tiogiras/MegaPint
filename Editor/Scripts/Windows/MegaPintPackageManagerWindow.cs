@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 
 namespace Editor.Scripts.Windows
 {
-    public class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
+    internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
     {
         #region Const
 
@@ -454,8 +454,8 @@ namespace Editor.Scripts.Windows
             {
                 version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
 
-                var i = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
-                var hash = variation.gitURL[(i + 1)..];
+                var i = variation.gitUrl.IndexOf("#", StringComparison.Ordinal);
+                var hash = variation.gitUrl[(i + 1)..];
 
                 var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, hash);
                 var needsUpdate = _allPackages.NeedsVariationUpdate(_currentPackage.packageKey, variation.niceName);

@@ -6,13 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.PackageManager
 {
 
-public static class MegaPintPackageManager
+internal static class MegaPintPackageManager
 {
     public class CachedPackages
     {
@@ -170,9 +169,9 @@ public static class MegaPintPackageManager
                         
                         foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
                         {
-                            var index = variation.gitURL.IndexOf("#", StringComparison.Ordinal);
+                            var index = variation.gitUrl.IndexOf("#", StringComparison.Ordinal);
 
-                            var importedUrlHash = variation.gitURL[(index + 1)..];
+                            var importedUrlHash = variation.gitUrl[(index + 1)..];
 
                             if (importedUrlHash.Equals(commitHash))
                             {
@@ -339,14 +338,14 @@ public static class MegaPintPackageManager
     public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
     {
 #pragma warning disable CS4014
-        AddEmbedded(package.gitUrl, package.dependencies);
+        AddEmbedded(GetPackageUrl(package), package.dependencies);
 #pragma warning restore CS4014
     }
 
     public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
     {
 #pragma warning disable CS4014
-        AddEmbedded(variation.gitURL, variation.dependencies);
+        AddEmbedded(GetPackageUrl(variation), variation.dependencies);
 #pragma warning restore CS4014
     }
 
@@ -370,6 +369,11 @@ public static class MegaPintPackageManager
 
     #region Private Methods
 
+    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData package) => $"{package.gitUrl}#{package.version}"; 
+    
+    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
+        => $"{variation.gitUrl}#{variation.version}{variation.variationTag}"; 
+    
     private static async Task <bool> Add(string packageUrl)
     {
         AddRequest request = Client.Add(packageUrl);
