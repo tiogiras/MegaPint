@@ -169,9 +169,7 @@ internal static class MegaPintPackageManager
                         
                         foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
                         {
-                            var index = variation.gitUrl.IndexOf("#", StringComparison.Ordinal);
-
-                            var importedUrlHash = variation.gitUrl[(index + 1)..];
+                            var importedUrlHash = $"v{variation.version}{variation.variationTag}";
 
                             if (importedUrlHash.Equals(commitHash))
                             {
