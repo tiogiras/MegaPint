@@ -144,7 +144,7 @@ internal static class MegaPintPackageManager
 
                 MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(packageCache.key);
 
-                Debug.Log($"Current Variation: {packageCache.currentVariation}");
+                Debug.Log($"Current Variation: {packageCache.currentVariation}"); // WHY NULL??????
                 
                 if (string.IsNullOrEmpty(packageCache.currentVariation))
                 {
@@ -219,16 +219,16 @@ internal static class MegaPintPackageManager
                         
                         foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
                         {
-                            var importedUrlHash = $"v{variation.version}{variation.variationTag}";
-
-                            if (importedUrlHash.Equals(commitHash))
+                            var hash = GetVariationHash(variation);
+                            
+                            if (hash.Equals(commitHash))
                             {
                                 currentVariation = commitHash;
                                 installedVariation = variation;
                                 break;
                             }
 
-                            if (!importedUrlHash.Equals(branch))
+                            if (!hash.Equals(branch))
                                 continue;
 
                             currentVariation = branch;
