@@ -140,6 +140,8 @@ internal static class MegaPintPackageManager
                 if (!packageCache.installed)
                     continue;
 
+                Debug.Log($"Found package: {packageCache.key}");
+
                 MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(packageCache.key);
 
                 Debug.Log($"Current Variation: {packageCache.currentVariation}");
@@ -147,7 +149,7 @@ internal static class MegaPintPackageManager
                 if (string.IsNullOrEmpty(packageCache.currentVariation))
                 {
                     packages.Add(package);
-                    continue;
+                    continue; // PACKAGE IS HERE !?!?!?!?
                 }
 
                 foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
@@ -410,6 +412,8 @@ internal static class MegaPintPackageManager
                 await AddEmbedded(variation);
             }   
         }
+        
+        CachedPackages.Refresh();
     }
     
     public static async Task AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
