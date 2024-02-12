@@ -141,7 +141,7 @@ internal static class MegaPintPackageManager
                     continue;
 
                 MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(packageCache.key);
-                
+
                 if (string.IsNullOrEmpty(packageCache.currentVariation))
                 {
                     packages.Add(package);
@@ -150,9 +150,14 @@ internal static class MegaPintPackageManager
 
                 foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
                 {
-                    if (!s_allPackages.IsVariation(package.packageKey, GetVariationHash(variation)))
+                    Debug.Log("Checking Variation");
+                    Debug.Log($"Variation Hash: {GetVariationHash(variation)}");
+                    Debug.Log($"IsVariation: {s_allPackages.IsVariation(package.packageKey, GetVariationHash(variation, true))}");
+
+                    if (!s_allPackages.IsVariation(package.packageKey, GetVariationHash(variation, true)))
                         continue;
-                    
+
+                    Debug.Log("Added Variation");
                     variations.Add(variation);
                     break;
                 }
@@ -439,10 +444,10 @@ internal static class MegaPintPackageManager
         return $"{package.gitUrl}#{GetPackageHash(package)}";
     }
 
-    public static string GetVariationHash(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
+    public static string GetVariationHash(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation, bool invert = false)
     {
         var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
-        return devMode ? variation.developmentBranch : $"v{variation.version}{variation.variationTag}";
+        return devMode && !invert ? variation.developmentBranch : $"v{variation.version}{variation.variationTag}";
     }
 
     private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
