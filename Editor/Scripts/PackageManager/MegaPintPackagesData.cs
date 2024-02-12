@@ -31,6 +31,7 @@ internal static class MegaPintPackagesData
             // Git Info & Identification
             public string gitUrl;
             public string variationTag;
+            public string developmentBranch;
             
             // Version
             public string version;

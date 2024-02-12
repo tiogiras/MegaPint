@@ -397,7 +397,7 @@ internal static class MegaPintPackageManager
     private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
     {
         var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
-        var hash = devMode ? "development" : $"v{variation.version}{variation.variationTag}";
+        var hash = devMode ? variation.developmentBranch : $"v{variation.version}{variation.variationTag}";
         
         return $"{variation.gitUrl}#{hash}";
     }
