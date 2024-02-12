@@ -40,44 +40,17 @@ internal static class MegaPintPackageManager
 
         private Dictionary <MegaPintPackagesData.PackageKey, List<string>> _dependencies = new();
 
-        private CachedPackages()
+        public CachedPackages()
         {
             Initialize();
         }
 
         #region Public Methods
 
-        public static void Refresh(ListableAction <CachedPackages> onCompleteAction = null)
+        public static void Refresh()
         {
             s_allPackages = null;
-            
-            OnCompleteActions.Add(onCompleteAction);
             RequestAllPackages();
-        }
-
-        public static void GetInstalled(Action<List<MegaPintPackagesData.MegaPintPackageData>> onCompletion)
-        {
-            Refresh(new ListableAction <CachedPackages>(
-                        _ =>
-                        {
-                            List <MegaPintPackagesData.MegaPintPackageData> packages = new();
-
-                            foreach (PackageCache packageCache in s_allPackages._packages)
-                            {
-                                Debug.Log(packageCache.key);
-                                Debug.Log(packageCache.installed);
-
-                                if (!packageCache.installed)
-                                    continue;
-
-                                MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(packageCache.key);
-                                Debug.Log(package.packageName);
-
-                                packages.Add(package);
-                            }
-
-                            onCompletion?.Invoke(packages);
-                        }, "GetInstalled"));
         }
 
         public static void RequestAllPackages()
@@ -153,6 +126,21 @@ internal static class MegaPintPackageManager
         public List <MegaPintPackagesData.MegaPintPackageData> ToDisplay()
         {
             return _packages.Select(package => MegaPintPackagesData.PackageData(package.key)).ToList();
+        }
+        
+        public List <MegaPintPackagesData.MegaPintPackageData> GetInstalled()
+        {
+            List <MegaPintPackagesData.MegaPintPackageData> packages = new();
+
+            foreach (PackageCache packageCache in _packages)
+            {
+                if (!packageCache.installed)
+                    continue;
+                
+                packages.Add(MegaPintPackagesData.PackageData(packageCache.key));
+            }
+
+            return packages;
         }
 
         #endregion
@@ -370,19 +358,18 @@ internal static class MegaPintPackageManager
 
     public static void UpdateAll()
     {
-        void Action(List <MegaPintPackagesData.MegaPintPackageData> packages)
+        var cache = new CachedPackages();
+
+        List <MegaPintPackagesData.MegaPintPackageData> packages = cache.GetInstalled();
+
+        Debug.Log(string.Join(", ", packages));
+
+        foreach (MegaPintPackagesData.MegaPintPackageData package in packages)
         {
-            Debug.Log(string.Join(", ", packages));
+            Debug.Log($"Updating {package}");
 
-            foreach (MegaPintPackagesData.MegaPintPackageData package in packages)
-            {
-                Debug.Log($"Updating {package}");
-
-                AddEmbedded(package);
-            }
+            AddEmbedded(package);
         }
-
-        CachedPackages.GetInstalled(Action);
     }
     
     public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
