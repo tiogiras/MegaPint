@@ -142,6 +142,8 @@ internal static class MegaPintPackageManager
 
                 MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(packageCache.key);
 
+                Debug.Log($"Current Variation: {packageCache.currentVariation}");
+                
                 if (string.IsNullOrEmpty(packageCache.currentVariation))
                 {
                     packages.Add(package);
