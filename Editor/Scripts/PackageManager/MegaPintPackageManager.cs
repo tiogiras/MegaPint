@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Editor.Scripts.Settings;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.PackageManager
@@ -133,9 +134,14 @@ internal static class MegaPintPackageManager
 
             foreach (PackageCache packageCache in s_allPackages._packages)
             {
+                Debug.Log(packageCache.key);
+                Debug.Log(packageCache.installed);
+                
                 if (!packageCache.installed)
                     continue;
-                
+
+                Debug.Log("Added");
+
                 packages.Add(MegaPintPackagesData.PackageData(packageCache.key));
             }
 
@@ -359,6 +365,7 @@ internal static class MegaPintPackageManager
     {
         foreach (MegaPintPackagesData.MegaPintPackageData packageData in CachedPackages.GetInstalled())
         {
+            Debug.Log($"Updating {packageData.packageKey}");
             AddEmbedded(packageData);
         }
     }
