@@ -130,22 +130,8 @@ internal static class MegaPintPackageManager
         
         public static List <MegaPintPackagesData.MegaPintPackageData> GetInstalled()
         {
-            List <MegaPintPackagesData.MegaPintPackageData> packages = new();
-
-            foreach (PackageCache packageCache in s_allPackages._packages)
-            {
-                Debug.Log(packageCache.key);
-                Debug.Log(packageCache.installed);
-                
-                if (!packageCache.installed)
-                    continue;
-
-                Debug.Log("Added");
-
-                packages.Add(MegaPintPackagesData.PackageData(packageCache.key));
-            }
-
-            return packages;
+            return (from packageCache in s_allPackages._packages where packageCache.installed 
+                    select MegaPintPackagesData.PackageData(packageCache.key)).ToList();
         }
 
         #endregion
@@ -361,27 +347,23 @@ internal static class MegaPintPackageManager
 
     #region Public Methods
 
-    public static void UpdateAll()
+    public static async void UpdateAll()
     {
         foreach (MegaPintPackagesData.MegaPintPackageData packageData in CachedPackages.GetInstalled())
         {
             Debug.Log($"Updating {packageData.packageKey}");
-            AddEmbedded(packageData);
+            await AddEmbedded(packageData);
         }
     }
     
-    public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
+    public static async Task AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
     {
-#pragma warning disable CS4014
-        AddEmbedded(GetPackageUrl(package), package.dependencies);
-#pragma warning restore CS4014
+        await AddEmbedded(GetPackageUrl(package), package.dependencies);
     }
 
-    public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
+    public static async Task AddEmbedded(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
     {
-#pragma warning disable CS4014
-        AddEmbedded(GetPackageUrl(variation), variation.dependencies);
-#pragma warning restore CS4014
+        await AddEmbedded(GetPackageUrl(variation), variation.dependencies);
     }
 
     public static async void Remove(string packageName)
@@ -429,6 +411,8 @@ internal static class MegaPintPackageManager
 
     private static async Task AddEmbedded(string gitUrl, List <MegaPintPackagesData.MegaPintPackageData.Dependency> dependencies)
     {
+        Debug.Log($"Importing: {gitUrl}");
+        
         if (dependencies is {Count: > 0})
         {
             foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in dependencies)
