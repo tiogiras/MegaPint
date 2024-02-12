@@ -93,6 +93,8 @@ internal static class MegaPintPackagesData
         PackageDataPlayModeStartScene.Get(),
         PackageDataNotePad.Get()
     };
+    
+    public static string BasePackageDevURL => "https://github.com/tiogiras/MegaPint.git#development";
 
     #region Public Methods
 
