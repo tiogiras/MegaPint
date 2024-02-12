@@ -175,10 +175,14 @@ internal static class MegaPintPackageManager
             {
                 installedPackagesNames.Add(package.name);
 
+                Debug.Log(package.name.ToLower());
+                
                 if (package.name.ToLower().Equals("com.tiogiras.megapint"))
                     _basePackage = package;
             }
-            
+
+            Debug.Log(_basePackage);
+
             _dependencies.Clear();
 
             foreach (MegaPintPackagesData.MegaPintPackageData package in allPackages)
@@ -410,6 +414,7 @@ internal static class MegaPintPackageManager
         }
         else
         {
+            Debug.Log(CachedPackages.BasePackage());
             await AddEmbedded($"https://github.com/tiogiras/MegaPint.git#v{CachedPackages.BasePackage().version}");
         }
 
