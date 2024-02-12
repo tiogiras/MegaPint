@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Editor.Scripts.Settings;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.PackageManager
@@ -174,7 +175,7 @@ internal static class MegaPintPackageManager
             {
                 installedPackagesNames.Add(package.name);
 
-                if (package.name.ToLower().Equals("megapint"))
+                if (package.name.ToLower().Equals("com.tiogiras.megapint"))
                     _basePackage = package;
             }
             
