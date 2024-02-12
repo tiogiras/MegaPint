@@ -390,6 +390,8 @@ internal static class MegaPintPackageManager
 
     public static async void UpdateAll()
     {
+        var version = CachedPackages.BasePackageVersion();
+        
         CachedPackages.GetInstalled(
             out List <MegaPintPackagesData.MegaPintPackageData> packages, 
             out List <MegaPintPackagesData.MegaPintPackageData.PackageVariation> variations);
@@ -416,8 +418,8 @@ internal static class MegaPintPackageManager
         }
         else
         {
-            Debug.Log($"VersionSSSSSSSSSSS: {CachedPackages.BasePackageVersion()}");
-            await AddEmbedded($"https://github.com/tiogiras/MegaPint.git#v{CachedPackages.BasePackageVersion()}");
+            Debug.Log($"VersionSSSSSSSSSSS: {version}");
+            await AddEmbedded($"https://github.com/tiogiras/MegaPint.git#v{version}");
         }
 
         CachedPackages.Refresh();
