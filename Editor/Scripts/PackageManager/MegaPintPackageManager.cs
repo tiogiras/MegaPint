@@ -386,7 +386,13 @@ internal static class MegaPintPackageManager
 
     #region Private Methods
 
-    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData package) => $"{package.gitUrl}#v{package.version}";
+    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData package)
+    {
+        var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
+        var hash = devMode ? "development" : $"v{package.version}";
+
+        return $"{package.gitUrl}#{hash}";
+    }
 
     private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
     {

@@ -296,14 +296,18 @@ namespace Editor.Scripts.Windows
         {
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
+#pragma warning disable CS4014
             MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex]);
+#pragma warning restore CS4014
         }
 
         private void OnImportVariation(MegaPintPackagesData.MegaPintPackageData.PackageVariation package)
         {
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
+#pragma warning disable CS4014
             MegaPintPackageManager.AddEmbedded(package);
+#pragma warning restore CS4014
         }
 
         private void OnImportSuccess()
@@ -358,14 +362,18 @@ namespace Editor.Scripts.Windows
         {
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
+#pragma warning disable CS4014
             MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex]);
+#pragma warning restore CS4014
         }
         
         private void OnUpdateVariation(MegaPintPackagesData.MegaPintPackageData.PackageVariation package)
         {
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
+#pragma warning disable CS4014
             MegaPintPackageManager.AddEmbedded(package);
+#pragma warning restore CS4014
         }
 
         private void OnUpdateSuccess()
