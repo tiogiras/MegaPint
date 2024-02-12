@@ -182,6 +182,7 @@ internal static class MegaPintPackageManager
 
                 _basePackage = package;
                 _basePackageVersion = package.version;
+                Debug.Log($"Version: {package.version}");
             }
 
             _dependencies.Clear();
@@ -415,6 +416,7 @@ internal static class MegaPintPackageManager
         }
         else
         {
+            Debug.Log($"VersionSSSSSSSSSSS: {CachedPackages.BasePackageVersion()}");
             await AddEmbedded($"https://github.com/tiogiras/MegaPint.git#v{CachedPackages.BasePackageVersion()}");
         }
 
