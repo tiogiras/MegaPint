@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,6 +52,13 @@ internal static class MegaPintPackageManager
             RequestAllPackages();
         }
 
+        public static List <MegaPintPackagesData.MegaPintPackageData> GetInstalled()
+        {
+            Refresh();
+            return (from packageCache in s_allPackages._packages where packageCache.installed 
+                    select MegaPintPackagesData.PackageData(packageCache.key)).ToList();
+        }
+
         public static void RequestAllPackages()
         {
             if (s_allPackages == null)
@@ -66,24 +74,6 @@ internal static class MegaPintPackageManager
                 foreach (ListableAction <CachedPackages> action in OnCompleteActions)
                     action?.Invoke(s_allPackages);
             }
-        }
-
-        public static void ReImportAllPackages()
-        {
-            ListableAction <CachedPackages> action = new(
-                cache =>
-                {
-                    foreach (PackageCache packageCache in cache._packages)
-                    {
-                        MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(packageCache.key);
-
-                        AddEmbedded(package);
-                    }
-                },
-                "ReImportAll");
-            
-            OnCompleteActions.Add(action);
-            RequestAllPackages();
         }
 
         public static void UpdateLoadingLabel(Label loadingLabel, int currentProgress, int refreshRate, out int newProgress)
@@ -343,6 +333,11 @@ internal static class MegaPintPackageManager
         }
 
         #endregion
+
+        public IEnumerator GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     private const int RefreshRate = 10;
@@ -352,6 +347,16 @@ internal static class MegaPintPackageManager
 
     #region Public Methods
 
+    public static void UpdateAll()
+    {
+        List <MegaPintPackagesData.MegaPintPackageData> packages = CachedPackages.GetInstalled();
+
+        foreach (MegaPintPackagesData.MegaPintPackageData package in packages)
+        {
+            AddEmbedded(package);
+        }
+    }
+    
     public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
     {
 #pragma warning disable CS4014

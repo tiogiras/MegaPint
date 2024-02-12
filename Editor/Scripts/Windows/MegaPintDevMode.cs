@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using Editor.Scripts.PackageManager;
 using Editor.Scripts.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -85,6 +86,8 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
         _settings.SetValue("devMode", _devModeValue);
 
         UpdateButtonStyles();
+        
+        MegaPintPackageManager.UpdateAll();
     }
 
     private void ToggleOn()
@@ -93,6 +96,8 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
         _settings.SetValue("devMode", _devModeValue);
 
         UpdateButtonStyles();
+
+        MegaPintPackageManager.UpdateAll();
     }
 
     private void UpdateButtonStyles()
