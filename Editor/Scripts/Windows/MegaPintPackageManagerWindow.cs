@@ -296,14 +296,18 @@ namespace Editor.Scripts.Windows
         {
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
+#pragma warning disable CS4014
             MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex]);
+#pragma warning restore CS4014
         }
 
         private void OnImportVariation(MegaPintPackagesData.MegaPintPackageData.PackageVariation package)
         {
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
+#pragma warning disable CS4014
             MegaPintPackageManager.AddEmbedded(package);
+#pragma warning restore CS4014
         }
 
         private void OnImportSuccess()
@@ -358,14 +362,18 @@ namespace Editor.Scripts.Windows
         {
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
+#pragma warning disable CS4014
             MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex]);
+#pragma warning restore CS4014
         }
         
         private void OnUpdateVariation(MegaPintPackagesData.MegaPintPackageData.PackageVariation package)
         {
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
+#pragma warning disable CS4014
             MegaPintPackageManager.AddEmbedded(package);
+#pragma warning restore CS4014
         }
 
         private void OnUpdateSuccess()
@@ -452,9 +460,7 @@ namespace Editor.Scripts.Windows
             {
                 version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
                 
-                var hash = $"v{variation.version}{variation.variationTag}";
-
-                var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, hash);
+                var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, MegaPintPackageManager.GetVariationHash(variation));
                 var needsUpdate = _allPackages.NeedsVariationUpdate(_currentPackage.packageKey, variation.niceName);
             
                 version.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;

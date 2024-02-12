@@ -1,11 +1,14 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Editor.Scripts.Settings;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.PackageManager
@@ -35,6 +38,9 @@ internal static class MegaPintPackageManager
 
         private readonly List <PackageCache> _packages = new();
 
+        private PackageInfo _basePackage;
+        private string _basePackageVersion;
+
         private Dictionary <MegaPintPackagesData.PackageKey, List<string>> _dependencies = new();
 
         private CachedPackages()
@@ -43,6 +49,9 @@ internal static class MegaPintPackageManager
         }
 
         #region Public Methods
+
+        public static PackageInfo BasePackage() => s_allPackages._basePackage;
+        public static string BasePackageVersion() => s_allPackages._basePackageVersion;
 
         public static void Refresh()
         {
@@ -124,6 +133,35 @@ internal static class MegaPintPackageManager
         {
             return _packages.Select(package => MegaPintPackagesData.PackageData(package.key)).ToList();
         }
+        
+        public static void GetInstalled(
+            out List <MegaPintPackagesData.MegaPintPackageData> packages, 
+            out List <MegaPintPackagesData.MegaPintPackageData.PackageVariation> variations)
+        {
+            packages = new List <MegaPintPackagesData.MegaPintPackageData>();
+            variations = new List <MegaPintPackagesData.MegaPintPackageData.PackageVariation>();
+            
+            foreach (PackageCache packageCache in s_allPackages._packages)
+            {
+                if (!packageCache.installed)
+                    continue;
+
+                MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(packageCache.key);
+
+                if (string.IsNullOrEmpty(packageCache.currentVariation))
+                {
+                    packages.Add(package);
+                    continue;
+                }
+
+                foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations.
+                             Where(variation => s_allPackages.IsVariation(package.packageKey, GetVariationHash(variation, true))))
+                {
+                    variations.Add(variation);
+                    break;
+                }
+            }
+        }
 
         #endregion
 
@@ -133,8 +171,20 @@ internal static class MegaPintPackageManager
         {
             List <MegaPintPackagesData.MegaPintPackageData> allPackages = MegaPintPackagesData.Packages;
             List <PackageInfo> installedPackages = await GetInstalledPackages();
-            List <string> installedPackagesNames = installedPackages.Select(installedPackage => installedPackage.name).ToList();
-            
+            List <string> installedPackagesNames = new(); //installedPackages.Select(installedPackage => installedPackage.name).ToList();
+
+            foreach (PackageInfo package in installedPackages)
+            {
+                installedPackagesNames.Add(package.name);
+                
+                if (!package.name.ToLower().Equals("com.tiogiras.megapint"))
+                    continue;
+
+                _basePackage = package;
+                _basePackageVersion = package.version;
+                Debug.Log($"Version: {package.version}");
+            }
+
             _dependencies.Clear();
 
             foreach (MegaPintPackagesData.MegaPintPackageData package in allPackages)
@@ -169,16 +219,16 @@ internal static class MegaPintPackageManager
                         
                         foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
                         {
-                            var importedUrlHash = $"v{variation.version}{variation.variationTag}";
-
-                            if (importedUrlHash.Equals(commitHash))
+                            var hash = GetVariationHash(variation);
+                            
+                            if (hash.Equals(commitHash))
                             {
                                 currentVariation = commitHash;
                                 installedVariation = variation;
                                 break;
                             }
 
-                            if (!importedUrlHash.Equals(branch))
+                            if (!hash.Equals(branch))
                                 continue;
 
                             currentVariation = branch;
@@ -191,7 +241,7 @@ internal static class MegaPintPackageManager
                         installedVariation == null ? "" : installedVariation.niceName,
                         installedVariation == null ? package.dependencies : installedVariation.dependencies);
                 }
-
+                
                 _packages.Add(
                     new PackageCache
                     {
@@ -324,6 +374,11 @@ internal static class MegaPintPackageManager
         }
 
         #endregion
+
+        public IEnumerator GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     private const int RefreshRate = 10;
@@ -333,18 +388,51 @@ internal static class MegaPintPackageManager
 
     #region Public Methods
 
-    public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
+    public static async void UpdateAll()
     {
-#pragma warning disable CS4014
-        AddEmbedded(GetPackageUrl(package), package.dependencies);
-#pragma warning restore CS4014
+        var version = CachedPackages.BasePackageVersion();
+        
+        CachedPackages.GetInstalled(
+            out List <MegaPintPackagesData.MegaPintPackageData> packages, 
+            out List <MegaPintPackagesData.MegaPintPackageData.PackageVariation> variations);
+        
+        if (packages.Count > 0)
+        {
+            foreach (MegaPintPackagesData.MegaPintPackageData package in packages)
+            {
+                await AddEmbedded(package);
+            }   
+        }
+
+        if (variations.Count > 0)
+        {
+            foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in variations)
+            {
+                await AddEmbedded(variation);
+            }   
+        }
+
+        if (MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false))
+        {
+            await AddEmbedded(MegaPintPackagesData.BasePackageDevURL);
+        }
+        else
+        {
+            Debug.Log($"VersionSSSSSSSSSSS: {version}");
+            await AddEmbedded($"https://github.com/tiogiras/MegaPint.git#v{version}");
+        }
+
+        CachedPackages.Refresh();
     }
 
-    public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
+    public static async Task AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
     {
-#pragma warning disable CS4014
-        AddEmbedded(GetPackageUrl(variation), variation.dependencies);
-#pragma warning restore CS4014
+        await AddEmbedded(GetPackageUrl(package), package.dependencies);
+    }
+
+    public static async Task AddEmbedded(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
+    {
+        await AddEmbedded(GetPackageUrl(variation), variation.dependencies);
     }
 
     public static async void Remove(string packageName)
@@ -367,10 +455,31 @@ internal static class MegaPintPackageManager
 
     #region Private Methods
 
-    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData package) => $"{package.gitUrl}#v{package.version}"; 
+    public static string GetPackageHash(MegaPintPackagesData.MegaPintPackageData package)
+    {
+        var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
+        return devMode ? "development" : $"v{package.version}";
+    }
     
+    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData package)
+    {
+        return $"{package.gitUrl}#{GetPackageHash(package)}";
+    }
+
+    public static string GetVariationHash(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation, bool invert = false)
+    {
+        var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
+
+        if (invert)
+            devMode = !devMode;
+        
+        return devMode ? variation.developmentBranch : $"v{variation.version}{variation.variationTag}";
+    }
+
     private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
-        => $"{variation.gitUrl}#v{variation.version}{variation.variationTag}"; 
+    {
+        return $"{variation.gitUrl}#{GetVariationHash(variation)}";
+    }
     
     private static async Task <bool> Add(string packageUrl)
     {

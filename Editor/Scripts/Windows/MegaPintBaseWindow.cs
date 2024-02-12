@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Editor.Scripts.PackageManager;
+using Editor.Scripts.Settings;
 using Editor.Scripts.Settings.BaseSettings;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace Editor.Scripts.Windows
         private VisualElement _rightPane;
         
         private Label _loading;
+        private Label _devMode;
         
         private ListView _packagesList;
         private ListView _settingsList;
@@ -35,6 +37,7 @@ namespace Editor.Scripts.Windows
         private Button _btnPackages;
         private Button _btnSettings;
         private Button _btnOpenPackageManager;
+        private Button _btnDevMode;
         
         #endregion
 
@@ -61,7 +64,13 @@ namespace Editor.Scripts.Windows
         private int _currentLoadingLabelProgress;
 
         private bool _inSearch;
-        
+
+        private const float MaxDevModeTimer = 50;
+        private float _currentDevModeTimer;
+
+        private const int MaxDevModeClickCount = 10;
+        private int _currentDevModeClickCount;
+
         #endregion
 
         public static Action onRightPaneInitialization;
@@ -81,7 +90,7 @@ namespace Editor.Scripts.Windows
         {
             base.CreateGUI();
 
-            var root = rootVisualElement;
+            VisualElement root = rootVisualElement;
 
             VisualElement content = _baseWindow.Instantiate();
 
@@ -99,6 +108,9 @@ namespace Editor.Scripts.Windows
             
             _searchField = content.Q<ToolbarSearchField>("SearchField");
             _loading = content.Q<Label>("Loading");
+
+            _btnDevMode = content.Q <Button>("BTN_DevMode");
+            _devMode = content.Q <Label>("DevMode");
 
             #endregion
             
@@ -182,6 +194,10 @@ namespace Editor.Scripts.Windows
             _packagesList.style.display = DisplayStyle.None;
             _settingsList.style.display = DisplayStyle.None;
 
+            _devMode.style.display = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false)
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
+
             MegaPintPackageManager.CachedPackages.RequestAllPackages();
             
             root.Add(content);
@@ -190,6 +206,14 @@ namespace Editor.Scripts.Windows
         private void OnGUI()
         {
             DisplayContent.onRightPaneGUI?.Invoke(rootVisualElement.Q<VisualElement>("RightPane"));
+            
+            if (_currentDevModeTimer > 0)
+                _currentDevModeTimer -= Time.deltaTime;
+            else
+            {
+                _currentDevModeTimer = 0;
+                _currentDevModeClickCount = 0;
+            }
         }
 
         protected override bool LoadResources()
@@ -217,6 +241,8 @@ namespace Editor.Scripts.Windows
             _btnPackages.clicked += MegaPintPackageManager.CachedPackages.RequestAllPackages;
             _btnSettings.clicked += OnUpdateSettings;
             _btnOpenPackageManager.clicked += OnOpenPackageManager;
+
+            _btnDevMode.clicked += OnDevMode;
         }
 
         protected override void UnRegisterCallbacks()
@@ -231,15 +257,31 @@ namespace Editor.Scripts.Windows
             
             _btnPackages.clicked -= MegaPintPackageManager.CachedPackages.RequestAllPackages;
             _btnSettings.clicked -= OnUpdateSettings;
-            _btnOpenPackageManager.clicked += OnOpenPackageManager;
+            _btnOpenPackageManager.clicked -= OnOpenPackageManager;
             
             onRightPaneClose?.Invoke();
+            
+            _btnDevMode.clicked -= OnDevMode;
         }
 
         #endregion
 
         #region Callback Methods
 
+        private void OnDevMode()
+        {
+            if (_currentDevModeClickCount == 0)
+                _currentDevModeTimer = MaxDevModeTimer;
+
+            _currentDevModeClickCount++;
+            
+            if (_currentDevModeClickCount < MaxDevModeClickCount)
+                return;
+
+            _currentDevModeClickCount = 0;
+            ContextMenu.TryOpen<MegaPintDevMode>(true);
+        }
+        
         private Action _onLoadingPackages => () =>
         {
             _loading.style.display = DisplayStyle.Flex;
