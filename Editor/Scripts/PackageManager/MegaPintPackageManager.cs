@@ -40,9 +40,11 @@ internal static class MegaPintPackageManager
 
         private Dictionary <MegaPintPackagesData.PackageKey, List<string>> _dependencies = new();
 
-        public CachedPackages()
+        public CachedPackages(Action<CachedPackages> onInitialized = null)
         {
             Initialize();
+            
+            onInitialized?.Invoke(this);
         }
 
         #region Public Methods
@@ -358,18 +360,19 @@ internal static class MegaPintPackageManager
 
     public static void UpdateAll()
     {
-        var cache = new CachedPackages();
-
-        List <MegaPintPackagesData.MegaPintPackageData> packages = cache.GetInstalled();
-
-        Debug.Log(string.Join(", ", packages));
-
-        foreach (MegaPintPackagesData.MegaPintPackageData package in packages)
+        var _ = new CachedPackages(cache =>
         {
-            Debug.Log($"Updating {package}");
+            List <MegaPintPackagesData.MegaPintPackageData> packages = cache.GetInstalled();
 
-            AddEmbedded(package);
-        }
+            Debug.Log(string.Join(", ", packages));
+
+            foreach (MegaPintPackagesData.MegaPintPackageData package in packages)
+            {
+                Debug.Log($"Updating {package}");
+
+                AddEmbedded(package);
+            }
+        });
     }
     
     public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
