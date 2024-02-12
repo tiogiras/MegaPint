@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Editor.Scripts.Settings;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.PackageManager
@@ -40,11 +39,9 @@ internal static class MegaPintPackageManager
 
         private Dictionary <MegaPintPackagesData.PackageKey, List<string>> _dependencies = new();
 
-        public CachedPackages(Action<CachedPackages> onInitialized = null)
+        private CachedPackages()
         {
             Initialize();
-            
-            onInitialized?.Invoke(this);
         }
 
         #region Public Methods
@@ -130,11 +127,11 @@ internal static class MegaPintPackageManager
             return _packages.Select(package => MegaPintPackagesData.PackageData(package.key)).ToList();
         }
         
-        public List <MegaPintPackagesData.MegaPintPackageData> GetInstalled()
+        public static List <MegaPintPackagesData.MegaPintPackageData> GetInstalled()
         {
             List <MegaPintPackagesData.MegaPintPackageData> packages = new();
 
-            foreach (PackageCache packageCache in _packages)
+            foreach (PackageCache packageCache in s_allPackages._packages)
             {
                 if (!packageCache.installed)
                     continue;
@@ -211,7 +208,7 @@ internal static class MegaPintPackageManager
                         installedVariation == null ? "" : installedVariation.niceName,
                         installedVariation == null ? package.dependencies : installedVariation.dependencies);
                 }
-
+                
                 _packages.Add(
                     new PackageCache
                     {
@@ -360,19 +357,10 @@ internal static class MegaPintPackageManager
 
     public static void UpdateAll()
     {
-        var _ = new CachedPackages(cache =>
+        foreach (MegaPintPackagesData.MegaPintPackageData packageData in CachedPackages.GetInstalled())
         {
-            List <MegaPintPackagesData.MegaPintPackageData> packages = cache.GetInstalled();
-
-            Debug.Log(string.Join(", ", packages));
-
-            foreach (MegaPintPackagesData.MegaPintPackageData package in packages)
-            {
-                Debug.Log($"Updating {package}");
-
-                AddEmbedded(package);
-            }
-        });
+            AddEmbedded(packageData);
+        }
     }
     
     public static void AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)

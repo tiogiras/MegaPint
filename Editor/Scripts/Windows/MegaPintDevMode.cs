@@ -43,6 +43,8 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
         UpdateButtonStyles();
 
         RegisterCallbacks();
+        
+        MegaPintPackageManager.CachedPackages.RequestAllPackages();
 
         root.Add(content);
     }
