@@ -42,8 +42,6 @@ internal static class MegaPintPackageManager
         private CachedPackages()
         {
             Initialize();
-            
-            onInitialized?.Invoke(this);
         }
 
         #region Public Methods
