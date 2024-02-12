@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Editor.Scripts.Settings;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine.UIElements;
@@ -65,6 +66,24 @@ internal static class MegaPintPackageManager
                 foreach (ListableAction <CachedPackages> action in OnCompleteActions)
                     action?.Invoke(s_allPackages);
             }
+        }
+
+        public static void ReImportAllPackages()
+        {
+            ListableAction <CachedPackages> action = new(
+                cache =>
+                {
+                    foreach (PackageCache packageCache in cache._packages)
+                    {
+                        MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(packageCache.key);
+
+                        AddEmbedded(package);
+                    }
+                },
+                "ReImportAll");
+            
+            OnCompleteActions.Add(action);
+            RequestAllPackages();
         }
 
         public static void UpdateLoadingLabel(Label loadingLabel, int currentProgress, int refreshRate, out int newProgress)
@@ -367,10 +386,15 @@ internal static class MegaPintPackageManager
 
     #region Private Methods
 
-    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData package) => $"{package.gitUrl}#v{package.version}"; 
-    
+    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData package) => $"{package.gitUrl}#v{package.version}";
+
     private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
-        => $"{variation.gitUrl}#v{variation.version}{variation.variationTag}"; 
+    {
+        var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
+        var hash = devMode ? "development" : $"v{variation.version}{variation.variationTag}";
+        
+        return $"{variation.gitUrl}#{hash}";
+    }
     
     private static async Task <bool> Add(string packageUrl)
     {
