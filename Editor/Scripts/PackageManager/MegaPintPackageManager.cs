@@ -377,15 +377,24 @@ internal static class MegaPintPackageManager
         CachedPackages.GetInstalled(
             out List <MegaPintPackagesData.MegaPintPackageData> packages, 
             out List <MegaPintPackagesData.MegaPintPackageData.PackageVariation> variations);
-        
-        foreach (MegaPintPackagesData.MegaPintPackageData package in packages)
+
+        Debug.Log(string.Join(", ", packages));
+        Debug.Log(string.Join(", ", variations));
+
+        if (packages.Count > 0)
         {
-            await AddEmbedded(package);
+            foreach (MegaPintPackagesData.MegaPintPackageData package in packages)
+            {
+                await AddEmbedded(package);
+            }   
         }
 
-        foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in variations)
+        if (variations.Count > 0)
         {
-            await AddEmbedded(variation);
+            foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in variations)
+            {
+                await AddEmbedded(variation);
+            }   
         }
     }
     
