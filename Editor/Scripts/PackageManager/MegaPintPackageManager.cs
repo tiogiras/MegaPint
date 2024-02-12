@@ -128,10 +128,35 @@ internal static class MegaPintPackageManager
             return _packages.Select(package => MegaPintPackagesData.PackageData(package.key)).ToList();
         }
         
-        public static List <MegaPintPackagesData.MegaPintPackageData> GetInstalled()
+        public static void GetInstalled(
+            out List <MegaPintPackagesData.MegaPintPackageData> packages, 
+            out List <MegaPintPackagesData.MegaPintPackageData.PackageVariation> variations)
         {
-            return (from packageCache in s_allPackages._packages where packageCache.installed 
-                    select MegaPintPackagesData.PackageData(packageCache.key)).ToList();
+            packages = new List <MegaPintPackagesData.MegaPintPackageData>();
+            variations = new List <MegaPintPackagesData.MegaPintPackageData.PackageVariation>();
+            
+            foreach (PackageCache packageCache in s_allPackages._packages)
+            {
+                if (!packageCache.installed)
+                    continue;
+
+                MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(packageCache.key);
+                
+                if (string.IsNullOrEmpty(packageCache.currentVariation))
+                {
+                    packages.Add(package);
+                    continue;
+                }
+
+                foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
+                {
+                    if (!s_allPackages.IsVariation(package.packageKey, GetVariationHash(variation)))
+                        continue;
+                    
+                    variations.Add(variation);
+                    break;
+                }
+            }
         }
 
         #endregion
@@ -349,10 +374,18 @@ internal static class MegaPintPackageManager
 
     public static async void UpdateAll()
     {
-        foreach (MegaPintPackagesData.MegaPintPackageData packageData in CachedPackages.GetInstalled())
+        CachedPackages.GetInstalled(
+            out List <MegaPintPackagesData.MegaPintPackageData> packages, 
+            out List <MegaPintPackagesData.MegaPintPackageData.PackageVariation> variations);
+        
+        foreach (MegaPintPackagesData.MegaPintPackageData package in packages)
         {
-            Debug.Log($"Updating {packageData.packageKey}");
-            await AddEmbedded(packageData);
+            await AddEmbedded(package);
+        }
+
+        foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in variations)
+        {
+            await AddEmbedded(variation);
         }
     }
     
@@ -386,20 +419,26 @@ internal static class MegaPintPackageManager
 
     #region Private Methods
 
-    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData package)
+    public static string GetPackageHash(MegaPintPackagesData.MegaPintPackageData package)
     {
         var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
-        var hash = devMode ? "development" : $"v{package.version}";
+        return devMode ? "development" : $"v{package.version}";
+    }
+    
+    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData package)
+    {
+        return $"{package.gitUrl}#{GetPackageHash(package)}";
+    }
 
-        return $"{package.gitUrl}#{hash}";
+    public static string GetVariationHash(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
+    {
+        var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
+        return devMode ? variation.developmentBranch : $"v{variation.version}{variation.variationTag}";
     }
 
     private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
     {
-        var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
-        var hash = devMode ? variation.developmentBranch : $"v{variation.version}{variation.variationTag}";
-        
-        return $"{variation.gitUrl}#{hash}";
+        return $"{variation.gitUrl}#{GetVariationHash(variation)}";
     }
     
     private static async Task <bool> Add(string packageUrl)

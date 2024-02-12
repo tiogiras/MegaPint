@@ -460,9 +460,7 @@ namespace Editor.Scripts.Windows
             {
                 version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
                 
-                var hash = $"v{variation.version}{variation.variationTag}";
-
-                var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, hash);
+                var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, MegaPintPackageManager.GetVariationHash(variation));
                 var needsUpdate = _allPackages.NeedsVariationUpdate(_currentPackage.packageKey, variation.niceName);
             
                 version.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;

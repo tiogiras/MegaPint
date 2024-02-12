@@ -37,6 +37,7 @@ internal static class PackageDataAlphaButton
                     // Git Info & Identification
                     gitUrl = "https://github.com/tiogiras/MegaPint-AlphaButton.git",
                     variationTag = "a",
+                    developmentBranch = "validatorsIntegration/development",
             
                     // Version
                     version = "1.0.0",
