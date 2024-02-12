@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,6 +42,8 @@ internal static class MegaPintPackageManager
         private CachedPackages()
         {
             Initialize();
+            
+            onInitialized?.Invoke(this);
         }
 
         #region Public Methods
