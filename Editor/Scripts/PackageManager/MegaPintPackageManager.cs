@@ -154,6 +154,13 @@ internal static class MegaPintPackageManager
                     Debug.Log($"Variation Hash: {GetVariationHash(variation)}");
                     Debug.Log($"IsVariation: {s_allPackages.IsVariation(package.packageKey, GetVariationHash(variation, true))}");
 
+                    // NONDEV -> DEV:
+                    // #v1.0.0
+                    
+                    // DEV -> NONDEV
+                    // variationDevBranch
+                    
+                    
                     if (!s_allPackages.IsVariation(package.packageKey, GetVariationHash(variation, true)))
                         continue;
 
@@ -447,7 +454,11 @@ internal static class MegaPintPackageManager
     public static string GetVariationHash(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation, bool invert = false)
     {
         var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
-        return devMode && !invert ? variation.developmentBranch : $"v{variation.version}{variation.variationTag}";
+
+        if (invert)
+            devMode = !devMode;
+        
+        return devMode ? variation.developmentBranch : $"v{variation.version}{variation.variationTag}";
     }
 
     private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
