@@ -39,6 +39,7 @@ internal static class MegaPintPackageManager
         private readonly List <PackageCache> _packages = new();
 
         private PackageInfo _basePackage;
+        private string _basePackageVersion;
 
         private Dictionary <MegaPintPackagesData.PackageKey, List<string>> _dependencies = new();
 
@@ -50,7 +51,8 @@ internal static class MegaPintPackageManager
         #region Public Methods
 
         public static PackageInfo BasePackage() => s_allPackages._basePackage;
-        
+        public static string BasePackageVersion() => s_allPackages._basePackageVersion;
+
         public static void Refresh()
         {
             s_allPackages = null;
@@ -174,14 +176,13 @@ internal static class MegaPintPackageManager
             foreach (PackageInfo package in installedPackages)
             {
                 installedPackagesNames.Add(package.name);
-
-                Debug.Log(package.name.ToLower());
                 
-                if (package.name.ToLower().Equals("com.tiogiras.megapint"))
-                    _basePackage = package;
-            }
+                if (!package.name.ToLower().Equals("com.tiogiras.megapint"))
+                    continue;
 
-            Debug.Log(_basePackage);
+                _basePackage = package;
+                _basePackageVersion = package.version;
+            }
 
             _dependencies.Clear();
 
@@ -414,8 +415,7 @@ internal static class MegaPintPackageManager
         }
         else
         {
-            Debug.Log(CachedPackages.BasePackage());
-            await AddEmbedded($"https://github.com/tiogiras/MegaPint.git#v{CachedPackages.BasePackage().version}");
+            await AddEmbedded($"https://github.com/tiogiras/MegaPint.git#v{CachedPackages.BasePackageVersion()}");
         }
 
         CachedPackages.Refresh();
