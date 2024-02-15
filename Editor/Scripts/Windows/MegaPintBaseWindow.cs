@@ -323,7 +323,7 @@ namespace Editor.Scripts.Windows
                 visualElement.style.borderLeftWidth = 2.5f;
                 _currentVisualElementPackages = visualElement;
 
-                var currentPackageKey = ((MegaPintPackagesData.MegaPintPackageData)_packagesList.selectedItem).packageKey;
+                var currentPackageKey = ((MegaPintPackagesData.MegaPintPackageData)_packagesList.selectedItem).key;
                 var contentPath = RightPaneContentBase.Replace("xxx", currentPackageKey.ToString());
                 var content = Resources.Load<VisualTreeAsset>(contentPath).Instantiate();
             
@@ -456,8 +456,8 @@ namespace Editor.Scripts.Windows
             SwitchState(0);
             
             _displayedPackages = searchString.Equals("") ? 
-                _allPackages.ToDisplay().Where(package => _allPackages.IsImported(package.packageKey)).ToList() :
-                _allPackages.ToDisplay().Where(package => _allPackages.IsImported(package.packageKey))
+                _allPackages.ToDisplay().Where(package => _allPackages.IsImported(package.key)).ToList() :
+                _allPackages.ToDisplay().Where(package => _allPackages.IsImported(package.key))
                     .Where(package => package.packageNiceName.ToLower().Contains(searchString.ToLower())).ToList();
             
             _displayedPackages.Sort();

@@ -51,6 +51,8 @@ internal class MegaPintPackageCache
 
     public static bool BasePackageUpdate()
     {
+        // Should be repository.url
+        
         Debug.Log(BasePackage());
         Debug.Log(BasePackage().repository); // NULL
         Debug.Log(BasePackage().source);
@@ -93,7 +95,7 @@ internal class MegaPintPackageCache
             }
 
             foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations.
-                         Where(variation => s_allPackages.IsVariation(package.packageKey, MegaPintPackageManager.GetVariationHash(variation, true))))
+                         Where(variation => s_allPackages.IsVariation(package.key, MegaPintPackageManager.GetVariationHash(variation, true))))
             {
                 variations.Add(variation);
 
@@ -218,7 +220,7 @@ internal class MegaPintPackageCache
 
         foreach (MegaPintPackagesData.MegaPintPackageData package in allPackages)
         {
-            var installed = installedPackagesNames.Contains(package.packageName);
+            var installed = installedPackagesNames.Contains(package.name);
             var newestVersion = false;
             var currentVersion = "";
             var currentVariation = "";
@@ -227,7 +229,7 @@ internal class MegaPintPackageCache
 
             if (installed)
             {
-                PackageInfo installedPackage = installedPackages[installedPackagesNames.IndexOf(package.packageName)];
+                PackageInfo installedPackage = installedPackages[installedPackagesNames.IndexOf(package.name)];
                 newestVersion = installedPackage.version == package.version;
                 currentVersion = installedPackage.version;
 
@@ -266,7 +268,7 @@ internal class MegaPintPackageCache
                 }
 
                 RegisterDependencies(
-                    package.packageKey,
+                    package.key,
                     installedVariation == null ? "" : installedVariation.niceName,
                     installedVariation == null ? package.dependencies : installedVariation.dependencies);
             }
@@ -274,7 +276,7 @@ internal class MegaPintPackageCache
             _packages.Add(
                 new PackageCache
                 {
-                    key = package.packageKey,
+                    key = package.key,
                     installed = installed,
                     newestVersion = newestVersion,
                     currentVersion = currentVersion,
