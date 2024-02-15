@@ -8,7 +8,7 @@ namespace Editor.Scripts.PackageManager.Packages
 internal class PackageData : IComparable <PackageData>
 {
     /// <summary> Key for internal references </summary>
-    public MegaPintPackagesData.PackageKey key;
+    public PackageKey key;
     
     /// <summary> Required megaPint basePackage version </summary>
     public string reqMpVersion;

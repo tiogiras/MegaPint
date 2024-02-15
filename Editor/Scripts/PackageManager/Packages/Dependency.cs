@@ -7,7 +7,7 @@ namespace Editor.Scripts.PackageManager.Packages
 internal class Dependency : IComparable <Dependency>
 {
     /// <summary> Key for internal references </summary>
-    public MegaPintPackagesData.PackageKey key;
+    public PackageKey key;
     
     /// <summary> Display name of this dependency </summary>
     public string name;

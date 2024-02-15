@@ -12,21 +12,6 @@ namespace Editor.Scripts.PackageManager
 
 internal class MegaPintPackageCache
 {
-    private struct PackageCache
-    {
-        public MegaPintPackagesData.PackageKey key;
-        public bool installed;
-        public bool newestVersion;
-        public string currentVersion;
-        public List <VariationsCache> variations;
-        public string currentVariation;
-    }
-
-    private struct VariationsCache
-    {
-        public string niceName;
-        public bool newestVersion;
-    }
 
     private static MegaPintPackageCache s_allPackages;
 
@@ -199,98 +184,7 @@ internal class MegaPintPackageCache
 
     #region Private Methods
 
-    private async void Initialize()
-    {
-        List <MegaPintPackagesData.MegaPintPackageData> allPackages = MegaPintPackagesData.Packages;
-        List <PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages();
-        List <string> installedPackagesNames = new(); //installedPackages.Select(installedPackage => installedPackage.name).ToList();
-
-        foreach (PackageInfo package in installedPackages)
-        {
-            installedPackagesNames.Add(package.name);
-
-            if (!package.name.ToLower().Equals("com.tiogiras.megapint"))
-                continue;
-
-            _basePackage = package;
-            _basePackageVersion = package.version;
-        }
-
-        _dependencies.Clear();
-
-        foreach (MegaPintPackagesData.MegaPintPackageData package in allPackages)
-        {
-            var installed = installedPackagesNames.Contains(package.name);
-            var newestVersion = false;
-            var currentVersion = "";
-            var currentVariation = "";
-
-            List <VariationsCache> variations = null;
-
-            if (installed)
-            {
-                PackageInfo installedPackage = installedPackages[installedPackagesNames.IndexOf(package.name)];
-                newestVersion = installedPackage.version == package.version;
-                currentVersion = installedPackage.version;
-
-                var commitHash = installedPackage.git?.hash;
-                var branch = installedPackage.git?.revision;
-
-                MegaPintPackagesData.MegaPintPackageData.PackageVariation installedVariation = null;
-
-                if (package.variations is {Count: > 0})
-                {
-                    variations = package.variations.Select(
-                                             variation => new VariationsCache
-                                             {
-                                                 niceName = variation.niceName, newestVersion = installedPackage.version == variation.version
-                                             }).
-                                         ToList();
-
-                    foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
-                    {
-                        var hash = MegaPintPackageManager.GetVariationHash(variation);
-
-                        if (hash.Equals(commitHash))
-                        {
-                            currentVariation = commitHash;
-                            installedVariation = variation;
-
-                            break;
-                        }
-
-                        if (!hash.Equals(branch))
-                            continue;
-
-                        currentVariation = branch;
-                        installedVariation = variation;
-                    }
-                }
-
-                RegisterDependencies(
-                    package.key,
-                    installedVariation == null ? "" : installedVariation.niceName,
-                    installedVariation == null ? package.dependencies : installedVariation.dependencies);
-            }
-
-            _packages.Add(
-                new PackageCache
-                {
-                    key = package.key,
-                    installed = installed,
-                    newestVersion = newestVersion,
-                    currentVersion = currentVersion,
-                    currentVariation = currentVariation,
-                    variations = variations
-                });
-        }
-
-        if (OnCompleteActions is not {Count: > 0})
-            return;
-
-        foreach (ListableAction <MegaPintPackageCache> action in OnCompleteActions)
-            action?.Invoke(s_allPackages);
-    }
+    
 
     private void RegisterDependencies(
         MegaPintPackagesData.PackageKey key,

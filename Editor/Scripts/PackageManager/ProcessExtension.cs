@@ -7,7 +7,7 @@ namespace Editor.Scripts.PackageManager
 internal static class ProcessExtensions
 {
     #region Public Methods
-    
+
     public static int Run(
         this Process process,
         string application,
@@ -26,14 +26,12 @@ internal static class ProcessExtensions
             Arguments = arguments,
             WorkingDirectory = workingDirectory
         };
-
-        // Use the following event to read both output and errors output.
+        
         var outputBuilder = new StringBuilder();
         var errorsBuilder = new StringBuilder();
         process.OutputDataReceived += (_, args) => outputBuilder.AppendLine(args.Data);
         process.ErrorDataReceived += (_, args) => errorsBuilder.AppendLine(args.Data);
-
-        // Start the process and wait for it to exit.
+        
         process.Start();
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();

@@ -10,7 +10,7 @@ internal static class PackageDataPlayModeStartScene
     {
         return new PackageData
         {
-            key = MegaPintPackagesData.PackageKey.PlayModeStartScene,
+            key = PackageKey.PlayModeStartScene,
             reqMpVersion = "1.1.0 or higher",
             name = "com.tiogiras.megapint-playmodestartscene",
         };

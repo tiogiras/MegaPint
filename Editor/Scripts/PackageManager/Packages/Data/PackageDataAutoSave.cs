@@ -10,7 +10,7 @@ internal static class PackageDataAutoSave
     {
         return new PackageData
         {
-            key = MegaPintPackagesData.PackageKey.AutoSave, 
+            key = PackageKey.AutoSave, 
             reqMpVersion = "1.1.0 or higher", 
             name = "com.tiogiras.megapint-autosave"
         };

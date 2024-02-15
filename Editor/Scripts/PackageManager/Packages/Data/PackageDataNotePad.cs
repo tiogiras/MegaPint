@@ -10,7 +10,7 @@ internal static class PackageDataNotePad
     {
         return new PackageData
         {
-            key = MegaPintPackagesData.PackageKey.NotePad,
+            key = PackageKey.NotePad,
             reqMpVersion = "1.1.0 or higher",
             name = "com.tiogiras.megapint-notepad",
         };

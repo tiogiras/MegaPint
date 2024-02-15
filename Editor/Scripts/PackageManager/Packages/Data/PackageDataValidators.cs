@@ -10,7 +10,7 @@ internal static class PackageDataValidators
     {
         return new PackageData
         {
-            key = MegaPintPackagesData.PackageKey.Validators,
+            key = PackageKey.Validators,
             reqMpVersion = "1.1.0 or higher",
             name = "com.tiogiras.megapint-validators",
         };

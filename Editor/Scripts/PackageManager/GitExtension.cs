@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using Debug = UnityEngine.Debug;
 
 namespace Editor.Scripts.PackageManager
 {
@@ -9,7 +8,16 @@ internal static class GitExtension
 {
     #region Public Methods
 
-    public static string RunGit(string arguments, string path)
+    public static string LatestGitTag(string repository)
+    {
+        return RunGit(@"git describe --tags --abbrev=0", repository);
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private static string RunGit(string arguments, string path)
     {
         using var process = new Process();
 
@@ -24,14 +32,6 @@ internal static class GitExtension
             return output;
 
         throw new Exception($"Git Exit Code: {exitCode} - {errors}");
-    }
-
-    public static string LatestGitTag(string repository)
-    {
-        var tag = RunGit(@"git describe --tags --abbrev=0", repository);
-        Debug.Log(tag);
-
-        return tag;
     }
 
     #endregion
