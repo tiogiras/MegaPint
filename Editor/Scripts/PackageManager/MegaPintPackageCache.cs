@@ -52,11 +52,16 @@ internal class MegaPintPackageCache
     public static bool BasePackageUpdate()
     {
         Debug.Log(BasePackage());
-        Debug.Log(BasePackage().repository);
+        Debug.Log(BasePackage().repository); // NULL
         Debug.Log(BasePackage().source);
-        
-        var repository = BasePackage().repository.url;
-        var tag = GitExtension.LatestGitTag(repository);
+        Debug.Log(BasePackage().git);
+        Debug.Log(BasePackage().git.revision);
+        Debug.Log(BasePackage().git.hash);
+        Debug.Log(BasePackage().registry);
+        Debug.Log(BasePackage().registry.url);
+
+        //var repository = BasePackage().repository.url;
+        //var tag = GitExtension.LatestGitTag(repository);
 
         return false;
     }
