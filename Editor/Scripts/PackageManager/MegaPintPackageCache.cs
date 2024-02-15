@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEditor.PackageManager;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.PackageManager
@@ -50,6 +51,10 @@ internal class MegaPintPackageCache
 
     public static bool BasePackageUpdate()
     {
+        Debug.Log(BasePackage());
+        Debug.Log(BasePackage().repository);
+        Debug.Log(BasePackage().source);
+        
         var repository = BasePackage().repository.url;
         var tag = GitExtension.LatestGitTag(repository);
 
