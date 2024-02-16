@@ -48,7 +48,7 @@ namespace Editor.Scripts.Windows
         private VisualTreeAsset _packageItem;
         private VisualTreeAsset _settingItem;
 
-        private MegaPintPackageManager.CachedPackages _allPackages;
+        private MegaPintPackageCache _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
 
         private VisualElement _currentVisualElementPackages;
@@ -198,7 +198,9 @@ namespace Editor.Scripts.Windows
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
 
-            MegaPintPackageManager.CachedPackages.RequestAllPackages();
+            MegaPintPackageCache.RequestAllPackages();
+
+            var basePackageNeedsUpdate = MegaPintPackageCache.BasePackageUpdate();
             
             root.Add(content);
         }
@@ -227,18 +229,18 @@ namespace Editor.Scripts.Windows
 
         protected override void RegisterCallbacks()
         {
-            MegaPintPackageManager.CachedPackages.OnUpdateActions.Add(
-                new MegaPintPackageManager.CachedPackages.ListableAction(_onLoadingPackages, "BaseWindow"));
+            MegaPintPackageCache.OnUpdateActions.Add(
+                new MegaPintPackageCache.ListableAction(_onLoadingPackages, "BaseWindow"));
             
-            MegaPintPackageManager.CachedPackages.OnCompleteActions
-                .Add(new MegaPintPackageManager.CachedPackages.ListableAction<MegaPintPackageManager.CachedPackages>(_onPackagesLoaded, "BaseWindow"));
+            MegaPintPackageCache.OnCompleteActions
+                .Add(new MegaPintPackageCache.ListableAction<MegaPintPackageCache>(_onPackagesLoaded, "BaseWindow"));
 
             _searchField.RegisterValueChangedCallback(OnSearchFieldChange);
             
             _packagesList.selectedIndicesChanged += OnUpdateRightPane;
             _settingsList.selectedIndicesChanged += OnRefreshSettings;
 
-            _btnPackages.clicked += MegaPintPackageManager.CachedPackages.RequestAllPackages;
+            _btnPackages.clicked += MegaPintPackageCache.RequestAllPackages;
             _btnSettings.clicked += OnUpdateSettings;
             _btnOpenPackageManager.clicked += OnOpenPackageManager;
 
@@ -247,15 +249,15 @@ namespace Editor.Scripts.Windows
 
         protected override void UnRegisterCallbacks()
         {
-            MegaPintPackageManager.CachedPackages.RemoveUpdateAction("BaseWindow");
-            MegaPintPackageManager.CachedPackages.RemoveCompleteAction("BaseWindow");
+            MegaPintPackageCache.RemoveUpdateAction("BaseWindow");
+            MegaPintPackageCache.RemoveCompleteAction("BaseWindow");
 
             _searchField.UnregisterValueChangedCallback(OnSearchFieldChange);
             
             _packagesList.selectedIndicesChanged -= OnUpdateRightPane;
             _settingsList.selectedIndicesChanged -= OnRefreshSettings;
             
-            _btnPackages.clicked -= MegaPintPackageManager.CachedPackages.RequestAllPackages;
+            _btnPackages.clicked -= MegaPintPackageCache.RequestAllPackages;
             _btnSettings.clicked -= OnUpdateSettings;
             _btnOpenPackageManager.clicked -= OnOpenPackageManager;
             
@@ -287,14 +289,14 @@ namespace Editor.Scripts.Windows
             _loading.style.display = DisplayStyle.Flex;
             _packagesList.style.display = DisplayStyle.None;
             
-            MegaPintPackageManager.CachedPackages.UpdateLoadingLabel(
+            MegaPintPackageCache.UpdateLoadingLabel(
                 _loading, 
                 _currentLoadingLabelProgress, 
                 30, 
                 out _currentLoadingLabelProgress);
         };
 
-        private Action<MegaPintPackageManager.CachedPackages> _onPackagesLoaded => packages =>
+        private Action<MegaPintPackageCache> _onPackagesLoaded => packages =>
         {
             _loading.style.display = DisplayStyle.None;
             _packagesList.style.display = DisplayStyle.Flex;
@@ -321,7 +323,7 @@ namespace Editor.Scripts.Windows
                 visualElement.style.borderLeftWidth = 2.5f;
                 _currentVisualElementPackages = visualElement;
 
-                var currentPackageKey = ((MegaPintPackagesData.MegaPintPackageData)_packagesList.selectedItem).packageKey;
+                var currentPackageKey = ((MegaPintPackagesData.MegaPintPackageData)_packagesList.selectedItem).key;
                 var contentPath = RightPaneContentBase.Replace("xxx", currentPackageKey.ToString());
                 var content = Resources.Load<VisualTreeAsset>(contentPath).Instantiate();
             
@@ -454,8 +456,8 @@ namespace Editor.Scripts.Windows
             SwitchState(0);
             
             _displayedPackages = searchString.Equals("") ? 
-                _allPackages.ToDisplay().Where(package => _allPackages.IsImported(package.packageKey)).ToList() :
-                _allPackages.ToDisplay().Where(package => _allPackages.IsImported(package.packageKey))
+                _allPackages.ToDisplay().Where(package => _allPackages.IsImported(package.key)).ToList() :
+                _allPackages.ToDisplay().Where(package => _allPackages.IsImported(package.key))
                     .Where(package => package.packageNiceName.ToLower().Contains(searchString.ToLower())).ToList();
             
             _displayedPackages.Sort();

@@ -44,7 +44,7 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
 
         RegisterCallbacks();
         
-        MegaPintPackageManager.CachedPackages.RequestAllPackages();
+        MegaPintPackageCache.RequestAllPackages();
 
         root.Add(content);
     }

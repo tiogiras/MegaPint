@@ -63,7 +63,7 @@ namespace Editor.Scripts.Windows
         private VisualTreeAsset _variationsListItem;
         private VisualTreeAsset _dependencyItem;
 
-        private MegaPintPackageManager.CachedPackages _allPackages;
+        private MegaPintPackageCache _allPackages;
         private List<MegaPintPackagesData.MegaPintPackageData> _displayedPackages;
 
         private List <MegaPintPackagesData.MegaPintPackageData.PackageVariation> _displayedPackageVariations;
@@ -147,7 +147,7 @@ namespace Editor.Scripts.Windows
             _loading.style.display = DisplayStyle.Flex;
             _packages.style.display = DisplayStyle.None;
             
-            MegaPintPackageManager.CachedPackages.RequestAllPackages();
+            MegaPintPackageCache.RequestAllPackages();
 
             OnUpdateRightPane();
 
@@ -166,11 +166,11 @@ namespace Editor.Scripts.Windows
 
         protected override void RegisterCallbacks()
         {
-            MegaPintPackageManager.CachedPackages.OnUpdateActions.Add(
-                new MegaPintPackageManager.CachedPackages.ListableAction(_onLoadingPackages, "PackageManager"));
+            MegaPintPackageCache.OnUpdateActions.Add(
+                new MegaPintPackageCache.ListableAction(_onLoadingPackages, "PackageManager"));
             
-            MegaPintPackageManager.CachedPackages.OnCompleteActions
-                .Add(new MegaPintPackageManager.CachedPackages.ListableAction<MegaPintPackageManager.CachedPackages>(_onPackagesLoaded, "PackageManager"));
+            MegaPintPackageCache.OnCompleteActions
+                .Add(new MegaPintPackageCache.ListableAction<MegaPintPackageCache>(_onPackagesLoaded, "PackageManager"));
             
             _packageSearch.RegisterValueChangedCallback(OnSearchStringChanged);
             
@@ -183,8 +183,8 @@ namespace Editor.Scripts.Windows
 
         protected override void UnRegisterCallbacks()
         {
-            MegaPintPackageManager.CachedPackages.RemoveUpdateAction("PackageManager");
-            MegaPintPackageManager.CachedPackages.RemoveCompleteAction("PackageManager");
+            MegaPintPackageCache.RemoveUpdateAction("PackageManager");
+            MegaPintPackageCache.RemoveCompleteAction("PackageManager");
             
             _packageSearch.UnregisterValueChangedCallback(OnSearchStringChanged);
             
@@ -204,14 +204,14 @@ namespace Editor.Scripts.Windows
             _loading.style.display = DisplayStyle.Flex;
             _packages.style.display = DisplayStyle.None;
             
-            MegaPintPackageManager.CachedPackages.UpdateLoadingLabel(
+            MegaPintPackageCache.UpdateLoadingLabel(
                 _loading, 
                 _currentLoadingLabelProgress, 
                 30, 
                 out _currentLoadingLabelProgress);
         };
 
-        private Action<MegaPintPackageManager.CachedPackages> _onPackagesLoaded => packages =>
+        private Action<MegaPintPackageCache> _onPackagesLoaded => packages =>
         {
             _loading.style.display = DisplayStyle.None;
             _packages.style.display = DisplayStyle.Flex;
@@ -241,7 +241,7 @@ namespace Editor.Scripts.Windows
             _version.text = package.version;
             _lastUpdate.text = package.lastUpdate;
             _unityVersion.text = package.unityVersion;
-            _megaPintVersion.text = package.megaPintVersion;
+            _megaPintVersion.text = package.reqMpVersion;
             _infoText.text = package.infoText;
 
             var hasVariation = package.variations is {Count: > 0};
@@ -282,10 +282,10 @@ namespace Editor.Scripts.Windows
             else
                 _dependencies.style.display = DisplayStyle.None;
 
-            var isImported = _allPackages.IsImported(package.packageKey);
+            var isImported = _allPackages.IsImported(package.key);
             _btnImport.style.display = isImported ? DisplayStyle.None : DisplayStyle.Flex;
             _btnRemove.style.display = isImported ? DisplayStyle.Flex : DisplayStyle.None;
-            _btnUpdate.style.display = isImported && _allPackages.NeedsUpdate(package.packageKey)
+            _btnUpdate.style.display = isImported && _allPackages.NeedsUpdate(package.key)
                 ? DisplayStyle.Flex 
                 : DisplayStyle.None;
         }
@@ -327,11 +327,11 @@ namespace Editor.Scripts.Windows
         {
             MegaPintPackagesData.MegaPintPackageData package = _displayedPackages[_list.selectedIndex];
 
-            if (_allPackages.CanBeRemoved(package.packageKey, out List <string> dependants))
+            if (_allPackages.CanBeRemoved(package.key, out List <string> dependants))
             {
                 MegaPintPackageManager.onSuccess += OnRemoveSuccess;
                 MegaPintPackageManager.onFailure += OnFailure;
-                MegaPintPackageManager.Remove(package.packageName);
+                MegaPintPackageManager.Remove(package.name);
             }
             else
             {
@@ -407,10 +407,10 @@ namespace Editor.Scripts.Windows
             element.Q<Label>("PackageName").text = package.packageNiceName;
             
             var version = element.Q<Label>("Version");
-            version.text = _allPackages.CurrentVersion(package.packageKey);
+            version.text = _allPackages.CurrentVersion(package.key);
 
-            version.style.display = _allPackages.IsImported(package.packageKey) ? DisplayStyle.Flex : DisplayStyle.None;
-            version.style.color = _allPackages.NeedsUpdate(package.packageKey) ? _wrongVersionColor : _normalColor;
+            version.style.display = _allPackages.IsImported(package.key) ? DisplayStyle.Flex : DisplayStyle.None;
+            version.style.color = _allPackages.NeedsUpdate(package.key) ? _wrongVersionColor : _normalColor;
         }
         
         private void UpdateVariationItem(VisualElement element, int index)
@@ -449,7 +449,7 @@ namespace Editor.Scripts.Windows
             else
                 dependencies.style.display = DisplayStyle.None;
             
-            if (!_allPackages.IsImported(_currentPackage.packageKey))
+            if (!_allPackages.IsImported(_currentPackage.key))
             {
                 version.style.display = DisplayStyle.None;
                 btnImport.style.display = DisplayStyle.None;
@@ -458,10 +458,10 @@ namespace Editor.Scripts.Windows
             }
             else
             {
-                version.text = _allPackages.CurrentVersion(_currentPackage.packageKey);
+                version.text = _allPackages.CurrentVersion(_currentPackage.key);
                 
-                var isVariation = _allPackages.IsVariation(_currentPackage.packageKey, MegaPintPackageManager.GetVariationHash(variation));
-                var needsUpdate = _allPackages.NeedsVariationUpdate(_currentPackage.packageKey, variation.niceName);
+                var isVariation = _allPackages.IsVariation(_currentPackage.key, MegaPintPackageManager.GetVariationHash(variation));
+                var needsUpdate = _allPackages.NeedsVariationUpdate(_currentPackage.key, variation.niceName);
             
                 version.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
                 version.style.color = needsUpdate ? _wrongVersionColor : _normalColor;
