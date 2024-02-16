@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Editor.Scripts.PackageManager;
+using Editor.Scripts.PackageManager.Packages;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,7 +25,7 @@ internal static partial class DisplayContent
 
     #region Public Methods
 
-    public static void DisplayRightPane(MegaPintPackagesData.PackageKey key, VisualElement root)
+    public static void DisplayRightPane(PackageKey key, VisualElement root)
     {
         s_onSelectedPackageChanged?.Invoke();
 

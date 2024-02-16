@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Editor.Scripts.PackageManager
+namespace Editor.Scripts.PackageManager.Utility
 {
 
 internal static class GitExtension

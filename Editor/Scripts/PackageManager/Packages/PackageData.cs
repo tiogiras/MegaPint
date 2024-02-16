@@ -16,6 +16,12 @@ internal class PackageData : IComparable <PackageData>
     /// <summary> Version attribute of the corresponding package.json </summary>
     public string version;
     
+    /// <summary> UnityVersion attribute of the corresponding package.json </summary>
+    public string unityVersion;
+    
+    /// <summary> Date of the last update of the package </summary>
+    public string lastUpdate;
+    
     /// <summary> Name attribute of the corresponding package.json for referencing </summary>
     public string name;
 

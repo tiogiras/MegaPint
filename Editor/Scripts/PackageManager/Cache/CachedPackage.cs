@@ -12,9 +12,11 @@ internal class CachedPackage
     public PackageKey Key {get;}
     public string Name {get;}
     public string DisplayName {get;}
+    public string LastUpdate {get;}
     public string Description {get;}
     public string ReqMpVersion {get;}
     public string Version {get;}
+    public string UnityVersion {get;}
     public string CurrentVersion {get;}
     public string Repository {get;}
     public bool IsInstalled {get;}
@@ -31,8 +33,10 @@ internal class CachedPackage
         Name = packageData.name;
         DisplayName = packageData.displayName;
         Description = packageData.description;
+        LastUpdate = packageData.lastUpdate;
         ReqMpVersion = packageData.reqMpVersion;
         Version = packageData.version;
+        UnityVersion = packageData.unityVersion;
 
         IsInstalled = packageInfo != null;
 
