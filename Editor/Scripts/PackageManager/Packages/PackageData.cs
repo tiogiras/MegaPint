@@ -12,9 +12,18 @@ internal class PackageData : IComparable <PackageData>
     
     /// <summary> Required megaPint basePackage version </summary>
     public string reqMpVersion;
+
+    /// <summary> Version attribute of the corresponding package.json </summary>
+    public string version;
     
     /// <summary> Name attribute of the corresponding package.json for referencing </summary>
     public string name;
+
+    /// <summary> Displayed name attribute of the corresponding package.json </summary>
+    public string displayName;
+
+    /// <summary> Display attribute of the corresponding package.json </summary>
+    public string description;
 
     /// <summary> All megaPint package dependencies of this variation </summary>
     public List <Dependency> dependencies;

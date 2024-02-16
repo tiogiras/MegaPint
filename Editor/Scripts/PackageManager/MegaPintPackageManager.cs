@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Editor.Scripts.PackageManager.Cache;
+using Editor.Scripts.PackageManager.Packages;
+using Editor.Scripts.PackageManager.Utility;
 using Editor.Scripts.Settings;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
@@ -12,6 +15,8 @@ namespace Editor.Scripts.PackageManager
 
 internal static class MegaPintPackageManager
 {
+    public static Action onRefreshingPackages;
+    
     public static int RefreshRate = 10;
 
     public static Action onSuccess;
@@ -21,15 +26,13 @@ internal static class MegaPintPackageManager
 
     public static async void UpdateAll()
     {
-        var version = MegaPintPackageCache.BasePackageVersion();
+        var version = PackageCache.BasePackage.version;
         
-        MegaPintPackageCache.GetInstalled(
-            out List <MegaPintPackagesData.MegaPintPackageData> packages, 
-            out List <MegaPintPackagesData.MegaPintPackageData.PackageVariation> variations);
+        PackageCache.GetInstalledMpPackages(out List <CachedPackage> packages, out List <CachedVariation> variations);
         
         if (packages.Count > 0)
         {
-            foreach (MegaPintPackagesData.MegaPintPackageData package in packages)
+            foreach (CachedPackage package in packages)
             {
                 await AddEmbedded(package);
             }   
@@ -37,28 +40,28 @@ internal static class MegaPintPackageManager
 
         if (variations.Count > 0)
         {
-            foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in variations)
+            foreach (CachedVariation variation in variations)
             {
                 await AddEmbedded(variation);
             }   
         }
 
         if (MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false))
-            await AddEmbedded(MegaPintPackagesData.BasePackageDevURL);
+            await AddEmbedded($"{PackageCache.BasePackage.repository}#{DataCache.BasePackageDevBranch}");
         else
-            await AddEmbedded($"https://github.com/tiogiras/MegaPint.git#v{version}");
+            await AddEmbedded($"{PackageCache.BasePackage.repository}#v{version}"); // TODO change to newer version if detected
 
-        MegaPintPackageCache.Refresh();
+        PackageCache.Refresh();
     }
 
-    public static async Task AddEmbedded(MegaPintPackagesData.MegaPintPackageData package)
+    public static async Task AddEmbedded(CachedPackage package)
     {
-        await AddEmbedded(GetPackageUrl(package), package.dependencies);
+        await AddEmbedded(PackageManagerUtility.GetPackageUrl(package), package.Dependencies);
     }
 
-    public static async Task AddEmbedded(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
+    public static async Task AddEmbedded(CachedVariation variation)
     {
-        await AddEmbedded(GetPackageUrl(variation), variation.dependencies);
+        await AddEmbedded(PackageManagerUtility.GetPackageUrl(variation), variation.dependencies);
     }
 
     public static async void Remove(string packageName)
@@ -73,39 +76,30 @@ internal static class MegaPintPackageManager
         else
         {
             onSuccess?.Invoke();
-            MegaPintPackageCache.Refresh();
+            PackageCache.Refresh();
         }
+    }
+    
+    public static async Task <List <PackageInfo>> GetInstalledPackages()
+    {
+        ListRequest request = Client.List();
+
+        while (!request.IsCompleted)
+        {
+            await Task.Delay(RefreshRate);
+
+            onRefreshingPackages?.Invoke();
+        }
+
+        if (request.Status >= StatusCode.Failure)
+            onFailure?.Invoke(request.Error.message);
+
+        return request.Result.Where(packageInfo => packageInfo.name.ToLower().Contains("megapint")).ToList();
     }
 
     #endregion
 
     #region Private Methods
-
-    public static string GetPackageHash(MegaPintPackagesData.MegaPintPackageData package)
-    {
-        var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
-        return devMode ? "development" : $"v{package.version}";
-    }
-    
-    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData package)
-    {
-        return $"{package.gitUrl}#{GetPackageHash(package)}";
-    }
-
-    public static string GetVariationHash(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation, bool invert = false)
-    {
-        var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
-
-        if (invert)
-            devMode = !devMode;
-        
-        return devMode ? variation.developmentBranch : $"v{variation.version}{variation.variationTag}";
-    }
-
-    private static string GetPackageUrl(MegaPintPackagesData.MegaPintPackageData.PackageVariation variation)
-    {
-        return $"{variation.gitUrl}#{GetVariationHash(variation)}";
-    }
     
     private static async Task <bool> Add(string packageUrl)
     {
@@ -120,15 +114,13 @@ internal static class MegaPintPackageManager
         return request.Status == StatusCode.Success;
     }
 
-    private static async Task AddEmbedded(string gitUrl, List <MegaPintPackagesData.MegaPintPackageData.Dependency> dependencies)
+    private static async Task AddEmbedded(string gitUrl, List <Dependency> dependencies)
     {
         if (dependencies is {Count: > 0})
         {
-            foreach (MegaPintPackagesData.MegaPintPackageData.Dependency dependency in dependencies)
+            foreach (CachedPackage cachedPackage in dependencies.Select(dependency => PackageCache.Get(dependency.key)))
             {
-                MegaPintPackagesData.MegaPintPackageData package = MegaPintPackagesData.PackageData(dependency.packageKey);
-
-                await AddEmbedded(GetPackageUrl(package), package.dependencies);
+                await AddEmbedded(PackageManagerUtility.GetPackageUrl(cachedPackage), cachedPackage.Dependencies);
                 await Task.Delay(250);
             }
         }
@@ -137,7 +129,7 @@ internal static class MegaPintPackageManager
         await AddEmbedded(gitUrl);
 
         onSuccess?.Invoke();
-        MegaPintPackageCache.Refresh();
+        PackageCache.Refresh();
     }
 
     private static async Task AddEmbedded(string packageUrl)
@@ -164,27 +156,6 @@ internal static class MegaPintPackageManager
 
         if (request.Status >= StatusCode.Failure)
             onFailure?.Invoke(request.Error.message);
-    }
-
-    public static async Task <List <PackageInfo>> GetInstalledPackages()
-    {
-        ListRequest request = Client.List();
-
-        while (!request.IsCompleted)
-        {
-            await Task.Delay(RefreshRate);
-
-            if (MegaPintPackageCache.OnUpdateActions is not {Count: > 0})
-                continue;
-
-            foreach (MegaPintPackageCache.ListableAction action in MegaPintPackageCache.OnUpdateActions)
-                action?.Invoke();
-        }
-
-        if (request.Status >= StatusCode.Failure)
-            onFailure?.Invoke(request.Error.message);
-
-        return request.Result.Where(packageInfo => packageInfo.name.ToLower().Contains("megapint")).ToList();
     }
 
     #endregion

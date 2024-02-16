@@ -1,107 +1,146 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Editor.Scripts.DevModeUtil;
 using Editor.Scripts.PackageManager.Packages;
-using UnityEditor;
+using UnityEditor.PackageManager;
 
 namespace Editor.Scripts.PackageManager.Cache
 {
 
 internal class PackageCache
 {
-    private static UnityEditor.PackageManager.PackageInfo s_basePackage;
+    public static Action onCacheRefreshed;
+    
+    public static PackageInfo BasePackage {get; private set;}
+    
+    private static readonly Dictionary <PackageKey, CachedPackage> s_cache = new();
+
+    private static void GetInstalledPackageNames(List<PackageInfo> packages, out List <string> packageNames)
+    {
+        packageNames = new List <string>();
+        
+        if (packages is not {Count: > 0})
+            return;
+
+        foreach (PackageInfo package in packages)
+        {
+            packageNames.Add(package.name);
+
+            if (!package.name.Equals(DataCache.BasePackageName))
+                continue;
+
+            BasePackage = package;
+            DevLog.Log(typeof(PackageCache), "BasePackage detected");
+        }
+    }
     
     private static async void Initialize()
     {
         IEnumerable <PackageData> mpPackages = DataCache.AllPackages;
-        List <UnityEditor.PackageManager.PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages();
+        List <PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages();
+
+        GetInstalledPackageNames(installedPackages, out List <string> installedPackagesNames);
         
-        List <string> installedPackagesNames = new();
-        
-        // Get names of all installed packages and find basePackage
-        foreach (UnityEditor.PackageManager.PackageInfo package in installedPackages)
+        s_cache.Clear();
+
+        Dictionary <PackageKey, List <Dependency>> allDependencies = new();
+
+        foreach (PackageData packageData in mpPackages)
         {
-            installedPackagesNames.Add(package.name);
+            var package = new CachedPackage(
+                packageData,
+                installedPackagesNames.Contains(packageData.name) ? installedPackages[installedPackagesNames.IndexOf(packageData.name)] : null,
+                out List <Dependency> dependencies);
 
-            if (!package.name.ToLower().Equals(DataCache.BasePackageName))
-                continue;
-
-            s_basePackage = package;
-        }
-
-        _dependencies.Clear();
-
-        foreach (MegaPintPackagesData.MegaPintPackageData package in allPackages)
-        {
-            var installed = installedPackagesNames.Contains(package.name);
-            var newestVersion = false;
-            var currentVersion = "";
-            var currentVariation = "";
-
-            List <VariationsCache> variations = null;
-
-            if (installed)
+            if (dependencies is {Count: > 0})
             {
-                PackageInfo installedPackage = installedPackages[installedPackagesNames.IndexOf(package.name)];
-                newestVersion = installedPackage.version == package.version;
-                currentVersion = installedPackage.version;
-
-                var commitHash = installedPackage.git?.hash;
-                var branch = installedPackage.git?.revision;
-
-                MegaPintPackagesData.MegaPintPackageData.PackageVariation installedVariation = null;
-
-                if (package.variations is {Count: > 0})
+                foreach (Dependency dependency in dependencies)
                 {
-                    variations = package.variations.Select(
-                                             variation => new VariationsCache
-                                             {
-                                                 niceName = variation.niceName, newestVersion = installedPackage.version == variation.version
-                                             }).
-                                         ToList();
-
-                    foreach (MegaPintPackagesData.MegaPintPackageData.PackageVariation variation in package.variations)
-                    {
-                        var hash = MegaPintPackageManager.GetVariationHash(variation);
-
-                        if (hash.Equals(commitHash))
-                        {
-                            currentVariation = commitHash;
-                            installedVariation = variation;
-
-                            break;
-                        }
-
-                        if (!hash.Equals(branch))
-                            continue;
-
-                        currentVariation = branch;
-                        installedVariation = variation;
-                    }
+                    allDependencies.TryAdd(dependency.key, new List <Dependency>());
+                    allDependencies[dependency.key].Add(dependency);
                 }
-
-                RegisterDependencies(
-                    package.key,
-                    installedVariation == null ? "" : installedVariation.niceName,
-                    installedVariation == null ? package.dependencies : installedVariation.dependencies);
             }
-
-            _packages.Add(
-                new PackageCache
-                {
-                    key = package.key,
-                    installed = installed,
-                    newestVersion = newestVersion,
-                    currentVersion = currentVersion,
-                    currentVariation = currentVariation,
-                    variations = variations
-                });
+            
+            s_cache.Add(package.Key, package);
         }
 
-        if (OnCompleteActions is not {Count: > 0})
+        foreach (KeyValuePair<PackageKey,List<Dependency>> valuePair in allDependencies)
+        {
+            CachedPackage cachedPackage = s_cache[valuePair.Key];
+            cachedPackage.RegisterDependencies(valuePair.Value);
+        }
+
+        onCacheRefreshed?.Invoke();
+        
+        /*if (OnCompleteActions is not {Count: > 0})
             return;
 
         foreach (MegaPintPackageCache.ListableAction <MegaPintPackageCache> action in OnCompleteActions)
-            action?.Invoke(s_allPackages);
+            action?.Invoke(s_allPackages);*/
+    }
+
+    public static CachedPackage Get(PackageKey key) => s_cache[key];
+
+    public static bool CanBeRemoved(PackageKey key, out List <Dependency> dependencies)
+    {
+        return s_cache[key].CanBeRemoved(out dependencies);
+    }
+
+    public static string CurrentVersion(PackageKey key)
+    {
+        return s_cache[key].CurrentVersion;
+    }
+    
+    public bool IsInstalled(PackageKey key)
+    {
+        return s_cache[key].IsInstalled;
+    }
+    
+    public static bool NeedsUpdate(PackageKey key)
+    {
+        return !s_cache[key].IsNewestVersion;
+    }
+    
+    public bool IsVariation(PackageKey key, string gitHash)
+    {
+        return s_cache[key].CurrentVariationHash.Equals(gitHash);
+    }
+    
+    public bool NeedsVariationUpdate(PackageKey key, string variationName)
+    {
+        CachedVariation variation = s_cache[key].Variations.First(variation => variation.name.Equals(variationName));
+        return !variation.isNewestVersion;
+    }
+    
+    public static void GetInstalledMpPackages(out List <CachedPackage> packages, out List <CachedVariation> variations)
+    {
+        packages = new List <CachedPackage>();
+        variations = new List <CachedVariation>();
+        
+        foreach (CachedPackage cachedPackage in s_cache.Values.Where(cachedPackage => cachedPackage.IsInstalled))
+        {
+            if (string.IsNullOrEmpty(cachedPackage.CurrentVariationHash))
+            {
+                packages.Add(cachedPackage);
+                continue;
+            }
+            
+            variations.Add(cachedPackage.CurrentVariation);
+        }
+    }
+
+    public static List <CachedPackage> GetAllMpPackages()
+    {
+        return s_cache.Values.ToList();
+    }
+
+    public static void Refresh()
+    {
+        Initialize();
     }
 }
 
 }
+#endif

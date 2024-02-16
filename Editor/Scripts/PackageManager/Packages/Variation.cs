@@ -15,7 +15,7 @@ internal class Variation : IComparable <Variation>
     
     /// <summary> Tag used to differentiate the main branch and the variation branch tags </summary>
     public string tag;
-    
+
     /// <summary> Branch used for development </summary>
     public string devBranch;
 
