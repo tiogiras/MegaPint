@@ -5,6 +5,7 @@ using System.Linq;
 using Editor.Scripts.DevModeUtil;
 using Editor.Scripts.PackageManager.Packages;
 using UnityEditor.PackageManager;
+using UnityEngine;
 
 namespace Editor.Scripts.PackageManager.Cache
 {

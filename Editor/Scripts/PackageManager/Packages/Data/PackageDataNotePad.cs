@@ -12,7 +12,12 @@ internal static class PackageDataNotePad
         {
             key = PackageKey.NotePad,
             reqMpVersion = "1.1.0 or higher",
+            version = "1.0.0",
+            unityVersion = "2022.3.15f1",
+            lastUpdate = "22.02.2024",
             name = "com.tiogiras.megapint-notepad",
+            displayName = "NotePad",
+            description = "TODO"
         };
     }
 
