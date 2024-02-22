@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
@@ -7,7 +8,7 @@ using UnityEditor.PackageManager;
 namespace Editor.Scripts.PackageManager.Cache
 {
 
-internal class CachedPackage
+internal class CachedPackage : IComparable <CachedPackage>
 {
     public PackageKey Key {get;}
     public string Name {get;}
@@ -46,7 +47,8 @@ internal class CachedPackage
             return;
 
         // PackageInfo data
-        Repository = packageInfo!.repository.url;
+        if (packageInfo!.repository != null)
+            Repository = packageInfo!.repository.url;
 
         CurrentVersion = packageInfo.version;
         IsNewestVersion = packageInfo.version == packageData.version; // TODO Update with branch and dev stuff
@@ -115,6 +117,14 @@ internal class CachedPackage
     {
         dependencies = Dependencies;
         return Dependencies is not {Count: > 0};
+    }
+
+    public int CompareTo(CachedPackage other)
+    {
+        if (ReferenceEquals(this, other))
+            return 0;
+
+        return ReferenceEquals(null, other) ? 1 : string.Compare(DisplayName, other.DisplayName, StringComparison.Ordinal);
     }
 }
 
