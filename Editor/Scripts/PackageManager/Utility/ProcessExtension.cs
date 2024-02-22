@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text;
 
-namespace Editor.Scripts.PackageManager
+namespace Editor.Scripts.PackageManager.Utility
 {
 
 internal static class ProcessExtensions

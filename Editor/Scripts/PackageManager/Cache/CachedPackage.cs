@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
@@ -7,14 +8,16 @@ using UnityEditor.PackageManager;
 namespace Editor.Scripts.PackageManager.Cache
 {
 
-internal class CachedPackage
+internal class CachedPackage : IComparable <CachedPackage>
 {
     public PackageKey Key {get;}
     public string Name {get;}
     public string DisplayName {get;}
+    public string LastUpdate {get;}
     public string Description {get;}
     public string ReqMpVersion {get;}
     public string Version {get;}
+    public string UnityVersion {get;}
     public string CurrentVersion {get;}
     public string Repository {get;}
     public bool IsInstalled {get;}
@@ -31,8 +34,10 @@ internal class CachedPackage
         Name = packageData.name;
         DisplayName = packageData.displayName;
         Description = packageData.description;
+        LastUpdate = packageData.lastUpdate;
         ReqMpVersion = packageData.reqMpVersion;
         Version = packageData.version;
+        UnityVersion = packageData.unityVersion;
 
         IsInstalled = packageInfo != null;
 
@@ -42,7 +47,8 @@ internal class CachedPackage
             return;
 
         // PackageInfo data
-        Repository = packageInfo!.repository.url;
+        if (packageInfo!.repository != null)
+            Repository = packageInfo!.repository.url;
 
         CurrentVersion = packageInfo.version;
         IsNewestVersion = packageInfo.version == packageData.version; // TODO Update with branch and dev stuff
@@ -111,6 +117,14 @@ internal class CachedPackage
     {
         dependencies = Dependencies;
         return Dependencies is not {Count: > 0};
+    }
+
+    public int CompareTo(CachedPackage other)
+    {
+        if (ReferenceEquals(this, other))
+            return 0;
+
+        return ReferenceEquals(null, other) ? 1 : string.Compare(DisplayName, other.DisplayName, StringComparison.Ordinal);
     }
 }
 

@@ -5,6 +5,7 @@ using System.Linq;
 using Editor.Scripts.DevModeUtil;
 using Editor.Scripts.PackageManager.Packages;
 using UnityEditor.PackageManager;
+using UnityEngine;
 
 namespace Editor.Scripts.PackageManager.Cache
 {
@@ -93,7 +94,7 @@ internal class PackageCache
         return s_cache[key].CurrentVersion;
     }
     
-    public bool IsInstalled(PackageKey key)
+    public static bool IsInstalled(PackageKey key)
     {
         return s_cache[key].IsInstalled;
     }
@@ -103,12 +104,12 @@ internal class PackageCache
         return !s_cache[key].IsNewestVersion;
     }
     
-    public bool IsVariation(PackageKey key, string gitHash)
+    public static bool IsVariation(PackageKey key, string gitHash)
     {
         return s_cache[key].CurrentVariationHash.Equals(gitHash);
     }
     
-    public bool NeedsVariationUpdate(PackageKey key, string variationName)
+    public static bool NeedsVariationUpdate(PackageKey key, string variationName)
     {
         CachedVariation variation = s_cache[key].Variations.First(variation => variation.name.Equals(variationName));
         return !variation.isNewestVersion;

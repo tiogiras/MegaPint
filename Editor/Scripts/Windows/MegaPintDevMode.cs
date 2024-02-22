@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using Editor.Scripts.PackageManager;
+using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -44,7 +45,7 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
 
         RegisterCallbacks();
         
-        MegaPintPackageCache.RequestAllPackages();
+        PackageCache.Refresh();
 
         root.Add(content);
     }

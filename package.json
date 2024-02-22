@@ -7,6 +7,6 @@
   "category": "Tools",
   "description": "Base package for the MegaPint collection",
   "repository": {
-    "url": ""
+    "url": "https://github.com/tiogiras/MegaPint.git"
   }
 }

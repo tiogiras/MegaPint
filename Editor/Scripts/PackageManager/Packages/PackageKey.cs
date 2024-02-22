@@ -3,7 +3,7 @@
 
 public enum PackageKey
 {
-    AutoSave, Validators, AlphaButton, PlayModeStartScene, NotePad
+    Undefined, BasePackage, AutoSave, Validators, AlphaButton, PlayModeStartScene, NotePad
 }
 
 }

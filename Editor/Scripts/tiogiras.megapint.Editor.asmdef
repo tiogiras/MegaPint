@@ -2,17 +2,23 @@
     "name": "tiogiras.megapint.Editor",
     "rootNamespace": "",
     "references": [
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
         "GUID:0e40976153628db4fbfccfcc6ab8f1bf",
         "GUID:8fb2808ce2fab7240955081b2f299435",
         "GUID:1e8946af7cfd66044950d25c19bdd467"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }
