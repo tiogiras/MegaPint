@@ -4,6 +4,7 @@ using System.Linq;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
+using UnityEngine;
 
 namespace Editor.Scripts.PackageManager.Cache
 {
@@ -49,6 +50,8 @@ internal class CachedPackage : IComparable <CachedPackage>
         // PackageInfo data
         if (packageInfo!.repository != null)
             Repository = packageInfo!.repository.url;
+
+        Debug.Log(Repository);
 
         CurrentVersion = packageInfo.version;
         IsNewestVersion = packageInfo.version == packageData.version; // TODO Update with branch and dev stuff
