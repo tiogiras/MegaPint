@@ -19,8 +19,8 @@ internal static class PackageDataAlphaButton
             lastUpdate = "22.02.2024",
             name = "com.tiogiras.megapint-alphabutton",
             displayName = "AlphaButton",
-            description = "TODO",
-            
+            description = "MegaPint package for an button component that uses the build in alphatransparency",
+
             variations = new List <Variation>
             {
                 new()

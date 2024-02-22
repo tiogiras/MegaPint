@@ -12,12 +12,12 @@ internal static class PackageDataValidators
         {
             key = PackageKey.Validators,
             reqMpVersion = "1.1.0 or higher",
-            version = "1.0.0",
+            version = "1.0.1",
             unityVersion = "2022.3.15f1",
             lastUpdate = "22.02.2024",
             name = "com.tiogiras.megapint-validators",
             displayName = "Validators",
-            description = "TODO"
+            description = "MegaPint package for validation functions"
         };
     }
 

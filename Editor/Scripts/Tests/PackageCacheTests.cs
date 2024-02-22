@@ -35,12 +35,6 @@ public class PackageCacheTests : MonoBehaviour
         PackageCache.onCacheRefreshed -= CacheRefreshed;
         _initialized = true;
     }
-
-    [Test]
-    public void Test()
-    {
-        
-    }
 }
 
 }

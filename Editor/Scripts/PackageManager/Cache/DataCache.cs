@@ -36,6 +36,11 @@ internal static class DataCache
     {
         return s_data[key];
     }
+    
+    public static PackageData PackageData(string packageName)
+    {
+        return s_data.Values.FirstOrDefault(package => package.name.Equals(packageName));
+    }
 
     #endregion
 }
