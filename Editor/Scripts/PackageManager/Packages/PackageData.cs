@@ -30,6 +30,8 @@ internal class PackageData
 
     /// <summary> Display attribute of the corresponding package.json </summary>
     public string description;
+    
+    public string repository;
 
     /// <summary> All megaPint package dependencies of this variation </summary>
     public List <Dependency> dependencies;

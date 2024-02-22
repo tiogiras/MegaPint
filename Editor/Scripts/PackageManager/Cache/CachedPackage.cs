@@ -39,7 +39,8 @@ internal class CachedPackage : IComparable <CachedPackage>
         ReqMpVersion = packageData.reqMpVersion;
         Version = packageData.version;
         UnityVersion = packageData.unityVersion;
-
+        Repository = packageData.repository;
+        
         IsInstalled = packageInfo != null;
 
         dependencies = null;
@@ -47,13 +48,7 @@ internal class CachedPackage : IComparable <CachedPackage>
         if (!IsInstalled)
             return;
 
-        // PackageInfo data
-        if (packageInfo!.repository != null)
-            Repository = packageInfo!.repository.url;
-
-        Debug.Log(Repository);
-
-        CurrentVersion = packageInfo.version;
+        CurrentVersion = packageInfo!.version;
         IsNewestVersion = packageInfo.version == packageData.version; // TODO Update with branch and dev stuff
 
         SetVariations(packageData, packageInfo, out Variation installedVariation);
