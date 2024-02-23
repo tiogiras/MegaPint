@@ -48,6 +48,8 @@ internal static class MegaPintPackageManager
         }
 
         Debug.Log("basePackage");
+        Debug.Log(MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false));
+
         if (MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false))
             await AddEmbedded($"{PackageCache.BasePackage.repository}#{DataCache.BasePackageDevBranch}");
         else
