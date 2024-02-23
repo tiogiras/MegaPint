@@ -4,7 +4,6 @@ using Editor.Scripts.PackageManager;
 using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.PackageManager.Packages;
 using NUnit.Framework;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -51,8 +50,6 @@ public class PackageManagerTests
         _waitingForPackageManager = true;
         _waitingForCache = true;
 
-        //Debug.Log("All Waiting to true");
-
 #pragma warning disable CS4014
         MegaPintPackageManager.AddEmbedded(PackageCache.Get(PackageKey.AlphaButton));
 #pragma warning restore CS4014
@@ -75,8 +72,6 @@ public class PackageManagerTests
         _waitingForPackageManager = true;
         _waitingForCache = true;
 
-        //Debug.Log("All Waiting to true");
-
 #pragma warning disable CS4014
         MegaPintPackageManager.AddEmbedded(PackageCache.Get(PackageKey.AlphaButton).Variations[0]);
 #pragma warning restore CS4014
@@ -91,6 +86,13 @@ public class PackageManagerTests
     public IEnumerator DependenciesRegistered()
     {
         yield return new WaitForDomainReload();
+        
+        PackageCache.onCacheRefreshed += CacheRefreshed;
+        _waitingForCache = true;
+        PackageCache.Refresh();
+
+        while (_waitingForCache)
+            yield return null;
         
         Assert.IsFalse(PackageCache.Get(PackageKey.Validators).CanBeRemoved(out List <Dependency> _));
     }
