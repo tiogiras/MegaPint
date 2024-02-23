@@ -89,6 +89,8 @@ namespace Editor.Scripts.Windows
             return this;
         }
 
+        private static bool _DevMode => MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
+
         protected override void CreateGUI()
         {
             base.CreateGUI();
@@ -199,10 +201,7 @@ namespace Editor.Scripts.Windows
             _settingsList.style.display = DisplayStyle.None;
 
             _versionNumber.style.display = DisplayStyle.None;
-
-            _devMode.style.display = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false)
-                ? DisplayStyle.Flex
-                : DisplayStyle.None;
+            _devMode.style.display = _DevMode ? DisplayStyle.Flex : DisplayStyle.None;
 
             PackageCache.Refresh();
 
@@ -302,10 +301,7 @@ namespace Editor.Scripts.Windows
             _loading.style.display = DisplayStyle.None;
             _packagesList.style.display = DisplayStyle.Flex;
 
-            _versionNumber.text = MegaPintSettings.instance.GetSetting("General").GetValue("DevMode", false)
-                ? "Development"
-                : $"v{PackageCache.BasePackage.version}";
-            
+            _versionNumber.text = _DevMode ? "Development" : $"v{PackageCache.BasePackage.version}";
             _versionNumber.style.display = DisplayStyle.Flex;
             
             _currentLoadingLabelProgress = 0;
