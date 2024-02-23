@@ -142,9 +142,9 @@ internal static class MegaPintPackageManager
         {
             await Embed(packageUrl);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            /* ignored */
+            Debug.Log(e);
         }
     }
 
