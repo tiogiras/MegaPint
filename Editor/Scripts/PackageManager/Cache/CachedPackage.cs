@@ -27,6 +27,8 @@ internal class CachedPackage : IComparable <CachedPackage>
     public string CurrentVariationHash {get; private set;}
     public List <Dependency> Dependencies {get; private set;}
 
+    private List <Dependency> _myDependants;
+
     public CachedPackage(PackageData packageData, PackageInfo packageInfo, out List <Dependency> dependencies)
     {
         // PackageData data
@@ -38,27 +40,29 @@ internal class CachedPackage : IComparable <CachedPackage>
         ReqMpVersion = packageData.reqMpVersion;
         Version = packageData.version;
         UnityVersion = packageData.unityVersion;
-
+        Repository = packageData.repository;
+        
         IsInstalled = packageInfo != null;
 
         dependencies = null;
         
+        SetVariations(packageData, packageInfo, out Variation installedVariation);
+        
         if (!IsInstalled)
             return;
 
-        // PackageInfo data
-        if (packageInfo!.repository != null)
-            Repository = packageInfo!.repository.url;
-
-        CurrentVersion = packageInfo.version;
+        CurrentVersion = packageInfo!.version;
         IsNewestVersion = packageInfo.version == packageData.version; // TODO Update with branch and dev stuff
-
-        SetVariations(packageData, packageInfo, out Variation installedVariation);
+        
+        SetVariations(packageData, packageInfo, out installedVariation);
 
         if (installedVariation == null)
         {
-            if (packageData.dependencies is {Count: > 0})
-                dependencies = packageData.dependencies;
+            if (packageData.dependencies is not {Count: > 0})
+                return;
+
+            dependencies = packageData.dependencies;
+            Dependencies = packageData.dependencies;
         }
         else
         {
@@ -78,10 +82,15 @@ internal class CachedPackage : IComparable <CachedPackage>
 
         if (packageData.variations is not {Count: > 0})
             return;
-
+        
         Variations = packageData.variations.Select(variation => PackageManagerUtility.VariationToCache(variation, CurrentVersion, Repository)).
                                  ToList();
 
+        if (packageInfo == null)
+            return;
+
+        CurrentVariationHash = "";
+        
         var commitHash = packageInfo.git?.hash;
         var branch = packageInfo.git?.revision;
 
@@ -110,13 +119,13 @@ internal class CachedPackage : IComparable <CachedPackage>
 
     public void RegisterDependencies(List<Dependency> dependencies)
     {
-        Dependencies = dependencies;
+        _myDependants = dependencies;
     }
 
     public bool CanBeRemoved(out List <Dependency> dependencies)
     {
-        dependencies = Dependencies;
-        return Dependencies is not {Count: > 0};
+        dependencies = _myDependants;
+        return _myDependants is not {Count: > 0};
     }
 
     public int CompareTo(CachedPackage other)

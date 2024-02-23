@@ -136,7 +136,7 @@ namespace Editor.Scripts.Windows
 
             #endregion
 
-            #region SubPackages List
+            #region Variations List
 
             _packageVariations.makeItem = () => _variationsListItem.Instantiate();
 
@@ -174,10 +174,30 @@ namespace Editor.Scripts.Windows
             _packageSearch.RegisterValueChangedCallback(OnSearchStringChanged);
             
             _list.selectedIndicesChanged += OnUpdateRightPane;
+
+            ButtonSubscriptions(true);
+        }
+
+        private void ButtonSubscriptions(bool status)
+        {
+            Debug.Log($"Status {status}");
+
+            _btnImport.style.opacity = status ? 1f : .5f;
+            _btnRemove.style.opacity = status ? 1f : .5f;
+            _btnUpdate.style.opacity = status ? 1f : .5f;
             
-            _btnImport.clicked += OnImport;
-            _btnRemove.clicked += OnRemove;
-            _btnUpdate.clicked += OnUpdate;
+            if (status)
+            {
+                _btnImport.clicked += OnImport;
+                _btnRemove.clicked += OnRemove;
+                _btnUpdate.clicked += OnUpdate;
+            }
+            else
+            {
+                _btnImport.clicked -= OnImport;
+                _btnRemove.clicked -= OnRemove;
+                _btnUpdate.clicked -= OnUpdate;
+            }
         }
 
         protected override void UnRegisterCallbacks()
@@ -189,9 +209,7 @@ namespace Editor.Scripts.Windows
             
             _list.selectedIndicesChanged -= OnUpdateRightPane;
             
-            _btnImport.clicked -= OnImport;
-            _btnRemove.clicked -= OnRemove;
-            _btnUpdate.clicked -= OnUpdate;
+            ButtonSubscriptions(false);
         }
 
         #endregion
@@ -202,7 +220,7 @@ namespace Editor.Scripts.Windows
         {
             _loading.style.display = DisplayStyle.Flex;
             _packages.style.display = DisplayStyle.None;
-            
+
             PackageManagerUtility.UpdateLoadingLabel(
                 _loading, 
                 _currentLoadingLabelProgress, 
@@ -214,7 +232,7 @@ namespace Editor.Scripts.Windows
         {
             _loading.style.display = DisplayStyle.None;
             _packages.style.display = DisplayStyle.Flex;
-            
+
             _currentLoadingLabelProgress = 0;
 
             SetDisplayedPackages(_packageSearch.value);
@@ -246,7 +264,7 @@ namespace Editor.Scripts.Windows
             var hasDependency = package.Dependencies is {Count: > 0};
 
             _separator.style.display = hasVariation || hasDependency ? DisplayStyle.Flex : DisplayStyle.None;
-            
+
             if (hasVariation)
             {
                 _packageVariationsParent.style.display = DisplayStyle.Flex;
@@ -292,6 +310,8 @@ namespace Editor.Scripts.Windows
 
         private void OnImport()
         {
+            ButtonSubscriptions(false);
+            
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
 #pragma warning disable CS4014
@@ -301,6 +321,8 @@ namespace Editor.Scripts.Windows
 
         private void OnImportVariation(CachedVariation variation)
         {
+            ButtonSubscriptions(false);
+            
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
 #pragma warning disable CS4014
@@ -310,6 +332,7 @@ namespace Editor.Scripts.Windows
 
         private void OnImportSuccess()
         {
+            ButtonSubscriptions(true);
             ReselectItem(_currentIndex);
             _list.ClearSelection();
 
@@ -323,6 +346,8 @@ namespace Editor.Scripts.Windows
 
         private void OnRemove()
         {
+            ButtonSubscriptions(false);
+            
             CachedPackage package = _displayedPackages[_list.selectedIndex];
 
             if (package.CanBeRemoved(out List <Dependency> dependants))
@@ -347,6 +372,7 @@ namespace Editor.Scripts.Windows
 
         private void OnRemoveSuccess()
         {
+            ButtonSubscriptions(true);
             ReselectItem(_currentIndex);
             _list.ClearSelection();
             
@@ -360,6 +386,8 @@ namespace Editor.Scripts.Windows
 
         private void OnUpdate()
         {
+            ButtonSubscriptions(false);
+            
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
 #pragma warning disable CS4014
@@ -369,6 +397,8 @@ namespace Editor.Scripts.Windows
         
         private void OnUpdateVariation(CachedVariation variation)
         {
+            ButtonSubscriptions(false);
+            
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
 #pragma warning disable CS4014
@@ -378,6 +408,7 @@ namespace Editor.Scripts.Windows
 
         private void OnUpdateSuccess()
         {
+            ButtonSubscriptions(true);
             ReselectItem(_currentIndex);
             _list.ClearSelection();
 
@@ -387,8 +418,12 @@ namespace Editor.Scripts.Windows
 
         #endregion
 
-        private static void OnFailure(string error) => Debug.LogError(error);
-        
+        private void OnFailure(string error)
+        {
+            ButtonSubscriptions(true);
+            Debug.LogError(error);
+        }
+
         #endregion
 
         private async void ReselectItem(int index)

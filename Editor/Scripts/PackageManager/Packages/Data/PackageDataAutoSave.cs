@@ -17,7 +17,8 @@ internal static class PackageDataAutoSave
             lastUpdate = "22.02.2024",
             name = "com.tiogiras.megapint-autosave",
             displayName = "Scene-AutoSave",
-            description = "MegaPint package for scene autosave function"
+            description = "MegaPint package for scene autosave function",
+            repository = "https://github.com/tiogiras/MegaPint-AutoSave.git"
         };
     }
 

@@ -17,7 +17,8 @@ internal static class PackageDataValidators
             lastUpdate = "22.02.2024",
             name = "com.tiogiras.megapint-validators",
             displayName = "Validators",
-            description = "MegaPint package for validation functions"
+            description = "MegaPint package for validation functions",
+            repository = "https://github.com/tiogiras/MegaPint-Validators.git"
         };
     }
 
