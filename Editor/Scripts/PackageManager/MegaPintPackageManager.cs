@@ -9,6 +9,7 @@ using Editor.Scripts.PackageManager.Utility;
 using Editor.Scripts.Settings;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
+using UnityEngine;
 
 namespace Editor.Scripts.PackageManager
 {
