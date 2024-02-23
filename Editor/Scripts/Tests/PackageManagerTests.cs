@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Editor.Scripts.PackageManager;
 using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.PackageManager.Packages;
@@ -85,12 +86,12 @@ public class PackageManagerTests
         Assert.IsTrue(_result);
     }
 
-    /*[Test] [Order(3)]
+    [Test] [Order(3)]
     public void DependenciesRegistered()
     {
         Assert.IsFalse(PackageCache.Get(PackageKey.Validators).CanBeRemoved(out List <Dependency> _));
     }
-
+/*
     [UnityTest] [Order(4)]
     public IEnumerator RemovePackage()
     {
