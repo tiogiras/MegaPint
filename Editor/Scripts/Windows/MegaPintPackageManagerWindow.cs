@@ -444,7 +444,7 @@ namespace Editor.Scripts.Windows
             
             var version = element.Q<Label>("Version");
 
-            version.text = _DevMode ? "Development" : package.CurrentVersion;
+            version.text = _DevMode ? "Dev" : package.CurrentVersion;
 
             version.style.display = package.IsInstalled ? DisplayStyle.Flex : DisplayStyle.None;
             version.style.color = !package.IsNewestVersion ? _wrongVersionColor : _normalColor;
