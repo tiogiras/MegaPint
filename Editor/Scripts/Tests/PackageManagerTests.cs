@@ -4,6 +4,7 @@ using Editor.Scripts.PackageManager;
 using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.PackageManager.Packages;
 using NUnit.Framework;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -86,9 +87,11 @@ public class PackageManagerTests
         Assert.IsTrue(_result);
     }
 
-    [Test] [Order(3)]
-    public void DependenciesRegistered()
+    [UnityTest] [Order(3)]
+    public IEnumerator DependenciesRegistered()
     {
+        yield return new WaitForDomainReload();
+        
         Assert.IsFalse(PackageCache.Get(PackageKey.Validators).CanBeRemoved(out List <Dependency> _));
     }
 /*
