@@ -30,7 +30,7 @@ namespace Editor.Scripts.Windows
         private VisualElement _rightPane;
         
         private Label _loading;
-        private Label _devMode;
+        private Label _versionNumber;
         
         private ListView _packagesList;
         private ListView _settingsList;
@@ -88,6 +88,8 @@ namespace Editor.Scripts.Windows
             return this;
         }
 
+        private static bool _DevMode => MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
+
         protected override void CreateGUI()
         {
             base.CreateGUI();
@@ -112,7 +114,7 @@ namespace Editor.Scripts.Windows
             _loading = content.Q<Label>("Loading");
 
             _btnDevMode = content.Q <Button>("BTN_DevMode");
-            _devMode = content.Q <Label>("DevMode");
+            _versionNumber = content.Q <Label>("VersionNumber");
 
             #endregion
             
@@ -196,9 +198,7 @@ namespace Editor.Scripts.Windows
             _packagesList.style.display = DisplayStyle.None;
             _settingsList.style.display = DisplayStyle.None;
 
-            _devMode.style.display = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false)
-                ? DisplayStyle.Flex
-                : DisplayStyle.None;
+            _versionNumber.style.display = DisplayStyle.None;
 
             PackageCache.Refresh();
 
@@ -297,6 +297,9 @@ namespace Editor.Scripts.Windows
         {
             _loading.style.display = DisplayStyle.None;
             _packagesList.style.display = DisplayStyle.Flex;
+
+            _versionNumber.text = _DevMode ? "Development" : $"v{PackageCache.BasePackage.version}";
+            _versionNumber.style.display = DisplayStyle.Flex;
             
             _currentLoadingLabelProgress = 0;
             

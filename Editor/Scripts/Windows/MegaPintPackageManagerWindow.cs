@@ -7,6 +7,7 @@ using Editor.Scripts.PackageManager;
 using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
+using Editor.Scripts.Settings;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -86,6 +87,8 @@ namespace Editor.Scripts.Windows
             titleContent.text = "Package Manager";
             return this;
         }
+
+        private static bool _DevMode => MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
         
         protected override void CreateGUI()
         {
@@ -180,8 +183,6 @@ namespace Editor.Scripts.Windows
 
         private void ButtonSubscriptions(bool status)
         {
-            Debug.Log($"Status {status}");
-
             _btnImport.style.opacity = status ? 1f : .5f;
             _btnRemove.style.opacity = status ? 1f : .5f;
             _btnUpdate.style.opacity = status ? 1f : .5f;
@@ -254,7 +255,7 @@ namespace Editor.Scripts.Windows
             
             CachedPackage package = _displayedPackages[_currentIndex];
             _packageName.text = package.DisplayName;
-            _version.text = package.CurrentVersion;
+            _version.text = package.Version;
             _lastUpdate.text = package.LastUpdate;
             _unityVersion.text = package.UnityVersion;
             _megaPintVersion.text = package.ReqMpVersion;
@@ -442,7 +443,8 @@ namespace Editor.Scripts.Windows
             element.Q<Label>("PackageName").text = package.DisplayName;
             
             var version = element.Q<Label>("Version");
-            version.text = package.CurrentVersion;
+
+            version.text = _DevMode ? "Dev" : package.CurrentVersion;
 
             version.style.display = package.IsInstalled ? DisplayStyle.Flex : DisplayStyle.None;
             version.style.color = !package.IsNewestVersion ? _wrongVersionColor : _normalColor;
@@ -493,7 +495,7 @@ namespace Editor.Scripts.Windows
             }
             else
             {
-                version.text = _currentPackage.CurrentVersion;
+                version.text = _DevMode ? "Development" : _currentPackage.CurrentVersion;
                 
                 var isVariation = PackageCache.IsVariation(_currentPackage.Key, PackageManagerUtility.GetVariationHash(variation));
                 var needsUpdate = PackageCache.NeedsVariationUpdate(_currentPackage.Key, variation.name);

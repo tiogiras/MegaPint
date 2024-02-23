@@ -47,10 +47,12 @@ internal static class MegaPintPackageManager
             }   
         }
 
-        if (MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false))
-            await AddEmbedded($"{PackageCache.BasePackage.repository}#{DataCache.BasePackageDevBranch}");
-        else
-            await AddEmbedded($"{PackageCache.BasePackage.repository}#v{version}"); // TODO change to newer version if detected
+        var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
+        var url = devMode
+            ? $"{PackageCache.BasePackage.repository.url}#{DataCache.BasePackageDevBranch}"
+            : $"{PackageCache.BasePackage.repository.url}#v{version}";
+
+        await AddEmbedded(url);
 
         PackageCache.Refresh();
     }
@@ -144,7 +146,7 @@ internal static class MegaPintPackageManager
         }
         catch (Exception)
         {
-            /* ignored */
+            // ignored
         }
     }
 
