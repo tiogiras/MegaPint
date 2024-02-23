@@ -1,0 +1,156 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using Editor.Scripts.PackageManager;
+using Editor.Scripts.PackageManager.Cache;
+using Editor.Scripts.PackageManager.Packages;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
+
+namespace Editor.Scripts.Tests
+{
+
+public class PackageManagerTests
+{
+    private bool _result;
+    private bool _waiting;
+    
+    private bool _initialized;
+    
+    [UnityTest, Order(0)]
+    public IEnumerator CacheInitialized()
+    {
+        _initialized = false;
+        var currentTime = 0f;
+
+        PackageCache.onCacheRefreshed += CacheRefreshed;
+        PackageCache.Refresh();
+        
+        while (!_initialized && currentTime < 200)
+        {
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+
+        Assert.IsTrue(_initialized);
+    }
+
+    private void CacheRefreshed()
+    {
+        PackageCache.onCacheRefreshed -= CacheRefreshed;
+        _initialized = true;
+    }
+    
+    [UnityTest, Order(1)]
+    public IEnumerator ImportPackage()
+    {
+        MegaPintPackageManager.onSuccess += Success;
+        MegaPintPackageManager.onFailure += Failure;
+
+        _result = false;
+        _waiting = true;
+        
+#pragma warning disable CS4014
+        MegaPintPackageManager.AddEmbedded(PackageCache.Get(PackageKey.AlphaButton));
+#pragma warning restore CS4014
+
+        while (_waiting)
+        {
+            yield return null;
+        }
+        
+        Assert.IsTrue(_result);
+    }
+    
+    [Test, Order(2)]
+    public void DependenciesRegistered()
+    {
+        Assert.IsFalse(PackageCache.Get(PackageKey.Validators).CanBeRemoved(out List <Dependency> _));
+    }
+    
+    [UnityTest, Order(2)]
+    public IEnumerator ImportPackageVariation()
+    {
+        MegaPintPackageManager.onSuccess += Success;
+        MegaPintPackageManager.onFailure += Failure;
+
+        _result = false;
+        _waiting = true;
+        
+#pragma warning disable CS4014
+        MegaPintPackageManager.AddEmbedded(PackageCache.Get(PackageKey.AlphaButton).Variations[0]);
+#pragma warning restore CS4014
+
+        while (_waiting)
+        {
+            yield return null;
+        }
+        
+        Assert.IsTrue(_result);
+    }
+    
+    [UnityTest, Order(2)]
+    public IEnumerator RemovePackage()
+    {
+        MegaPintPackageManager.onSuccess += Success;
+        MegaPintPackageManager.onFailure += Failure;
+
+        _result = false;
+        _waiting = true;
+        
+#pragma warning disable CS4014
+        MegaPintPackageManager.Remove(PackageCache.Get(PackageKey.AlphaButton).Name);
+#pragma warning restore CS4014
+
+        while (_waiting)
+        {
+            yield return null;
+        }
+        
+        Assert.IsTrue(_result);
+    }
+    
+    [UnityTest, Order(2)]
+    public IEnumerator RemoveFormerDependencyPackage()
+    {
+        MegaPintPackageManager.onSuccess += Success;
+        MegaPintPackageManager.onFailure += Failure;
+
+        _result = false;
+        _waiting = true;
+        
+#pragma warning disable CS4014
+        MegaPintPackageManager.Remove(PackageCache.Get(PackageKey.Validators).Name);
+#pragma warning restore CS4014
+
+        while (_waiting)
+        {
+            yield return null;
+        }
+        
+        Assert.IsTrue(_result);
+    }
+    
+    
+
+    private void Success()
+    {
+        MegaPintPackageManager.onSuccess -= Success;
+        MegaPintPackageManager.onFailure -= Failure;
+
+        _waiting = false;
+        _result = true;
+    }
+
+    private void Failure(string error)
+    {
+        MegaPintPackageManager.onSuccess -= Success;
+        MegaPintPackageManager.onFailure -= Failure;
+
+        Debug.Log(error);
+        _waiting = false;
+        _result = false;
+    }
+}
+
+}
