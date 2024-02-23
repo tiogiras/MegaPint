@@ -81,6 +81,8 @@ internal class CachedPackage : IComparable <CachedPackage>
 
         if (packageInfo == null)
             return;
+
+        CurrentVariationHash = "";
         
         var commitHash = packageInfo.git?.hash;
         var branch = packageInfo.git?.revision;

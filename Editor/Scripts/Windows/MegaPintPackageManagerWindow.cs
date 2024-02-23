@@ -222,9 +222,13 @@ namespace Editor.Scripts.Windows
             _loading.style.display = DisplayStyle.None;
             _packages.style.display = DisplayStyle.Flex;
             
-            _btnUpdate.style.color = _activeColor;
-            _btnImport.style.color = _activeColor;
-            _btnRemove.style.color = _activeColor;
+            _btnUpdate.style.opacity = 1;
+            _btnImport.style.opacity = 1;
+            _btnRemove.style.opacity = 1;
+
+            _btnUpdate.focusable = true;
+            _btnImport.focusable = true;
+            _btnRemove.focusable = true;
             
             _currentLoadingLabelProgress = 0;
 
@@ -258,8 +262,6 @@ namespace Editor.Scripts.Windows
 
             _separator.style.display = hasVariation || hasDependency ? DisplayStyle.Flex : DisplayStyle.None;
 
-            Debug.Log($"hasVariation: {hasVariation}"); // THIS IS FALSE
-            
             if (hasVariation)
             {
                 _packageVariationsParent.style.display = DisplayStyle.Flex;
@@ -316,9 +318,13 @@ namespace Editor.Scripts.Windows
 
         private void GrayOutButtons()
         {
-            _btnUpdate.style.color = _inactiveColor;
-            _btnImport.style.color = _inactiveColor;
-            _btnRemove.style.color = _inactiveColor;
+            _btnUpdate.style.opacity = .5f;
+            _btnImport.style.opacity = .5f;
+            _btnRemove.style.opacity = .5f;
+
+            _btnUpdate.focusable = false;
+            _btnImport.focusable = false;
+            _btnRemove.focusable = false;
         }
 
         private void OnImportVariation(CachedVariation variation)
