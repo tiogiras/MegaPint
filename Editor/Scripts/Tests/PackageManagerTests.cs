@@ -82,14 +82,9 @@ public class PackageManagerTests
         Assert.IsTrue(_result);
     }
 
-    [UnityTest] [Order(3)]
-    public IEnumerator DependenciesRegistered()
+    [Test] [Order(3)]
+    public void DependenciesRegistered()
     {
-        PackageCache.onCacheRefreshed += CacheRefreshed;
-        
-        while (_waitingForCache)
-            yield return null;
-        
         Assert.IsFalse(PackageCache.Get(PackageKey.Validators).CanBeRemoved(out List <Dependency> _));
     }
 
@@ -118,8 +113,6 @@ public class PackageManagerTests
     [UnityTest] [Order(5)]
     public IEnumerator RemoveFormerDependencyPackage()
     {
-        yield return null;
-        
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
         
