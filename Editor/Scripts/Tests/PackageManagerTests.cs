@@ -96,10 +96,19 @@ public class PackageManagerTests
         
         Assert.IsFalse(PackageCache.Get(PackageKey.Validators).CanBeRemoved(out List <Dependency> _));
     }
-/*
+
     [UnityTest] [Order(4)]
     public IEnumerator RemovePackage()
     {
+        yield return new WaitForDomainReload();
+        
+        PackageCache.onCacheRefreshed += CacheRefreshed;
+        _waitingForCache = true;
+        PackageCache.Refresh();
+
+        while (_waitingForCache)
+            yield return null;
+        
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
         
@@ -122,6 +131,15 @@ public class PackageManagerTests
     [UnityTest] [Order(5)]
     public IEnumerator RemoveFormerDependencyPackage()
     {
+        yield return new WaitForDomainReload();
+        
+        PackageCache.onCacheRefreshed += CacheRefreshed;
+        _waitingForCache = true;
+        PackageCache.Refresh();
+
+        while (_waitingForCache)
+            yield return null;
+        
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
         
@@ -139,7 +157,7 @@ public class PackageManagerTests
             yield return null;
 
         Assert.IsTrue(_result);
-    }*/
+    }
 
     #endregion
 
@@ -150,8 +168,6 @@ public class PackageManagerTests
         PackageCache.onCacheRefreshed -= CacheRefreshed;
         _initialized = true;
         _waitingForCache = false;
-
-        //Debug.Log("Cache Wait = false");
     }
 
     private void Failure(string error)
@@ -159,11 +175,9 @@ public class PackageManagerTests
         MegaPintPackageManager.onSuccess -= Success;
         MegaPintPackageManager.onFailure -= Failure;
 
-        Debug.Log(error);
+        Debug.LogError(error);
         _waitingForPackageManager = false;
         _result = false;
-        
-        //Debug.Log("Wait = false");
     }
 
     private void Success()
@@ -173,8 +187,6 @@ public class PackageManagerTests
 
         _waitingForPackageManager = false;
         _result = true;
-        
-        //Debug.Log("Wait = false");
     }
 
     #endregion
