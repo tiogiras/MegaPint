@@ -50,6 +50,8 @@ public class PackageManagerTests
         _waitingForPackageManager = true;
         _waitingForCache = true;
 
+        Debug.Log("All Waiting to true");
+
 #pragma warning disable CS4014
         MegaPintPackageManager.AddEmbedded(PackageCache.Get(PackageKey.AlphaButton));
 #pragma warning restore CS4014
@@ -74,6 +76,8 @@ public class PackageManagerTests
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
 
+        Debug.Log("All Waiting to true");
+        
         _result = false;
         _waitingForPackageManager = true;
         _waitingForCache = true;
