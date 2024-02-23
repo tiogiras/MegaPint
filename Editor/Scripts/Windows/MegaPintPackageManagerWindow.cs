@@ -177,10 +177,28 @@ namespace Editor.Scripts.Windows
             _packageSearch.RegisterValueChangedCallback(OnSearchStringChanged);
             
             _list.selectedIndicesChanged += OnUpdateRightPane;
+
+            ButtonSubscriptions(true);
+        }
+
+        private void ButtonSubscriptions(bool status)
+        {
+            _btnImport.style.opacity = status ? 1f : .5f;
+            _btnRemove.style.opacity = status ? 1f : .5f;
+            _btnUpdate.style.opacity = status ? 1f : .5f;
             
-            _btnImport.clicked += OnImport;
-            _btnRemove.clicked += OnRemove;
-            _btnUpdate.clicked += OnUpdate;
+            if (status)
+            {
+                _btnImport.clicked += OnImport;
+                _btnRemove.clicked += OnRemove;
+                _btnUpdate.clicked += OnUpdate;
+            }
+            else
+            {
+                _btnImport.clicked -= OnImport;
+                _btnRemove.clicked -= OnRemove;
+                _btnUpdate.clicked -= OnUpdate;
+            }
         }
 
         protected override void UnRegisterCallbacks()
@@ -192,9 +210,7 @@ namespace Editor.Scripts.Windows
             
             _list.selectedIndicesChanged -= OnUpdateRightPane;
             
-            _btnImport.clicked -= OnImport;
-            _btnRemove.clicked -= OnRemove;
-            _btnUpdate.clicked -= OnUpdate;
+            ButtonSubscriptions(false);
         }
 
         #endregion
@@ -221,14 +237,9 @@ namespace Editor.Scripts.Windows
         {
             _loading.style.display = DisplayStyle.None;
             _packages.style.display = DisplayStyle.Flex;
-            
-            _btnUpdate.style.opacity = 1;
-            _btnImport.style.opacity = 1;
-            _btnRemove.style.opacity = 1;
 
-            _btnUpdate.focusable = true;
-            _btnImport.focusable = true;
-            _btnRemove.focusable = true;
+            Debug.Log("Loaded");
+            ButtonSubscriptions(true);
             
             _currentLoadingLabelProgress = 0;
 
@@ -307,7 +318,7 @@ namespace Editor.Scripts.Windows
 
         private void OnImport()
         {
-            GrayOutButtons();
+            ButtonSubscriptions(false);
             
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
@@ -316,20 +327,9 @@ namespace Editor.Scripts.Windows
 #pragma warning restore CS4014
         }
 
-        private void GrayOutButtons()
-        {
-            _btnUpdate.style.opacity = .5f;
-            _btnImport.style.opacity = .5f;
-            _btnRemove.style.opacity = .5f;
-
-            _btnUpdate.focusable = false;
-            _btnImport.focusable = false;
-            _btnRemove.focusable = false;
-        }
-
         private void OnImportVariation(CachedVariation variation)
         {
-            GrayOutButtons();
+            ButtonSubscriptions(false);
             
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
@@ -353,7 +353,7 @@ namespace Editor.Scripts.Windows
 
         private void OnRemove()
         {
-            GrayOutButtons();
+            ButtonSubscriptions(false);
             
             CachedPackage package = _displayedPackages[_list.selectedIndex];
 
@@ -392,7 +392,7 @@ namespace Editor.Scripts.Windows
 
         private void OnUpdate()
         {
-            GrayOutButtons();
+            ButtonSubscriptions(false);
             
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
@@ -403,7 +403,7 @@ namespace Editor.Scripts.Windows
         
         private void OnUpdateVariation(CachedVariation variation)
         {
-            GrayOutButtons();
+            ButtonSubscriptions(false);
             
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
