@@ -50,7 +50,7 @@ public class PackageManagerTests
         _waitingForPackageManager = true;
         _waitingForCache = true;
 
-        Debug.Log("All Waiting to true");
+        //Debug.Log("All Waiting to true");
 
 #pragma warning disable CS4014
         MegaPintPackageManager.AddEmbedded(PackageCache.Get(PackageKey.AlphaButton));
@@ -74,7 +74,7 @@ public class PackageManagerTests
         _waitingForPackageManager = true;
         _waitingForCache = true;
 
-        Debug.Log("All Waiting to true");
+        //Debug.Log("All Waiting to true");
 
 #pragma warning disable CS4014
         MegaPintPackageManager.AddEmbedded(PackageCache.Get(PackageKey.AlphaButton).Variations[0]);
@@ -146,7 +146,7 @@ public class PackageManagerTests
         _initialized = true;
         _waitingForCache = false;
 
-        Debug.Log("Cache Wait = false");
+        //Debug.Log("Cache Wait = false");
     }
 
     private void Failure(string error)
@@ -158,7 +158,7 @@ public class PackageManagerTests
         _waitingForPackageManager = false;
         _result = false;
         
-        Debug.Log("Wait = false");
+        //Debug.Log("Wait = false");
     }
 
     private void Success()
@@ -169,7 +169,7 @@ public class PackageManagerTests
         _waitingForPackageManager = false;
         _result = true;
         
-        Debug.Log("Wait = false");
+        //Debug.Log("Wait = false");
     }
 
     #endregion

@@ -4,6 +4,7 @@ using System.Linq;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
+using UnityEngine;
 
 namespace Editor.Scripts.PackageManager.Cache
 {
@@ -124,6 +125,8 @@ internal class CachedPackage : IComparable <CachedPackage>
 
     public bool CanBeRemoved(out List <Dependency> dependencies)
     {
+        Debug.Log($"Deps: {_myDependants.Count}");
+
         dependencies = _myDependants;
         return _myDependants is not {Count: > 0};
     }
