@@ -63,8 +63,6 @@ public class PackageManagerTests
     [UnityTest] [Order(2)]
     public IEnumerator ImportPackageVariation()
     {
-        yield return null;
-        
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
         
@@ -84,17 +82,20 @@ public class PackageManagerTests
         Assert.IsTrue(_result);
     }
 
-    [Test] [Order(3)]
-    public void DependenciesRegistered()
+    [UnityTest] [Order(3)]
+    public IEnumerator DependenciesRegistered()
     {
+        PackageCache.onCacheRefreshed += CacheRefreshed;
+        
+        while (_waitingForCache)
+            yield return null;
+        
         Assert.IsFalse(PackageCache.Get(PackageKey.Validators).CanBeRemoved(out List <Dependency> _));
     }
 
     [UnityTest] [Order(4)]
     public IEnumerator RemovePackage()
     {
-        yield return null;
-        
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
         
