@@ -88,7 +88,7 @@ namespace Editor.Scripts.Windows
             return this;
         }
 
-        private bool _devMode => MegaPintSettings.instance.GetSetting("General").GetValue("DevMode", false);
+        private static bool _DevMode => MegaPintSettings.instance.GetSetting("General").GetValue("DevMode", false);
         
         protected override void CreateGUI()
         {
@@ -255,7 +255,7 @@ namespace Editor.Scripts.Windows
             
             CachedPackage package = _displayedPackages[_currentIndex];
             _packageName.text = package.DisplayName;
-            _version.text = package.CurrentVersion;
+            _version.text = package.Version;
             _lastUpdate.text = package.LastUpdate;
             _unityVersion.text = package.UnityVersion;
             _megaPintVersion.text = package.ReqMpVersion;
@@ -443,7 +443,10 @@ namespace Editor.Scripts.Windows
             element.Q<Label>("PackageName").text = package.DisplayName;
             
             var version = element.Q<Label>("Version");
-            version.text = _devMode ? "Development" : package.CurrentVersion;
+
+            Debug.Log($"devMode: {_DevMode}");
+
+            version.text = _DevMode ? "Development" : package.CurrentVersion;
 
             version.style.display = package.IsInstalled ? DisplayStyle.Flex : DisplayStyle.None;
             version.style.color = !package.IsNewestVersion ? _wrongVersionColor : _normalColor;
@@ -494,7 +497,7 @@ namespace Editor.Scripts.Windows
             }
             else
             {
-                version.text = _devMode ? "Development" : _currentPackage.CurrentVersion;
+                version.text = _DevMode ? "Development" : _currentPackage.CurrentVersion;
                 
                 var isVariation = PackageCache.IsVariation(_currentPackage.Key, PackageManagerUtility.GetVariationHash(variation));
                 var needsUpdate = PackageCache.NeedsVariationUpdate(_currentPackage.Key, variation.name);

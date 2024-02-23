@@ -30,7 +30,6 @@ namespace Editor.Scripts.Windows
         private VisualElement _rightPane;
         
         private Label _loading;
-        private Label _devMode;
         private Label _versionNumber;
         
         private ListView _packagesList;
@@ -115,7 +114,6 @@ namespace Editor.Scripts.Windows
             _loading = content.Q<Label>("Loading");
 
             _btnDevMode = content.Q <Button>("BTN_DevMode");
-            _devMode = content.Q <Label>("DevMode");
             _versionNumber = content.Q <Label>("VersionNumber");
 
             #endregion
@@ -201,7 +199,6 @@ namespace Editor.Scripts.Windows
             _settingsList.style.display = DisplayStyle.None;
 
             _versionNumber.style.display = DisplayStyle.None;
-            _devMode.style.display = _DevMode ? DisplayStyle.Flex : DisplayStyle.None;
 
             PackageCache.Refresh();
 
