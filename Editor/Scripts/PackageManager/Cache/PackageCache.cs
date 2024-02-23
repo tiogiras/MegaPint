@@ -133,6 +133,7 @@ internal class PackageCache
 
     public static void Refresh()
     {
+        Debug.Log("Refreshing");
         Initialize();
     }
 }
