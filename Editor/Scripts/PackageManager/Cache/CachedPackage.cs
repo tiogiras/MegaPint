@@ -4,6 +4,7 @@ using System.Linq;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
+using UnityEngine;
 
 namespace Editor.Scripts.PackageManager.Cache
 {
@@ -64,6 +65,7 @@ internal class CachedPackage : IComparable <CachedPackage>
         }
         else
         {
+            Debug.Log(CurrentVersion);
             CurrentVariation = PackageManagerUtility.VariationToCache(installedVariation, CurrentVersion, Repository);
             
             if (installedVariation.dependencies is {Count: > 0})
@@ -81,6 +83,8 @@ internal class CachedPackage : IComparable <CachedPackage>
         if (packageData.variations is not {Count: > 0})
             return;
 
+        Debug.Log($"000: {CurrentVersion}");
+        
         Variations = packageData.variations.Select(variation => PackageManagerUtility.VariationToCache(variation, CurrentVersion, Repository)).
                                  ToList();
 
