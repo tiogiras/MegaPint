@@ -64,22 +64,16 @@ public class PackageManagerTests
     [UnityTest] [Order(2)]
     public IEnumerator ImportPackageVariation()
     {
-        PackageCache.onCacheRefreshed += CacheRefreshed;
-        PackageCache.Refresh();
-
-        _waitingForCache = true;
-        
-        while (_waitingForCache)
-            yield return null;
-        
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
 
-        Debug.Log("All Waiting to true");
-        
+        PackageCache.onCacheRefreshed += CacheRefreshed;
+
         _result = false;
         _waitingForPackageManager = true;
         _waitingForCache = true;
+
+        Debug.Log("All Waiting to true");
 
 #pragma warning disable CS4014
         MegaPintPackageManager.AddEmbedded(PackageCache.Get(PackageKey.AlphaButton).Variations[0]);
