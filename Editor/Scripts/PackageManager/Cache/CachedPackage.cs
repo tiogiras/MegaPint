@@ -54,6 +54,8 @@ internal class CachedPackage : IComparable <CachedPackage>
 
         CurrentVersion = packageInfo!.version;
         IsNewestVersion = packageInfo.version == packageData.version; // TODO Update with branch and dev stuff
+        
+        SetVariations(packageData, packageInfo, out installedVariation);
 
         if (installedVariation == null)
         {
@@ -65,7 +67,6 @@ internal class CachedPackage : IComparable <CachedPackage>
         }
         else
         {
-            Debug.Log(CurrentVersion);
             CurrentVariation = PackageManagerUtility.VariationToCache(installedVariation, CurrentVersion, Repository);
             
             if (installedVariation.dependencies is {Count: > 0})
@@ -82,8 +83,6 @@ internal class CachedPackage : IComparable <CachedPackage>
 
         if (packageData.variations is not {Count: > 0})
             return;
-
-        Debug.Log($"000: {CurrentVersion}");
         
         Variations = packageData.variations.Select(variation => PackageManagerUtility.VariationToCache(variation, CurrentVersion, Repository)).
                                  ToList();

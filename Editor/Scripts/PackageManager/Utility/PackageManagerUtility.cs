@@ -40,8 +40,6 @@ internal static class PackageManagerUtility
 
     public static CachedVariation VariationToCache(Variation variation, string currentVersion, string repository)
     {
-        Debug.Log($"{variation.version} | {currentVersion}");
-
         return new CachedVariation
         {
             devBranch = variation.devBranch,
