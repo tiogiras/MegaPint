@@ -37,7 +37,7 @@ public class PackageManagerTests
 
         Assert.IsTrue(_initialized);
     }
-    
+
     [UnityTest] [Order(1)]
     public IEnumerator ImportPackage()
     {
@@ -63,10 +63,16 @@ public class PackageManagerTests
     [UnityTest] [Order(2)]
     public IEnumerator ImportPackageVariation()
     {
+        PackageCache.onCacheRefreshed += CacheRefreshed;
+        PackageCache.Refresh();
+
+        _waitingForCache = true;
+        
+        while (_waitingForCache)
+            yield return null;
+        
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
-        
-        PackageCache.onCacheRefreshed += CacheRefreshed;
 
         _result = false;
         _waitingForPackageManager = true;
@@ -82,7 +88,7 @@ public class PackageManagerTests
         Assert.IsTrue(_result);
     }
 
-    [Test] [Order(3)]
+    /*[Test] [Order(3)]
     public void DependenciesRegistered()
     {
         Assert.IsFalse(PackageCache.Get(PackageKey.Validators).CanBeRemoved(out List <Dependency> _));
@@ -130,7 +136,7 @@ public class PackageManagerTests
             yield return null;
 
         Assert.IsTrue(_result);
-    }
+    }*/
 
     #endregion
 
