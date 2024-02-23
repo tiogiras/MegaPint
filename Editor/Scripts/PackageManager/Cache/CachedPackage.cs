@@ -27,6 +27,8 @@ internal class CachedPackage : IComparable <CachedPackage>
     public string CurrentVariationHash {get; private set;}
     public List <Dependency> Dependencies {get; private set;}
 
+    private List <Dependency> _myDependants;
+
     public CachedPackage(PackageData packageData, PackageInfo packageInfo, out List <Dependency> dependencies)
     {
         // PackageData data
@@ -64,6 +66,8 @@ internal class CachedPackage : IComparable <CachedPackage>
             if (installedVariation.dependencies is {Count: > 0})
                 dependencies = installedVariation.dependencies;
         }
+
+        Dependencies = dependencies;
     }
 
     private void SetVariations(
@@ -112,13 +116,13 @@ internal class CachedPackage : IComparable <CachedPackage>
 
     public void RegisterDependencies(List<Dependency> dependencies)
     {
-        Dependencies = dependencies;
+        _myDependants = dependencies;
     }
 
     public bool CanBeRemoved(out List <Dependency> dependencies)
     {
-        dependencies = Dependencies;
-        return Dependencies is not {Count: > 0};
+        dependencies = _myDependants;
+        return _myDependants.Count == 0;
     }
 
     public int CompareTo(CachedPackage other)
