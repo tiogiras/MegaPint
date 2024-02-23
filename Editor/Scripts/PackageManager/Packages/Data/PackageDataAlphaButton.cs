@@ -20,6 +20,7 @@ internal static class PackageDataAlphaButton
             name = "com.tiogiras.megapint-alphabutton",
             displayName = "AlphaButton",
             description = "MegaPint package for an button component that uses the build in alphatransparency",
+            repository = "https://github.com/tiogiras/MegaPint-AlphaButton.git",
 
             variations = new List <Variation>
             {

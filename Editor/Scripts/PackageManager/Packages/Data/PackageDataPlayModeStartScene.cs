@@ -17,7 +17,8 @@ internal static class PackageDataPlayModeStartScene
             lastUpdate = "22.02.2024",
             name = "com.tiogiras.megapint-playmodestartscene",
             displayName = "PlayMode Start Scene",
-            description = "Package for the MegaPint package collection that allows you to set a starting scene for entering playmode."
+            description = "Package for the MegaPint package collection that allows you to set a starting scene for entering playmode.",
+            repository = "https://github.com/tiogiras/megapint-playmodestartscene.git"
         };
     }
 

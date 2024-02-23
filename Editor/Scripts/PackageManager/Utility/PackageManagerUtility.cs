@@ -3,6 +3,7 @@ using System.Text;
 using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.Settings;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.PackageManager.Utility

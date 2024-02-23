@@ -51,6 +51,7 @@ public class DataCacheTests : MonoBehaviour
             TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageData.name), $"Package[{key}] missing [name]!");
             TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageData.displayName), $"Package[{key}] missing [displayName]!");
             TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageData.description), $"Package[{key}] missing [description]!");
+            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageData.repository), $"Package[{key}] missing [repository]!");
 
             TestsUtility.Validate(ref valid, !ValidateDependencies(packageData.dependencies, key));
             TestsUtility.Validate(ref valid, !ValidateVariations(packageData.variations, key));
@@ -109,8 +110,11 @@ public class DataCacheTests : MonoBehaviour
         if (!TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageInfo.description), $"PackageInfo[{name}] missing [description]!"))
             TestsUtility.Validate(ref valid, !packageInfo.description.Equals(packageData.description), $"PackageInfo[{name}] non-equal [description]!");
 
-        if (!TestsUtility.Validate(ref valid, packageInfo.repository == null, $"PackageInfo[{name}] missing [repository]!"))
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageInfo.repository!.url), $"PackageInfo[{name}] missing [repository.url]!");
+        if (TestsUtility.Validate(ref valid, packageInfo.repository == null, $"PackageInfo[{name}] missing [repository]!"))
+            return valid;
+
+        if (!TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageInfo.repository!.url), $"PackageInfo[{name}] missing [repository.url]!"))
+            TestsUtility.Validate(ref valid, !packageInfo.repository.url.Equals(packageData.repository), $"PackageInfo[{name}] non-equal [repository.url]!");
 
         return valid;
     }
