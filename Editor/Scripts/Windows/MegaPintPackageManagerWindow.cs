@@ -88,7 +88,7 @@ namespace Editor.Scripts.Windows
             return this;
         }
 
-        private static bool _DevMode => MegaPintSettings.instance.GetSetting("General").GetValue("DevMode", false);
+        private static bool _DevMode => MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
         
         protected override void CreateGUI()
         {
@@ -443,8 +443,6 @@ namespace Editor.Scripts.Windows
             element.Q<Label>("PackageName").text = package.DisplayName;
             
             var version = element.Q<Label>("Version");
-
-            Debug.Log($"devMode: {_DevMode}");
 
             version.text = _DevMode ? "Development" : package.CurrentVersion;
 
