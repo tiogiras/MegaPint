@@ -14,7 +14,8 @@ public class PackageManagerTests
 {
     private bool _initialized;
     private bool _result;
-    private bool _waiting;
+    private bool _waitingForPackageManager;
+    private bool _waitingForCache;
 
     #region Tests
 
@@ -43,14 +44,17 @@ public class PackageManagerTests
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
 
+        PackageCache.onCacheRefreshed += CacheRefreshed;
+
         _result = false;
-        _waiting = true;
+        _waitingForPackageManager = true;
+        _waitingForCache = true;
 
 #pragma warning disable CS4014
         MegaPintPackageManager.AddEmbedded(PackageCache.Get(PackageKey.AlphaButton));
 #pragma warning restore CS4014
 
-        while (_waiting)
+        while (_waitingForPackageManager || _waitingForCache)
             yield return null;
 
         Assert.IsTrue(_result);
@@ -59,19 +63,22 @@ public class PackageManagerTests
     [UnityTest] [Order(2)]
     public IEnumerator ImportPackageVariation()
     {
-        yield return new WaitForSeconds(2);
+        yield return null;
         
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
+        
+        PackageCache.onCacheRefreshed += CacheRefreshed;
 
         _result = false;
-        _waiting = true;
+        _waitingForPackageManager = true;
+        _waitingForCache = true;
 
 #pragma warning disable CS4014
         MegaPintPackageManager.AddEmbedded(PackageCache.Get(PackageKey.AlphaButton).Variations[0]);
 #pragma warning restore CS4014
 
-        while (_waiting)
+        while (_waitingForPackageManager || _waitingForCache)
             yield return null;
 
         Assert.IsTrue(_result);
@@ -86,19 +93,22 @@ public class PackageManagerTests
     [UnityTest] [Order(4)]
     public IEnumerator RemovePackage()
     {
-        yield return new WaitForSeconds(2);
+        yield return null;
         
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
+        
+        PackageCache.onCacheRefreshed += CacheRefreshed;
 
         _result = false;
-        _waiting = true;
+        _waitingForPackageManager = true;
+        _waitingForCache = true;
 
 #pragma warning disable CS4014
         MegaPintPackageManager.Remove(PackageCache.Get(PackageKey.AlphaButton).Name);
 #pragma warning restore CS4014
 
-        while (_waiting)
+        while (_waitingForPackageManager || _waitingForCache)
             yield return null;
 
         Assert.IsTrue(_result);
@@ -107,19 +117,22 @@ public class PackageManagerTests
     [UnityTest] [Order(5)]
     public IEnumerator RemoveFormerDependencyPackage()
     {
-        yield return new WaitForSeconds(2);
+        yield return null;
         
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
+        
+        PackageCache.onCacheRefreshed += CacheRefreshed;
 
         _result = false;
-        _waiting = true;
+        _waitingForPackageManager = true;
+        _waitingForCache = true;
 
 #pragma warning disable CS4014
         MegaPintPackageManager.Remove(PackageCache.Get(PackageKey.Validators).Name);
 #pragma warning restore CS4014
 
-        while (_waiting)
+        while (_waitingForPackageManager || _waitingForCache)
             yield return null;
 
         Assert.IsTrue(_result);
@@ -133,6 +146,9 @@ public class PackageManagerTests
     {
         PackageCache.onCacheRefreshed -= CacheRefreshed;
         _initialized = true;
+        _waitingForCache = false;
+
+        Debug.Log("Cache Wait = false");
     }
 
     private void Failure(string error)
@@ -141,8 +157,10 @@ public class PackageManagerTests
         MegaPintPackageManager.onFailure -= Failure;
 
         Debug.Log(error);
-        _waiting = false;
+        _waitingForPackageManager = false;
         _result = false;
+        
+        Debug.Log("Wait = false");
     }
 
     private void Success()
@@ -150,8 +168,10 @@ public class PackageManagerTests
         MegaPintPackageManager.onSuccess -= Success;
         MegaPintPackageManager.onFailure -= Failure;
 
-        _waiting = false;
+        _waitingForPackageManager = false;
         _result = true;
+        
+        Debug.Log("Wait = false");
     }
 
     #endregion
