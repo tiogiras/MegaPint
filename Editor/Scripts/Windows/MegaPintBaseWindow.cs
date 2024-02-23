@@ -202,6 +202,8 @@ namespace Editor.Scripts.Windows
 
             PackageCache.Refresh();
 
+            GitExtension.LatestGitCommit(PackageCache.BasePackage.repository.url, "development");
+            
             root.Add(content);
         }
 

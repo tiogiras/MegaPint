@@ -13,6 +13,11 @@ internal static class GitExtension
         return RunGit(@"git describe --tags --abbrev=0", repository);
     }
 
+    public static string LatestGitCommit(string repository, string branch)
+    {
+        return RunGit($@"git rev-parse {branch}", repository);
+    }
+
     #endregion
 
     #region Private Methods
