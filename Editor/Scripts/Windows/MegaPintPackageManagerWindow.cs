@@ -183,6 +183,8 @@ namespace Editor.Scripts.Windows
 
         private void ButtonSubscriptions(bool status)
         {
+            Debug.Log($"Status {status}");
+
             _btnImport.style.opacity = status ? 1f : .5f;
             _btnRemove.style.opacity = status ? 1f : .5f;
             _btnUpdate.style.opacity = status ? 1f : .5f;
@@ -238,9 +240,6 @@ namespace Editor.Scripts.Windows
             _loading.style.display = DisplayStyle.None;
             _packages.style.display = DisplayStyle.Flex;
 
-            Debug.Log("Loaded");
-            ButtonSubscriptions(true);
-            
             _currentLoadingLabelProgress = 0;
 
             SetDisplayedPackages(_packageSearch.value);
@@ -340,6 +339,7 @@ namespace Editor.Scripts.Windows
 
         private void OnImportSuccess()
         {
+            ButtonSubscriptions(true);
             ReselectItem(_currentIndex);
             _list.ClearSelection();
 
@@ -379,6 +379,7 @@ namespace Editor.Scripts.Windows
 
         private void OnRemoveSuccess()
         {
+            ButtonSubscriptions(true);
             ReselectItem(_currentIndex);
             _list.ClearSelection();
             
@@ -414,6 +415,7 @@ namespace Editor.Scripts.Windows
 
         private void OnUpdateSuccess()
         {
+            ButtonSubscriptions(true);
             ReselectItem(_currentIndex);
             _list.ClearSelection();
 
@@ -423,8 +425,12 @@ namespace Editor.Scripts.Windows
 
         #endregion
 
-        private static void OnFailure(string error) => Debug.LogError(error);
-        
+        private void OnFailure(string error)
+        {
+            ButtonSubscriptions(true);
+            Debug.LogError(error);
+        }
+
         #endregion
 
         private async void ReselectItem(int index)
