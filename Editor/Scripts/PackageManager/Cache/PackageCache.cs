@@ -74,12 +74,6 @@ internal class PackageCache
         }
 
         onCacheRefreshed?.Invoke();
-        
-        /*if (OnCompleteActions is not {Count: > 0})
-            return;
-
-        foreach (MegaPintPackageCache.ListableAction <MegaPintPackageCache> action in OnCompleteActions)
-            action?.Invoke(s_allPackages);*/
     }
 
     public static CachedPackage Get(PackageKey key) => s_cache[key];

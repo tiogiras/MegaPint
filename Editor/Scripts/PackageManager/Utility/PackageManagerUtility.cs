@@ -3,6 +3,7 @@ using System.Text;
 using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.Settings;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.PackageManager.Utility
@@ -39,6 +40,8 @@ internal static class PackageManagerUtility
 
     public static CachedVariation VariationToCache(Variation variation, string currentVersion, string repository)
     {
+        Debug.Log($"{variation.version} | {currentVersion}");
+        
         return new CachedVariation
         {
             devBranch = variation.devBranch,

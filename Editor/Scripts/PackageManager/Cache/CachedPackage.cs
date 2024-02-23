@@ -56,8 +56,11 @@ internal class CachedPackage : IComparable <CachedPackage>
 
         if (installedVariation == null)
         {
-            if (packageData.dependencies is {Count: > 0})
-                dependencies = packageData.dependencies;
+            if (packageData.dependencies is not {Count: > 0})
+                return;
+
+            dependencies = packageData.dependencies;
+            Dependencies = packageData.dependencies;
         }
         else
         {
@@ -66,8 +69,6 @@ internal class CachedPackage : IComparable <CachedPackage>
             if (installedVariation.dependencies is {Count: > 0})
                 dependencies = installedVariation.dependencies;
         }
-
-        Dependencies = dependencies;
     }
 
     private void SetVariations(
