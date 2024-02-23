@@ -4,7 +4,6 @@ using System.Linq;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
-using UnityEngine;
 
 namespace Editor.Scripts.PackageManager.Cache
 {
@@ -45,13 +44,13 @@ internal class CachedPackage : IComparable <CachedPackage>
 
         dependencies = null;
         
+        SetVariations(packageData, packageInfo, out Variation installedVariation);
+        
         if (!IsInstalled)
             return;
 
         CurrentVersion = packageInfo!.version;
         IsNewestVersion = packageInfo.version == packageData.version; // TODO Update with branch and dev stuff
-
-        SetVariations(packageData, packageInfo, out Variation installedVariation);
 
         if (installedVariation == null)
         {
@@ -80,6 +79,9 @@ internal class CachedPackage : IComparable <CachedPackage>
         Variations = packageData.variations.Select(variation => PackageManagerUtility.VariationToCache(variation, CurrentVersion, Repository)).
                                  ToList();
 
+        if (packageInfo == null)
+            return;
+        
         var commitHash = packageInfo.git?.hash;
         var branch = packageInfo.git?.revision;
 

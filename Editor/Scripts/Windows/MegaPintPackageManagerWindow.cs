@@ -258,7 +258,7 @@ namespace Editor.Scripts.Windows
 
             _separator.style.display = hasVariation || hasDependency ? DisplayStyle.Flex : DisplayStyle.None;
 
-            Debug.Log($"hasVariation: {hasVariation}");
+            Debug.Log($"hasVariation: {hasVariation}"); // THIS IS FALSE
             
             if (hasVariation)
             {
@@ -305,6 +305,8 @@ namespace Editor.Scripts.Windows
 
         private void OnImport()
         {
+            GrayOutButtons();
+            
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
 #pragma warning disable CS4014
@@ -312,8 +314,17 @@ namespace Editor.Scripts.Windows
 #pragma warning restore CS4014
         }
 
+        private void GrayOutButtons()
+        {
+            _btnUpdate.style.color = _inactiveColor;
+            _btnImport.style.color = _inactiveColor;
+            _btnRemove.style.color = _inactiveColor;
+        }
+
         private void OnImportVariation(CachedVariation variation)
         {
+            GrayOutButtons();
+            
             MegaPintPackageManager.onSuccess += OnImportSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
 #pragma warning disable CS4014
@@ -336,6 +347,8 @@ namespace Editor.Scripts.Windows
 
         private void OnRemove()
         {
+            GrayOutButtons();
+            
             CachedPackage package = _displayedPackages[_list.selectedIndex];
 
             if (package.CanBeRemoved(out List <Dependency> dependants))
@@ -373,6 +386,8 @@ namespace Editor.Scripts.Windows
 
         private void OnUpdate()
         {
+            GrayOutButtons();
+            
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
 #pragma warning disable CS4014
@@ -382,6 +397,8 @@ namespace Editor.Scripts.Windows
         
         private void OnUpdateVariation(CachedVariation variation)
         {
+            GrayOutButtons();
+            
             MegaPintPackageManager.onSuccess += OnUpdateSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
 #pragma warning disable CS4014
