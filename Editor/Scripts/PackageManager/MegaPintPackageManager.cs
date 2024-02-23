@@ -57,6 +57,8 @@ internal static class MegaPintPackageManager
             ? $"{PackageCache.BasePackage.repository}#{DataCache.BasePackageDevBranch}"
             : $"{PackageCache.BasePackage.repository}#v{version}";
 
+        Debug.Log(url);
+
         await AddEmbedded(url);
 
         PackageCache.Refresh();
