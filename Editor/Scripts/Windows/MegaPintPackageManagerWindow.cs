@@ -24,9 +24,6 @@ namespace Editor.Scripts.Windows
         
         private readonly Color _normalColor = new (0.823529422f, 0.823529422f, 0.823529422f);
         private readonly Color _wrongVersionColor = new (0.688679218f,0.149910346f,0.12019401f);
-        
-        private readonly Color _activeColor = new (0.823529422f, 0.823529422f, 0.823529422f);
-        private readonly Color _inactiveColor = new (0.823529422f/2, 0.823529422f/2, 0.823529422f/2);
 
         #endregion
 
@@ -224,10 +221,6 @@ namespace Editor.Scripts.Windows
             _loading.style.display = DisplayStyle.Flex;
             _packages.style.display = DisplayStyle.None;
 
-            _btnUpdate.style.color = _inactiveColor;
-            _btnImport.style.color = _inactiveColor;
-            _btnRemove.style.color = _inactiveColor;
-            
             PackageManagerUtility.UpdateLoadingLabel(
                 _loading, 
                 _currentLoadingLabelProgress, 
