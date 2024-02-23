@@ -59,6 +59,8 @@ public class PackageManagerTests
     [UnityTest] [Order(2)]
     public IEnumerator ImportPackageVariation()
     {
+        yield return new WaitForSeconds(2);
+        
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
 
@@ -84,6 +86,8 @@ public class PackageManagerTests
     [UnityTest] [Order(4)]
     public IEnumerator RemovePackage()
     {
+        yield return new WaitForSeconds(2);
+        
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
 
@@ -103,6 +107,8 @@ public class PackageManagerTests
     [UnityTest] [Order(5)]
     public IEnumerator RemoveFormerDependencyPackage()
     {
+        yield return new WaitForSeconds(2);
+        
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
 
