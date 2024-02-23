@@ -47,17 +47,10 @@ internal static class MegaPintPackageManager
             }   
         }
 
-        Debug.Log("basePackage");
-        
-
         var devMode = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
-        Debug.Log(devMode);
-
         var url = devMode
-            ? $"{PackageCache.BasePackage.repository}#{DataCache.BasePackageDevBranch}"
-            : $"{PackageCache.BasePackage.repository}#v{version}";
-
-        Debug.Log(url);
+            ? $"{PackageCache.BasePackage.repository.url}#{DataCache.BasePackageDevBranch}"
+            : $"{PackageCache.BasePackage.repository.url}#v{version}";
 
         await AddEmbedded(url);
 
