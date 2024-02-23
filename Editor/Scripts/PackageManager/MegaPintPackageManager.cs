@@ -47,10 +47,11 @@ internal static class MegaPintPackageManager
             }   
         }
 
+        Debug.Log("basePackage");
         if (MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false))
             await AddEmbedded($"{PackageCache.BasePackage.repository}#{DataCache.BasePackageDevBranch}");
         else
-            await AddEmbedded($"{PackageCache.BasePackage.repository}#v{version}"); // TODO change to newer version if detected
+            await AddEmbedded($"{PackageCache.BasePackage.repository}#v{version}");
 
         PackageCache.Refresh();
     }
@@ -142,9 +143,9 @@ internal static class MegaPintPackageManager
         {
             await Embed(packageUrl);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            Debug.Log(e);
+            // ignored
         }
     }
 
