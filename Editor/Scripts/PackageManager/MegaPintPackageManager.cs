@@ -162,6 +162,11 @@ internal static class MegaPintPackageManager
     }
 
     #endregion
+
+    public static async Task UpdateBasePackage()
+    {
+        await AddEmbedded($"{PackageCache.BasePackage.repository.url}#v{PackageCache.NewestBasePackageVersion}");
+    }
 }
 
 }

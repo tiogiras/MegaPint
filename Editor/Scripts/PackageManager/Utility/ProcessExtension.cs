@@ -12,7 +12,7 @@ internal static class ProcessExtensions
         this Process process,
         string application,
         string arguments,
-        string workingDirectory,
+        /*string workingDirectory,*/
         out string output,
         out string errors)
     {
@@ -23,8 +23,8 @@ internal static class ProcessExtensions
             RedirectStandardError = true,
             RedirectStandardOutput = true,
             FileName = application,
-            Arguments = arguments,
-            WorkingDirectory = workingDirectory
+            Arguments = arguments/*,
+            WorkingDirectory = "git@github.com:tiogiras/MegaPint.git"*/
         };
         
         var outputBuilder = new StringBuilder();
