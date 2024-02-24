@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Editor.Scripts.DevModeUtil;
 using Editor.Scripts.PackageManager.Packages;
+using Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
-using UnityEngine;
 
 namespace Editor.Scripts.PackageManager.Cache
 {
@@ -15,6 +15,9 @@ internal class PackageCache
     public static Action onCacheRefreshed;
     
     public static PackageInfo BasePackage {get; private set;}
+    public static string NewestBasePackageVersion {get; private set;}
+
+    public static bool NeedsBasePackageUpdate => !BasePackage.version.Equals(NewestBasePackageVersion);
     
     private static readonly Dictionary <PackageKey, CachedPackage> s_cache = new();
 
@@ -34,6 +37,8 @@ internal class PackageCache
 
             BasePackage = package;
             DevLog.Log(typeof(PackageCache), "BasePackage detected");
+
+            NewestBasePackageVersion = GitExtension.LatestGitTag(BasePackage.repository.url)[1..];
         }
     }
     

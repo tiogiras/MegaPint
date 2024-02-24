@@ -8,6 +8,7 @@ using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
 using Editor.Scripts.Settings;
 using Editor.Scripts.Settings.BaseSettings;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -28,6 +29,7 @@ namespace Editor.Scripts.Windows
         #region Visual References
 
         private VisualElement _rightPane;
+        private GroupBox _updateBasePackage;
         
         private Label _loading;
         private Label _versionNumber;
@@ -41,7 +43,8 @@ namespace Editor.Scripts.Windows
         private Button _btnSettings;
         private Button _btnOpenPackageManager;
         private Button _btnDevMode;
-        
+        private Button _btnUpdate;
+
         #endregion
 
         #region Private
@@ -115,6 +118,9 @@ namespace Editor.Scripts.Windows
 
             _btnDevMode = content.Q <Button>("BTN_DevMode");
             _versionNumber = content.Q <Label>("VersionNumber");
+
+            _updateBasePackage = content.Q <GroupBox>("UpdateBasePackage");
+            _btnUpdate = _updateBasePackage.Q <Button>("BTN_Update");
 
             #endregion
             
@@ -199,6 +205,8 @@ namespace Editor.Scripts.Windows
             _settingsList.style.display = DisplayStyle.None;
 
             _versionNumber.style.display = DisplayStyle.None;
+            
+            _updateBasePackage.style.display = DisplayStyle.None;
 
             PackageCache.Refresh();
 
@@ -261,6 +269,7 @@ namespace Editor.Scripts.Windows
             onRightPaneClose?.Invoke();
             
             _btnDevMode.clicked -= OnDevMode;
+            _btnUpdate.clicked -= UpdateBasePackage;
         }
 
         #endregion
@@ -304,15 +313,27 @@ namespace Editor.Scripts.Windows
             _currentLoadingLabelProgress = 0;
             
             SetDisplayedPackages(_searchField.value);
-            
-            
-            
-            
-            // TODO remove
 
-            GitExtension.LatestGitTag(PackageCache.BasePackage.repository.url);
-            GitExtension.LatestGitCommit(PackageCache.BasePackage.repository.url, "development");
+            if (!PackageCache.NeedsBasePackageUpdate)
+                return;
+            
+            _updateBasePackage.style.display = DisplayStyle.Flex;
+            _btnUpdate.clicked += UpdateBasePackage;
         };
+
+        private void UpdateBasePackage()
+        {
+            if (!EditorUtility.DisplayDialog(
+                    "Update MegaPint",
+                    $"Are you sure you want to upgrade\nMegaPint v{PackageCache.NewestBasePackageVersion}?",
+                    "Yes",
+                    "Abort")) 
+                return;
+
+#pragma warning disable CS4014
+            MegaPintPackageManager.UpdateBasePackage();
+#pragma warning restore CS4014
+        }
 
         private void OnUpdateRightPane(IEnumerable<int> _)
         {
