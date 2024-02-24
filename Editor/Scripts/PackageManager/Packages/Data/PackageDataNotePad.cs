@@ -11,10 +11,10 @@ internal static class PackageDataNotePad
         return new PackageData
         {
             key = PackageKey.NotePad,
-            reqMpVersion = "1.1.0 or higher",
-            version = "1.0.0",
+            reqMpVersion = "1.1.1 or higher",
+            version = "1.0.1",
             unityVersion = "2022.3.15f1",
-            lastUpdate = "22.02.2024",
+            lastUpdate = "24.02.2024",
             name = "com.tiogiras.megapint-notepad",
             displayName = "NotePad",
             description = "NotePad allows you to make and edit notes directly on a GameObjects MonoBehaviour.",

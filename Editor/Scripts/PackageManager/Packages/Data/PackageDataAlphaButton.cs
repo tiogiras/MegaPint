@@ -13,13 +13,13 @@ internal static class PackageDataAlphaButton
         return new PackageData
         {
             key = PackageKey.AlphaButton,
-            reqMpVersion = "1.1.0 or higher",
-            version = "1.0.0",
+            reqMpVersion = "1.1.1 or higher",
+            version = "1.0.1",
             unityVersion = "2022.3.15f1",
-            lastUpdate = "22.02.2024",
+            lastUpdate = "24.02.2024",
             name = "com.tiogiras.megapint-alphabutton",
             displayName = "AlphaButton",
-            description = "MegaPint package for an button component that uses the build in alphatransparency",
+            description = "This package adds a new component based on the normal button component that is only clickable where the alpha is greater than a certain threshold.",
             repository = "https://github.com/tiogiras/MegaPint-AlphaButton.git",
 
             variations = new List <Variation>
