@@ -314,7 +314,7 @@ namespace Editor.Scripts.Windows
             
             SetDisplayedPackages(_searchField.value);
 
-            if (!PackageCache.NeedsBasePackageUpdate)
+            if (!PackageCache.NeedsBasePackageUpdate())
                 return;
             
             _updateBasePackage.style.display = DisplayStyle.Flex;

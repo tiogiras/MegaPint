@@ -11,13 +11,13 @@ internal static class PackageDataValidators
         return new PackageData
         {
             key = PackageKey.Validators,
-            reqMpVersion = "1.1.0 or higher",
-            version = "1.0.1",
+            reqMpVersion = "1.1.1 or higher",
+            version = "1.0.2",
             unityVersion = "2022.3.15f1",
             lastUpdate = "22.02.2024",
             name = "com.tiogiras.megapint-validators",
             displayName = "Validators",
-            description = "MegaPint package for validation functions",
+            description = "This package adds an option to use and create own validations for MonoBehaviours. The results of the validations are easily readable in one window and can be automatically fixed.",
             repository = "https://github.com/tiogiras/MegaPint-Validators.git"
         };
     }

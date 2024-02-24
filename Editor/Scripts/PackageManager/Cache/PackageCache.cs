@@ -5,7 +5,9 @@ using System.Linq;
 using Editor.Scripts.DevModeUtil;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
+using Editor.Scripts.Settings;
 using UnityEditor.PackageManager;
+using UnityEngine;
 
 namespace Editor.Scripts.PackageManager.Cache
 {
@@ -17,8 +19,15 @@ internal class PackageCache
     public static PackageInfo BasePackage {get; private set;}
     public static string NewestBasePackageVersion {get; private set;}
 
-    public static bool NeedsBasePackageUpdate => !BasePackage.version.Equals(NewestBasePackageVersion);
-    
+    public static bool NeedsBasePackageUpdate()
+    {
+        Debug.Log(GitExtension.LatestGitCommitRemote(BasePackage.repository.url, DataCache.BasePackageDevBranch));
+
+        return MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false)
+            ? false
+            : !BasePackage.version.Equals(NewestBasePackageVersion);
+    }
+
     private static readonly Dictionary <PackageKey, CachedPackage> s_cache = new();
 
     private static void GetInstalledPackageNames(List<PackageInfo> packages, out List <string> packageNames)

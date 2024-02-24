@@ -165,7 +165,12 @@ internal static class MegaPintPackageManager
 
     public static async Task UpdateBasePackage()
     {
-        await AddEmbedded($"{PackageCache.BasePackage.repository.url}#v{PackageCache.NewestBasePackageVersion}");
+        var url = MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false)
+            ? $"{PackageCache.BasePackage.repository.url}#{DataCache.BasePackageDevBranch}"
+            : $"{PackageCache.BasePackage.repository.url}#v{PackageCache.NewestBasePackageVersion}";
+        
+        await AddEmbedded(url);
+        PackageCache.Refresh();
     }
 }
 
