@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Editor.Scripts.PackageManager;
 using Editor.Scripts.PackageManager.Packages;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,9 +11,9 @@ namespace Editor.Scripts
 
 internal static partial class DisplayContent
 {
+    public static Action <VisualElement> onRightPaneGUI;
     private static Action <int, VisualElement> s_onSelectedTabChanged;
     private static Action s_onSelectedPackageChanged;
-    public static Action<VisualElement> onRightPaneGUI;
 
     private static readonly List <Button> s_tabs = new();
     private static readonly List <string> s_tabsContentLocations = new();
@@ -29,9 +28,9 @@ internal static partial class DisplayContent
     {
         s_onSelectedPackageChanged?.Invoke();
 
-        CallMethodByName(key.ToString(), new object[]{root});
+        CallMethodByName(key.ToString(), new object[] {root});
     }
-    
+
     #endregion
 
     #region Private Methods

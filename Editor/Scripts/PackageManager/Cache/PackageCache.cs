@@ -156,7 +156,7 @@ internal static class PackageCache
     private static async void Initialize()
     {
         IEnumerable <PackageData> mpPackages = DataCache.AllPackages;
-        List <PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages();
+        List <PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages(); // TODO lucidchart Class Reference
 
         GetInstalledPackageNames(installedPackages, out List <string> installedPackagesNames);
 

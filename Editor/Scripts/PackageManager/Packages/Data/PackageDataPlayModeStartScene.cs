@@ -2,10 +2,13 @@
 namespace Editor.Scripts.PackageManager.Packages.Data
 {
 
+/// <summary> Data for the PlayModeStartScene package </summary>
 internal static class PackageDataPlayModeStartScene
 {
     #region Public Methods
 
+    /// <summary> Get the data for this package </summary>
+    /// <returns> Corresponding <see cref="PackageData" /> </returns>
     public static PackageData Get()
     {
         return new PackageData

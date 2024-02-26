@@ -1,9 +1,12 @@
-﻿namespace Editor.Scripts.PackageManager.Packages
+﻿#if UNITY_EDITOR
+namespace Editor.Scripts.PackageManager.Packages
 {
 
-public enum PackageKey
+/// <summary> Key for internal referencing of MegaPint packages </summary>
+internal enum PackageKey
 {
-    Undefined, BasePackage, AutoSave, Validators, AlphaButton, PlayModeStartScene, NotePad
+    Undefined, AutoSave, Validators, AlphaButton, PlayModeStartScene, NotePad
 }
 
 }
+#endif

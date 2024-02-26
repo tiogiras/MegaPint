@@ -2,15 +2,18 @@
 namespace Editor.Scripts.PackageManager.Packages.Data
 {
 
+/// <summary> Data for the AutoSave package </summary>
 internal static class PackageDataAutoSave
 {
     #region Public Methods
 
+    /// <summary> Get the data for this package </summary>
+    /// <returns> Corresponding <see cref="PackageData" /> </returns>
     public static PackageData Get()
     {
         return new PackageData
         {
-            key = PackageKey.AutoSave, 
+            key = PackageKey.AutoSave,
             reqMpVersion = "1.1.1 or higher",
             version = "1.0.2",
             unityVersion = "2022.3.15f1",

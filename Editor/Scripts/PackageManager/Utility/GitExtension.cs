@@ -1,35 +1,32 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using Debug = UnityEngine.Debug;
 
 namespace Editor.Scripts.PackageManager.Utility
 {
 
+/// <summary> Class to get information via git methods </summary>
 internal static class GitExtension
 {
     #region Public Methods
 
-    /*public static string LatestGitTag(string repository)
-    {
-        //return RunGit(@"git describe --tags --abbrev=0", repository);
-    }
-
-    public static string LatestGitCommit(string repository, string branch)
-    {
-        //return RunGit($@"git rev-parse {branch}", repository);
-    }*/
-
+    /// <summary> Get the latest public tag of a specified repository </summary>
+    /// <param name="repository"> Git url of the target repository </param>
+    /// <returns> The latest found tag of any branch </returns>
     public static string LatestGitTag(string repository)
     {
         return GitTags(repository)[^1];
     }
-    
+
+    #endregion
+
+    #region Private Methods
+
     private static string[] GitTags(string repository)
     {
         List <string> tags = new();
-        
+
         var outPut = RunGit($"ls-remote --tags {repository}");
 
         var ses = outPut.Split("tags/");
@@ -42,27 +39,14 @@ internal static class GitExtension
 
         return tags.ToArray();
     }
-    
-    public static string LatestGitCommitRemote(string repository, string branch)
-    {
-        var outPut = RunGit($"ls-remote {repository} refs/heads/{branch}");
-        var index = outPut.IndexOf("refs", StringComparison.Ordinal);
 
-        return outPut[..(index - 1)];
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private static string RunGit(string arguments/*, string path*/)
+    private static string RunGit(string arguments)
     {
         using var process = new Process();
 
         var exitCode = process.Run(
             "git",
             arguments,
-            /*path,*/
             out var output,
             out var errors);
 
@@ -76,3 +60,4 @@ internal static class GitExtension
 }
 
 }
+#endif
