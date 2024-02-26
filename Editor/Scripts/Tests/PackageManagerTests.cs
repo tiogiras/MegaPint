@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if UNITY_EDITOR
+using System.Collections;
 using System.Collections.Generic;
 using Editor.Scripts.PackageManager;
 using Editor.Scripts.PackageManager.Cache;
@@ -10,12 +11,13 @@ using UnityEngine.TestTools;
 namespace Editor.Scripts.Tests
 {
 
-public class PackageManagerTests
+/// <summary> Unit tests regarding the <see cref="MegaPintPackageManager" /> </summary>
+internal class PackageManagerTests
 {
     private bool _initialized;
     private bool _result;
-    private bool _waitingForPackageManager;
     private bool _waitingForCache;
+    private bool _waitingForPackageManager;
 
     #region Tests
 
@@ -36,6 +38,21 @@ public class PackageManagerTests
         }
 
         Assert.IsTrue(_initialized);
+    }
+
+    [UnityTest] [Order(3)]
+    public IEnumerator DependenciesRegistered()
+    {
+        yield return new WaitForDomainReload();
+
+        PackageCache.onCacheRefreshed += CacheRefreshed;
+        _waitingForCache = true;
+        PackageCache.Refresh();
+
+        while (_waitingForCache)
+            yield return null;
+
+        Assert.IsFalse(PackageCache.Get(PackageKey.Validators).CanBeRemoved(out List <Dependency> _));
     }
 
     [UnityTest] [Order(1)]
@@ -59,7 +76,7 @@ public class PackageManagerTests
 
         Assert.IsTrue(_result);
     }
-    
+
     [UnityTest] [Order(2)]
     public IEnumerator ImportPackageVariation()
     {
@@ -82,67 +99,21 @@ public class PackageManagerTests
         Assert.IsTrue(_result);
     }
 
-    [UnityTest] [Order(3)]
-    public IEnumerator DependenciesRegistered()
-    {
-        yield return new WaitForDomainReload();
-        
-        PackageCache.onCacheRefreshed += CacheRefreshed;
-        _waitingForCache = true;
-        PackageCache.Refresh();
-
-        while (_waitingForCache)
-            yield return null;
-        
-        Assert.IsFalse(PackageCache.Get(PackageKey.Validators).CanBeRemoved(out List <Dependency> _));
-    }
-
-    [UnityTest] [Order(4)]
-    public IEnumerator RemovePackage()
-    {
-        yield return new WaitForDomainReload();
-        
-        PackageCache.onCacheRefreshed += CacheRefreshed;
-        _waitingForCache = true;
-        PackageCache.Refresh();
-
-        while (_waitingForCache)
-            yield return null;
-        
-        MegaPintPackageManager.onSuccess += Success;
-        MegaPintPackageManager.onFailure += Failure;
-        
-        PackageCache.onCacheRefreshed += CacheRefreshed;
-
-        _result = false;
-        _waitingForPackageManager = true;
-        _waitingForCache = true;
-
-#pragma warning disable CS4014
-        MegaPintPackageManager.Remove(PackageCache.Get(PackageKey.AlphaButton).Name);
-#pragma warning restore CS4014
-
-        while (_waitingForPackageManager || _waitingForCache)
-            yield return null;
-
-        Assert.IsTrue(_result);
-    }
-    
     [UnityTest] [Order(5)]
     public IEnumerator RemoveFormerDependencyPackage()
     {
         yield return new WaitForDomainReload();
-        
+
         PackageCache.onCacheRefreshed += CacheRefreshed;
         _waitingForCache = true;
         PackageCache.Refresh();
 
         while (_waitingForCache)
             yield return null;
-        
+
         MegaPintPackageManager.onSuccess += Success;
         MegaPintPackageManager.onFailure += Failure;
-        
+
         PackageCache.onCacheRefreshed += CacheRefreshed;
 
         _result = false;
@@ -151,6 +122,37 @@ public class PackageManagerTests
 
 #pragma warning disable CS4014
         MegaPintPackageManager.Remove(PackageCache.Get(PackageKey.Validators).Name);
+#pragma warning restore CS4014
+
+        while (_waitingForPackageManager || _waitingForCache)
+            yield return null;
+
+        Assert.IsTrue(_result);
+    }
+
+    [UnityTest] [Order(4)]
+    public IEnumerator RemovePackage()
+    {
+        yield return new WaitForDomainReload();
+
+        PackageCache.onCacheRefreshed += CacheRefreshed;
+        _waitingForCache = true;
+        PackageCache.Refresh();
+
+        while (_waitingForCache)
+            yield return null;
+
+        MegaPintPackageManager.onSuccess += Success;
+        MegaPintPackageManager.onFailure += Failure;
+
+        PackageCache.onCacheRefreshed += CacheRefreshed;
+
+        _result = false;
+        _waitingForPackageManager = true;
+        _waitingForCache = true;
+
+#pragma warning disable CS4014
+        MegaPintPackageManager.Remove(PackageCache.Get(PackageKey.AlphaButton).Name);
 #pragma warning restore CS4014
 
         while (_waitingForPackageManager || _waitingForCache)
@@ -193,3 +195,4 @@ public class PackageManagerTests
 }
 
 }
+#endif

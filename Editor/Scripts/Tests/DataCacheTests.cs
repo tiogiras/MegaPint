@@ -13,8 +13,11 @@ using UnityEngine.TestTools;
 namespace Editor.Scripts.Tests
 {
 
-public class DataCacheTests : MonoBehaviour
+/// <summary> Unit tests regarding the <see cref="DataCache"/> </summary>
+internal class DataCacheTests : MonoBehaviour
 {
+    #region Tests
+    
     [Test]
     public void BasePackage()
     {
@@ -25,7 +28,7 @@ public class DataCacheTests : MonoBehaviour
             Debug.Log("Cache is missing the [BasePackageName]!");
             valid = false;
         }
-        
+
         if (string.IsNullOrEmpty(DataCache.BasePackageDevBranch))
         {
             Debug.Log("Cache is missing the [BasePackageDevBranch]!");
@@ -35,11 +38,11 @@ public class DataCacheTests : MonoBehaviour
         Assert.IsTrue(valid);
     }
 
-    [Test, Order(0)]
+    [Test] [Order(0)]
     public void PackageData()
     {
         var valid = true;
-        
+
         foreach (PackageData packageData in DataCache.AllPackages)
         {
             PackageKey key = packageData.key;
@@ -56,35 +59,61 @@ public class DataCacheTests : MonoBehaviour
             TestsUtility.Validate(ref valid, !ValidateDependencies(packageData.dependencies, key));
             TestsUtility.Validate(ref valid, !ValidateVariations(packageData.variations, key));
         }
-        
+
         Assert.IsTrue(valid);
     }
 
-    [UnityTest, Order(1)]
+    [UnityTest] [Order(1)]
     public IEnumerator PackageInfo()
     {
         Task <List <PackageInfo>> task = MegaPintPackageManager.GetInstalledPackages();
 
         while (!task.IsCompleted)
-        {
             yield return null;
-        }
 
         List <PackageInfo> packages = task.Result;
 
         var valid = true;
+
         foreach (PackageInfo packageInfo in packages)
-        {
             TestsUtility.Validate(ref valid, !ValidatePackageInfo(packageInfo));
-        }
-        
+
         Assert.IsTrue(valid);
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private static bool ValidateDependencies(List <Dependency> dependencies, PackageKey parent, string variation = "")
+    {
+        if (dependencies is not {Count: > 0})
+            return true;
+
+        var valid = true;
+
+        var variationStr = string.IsNullOrEmpty(variation) ? "" : $"Variation[{variation}]";
+
+        foreach (Dependency dependency in dependencies)
+        {
+            TestsUtility.Validate(
+                ref valid,
+                dependency.key == PackageKey.Undefined,
+                $"Package[{parent}] {variationStr} Dependency is missing PackageKey!");
+
+            TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(dependency.name),
+                $"Package[{parent}] {variationStr} Dependency[{dependency.key}] is missing a name!");
+        }
+
+        return valid;
     }
 
     private static bool ValidatePackageInfo(PackageInfo packageInfo)
     {
         var name = packageInfo.name;
-        
+
         PackageData packageData = DataCache.PackageData(name);
 
         if (packageInfo.name.Equals(DataCache.BasePackageName))
@@ -108,13 +137,19 @@ public class DataCacheTests : MonoBehaviour
         TestsUtility.Validate(ref valid, !packageInfo.category.Equals("Tools"), $"PackageInfo[{name}] incorrect [category]!");
 
         if (!TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageInfo.description), $"PackageInfo[{name}] missing [description]!"))
-            TestsUtility.Validate(ref valid, !packageInfo.description.Equals(packageData.description), $"PackageInfo[{name}] non-equal [description]!");
+            TestsUtility.Validate(
+                ref valid,
+                !packageInfo.description.Equals(packageData.description),
+                $"PackageInfo[{name}] non-equal [description]!");
 
         if (TestsUtility.Validate(ref valid, packageInfo.repository == null, $"PackageInfo[{name}] missing [repository]!"))
             return valid;
 
         if (!TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageInfo.repository!.url), $"PackageInfo[{name}] missing [repository.url]!"))
-            TestsUtility.Validate(ref valid, !packageInfo.repository.url.Equals(packageData.repository), $"PackageInfo[{name}] non-equal [repository.url]!");
+            TestsUtility.Validate(
+                ref valid,
+                !packageInfo.repository.url.Equals(packageData.repository),
+                $"PackageInfo[{name}] non-equal [repository.url]!");
 
         return valid;
     }
@@ -123,39 +158,32 @@ public class DataCacheTests : MonoBehaviour
     {
         if (variations is not {Count: > 0})
             return true;
-        
+
         var valid = true;
 
         foreach (Variation variation in variations)
         {
             TestsUtility.Validate(ref valid, string.IsNullOrEmpty(variation.name), $"Package[{parent}] Variation is missing a name");
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(variation.version), $"Package[{parent}] Variation[{variation.name}] missing [version]!");
+
+            TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(variation.version),
+                $"Package[{parent}] Variation[{variation.name}] missing [version]!");
+
             TestsUtility.Validate(ref valid, string.IsNullOrEmpty(variation.tag), $"Package[{parent}] Variation[{variation.name}] missing [tag]!");
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(variation.devBranch), $"Package[{parent}] Variation[{variation.name}] missing [devBranch]!");
-            
+
+            TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(variation.devBranch),
+                $"Package[{parent}] Variation[{variation.name}] missing [devBranch]!");
+
             TestsUtility.Validate(ref valid, !ValidateDependencies(variation.dependencies, parent, variation.name));
         }
 
         return valid;
     }
-    
-    private static bool ValidateDependencies(List <Dependency> dependencies, PackageKey parent, string variation = "")
-    {
-        if (dependencies is not {Count: > 0})
-            return true;
-        
-        var valid = true;
 
-        var variationStr = string.IsNullOrEmpty(variation) ? "" : $"Variation[{variation}]";
-        
-        foreach (Dependency dependency in dependencies)
-        {
-            TestsUtility.Validate(ref valid, dependency.key == PackageKey.Undefined, $"Package[{parent}] {variationStr} Dependency is missing PackageKey!");
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(dependency.name), $"Package[{parent}] {variationStr} Dependency[{dependency.key}] is missing a name!");
-        }
-
-        return valid;
-    }
+    #endregion
 }
 
 }

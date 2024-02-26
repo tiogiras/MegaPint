@@ -1,37 +1,39 @@
 ﻿#if UNITY_EDITOR
-using Editor.Scripts.Settings;
 using UnityEngine;
 
 namespace Editor.Scripts.DevModeUtil
 {
 
+/// <summary> Utility class to log messages only when the development mode is activated. </summary>
 internal static class DevLog
 {
-    private static MegaPintSettingsBase s_settings;
-    
-    private static bool IsDevMode()
+    #region Public Methods
+
+    /// <summary> Log a message if the devMode is enabled </summary>
+    /// <param name="msg"> Message to be logged </param>
+    public static void Log(string msg)
     {
-        s_settings ??= MegaPintSettings.instance.GetSetting("General");
-        return s_settings.GetValue("devMode", false);
+        if (SaveData.DevMode())
+            Debug.Log($"[DevMode]: {msg}");
     }
-    
-    public static void Log<T>(T caller, string msg)
+
+    /// <summary> Log an errorMessage if the devMode is enabled </summary>
+    /// <param name="msg"> Message to be logged </param>
+    public static void LogError(string msg)
     {
-        if (IsDevMode())
-            Debug.Log($"[{caller.GetType()}]: {msg}");
+        if (SaveData.DevMode())
+            Debug.LogError($"[DevMode]: {msg}");
     }
-    
-    public static void LogWarning<T>(T caller, string msg)
+
+    /// <summary> Log a warningMessage if the devMode is enabled </summary>
+    /// <param name="msg"> Message to be logged </param>
+    public static void LogWarning(string msg)
     {
-        if (IsDevMode())
-            Debug.LogWarning($"[{caller.GetType()}]: {msg}");
+        if (SaveData.DevMode())
+            Debug.LogWarning($"[DevMode]: {msg}");
     }
-    
-    public static void LogError<T>(T caller, string msg)
-    {
-        if (IsDevMode())
-            Debug.LogError($"[{caller.GetType()}]: {msg}");
-    }
+
+    #endregion
 }
 
 }
