@@ -17,7 +17,7 @@ internal static class PackageDataValidators
             reqMpVersion = "1.1.1 or higher",
             version = "1.0.2",
             unityVersion = "2022.3.15f1",
-            lastUpdate = "26.02.2024",
+            lastUpdate = "28.02.2024",
             name = "com.tiogiras.megapint-validators",
             displayName = "Validators",
             description =
