@@ -5,27 +5,44 @@ using UnityEditor;
 
 namespace Editor.Scripts
 {
-    internal static partial class ContextMenu
+
+internal static partial class ContextMenu
+{
+    private const string MenuItemMegaPint = "MegaPint";
+    private const string MenuItemPackages = MenuItemMegaPint + "/Packages";
+
+    #region Public Methods
+
+    public static MegaPintEditorWindowBase TryOpen <T>(bool utility, string title = "") where T : MegaPintEditorWindowBase
     {
-        private const string MenuItemMegaPint = "MegaPint";
-        private const string MenuItemPackages = MenuItemMegaPint + "/Packages";
+        if (typeof(T) == typeof(MegaPintFirstSteps))
+            return EditorWindow.GetWindow <T>(utility, title).ShowWindow();
 
-        [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
-        private static void Open() => TryOpen<MegaPintBaseWindow>(false);
+        var exists = MegaPintSettings.Exists();
 
-        [MenuItem(MenuItemMegaPint + "/PackageManager", false, 11)]
-        private static void OpenImporter() => MegaPintBaseWindow.OnOpenPackageManager();
-
-        public static MegaPintEditorWindowBase TryOpen<T>(bool utility, string title = "") where T : MegaPintEditorWindowBase
-        {
-            if (typeof(T) == typeof(MegaPintFirstSteps)) return EditorWindow.GetWindow<T>(utility, title).ShowWindow();
-
-            var exists = MegaPintSettings.Exists();
-            
-            return ! exists
-                ? EditorWindow.GetWindow<MegaPintFirstSteps>(utility, title).ShowWindow() 
-                : EditorWindow.GetWindow<T>(utility, title).ShowWindow();
-        }
+        return !exists
+            ? EditorWindow.GetWindow <MegaPintFirstSteps>(utility, title).ShowWindow()
+            : EditorWindow.GetWindow <T>(utility, title).ShowWindow();
     }
+
+    #endregion
+
+    #region Private Methods
+
+    [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
+    private static void Open()
+    {
+        TryOpen <MegaPintBaseWindow>(false);
+    }
+
+    [MenuItem(MenuItemMegaPint + "/PackageManager", false, 11)]
+    private static void OpenImporter()
+    {
+        MegaPintBaseWindow.OnOpenPackageManager();
+    }
+
+    #endregion
+}
+
 }
 #endif

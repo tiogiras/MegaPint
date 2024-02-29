@@ -6,7 +6,7 @@ using System.Linq;
 namespace Editor.Scripts.Settings
 {
     [Serializable]
-    public class MegaPintSerializableDictionary<TKey, TValue>
+    internal class MegaPintSerializableDictionary<TKey, TValue>
     {
         [Serializable]
         public struct KeyValueEntry
