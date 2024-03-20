@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Editor.Scripts.DevModeUtil;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
 
+[assembly: InternalsVisibleTo("tiogiras.megapint.Editor.Tests")]
 namespace Editor.Scripts.PackageManager.Cache
 {
 

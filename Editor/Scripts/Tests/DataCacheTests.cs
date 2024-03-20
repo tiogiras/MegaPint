@@ -1,14 +1,15 @@
 #if UNITY_EDITOR
+#if UNITY_INCLUDE_TESTS
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Editor.Scripts.PackageManager;
 using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.PackageManager.Packages;
-using NUnit.Framework;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.TestTools;
+using NUnit.Framework;
 
 namespace Editor.Scripts.Tests
 {
@@ -187,4 +188,5 @@ internal class DataCacheTests : MonoBehaviour
 }
 
 }
+#endif
 #endif
