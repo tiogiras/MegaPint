@@ -60,7 +60,7 @@ namespace Editor.Scripts.Settings
             if (instance != null)
                 return true;
             
-            var search = AssetDatabase.FindAssets("t:MegaPintSettings", null /*new[] { "Assets" }*/);
+            var search = AssetDatabase.FindAssets("t:MegaPintSettings", new[] { "Assets" });
 
             Debug.Log(search.Length);
 
