@@ -62,6 +62,8 @@ namespace Editor.Scripts.Settings
             
             var search = AssetDatabase.FindAssets("t:MegaPintSettings", new[] { "Assets" });
 
+            Debug.Log(search.Length);
+
             if (search.Length == 0)
                 return false;
             
