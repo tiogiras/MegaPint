@@ -30,7 +30,7 @@ internal static partial class ContextMenu
     #region Private Methods
 
     [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
-    private static void Open()
+    public static void Open()
     {
         TryOpen <MegaPintBaseWindow>(false);
     }

@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using Editor.Scripts.PackageManager.Packages;
 using UnityEngine;
@@ -58,7 +59,8 @@ internal static partial class DisplayContent
             tab.clickable = new Clickable(() => {SwitchTab(tabContentParent, index);});
         }
     }
-
+    
+    [Obsolete("Use SetTabContentLocation(string, int)")]
     private static void SetTabContentLocations(params string[] locations)
     {
         s_tabsContentLocations.Clear();
@@ -67,6 +69,18 @@ internal static partial class DisplayContent
         foreach (var location in locations)
         {
             s_tabsContentLocations.Add(location);
+            s_tabsContainer.Add(null);
+        }
+    }
+
+    private static void SetTabContentLocation(string location, int tabCount)
+    {
+        s_tabsContentLocations.Clear();
+        s_tabsContainer.Clear();
+
+        for (var i = 0; i < tabCount; i++)
+        {
+            s_tabsContentLocations.Add(Path.Combine(location, $"Tab{i}"));
             s_tabsContainer.Add(null);
         }
     }
