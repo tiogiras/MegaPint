@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 
 namespace Editor.Scripts.PackageManager.Packages
 {
@@ -26,3 +27,4 @@ internal class Dependency : IComparable <Dependency>
 }
 
 }
+#endif

@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+#if UNITY_INCLUDE_TESTS
 using System.Collections;
 using System.Collections.Generic;
 using Editor.Scripts.PackageManager;
@@ -195,4 +196,5 @@ internal class PackageManagerTests
 }
 
 }
+#endif
 #endif

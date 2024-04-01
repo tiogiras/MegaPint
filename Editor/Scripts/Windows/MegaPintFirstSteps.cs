@@ -95,6 +95,8 @@ namespace Editor.Scripts.Windows
                     : "Could not connect asset due to an unknown issue.",
                 "OK");
             
+            ContextMenu.Open();
+            
             Close();
         }
 
