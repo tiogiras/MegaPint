@@ -5,7 +5,7 @@ namespace Editor.Scripts.Settings
 {
 
 [Serializable]
-internal class MegaPintSettingsStruct
+public class MegaPintSettingsStruct
 {
     public MegaPintSerializableDictionary <string, string> stringValues;
     public MegaPintSerializableDictionary <string, float> floatValues;
