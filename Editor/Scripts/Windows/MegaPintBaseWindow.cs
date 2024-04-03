@@ -99,6 +99,9 @@ namespace Editor.Scripts.Windows
 
             VisualElement root = rootVisualElement;
 
+            GUI.GUIUtility.DisplaySplashScreen(root);
+            
+            return; // TODO remove testing
             VisualElement content = _baseWindow.Instantiate();
 
             #region References

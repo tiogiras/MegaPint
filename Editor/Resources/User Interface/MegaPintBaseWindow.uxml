@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=2f2b50e0e132e3a4989e6dbb646711fa&amp;type=3#MegaPint" />
-    <ui:GroupBox style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; background-image: resource(&apos;Images/Background/Background 1&apos;); border-bottom-width: 1px; border-bottom-color: rgb(0, 0, 0); align-items: center; flex-direction: row; justify-content: center;">
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/User%20Interface/Stylesheets/MegaPint%20Interactables.uss?fileID=7433441132597879392&amp;guid=2f2b50e0e132e3a4989e6dbb646711fa&amp;type=3#MegaPint Interactables" />
+    <ui:GroupBox name="Title" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; background-image: resource(&apos;Images/Background/Background 1&apos;); border-bottom-width: 1px; border-bottom-color: rgb(0, 0, 0); align-items: center; flex-direction: row; justify-content: center;">
         <ui:Button text="MegaPint of Code" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_DevMode" style="-unity-font-style: bold; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); -unity-font-definition: initial; font-size: 24px; color: rgb(209, 0, 114); background-color: rgba(88, 88, 88, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; margin-top: 5px; margin-right: 0; margin-bottom: 5px; margin-left: 0;" />
         <ui:Label tabindex="-1" text="v1.0.0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="VersionNumber" style="-unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); height: 100%; -unity-text-align: lower-left; margin-top: 0; padding-top: 10px; padding-bottom: 10px; font-size: 10px; position: absolute; right: 0; bottom: 0;" />
     </ui:GroupBox>
@@ -8,7 +8,7 @@
         <ui:Button text="Update" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Update" class="megapint-button-nomargin" style="margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px;" />
         <ui:Label tabindex="-1" text="New MegaPint Version available." parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;);" />
     </ui:GroupBox>
-    <ui:TwoPaneSplitView fixed-pane-initial-size="200" fixed-pane-initial-dimension="300" style="height: 5000px; flex-shrink: 1;">
+    <ui:TwoPaneSplitView fixed-pane-initial-size="200" fixed-pane-initial-dimension="300" name="SplitView" style="height: 5000px; flex-shrink: 1;">
         <ui:GroupBox style="background-image: resource(&apos;Images/Background/Background 2&apos;); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: auto; min-width: 300px;">
             <ui:GroupBox style="flex-direction: row; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: center; justify-content: center;">
                 <ui:Button display-tooltip-when-elided="true" enable-rich-text="false" focusable="false" text="Packages" name="BTN_Packages" class="megapint-button" style="width: 48%; justify-content: center; align-items: center;" />
@@ -36,4 +36,9 @@
             <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="RightPane" style="flex-grow: 1; height: 100%; width: 100%;" />
         </ui:GroupBox>
     </ui:TwoPaneSplitView>
+    <ui:VisualElement name="SplashScreen" style="background-color: rgb(25, 25, 25); flex-grow: 1; width: 100%; height: 100%;">
+        <ui:VisualElement style="width: 33%; height: 100%; justify-content: center; align-self: center;">
+            <Editor.Scripts.AspectRatioPanel aspect-ratio-x="576" aspect-ratio-y="303" scale="1" style="background-image: resource(&apos;Images/MegaPintLogo (1)&apos;); justify-content: center; align-self: center; width: 50%; height: 50%;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>
