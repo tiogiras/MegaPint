@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Editor.Scripts.PackageManager.Cache;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
@@ -35,7 +38,7 @@ public static class GUIUtility
         target.RemoveFromClassList(s_linkCursorClassName);
     }
 
-    public static async void DisplaySplashScreen(VisualElement root, float speed = .05f)
+    private static VisualElement CreateSplashScreen(VisualElement root, out VisualElement[] loadingIcon, out VisualElement logo)
     {
         var treeAsset = Resources.Load <VisualTreeAsset>("User Interface/Splash Screen");
 
@@ -44,53 +47,66 @@ public static class GUIUtility
         splashScreen.style.flexShrink = 1;
         
         root.Add(splashScreen);
-
-        VisualElement logo = splashScreen.Q("Logo");
-        VisualElement[] loadingIcon = GetLoadingIcon(splashScreen.Q("Loading"));
-
-        const int RefreshRate = 1;
         
-        var loadingTime = 0f;
-        var fadeInProgress = 0f;
-        
-        while (splashScreen != null)
-        {
-            if (fadeInProgress < 1)
-                fadeInProgress += speed;
-            
-            logo.style.opacity = fadeInProgress;
+        loadingIcon = GetLoadingIcon(splashScreen.Q("Loading"));
+        logo = splashScreen.Q("Logo");
 
-            loadingTime += RefreshRate;
-            HandleLoadingIcon(loadingIcon, loadingTime);
-
-            await Task.Delay(RefreshRate);
-        }
+        return splashScreen;
     }
     
-    private static void HandleLoadingIcon(VisualElement[] elements, float loadingTime)
+    public static async void DisplaySplashScreen(VisualElement root, Action method, int refreshRate = 1, float speed = .05f)
     {
-        var cycleTime = 20f;
+        VisualElement splashScreen = CreateSplashScreen(
+            root,
+            out VisualElement[] loadingIcon,
+            out VisualElement logo);
+
+        var cacheRefreshed = false;
+        
+        PackageCache.onCacheRefreshed += () => {cacheRefreshed = true;};
+        
+        var loadingTime = 0;
+        var fadeInProgress = 0f;
+
+        while (!cacheRefreshed || fadeInProgress < 1)
+        {
+            if (fadeInProgress < 1)
+            {
+                fadeInProgress += speed;
+                fadeInProgress = Mathf.Clamp01(fadeInProgress);
+                logo.style.opacity = fadeInProgress;
+            }
+
+            loadingTime += refreshRate;
+            HandleLoadingIcon(loadingIcon, loadingTime);
+
+            await Task.Delay(refreshRate);
+        }
+
+        splashScreen.RemoveFromHierarchy();
+
+        method?.Invoke();
+    }
+    
+    private static void HandleLoadingIcon(IReadOnlyList <VisualElement> elements, int loadingTime)
+    {
+        const float CycleTime = 20f;
 
         for (var i = 0; i < 12; i++)
         {
-            var individualTime = loadingTime + i * cycleTime / 6;
-            
-            /*if (individualTime < 0)
-                continue;*/
-            
+            var individualTime = loadingTime + i * CycleTime / 6;
+
             VisualElement element = elements[i];
             
-            var fadeIn = Mathf.CeilToInt(individualTime / cycleTime) % 2 == 0;
+            var fadeIn = Mathf.CeilToInt(individualTime / CycleTime) % 2 == 0;
             
             
-            var rest = individualTime % cycleTime;
+            var rest = individualTime % CycleTime;
             
             if (rest == 0)
                 continue;
             
-            var opacity = Mathf.Lerp(fadeIn ? 0 : 1, fadeIn ? 1 : 0, rest / cycleTime);
-
-            Debug.Log($"{fadeIn}: op: {opacity} mod:{individualTime % cycleTime}");
+            var opacity = Mathf.Lerp(fadeIn ? 0 : 1, fadeIn ? 1 : 0, rest / CycleTime);
 
             element.style.opacity = opacity;
         }

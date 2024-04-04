@@ -36,9 +36,4 @@
             <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="RightPane" style="flex-grow: 1; height: 100%; width: 100%;" />
         </ui:GroupBox>
     </ui:TwoPaneSplitView>
-    <ui:VisualElement name="SplashScreen" style="background-color: rgb(25, 25, 25); flex-grow: 1; width: 100%; height: 100%;">
-        <ui:VisualElement style="width: 33%; height: 100%; justify-content: center; align-self: center;">
-            <Editor.Scripts.AspectRatioPanel aspect-ratio-x="576" aspect-ratio-y="303" scale="1" style="background-image: resource(&apos;Images/MegaPintLogo (1)&apos;); justify-content: center; align-self: center; width: 50%; height: 50%;" />
-        </ui:VisualElement>
-    </ui:VisualElement>
 </ui:UXML>

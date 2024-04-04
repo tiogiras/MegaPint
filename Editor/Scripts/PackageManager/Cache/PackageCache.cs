@@ -25,6 +25,8 @@ internal static class PackageCache
 
     /// <summary> Newest Version of the MegaPint basePackage </summary>
     public static string NewestBasePackageVersion {get; private set;}
+    
+    public static bool WasInitialized {get; private set;}
 
     #region Public Methods
 
@@ -158,7 +160,7 @@ internal static class PackageCache
     private static async void Initialize()
     {
         IEnumerable <PackageData> mpPackages = DataCache.AllPackages;
-        List <PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages(); // TODO lucidchart Class Reference
+        List <PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages();
 
         GetInstalledPackageNames(installedPackages, out List <string> installedPackagesNames);
 
@@ -191,6 +193,8 @@ internal static class PackageCache
             cachedPackage.RegisterDependencies(valuePair.Value);
         }
 
+        WasInitialized = true;
+        
         onCacheRefreshed?.Invoke();
     }
 

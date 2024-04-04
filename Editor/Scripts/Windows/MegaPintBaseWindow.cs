@@ -99,9 +99,17 @@ namespace Editor.Scripts.Windows
 
             VisualElement root = rootVisualElement;
 
-            GUI.GUIUtility.DisplaySplashScreen(root);
-            
-            return; // TODO remove testing
+            if (!PackageCache.WasInitialized)
+            {
+                GUI.GUIUtility.DisplaySplashScreen(root, () => {CreateGUIContent(root);});
+                PackageCache.Refresh();
+            }
+            else
+                CreateGUIContent(root);
+        }
+
+        private void CreateGUIContent(VisualElement root)
+        {
             VisualElement content = _baseWindow.Instantiate();
 
             #region References
