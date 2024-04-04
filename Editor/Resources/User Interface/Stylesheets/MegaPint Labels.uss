@@ -1,0 +1,29 @@
+.heading-1 {
+    color: rgb(198, 0, 114);
+    -unity-font-style: bold;
+    font-size: 14px;
+    white-space: normal;
+    margin-bottom: 10px;
+    -unity-font-definition: initial;
+    -unity-font: resource('RobotoMono-VariableFont_wght');
+}
+
+.heading-2 {
+    color: rgb(210, 210, 210);
+    -unity-font-style: bold;
+    font-size: 12px;
+    white-space: normal;
+    margin-bottom: 5px;
+    -unity-font-definition: initial;
+    -unity-font: resource('RobotoMono-VariableFont_wght');
+}
+
+.heading-3 {
+    color: rgb(125, 125, 125);
+    -unity-font-style: bold;
+    font-size: 12px;
+    white-space: normal;
+    margin-bottom: 5px;
+    -unity-font-definition: initial;
+    -unity-font: resource('RobotoMono-VariableFont_wght');
+}
