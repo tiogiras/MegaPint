@@ -1,10 +1,15 @@
+.link {
+}
+
 .link-cursor {
     cursor: link;
+    -unity-font: resource('Roboto Mono');
+    -unity-font-definition: initial;
 }
 
 .megapint-button {
     -unity-font-definition: initial;
-    -unity-font: resource('RobotoMono-VariableFont_wght');
+    -unity-font: resource('Roboto Mono');
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
@@ -25,7 +30,7 @@
     margin-top: 5px;
     margin-bottom: 5px;
     -unity-font-definition: initial;
-    -unity-font: resource('RobotoMono-VariableFont_wght');
+    -unity-font: resource('Roboto Mono');
     -unity-font-style: normal;
     border-left-width: 1px;
     border-right-width: 1px;
@@ -46,7 +51,7 @@
     margin-top: 5px;
     margin-bottom: 5px;
     -unity-font-definition: initial;
-    -unity-font: resource('RobotoMono-VariableFont_wght');
+    -unity-font: resource('Roboto Mono');
     -unity-font-style: normal;
     border-left-width: 1px;
     border-right-width: 1px;

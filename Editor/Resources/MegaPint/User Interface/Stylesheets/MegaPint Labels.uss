@@ -1,0 +1,5 @@
+.normal-text {
+    white-space: normal;
+    -unity-font-definition: initial;
+    -unity-font: resource('Roboto Mono');
+}

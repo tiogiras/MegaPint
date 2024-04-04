@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/Stylesheets/MegaPint%20Headlines.uss?fileID=7433441132597879392&amp;guid=e7576e2a9200d89498645565b9f9b674&amp;type=3#MegaPint Headlines" />
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/Stylesheets/MegaPint%20Interactables.uss?fileID=7433441132597879392&amp;guid=2f2b50e0e132e3a4989e6dbb646711fa&amp;type=3#MegaPint Interactables" />
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/Stylesheets/MegaPint%20Labels.uss?fileID=7433441132597879392&amp;guid=50f56c74345dc1d438f9f8c2222f7bdb&amp;type=3#MegaPint Labels" />
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/Stylesheets/MegaPint%20Structure.uss?fileID=7433441132597879392&amp;guid=4446cbcdbf0ef264ebd2e8a8dd9347af&amp;type=3#MegaPint Structure" />
+    <ui:VisualElement class="root-element" style="flex-grow: 1; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
+        <ui:Label text="Contact" class="heading-1" style="background-color: rgb(37, 37, 37); padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; -unity-text-align: upper-center;" />
+        <ui:Label text="My name is Niklas (aka. Tiogiras).&#10;&#10;If you wish to contact me to report an issue or anything else you can use my &lt;link=&quot;discord&quot;&gt;Discord&lt;/link&gt; or contact me through my &lt;link=&quot;email&quot;&gt;email adress&lt;/link&gt;.&#10;&#10;More information about MegaPint and my other projects are available on my &lt;link=&quot;website&quot;&gt;website&lt;/link&gt;." class="normal-text link" style="-unity-text-align: upper-center;" />
+    </ui:VisualElement>
+</ui:UXML>

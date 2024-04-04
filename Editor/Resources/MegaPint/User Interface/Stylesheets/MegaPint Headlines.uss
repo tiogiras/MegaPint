@@ -5,7 +5,7 @@
     white-space: normal;
     margin-bottom: 10px;
     -unity-font-definition: initial;
-    -unity-font: resource('RobotoMono-VariableFont_wght');
+    -unity-font: resource('Roboto Mono');
 }
 
 .heading-2 {
@@ -15,7 +15,7 @@
     white-space: normal;
     margin-bottom: 5px;
     -unity-font-definition: initial;
-    -unity-font: resource('RobotoMono-VariableFont_wght');
+    -unity-font: resource('Roboto Mono');
 }
 
 .heading-3 {
@@ -25,5 +25,5 @@
     white-space: normal;
     margin-bottom: 5px;
     -unity-font-definition: initial;
-    -unity-font: resource('RobotoMono-VariableFont_wght');
+    -unity-font: resource('Roboto Mono');
 }

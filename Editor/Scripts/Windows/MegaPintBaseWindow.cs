@@ -18,10 +18,10 @@ namespace Editor.Scripts.Windows
     {
         #region Const
 
-        private const string PackageItem = "User Interface/MegaPintBasePackageItem";
-        private const string SettingItem = "User Interface/MegaPintBaseSettingItem";
+        private const string PackageItem = "MegaPint/User Interface/Windows/Base Window/Package Item";
+        private const string SettingItem = "MegaPint/User Interface/Windows/Base Window/Setting Item";
 
-        private const string RightPaneContentBase = "xxx/User Interface/DisplayContent";
+        private const string RightPaneContentBase = "xxx/User Interface/Display Content";
 
         #endregion
 
@@ -80,7 +80,7 @@ namespace Editor.Scripts.Windows
 
         #region Override Methods
 
-        protected override string BasePath() => "User Interface/MegaPintBaseWindow";
+        protected override string BasePath() => "MegaPint/User Interface/Windows/Base Window";
         
         public override MegaPintEditorWindowBase ShowWindow()
         {

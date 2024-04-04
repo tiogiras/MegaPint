@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Editor.Scripts.PackageManager.Cache;
 using UnityEngine;
@@ -20,10 +21,38 @@ public static class GUIUtility
         links.ForEach(
             link =>
             {
+                link.text = ColorLinks(link.text);
+                
                 link.RegisterCallback(linkCallback);
                 link.RegisterCallback<PointerOverLinkTagEvent>(HyperlinkOnPointerOver);
                 link.RegisterCallback<PointerOutLinkTagEvent>(HyperlinkOnPointerOut);
             });
+    }
+
+    private static string ColorLinks(string str)
+    {
+        var linkStarts = str.Split("<link=");
+
+        var builder = new StringBuilder(linkStarts[0]);
+        
+        for (var i = 1; i < linkStarts.Length; i++)
+        {
+            builder.Append("<b><color=#D10072><link=");
+            builder.Append(linkStarts[i]);
+        }
+        
+        var linkEnds = builder.ToString().Split("</link>");
+
+        builder.Clear();
+        builder.Append(linkEnds[0]);
+
+        for (var i = 1; i < linkEnds.Length; i++)
+        {
+            builder.Append("</link></color></b>");
+            builder.Append(linkEnds[i]);
+        }
+
+        return builder.ToString();
     }
 
     private static void HyperlinkOnPointerOver(PointerOverLinkTagEvent evt)
@@ -40,7 +69,7 @@ public static class GUIUtility
 
     private static VisualElement CreateSplashScreen(VisualElement root, out VisualElement[] loadingIcon, out VisualElement logo)
     {
-        var treeAsset = Resources.Load <VisualTreeAsset>("User Interface/Splash Screen");
+        var treeAsset = Resources.Load <VisualTreeAsset>("MegaPint/User Interface/Windows/Splash Screen");
 
         VisualElement splashScreen = treeAsset.Instantiate();
         splashScreen.style.flexGrow = 1;
