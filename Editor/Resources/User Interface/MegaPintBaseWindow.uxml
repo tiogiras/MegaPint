@@ -12,7 +12,7 @@
         <ui:GroupBox style="background-image: resource(&apos;Images/Background/Background 2&apos;); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: auto; min-width: 300px;">
             <ui:GroupBox style="flex-direction: row; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: center; justify-content: center;">
                 <ui:Button display-tooltip-when-elided="true" enable-rich-text="false" focusable="false" text="Packages" name="BTN_Packages" class="megapint-button" style="width: 48%; justify-content: center; align-items: center;" />
-                <ui:Button display-tooltip-when-elided="true" enable-rich-text="false" focusable="false" text="FAQs" name="BTN_Settings" class="megapint-button" style="width: 48%; justify-content: center; align-items: center;" />
+                <ui:Button display-tooltip-when-elided="true" enable-rich-text="false" focusable="false" text="Info" name="BTN_Settings" class="megapint-button" style="width: 48%; justify-content: center; align-items: center;" />
             </ui:GroupBox>
             <ui:IMGUIContainer style="background-image: none; height: 1.5px; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; background-color: rgb(88, 88, 88);" />
             <uie:Toolbar style="background-color: rgba(60, 60, 60, 0);">
@@ -22,14 +22,7 @@
                 <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="flex-shrink: 1; flex-basis: auto; flex-grow: 0; flex-direction: column;">
                     <ui:ListView focusable="true" name="PackagesList" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None" style="margin-left: 5px; margin-right: 0;" />
                     <ui:ListView focusable="true" name="SettingsList" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None" style="margin-left: 5px; margin-right: 0;" />
-                    <ui:Label text="Loading..." display-tooltip-when-elided="true" name="Loading" style="-unity-text-align: upper-left; -unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); -unity-font-style: bold; font-size: 12.5px; margin-top: 3px; margin-bottom: 3px; margin-left: 10px; margin-right: 0;" />
                 </ui:ScrollView>
-                <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 0; flex-basis: auto;">
-                    <ui:IMGUIContainer style="background-image: none; height: 2px; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; background-color: rgb(88, 88, 88);" />
-                    <ui:GroupBox style="flex-direction: row-reverse; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
-                        <ui:Button display-tooltip-when-elided="true" name="OpenImporter" style="-unity-text-align: middle-center; white-space: nowrap; background-image: resource(&apos;Images/New Project (2)&apos;); width: 20px; height: 20px;" />
-                    </ui:GroupBox>
-                </ui:GroupBox>
             </ui:GroupBox>
         </ui:GroupBox>
         <ui:GroupBox style="background-image: resource(&apos;Images/Background/Background 3&apos;); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; min-width: 40%;">

@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,10 +29,11 @@ namespace Editor.Scripts.Windows
 
         #region Visual References
 
+        private VisualElement _root;
+        
         private GroupBox _rightPane;
         private GroupBox _content;
         
-        private Label _loading;
         private Label _packageName;
         private Label _version;
         private Label _lastUpdate;
@@ -73,8 +73,6 @@ namespace Editor.Scripts.Windows
 
         private CachedPackage _currentPackage;
         private int _currentIndex;
-        
-        private int _currentLoadingLabelProgress;
 
         #endregion
 
@@ -94,16 +92,27 @@ namespace Editor.Scripts.Windows
         {
             base.CreateGUI();
 
-            VisualElement root = rootVisualElement;
+            _root = rootVisualElement;
 
+            PackageCache.onCacheStartRefreshing += StartCacheRefresh;
+            
+            if (!PackageCache.WasInitialized)
+            {
+                PackageCache.Refresh();
+            }
+            else
+                CreateGUIContent(_root);
+        }
+
+        private void CreateGUIContent(VisualElement root)
+        {
             VisualElement content = _baseWindow.Instantiate();
 
             #region References
 
             _packages = content.Q<ScrollView>("Packages");
             _list = content.Q<ListView>("MainList");
-            _loading = content.Q<Label>("Loading");
-            
+
             _rightPane = content.Q<GroupBox>("RightPane");
             _packageName = _rightPane.Q<Label>("PackageName");
             _content = _rightPane.Q<GroupBox>("Content");
@@ -148,11 +157,8 @@ namespace Editor.Scripts.Windows
             _packageVariations.destroyItem = element => element.Clear();
 
             #endregion
-
-            _loading.style.display = DisplayStyle.Flex;
-            _packages.style.display = DisplayStyle.None;
             
-            PackageCache.Refresh();
+            SetDisplayedPackages(_packageSearch.value);
 
             OnUpdateRightPane();
 
@@ -171,14 +177,16 @@ namespace Editor.Scripts.Windows
 
         protected override void RegisterCallbacks()
         {
-            MegaPintPackageManager.onRefreshingPackages += _onLoadingPackages;
-            PackageCache.onCacheRefreshed += _onPackagesLoaded;
-            
             _packageSearch.RegisterValueChangedCallback(OnSearchStringChanged);
             
             _list.selectedIndicesChanged += OnUpdateRightPane;
 
             ButtonSubscriptions(true);
+        }
+
+        private void StartCacheRefresh()
+        {
+            GUI.GUIUtility.DisplaySplashScreen(_root, () => {CreateGUIContent(_root);});
         }
 
         private void ButtonSubscriptions(bool status)
@@ -203,8 +211,7 @@ namespace Editor.Scripts.Windows
 
         protected override void UnRegisterCallbacks()
         {
-            MegaPintPackageManager.onRefreshingPackages -= _onLoadingPackages;
-            PackageCache.onCacheRefreshed -= _onPackagesLoaded;
+            PackageCache.onCacheStartRefreshing -= StartCacheRefresh;
             
             _packageSearch.UnregisterValueChangedCallback(OnSearchStringChanged);
             
@@ -216,28 +223,6 @@ namespace Editor.Scripts.Windows
         #endregion
 
         #region Callbacks
-
-        private Action _onLoadingPackages => () =>
-        {
-            _loading.style.display = DisplayStyle.Flex;
-            _packages.style.display = DisplayStyle.None;
-
-            PackageManagerUtility.UpdateLoadingLabel(
-                _loading, 
-                _currentLoadingLabelProgress, 
-                30, 
-                out _currentLoadingLabelProgress);
-        };
-
-        private Action _onPackagesLoaded => () =>
-        {
-            _loading.style.display = DisplayStyle.None;
-            _packages.style.display = DisplayStyle.Flex;
-
-            _currentLoadingLabelProgress = 0;
-
-            SetDisplayedPackages(_packageSearch.value);
-        };
 
         private void OnSearchStringChanged(ChangeEvent<string> evt) => SetDisplayedPackages(_packageSearch.value);
         
@@ -517,7 +502,6 @@ namespace Editor.Scripts.Windows
 
         private void SetDisplayedPackages(string searchString)
         {
-            _loading.style.display = DisplayStyle.None;
             _packages.style.display = DisplayStyle.Flex;
             
             _displayedPackages = searchString.Equals("") ? 

@@ -29,12 +29,6 @@ namespace Editor.Scripts.Settings.BaseSettings
                 {
                     new()
                     {
-                        settingKey = SettingKey.Contact,
-                        settingName = "Contact",
-                        intendLevel = 1
-                    },
-                    new()
-                    {
                         settingName = "How To's",
                         intendLevel = 1,
                         subSettings = new List<Setting>
@@ -60,6 +54,12 @@ namespace Editor.Scripts.Settings.BaseSettings
                         }
                     }
                 }
+            },
+            new Setting
+            {
+                settingKey = SettingKey.Contact,
+                settingName = "Contact",
+                intendLevel = 0
             }
         };
         

@@ -56,6 +56,8 @@ public static class GUIUtility
     
     public static async void DisplaySplashScreen(VisualElement root, Action method, int refreshRate = 1, float speed = .05f)
     {
+        root.Clear();
+        
         VisualElement splashScreen = CreateSplashScreen(
             root,
             out VisualElement[] loadingIcon,

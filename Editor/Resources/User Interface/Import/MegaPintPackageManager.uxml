@@ -1,16 +1,13 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=2f2b50e0e132e3a4989e6dbb646711fa&amp;type=3#MegaPint" />
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/User%20Interface/Stylesheets/MegaPint%20Interactables.uss?fileID=7433441132597879392&amp;guid=2f2b50e0e132e3a4989e6dbb646711fa&amp;type=3#MegaPint Interactables" />
     <ui:TwoPaneSplitView fixed-pane-initial-size="200" fixed-pane-initial-dimension="200" fixed-pane-index="0" tabindex="0" style="height: 5000px; width: auto; -unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;);">
         <ui:GroupBox style="background-image: resource(&apos;Images/Background/Background 2&apos;); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: auto; min-width: 200px; width: 200px; max-width: 300px;">
             <uie:Toolbar style="background-color: rgba(60, 60, 60, 0);">
                 <uie:ToolbarSearchField focusable="true" name="PackageSearch" style="-unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;);" />
             </uie:Toolbar>
-            <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: space-between; height: auto; flex-grow: 1;">
-                <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="Packages" style="flex-shrink: 1; flex-basis: auto; flex-grow: 0; flex-direction: column;">
-                    <ui:ListView focusable="true" name="MainList" virtualization-method="DynamicHeight" show-bound-collection-size="false" />
-                </ui:ScrollView>
-                <ui:Label text="Loading..." display-tooltip-when-elided="true" name="Loading" style="-unity-text-align: upper-left; -unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); -unity-font-style: bold; font-size: 12.5px; margin-top: 3px; margin-bottom: 3px; margin-left: 10px; margin-right: 0;" />
-            </ui:GroupBox>
+            <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="Packages" style="flex-shrink: 1; flex-basis: auto; flex-grow: 1; flex-direction: column;">
+                <ui:ListView focusable="true" name="MainList" virtualization-method="DynamicHeight" show-bound-collection-size="false" />
+            </ui:ScrollView>
         </ui:GroupBox>
         <ui:GroupBox name="RightPane" style="background-image: resource(&apos;Images/Background/Background 3&apos;); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: auto; min-width: 40%;">
             <ui:GroupBox name="Content" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: space-between; flex-grow: 1; flex-shrink: 0; height: 100%; flex-basis: auto;">

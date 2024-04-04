@@ -18,6 +18,8 @@ internal static class PackageCache
     /// <summary> Called when the cache was refreshed </summary>
     public static Action onCacheRefreshed;
 
+    public static Action onCacheStartRefreshing;
+
     private static readonly Dictionary <PackageKey, CachedPackage> s_cache = new();
 
     /// <summary> <see cref="PackageInfo" /> of the MegaPint basePackage </summary>
@@ -159,6 +161,8 @@ internal static class PackageCache
 
     private static async void Initialize()
     {
+        onCacheStartRefreshing?.Invoke();
+        
         IEnumerable <PackageData> mpPackages = DataCache.AllPackages;
         List <PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages();
 
