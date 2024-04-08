@@ -75,7 +75,7 @@ public static class RootElement
 
     private static readonly ThemedColor s_secondaryText = new()
     {
-        darkColor = new Color(0.84f, 0.84f, 0.84f),
+        darkColor = new Color(0.63f, 0.63f, 0.63f),
         lightColor = new Color(0.84f, 0.84f, 0.84f)
     };
 

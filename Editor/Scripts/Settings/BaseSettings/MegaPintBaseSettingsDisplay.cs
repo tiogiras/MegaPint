@@ -33,7 +33,7 @@ namespace Editor.Scripts.Settings.BaseSettings
             switch (key)
             {
                 case MegaPintBaseSettingsData.SettingKey.Contact: ContactLogic(root); break;
-                case MegaPintBaseSettingsData.SettingKey.ManagePackages: break;
+                case MegaPintBaseSettingsData.SettingKey.ManagePackages: ManagePackagesLogic(root); break;
                 case MegaPintBaseSettingsData.SettingKey.UsePackages: break;
                 case MegaPintBaseSettingsData.SettingKey.UpdateBasePackage: break;
                 default: return;
@@ -61,6 +61,29 @@ namespace Editor.Scripts.Settings.BaseSettings
                         case "website":
                             Application.OpenURL("https://tiogiras.games");
 
+                            break;
+                    }
+                });
+        }
+        
+        private static void ManagePackagesLogic(VisualElement root)
+        {
+            GUIUtility.ActivateLinks(
+                root,
+                evt =>
+                {
+                    switch (evt.linkID)
+                    {
+                        case "github":
+                            Application.OpenURL("https://github.com/tiogiras/MegaPint");
+                            break;
+                        
+                        case "MegaPint/PackageManager":
+                            
+                            break;
+                        
+                        case "website":
+                            Application.OpenURL("https://tiogiras.games");
                             break;
                     }
                 });
