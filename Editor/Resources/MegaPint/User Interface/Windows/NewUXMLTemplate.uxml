@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:GroupBox name="Title" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; background-image: resource(&apos;Images/Background/Background 1&apos;); border-bottom-width: 1px; border-bottom-color: rgb(0, 0, 0); align-items: center; flex-direction: row; justify-content: center;">
+        <ui:Button text="MegaPint of Code" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_DevMode" style="-unity-font-style: bold; -unity-font: resource(&apos;Roboto Mono&apos;); -unity-font-definition: initial; font-size: 24px; color: rgb(209, 0, 114); background-color: rgba(88, 88, 88, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; margin-top: 5px; margin-right: 0; margin-bottom: 5px; margin-left: 0;" />
+        <ui:Label tabindex="-1" text="v1.0.0" parse-escape-sequences="true" display-tooltip-when-elided="true" name="VersionNumber" style="-unity-font-definition: initial; -unity-font: resource(&apos;Roboto Mono&apos;); height: 100%; -unity-text-align: lower-left; margin-top: 0; padding-top: 10px; padding-bottom: 10px; font-size: 10px; position: absolute; right: 0; bottom: 0;" />
+    </ui:GroupBox>
+    <ui:GroupBox name="UpdateBasePackage" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; background-image: resource(&apos;Images/Background/Background 2&apos;); border-bottom-width: 1px; border-bottom-color: rgb(0, 0, 0); align-items: center; flex-direction: row-reverse; justify-content: flex-start;">
+        <ui:Button text="Update" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Update" class="megapint-button-nomargin" style="margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px;" />
+        <ui:Label tabindex="-1" text="New MegaPint Version available." parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-font-definition: initial; -unity-font: resource(&apos;Roboto Mono&apos;);" />
+    </ui:GroupBox>
+    <ui:TwoPaneSplitView fixed-pane-initial-size="200" fixed-pane-initial-dimension="300" name="SplitView" style="height: 5000px; flex-shrink: 1;">
+        <ui:GroupBox style="background-image: resource(&apos;Images/Background/Background 2&apos;); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: auto; min-width: 300px;">
+            <ui:GroupBox style="flex-direction: row; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: center; justify-content: center;">
+                <ui:Button display-tooltip-when-elided="true" enable-rich-text="false" focusable="false" text="Packages" name="BTN_Packages" class="megapint-button" style="width: 48%; justify-content: center; align-items: center;" />
+                <ui:Button display-tooltip-when-elided="true" enable-rich-text="false" focusable="false" text="Info" name="BTN_Settings" class="megapint-button" style="width: 48%; justify-content: center; align-items: center;" />
+            </ui:GroupBox>
+            <ui:IMGUIContainer style="background-image: none; height: 1.5px; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; background-color: rgb(88, 88, 88);" />
+            <uie:Toolbar style="background-color: rgba(60, 60, 60, 0);">
+                <uie:ToolbarSearchField focusable="true" name="SearchField" />
+            </uie:Toolbar>
+            <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: space-between; height: auto; flex-grow: 1;">
+                <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="flex-shrink: 1; flex-basis: auto; flex-grow: 0; flex-direction: column;">
+                    <ui:ListView focusable="true" name="PackagesList" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None" style="margin-left: 5px; margin-right: 0;" />
+                    <ui:ListView focusable="true" name="SettingsList" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None" style="margin-left: 5px; margin-right: 0;" />
+                </ui:ScrollView>
+            </ui:GroupBox>
+        </ui:GroupBox>
+        <ui:GroupBox style="background-image: resource(&apos;Images/Background/Background 3&apos;); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; min-width: 40%;">
+            <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="RightPane" style="flex-grow: 1; height: 100%; width: 100%;" />
+        </ui:GroupBox>
+    </ui:TwoPaneSplitView>
+</ui:UXML>

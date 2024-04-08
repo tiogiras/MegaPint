@@ -11,6 +11,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using GUIUtility = Editor.Scripts.GUI.GUIUtility;
 
 namespace Editor.Scripts.Windows
 {
@@ -30,7 +31,7 @@ namespace Editor.Scripts.Windows
         private VisualElement _root;
 
         private VisualElement _rightPane;
-        private GroupBox _updateBasePackage;
+        private VisualElement _updateBasePackage;
         
         private Label _versionNumber;
         
@@ -108,12 +109,14 @@ namespace Editor.Scripts.Windows
 
         private void StartCacheRefresh()
         {
-            GUI.GUIUtility.DisplaySplashScreen(_root, () => {CreateGUIContent(_root);});
+            GUIUtility.DisplaySplashScreen(_root, () => {CreateGUIContent(_root);});
         }
 
         private void CreateGUIContent(VisualElement root)
         {
             VisualElement content = _baseWindow.Instantiate();
+            GUIUtility.ApplyTheme(content);
+            
             root.Add(content);
 
             #region References
@@ -131,7 +134,7 @@ namespace Editor.Scripts.Windows
             _btnDevMode = content.Q <Button>("BTN_DevMode");
             _versionNumber = content.Q <Label>("VersionNumber");
 
-            _updateBasePackage = content.Q <GroupBox>("UpdateBasePackage");
+            _updateBasePackage = content.Q <VisualElement>("UpdateBasePackage");
             _btnUpdate = _updateBasePackage.Q <Button>("BTN_Update");
 
             #endregion
@@ -140,7 +143,12 @@ namespace Editor.Scripts.Windows
 
             #region Packages List
 
-            _packagesList.makeItem = () => _packageItem.Instantiate();
+            _packagesList.makeItem = () => {
+                TemplateContainer item = _packageItem.Instantiate();
+                GUIUtility.ApplyTheme(item);
+                
+                return item;
+            };
             
             _packagesList.bindItem = (element, i) =>
             {
@@ -166,7 +174,13 @@ namespace Editor.Scripts.Windows
 
             #region Settings List
 
-            _settingsList.makeItem = () => _settingItem.Instantiate();
+            _settingsList.makeItem = () =>
+            {
+                TemplateContainer item = _settingItem.Instantiate();
+                GUIUtility.ApplyTheme(item);
+                
+                return item;
+            };
             
             _settingsList.bindItem = (element, i) =>
             {
@@ -333,7 +347,13 @@ namespace Editor.Scripts.Windows
 
                 PackageKey currentPackageKey = ((CachedPackage)_packagesList.selectedItem).Key;
                 var contentPath = RightPaneContentBase.Replace("xxx", currentPackageKey.ToString());
-                TemplateContainer content = Resources.Load<VisualTreeAsset>(contentPath).Instantiate();
+
+                var template = Resources.Load <VisualTreeAsset>(contentPath);
+                
+                if (template == null)
+                    return;
+                
+                TemplateContainer content = template.Instantiate();
             
                 DisplayContent.DisplayRightPane(currentPackageKey, content);
             
@@ -350,6 +370,8 @@ namespace Editor.Scripts.Windows
             }
             
             onRightPaneInitialization?.Invoke();
+            
+            _packagesList.ClearSelection();
         }
         
         public static void OnOpenPackageManager() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true, "Package Manager");

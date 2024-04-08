@@ -1,9 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/Stylesheets/MegaPint%20Headlines.uss?fileID=7433441132597879392&amp;guid=e7576e2a9200d89498645565b9f9b674&amp;type=3#MegaPint Headlines" />
-    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/Stylesheets/MegaPint%20Interactables.uss?fileID=7433441132597879392&amp;guid=2f2b50e0e132e3a4989e6dbb646711fa&amp;type=3#MegaPint Interactables" />
-    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/Stylesheets/MegaPint%20Labels.uss?fileID=7433441132597879392&amp;guid=50f56c74345dc1d438f9f8c2222f7bdb&amp;type=3#MegaPint Labels" />
-    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/Stylesheets/MegaPint%20Structure.uss?fileID=7433441132597879392&amp;guid=4446cbcdbf0ef264ebd2e8a8dd9347af&amp;type=3#MegaPint Structure" />
-    <ui:VisualElement style="border-bottom-width: 1px; border-bottom-color: rgb(20, 20, 20); border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;">
-        <ui:Label text="Package Name" display-tooltip-when-elided="true" name="PackageName" style="-unity-font-definition: initial; -unity-font: resource(&apos;Roboto Mono&apos;); white-space: normal; color: rgb(255, 255, 255); border-left-color: rgb(255, 0, 102); border-left-width: 2px; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; margin-left: 0; margin-right: 0; font-size: 13px;" />
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
+    <ui:VisualElement class="mpBg1AsBorderColor" style="border-bottom-width: 1px; border-bottom-color: rgb(255, 255, 255);">
+        <Editor.Scripts.GUI.Factories.Text tabindex="-1" text="Package Name" name="PackageName" class="mpPrimaryColorBorder" style="border-left-width: 2px; border-left-color: rgb(255, 255, 255);" />
     </ui:VisualElement>
 </ui:UXML>

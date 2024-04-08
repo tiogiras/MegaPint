@@ -12,8 +12,8 @@ namespace Editor.Scripts.GUI
 
 public static class GUIUtility
 {
-    private static string s_linkCursorClassName = "link-cursor";
-    
+    private const string LinkCursorClassName = "link-cursor";
+
     public static void ActivateLinks(VisualElement root, EventCallback <PointerUpLinkTagEvent> linkCallback)
     {
         UQueryBuilder <Label> links = root.Query<Label>(className: "link");
@@ -58,13 +58,13 @@ public static class GUIUtility
     private static void HyperlinkOnPointerOver(PointerOverLinkTagEvent evt)
     {
         var target = (VisualElement)evt.target;
-        target.AddToClassList(s_linkCursorClassName);
+        target.AddToClassList(LinkCursorClassName);
     }
     
     private static void HyperlinkOnPointerOut(PointerOutLinkTagEvent evt)
     {
         var target = (VisualElement)evt.target;
-        target.RemoveFromClassList(s_linkCursorClassName);
+        target.RemoveFromClassList(LinkCursorClassName);
     }
 
     private static VisualElement CreateSplashScreen(VisualElement root, out VisualElement[] loadingIcon, out VisualElement logo)
@@ -156,6 +156,138 @@ public static class GUIUtility
 
         return elements;
     }
+
+    public static void SetBorderWidth(VisualElement element, float width)
+    {
+        element.style.borderTopWidth = width;
+        element.style.borderRightWidth = width;
+        element.style.borderBottomWidth = width;
+        element.style.borderLeftWidth = width;
+    }
+    
+    public static void SetBorderColor(VisualElement element, Color color)
+    {
+        SetBorderColor(element, (StyleColor)color);
+    }
+    
+    public static void SetBorderColor(VisualElement element, StyleColor color)
+    {
+        element.style.borderTopColor = color;
+        element.style.borderRightColor = color;
+        element.style.borderBottomColor = color;
+        element.style.borderLeftColor = color;
+    }
+    
+    public static void SetBorderRadius(VisualElement element, float radius)
+    {
+        element.style.borderTopRightRadius = radius;
+        element.style.borderTopLeftRadius = radius;
+        element.style.borderBottomRightRadius = radius;
+        element.style.borderBottomLeftRadius = radius;
+    }
+    
+    public static void SetMargin(VisualElement element, float margin)
+    {
+        element.style.marginTop = margin;
+        element.style.marginRight = margin;
+        element.style.marginBottom = margin;
+        element.style.marginLeft = margin;
+    }
+
+    public static void ApplyTheme(VisualElement root)
+    {
+        foreach (var overwrite in Enum.GetNames(typeof(Overwrite)))
+        {
+            List <VisualElement> result = root.Query(className: overwrite).ToList();
+
+            if (result.Count == 0)
+                continue;
+            
+            RootElement.Overwrites[overwrite]?.Invoke(result);
+        }
+    }
+
+    public static void SubscribeInteractable(VisualElement element)
+    {
+        StyleColor defaultBackgroundColor = element.style.backgroundColor;
+        StyleColor defaultBorderColor = element.style.color;
+        
+        element.RegisterCallback <MouseOverEvent>(
+            evt =>
+            {
+                SetBorderColor(evt.target as VisualElement, RootElement.Colors.Primary);
+            });
+
+        element.RegisterCallback <MouseDownEvent>(
+            evt =>
+            {
+                ((VisualElement)evt.target).style.backgroundColor =
+                    RootElement.Colors.PrimaryInteracted;
+            },
+            TrickleDown.TrickleDown);
+        
+        element.RegisterCallback <MouseUpEvent>(
+            evt =>
+            {
+                ((VisualElement)evt.target).style.backgroundColor =
+                    defaultBackgroundColor;
+            },
+            TrickleDown.TrickleDown);
+
+        element.RegisterCallback <MouseOutEvent>(
+            evt =>
+            {
+                var target = (VisualElement)evt.target;
+                target.Blur();
+                
+                target.style.backgroundColor = defaultBackgroundColor;
+                SetBorderColor(target, defaultBorderColor);
+            });
+    }
+    
+    /*private void BeginHover(MouseOverEvent evt)
+        {
+            _hovered = true;
+
+            var element = (VisualElement)evt.target;
+            _defaultColor = element.style.backgroundColor;
+            _defaultBorderColor = element.style.borderTopColor;
+
+            Refresh(element);
+        }
+
+        private void EndHover(MouseOutEvent evt)
+        {
+            _hovered = false;
+            _pressed = false;
+
+            var element = (VisualElement)evt.target;
+            element.Blur();
+
+            Refresh(element);
+        }
+
+        private void OnMouseDown(MouseDownEvent evt)
+        {
+            _pressed = true;
+            Refresh(evt.target as VisualElement);
+        }
+
+        private void OnMouseUp(MouseUpEvent evt)
+        {
+            _pressed = false;
+            Refresh(evt.target as VisualElement);
+        }
+
+        private void Refresh(VisualElement element)
+        {
+            GUIUtility.SetBorderColor(
+                element,
+                _hovered ? RootElement.Colors.Primary : _defaultBorderColor);
+
+            element.style.backgroundColor =
+                _pressed ? RootElement.Colors.PrimaryInteracted : _defaultColor;
+        }*/
 }
 
 }
