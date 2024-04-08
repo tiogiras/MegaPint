@@ -1,0 +1,32 @@
+.mpFont {
+    -unity-font: resource('Roboto Mono');
+    -unity-font-definition: initial;
+}
+
+.link-cursor{
+    cursor: link;
+}
+
+.mpLink{}
+
+.mpPrimaryColorText {}
+
+.mpPrimaryColorBorder {}
+
+.mpTextColor {}
+
+.mpTextColorSecondary {}
+
+.mpBackground1 {}
+
+.mpBackground2 {}
+
+.mpBackground3 {}
+
+.mpInteraction {}
+
+.mpBg1AsBorderColor {}
+
+.mpPrimaryAsImageTint {}
+
+.dontChangeColorAfterInteract {}
