@@ -30,6 +30,8 @@ public static class RootElement
         public static Color TertiaryBack => s_tertiaryBack.Value();
         
         public static Color Separator => s_separatorColor.Value();
+        
+        public static Color ButtonColor => s_buttonColor.Value();
     }
 
     private class ThemedColor
@@ -96,6 +98,12 @@ public static class RootElement
     };
 
     private static readonly ThemedColor s_separatorColor = new()
+    {
+        darkColor = new Color(0.35f, 0.35f, 0.35f),
+        lightColor = new Color(0.35f, 0.35f, 0.35f)
+    };    
+    
+    private static readonly ThemedColor s_buttonColor = new()
     {
         darkColor = new Color(0.35f, 0.35f, 0.35f),
         lightColor = new Color(0.35f, 0.35f, 0.35f)

@@ -1,5 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=2f2b50e0e132e3a4989e6dbb646711fa&amp;type=3#MegaPint" />
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="True">
     <ui:GroupBox style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; background-image: resource(&apos;Images/Background/Background 1&apos;); border-left-color: rgba(0, 0, 0, 255); border-right-color: rgba(0, 0, 0, 255); border-top-color: rgba(0, 0, 0, 255); border-bottom-color: rgba(0, 0, 0, 255); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;">
         <ui:Label text="MegaPint of Code" display-tooltip-when-elided="true" style="font-size: 24px; -unity-text-align: upper-center; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-top: 5px; margin-bottom: 5px; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); -unity-font-definition: initial; -unity-font-style: bold; color: rgb(209, 0, 114); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;" />
     </ui:GroupBox>
