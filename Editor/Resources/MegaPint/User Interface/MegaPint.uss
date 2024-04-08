@@ -20,3 +20,5 @@
 .mpInteraction {}
 
 .mpBg1AsBorderColor {}
+
+.mpPrimaryAsImageTint {}

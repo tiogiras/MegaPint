@@ -359,6 +359,8 @@ namespace Editor.Scripts.Windows
             
                 _rightPane.Add(content);
             }
+            
+            _packagesList.ClearSelection();
 
             if (_settingsList.style.display == DisplayStyle.Flex)
             {
@@ -370,8 +372,6 @@ namespace Editor.Scripts.Windows
             }
             
             onRightPaneInitialization?.Invoke();
-            
-            _packagesList.ClearSelection();
         }
         
         public static void OnOpenPackageManager() => ContextMenu.TryOpen<MegaPintPackageManagerWindow>(true, "Package Manager");

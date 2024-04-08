@@ -111,8 +111,19 @@ public static class RootElement
         {Overwrite.mpBackground2.ToString(), OverwriteBackgroundColor2},
         {Overwrite.mpBackground3.ToString(), OverwriteBackgroundColor3},
         {Overwrite.mpInteraction.ToString(), OverwriteInteraction},
-        {Overwrite.mpBg1AsBorderColor.ToString(), OverwriteBg1AsBorderColor}
+        {Overwrite.mpBg1AsBorderColor.ToString(), OverwriteBg1AsBorderColor},
+        {Overwrite.mpPrimaryAsImageTint.ToString(), OverwritePrimaryAsImageTint}
     };
+
+    private static void OverwritePrimaryAsImageTint(List <VisualElement> elements)
+    {
+        Color color = Colors.Primary;
+
+        foreach (VisualElement element in elements)
+        {
+            element.style.unityBackgroundImageTintColor = color;
+        }
+    }
 
     private static void OverwriteBg1AsBorderColor(List <VisualElement> elements)
     {

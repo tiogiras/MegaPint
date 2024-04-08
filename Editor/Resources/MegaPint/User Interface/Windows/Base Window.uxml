@@ -15,8 +15,8 @@
                 <Editor.Scripts.GUI.Factories.Interactive.Button text="Info" name="BTN_Settings" style="align-items: center; justify-content: center; width: 48%;" />
             </ui:GroupBox>
             <ui:IMGUIContainer style="background-image: none; height: 1.5px; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; background-color: rgb(88, 88, 88);" />
-            <uie:Toolbar style="background-color: rgba(60, 60, 60, 0);">
-                <uie:ToolbarSearchField focusable="true" name="SearchField" class="mpInteraction" />
+            <uie:Toolbar style="background-color: rgba(60, 60, 60, 0); width: 100%; padding-right: 5px;">
+                <uie:ToolbarSearchField focusable="true" name="SearchField" class="mpInteraction" style="padding-right: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%;" />
             </uie:Toolbar>
             <ui:ListView focusable="true" name="PackagesList" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None" style="margin-left: 5px; margin-right: 0; flex-grow: 1;" />
             <ui:ListView focusable="true" name="SettingsList" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None" style="margin-left: 5px; margin-right: 0; flex-grow: 1;" />
