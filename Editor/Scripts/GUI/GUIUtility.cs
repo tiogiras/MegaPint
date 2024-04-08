@@ -16,7 +16,7 @@ public static class GUIUtility
 
     public static void ActivateLinks(VisualElement root, EventCallback <PointerUpLinkTagEvent> linkCallback)
     {
-        UQueryBuilder <Label> links = root.Query<Label>(className: "link");
+        UQueryBuilder <Label> links = root.Query<Label>(className: "mpLink");
 
         links.ForEach(
             link =>

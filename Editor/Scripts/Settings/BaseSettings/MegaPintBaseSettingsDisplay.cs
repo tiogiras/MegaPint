@@ -15,6 +15,8 @@ namespace Editor.Scripts.Settings.BaseSettings
         public static void Display(VisualElement root, MegaPintBaseSettingsData.SettingKey key)
         {
             s_element = Load(key).Instantiate();
+            GUIUtility.ApplyTheme(s_element);
+            
             root.Add(s_element);
 
             ActivateLogic(key, root);

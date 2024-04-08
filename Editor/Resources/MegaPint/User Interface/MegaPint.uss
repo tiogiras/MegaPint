@@ -3,6 +3,12 @@
     -unity-font-definition: initial;
 }
 
+.link-cursor{
+    cursor: link;
+}
+
+.mpLink{}
+
 .mpPrimaryColorText {}
 
 .mpPrimaryColorBorder {}

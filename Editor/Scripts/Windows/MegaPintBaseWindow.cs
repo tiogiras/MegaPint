@@ -395,6 +395,7 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
                 return;
 
             TemplateContainer content = template.Instantiate();
+            GUIUtility.ApplyTheme(content);
 
             DisplayContent.DisplayRightPane(currentPackageKey, content);
 
