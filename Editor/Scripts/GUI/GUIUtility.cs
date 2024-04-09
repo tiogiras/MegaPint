@@ -212,16 +212,30 @@ public static class GUIUtility
         StyleColor defaultBackgroundColor = element.style.backgroundColor;
         StyleColor defaultBorderColor = element.style.color;
 
+        var hovered = false;
+        var pressed = false;
+        var focused = false;
         var interacted = false;
 
+        var onlyLoseFocusOnBlur = element.ClassListContains("onlyLoseFocusOnBlur");
+        var checkColorOnMouseUp = element.ClassListContains("checkColorOnMouseUp");
+        
         element.RegisterCallback <MouseOverEvent>(
             evt =>
             {
                 var target = (VisualElement)evt.target;
 
+                if ((!onlyLoseFocusOnBlur || !focused) && !hovered)
+                {
+                    defaultBackgroundColor = target.style.backgroundColor;
+                    defaultBorderColor = target.style.borderTopColor;   
+                }
+                
+                hovered = true;
                 interacted = false;
-                defaultBackgroundColor = target.style.backgroundColor;
-                defaultBorderColor = target.style.borderTopColor;
+
+                if (pressed)
+                    target.style.backgroundColor = RootElement.Colors.PrimaryInteracted;
                 
                 SetBorderColor(target, RootElement.Colors.Primary);
             });
@@ -229,6 +243,8 @@ public static class GUIUtility
         element.RegisterCallback <MouseDownEvent>(
             evt =>
             {
+                pressed = true;
+
                 ((VisualElement)evt.target).style.backgroundColor =
                     RootElement.Colors.PrimaryInteracted;
             },
@@ -237,22 +253,52 @@ public static class GUIUtility
         element.RegisterCallback <MouseUpEvent>(
             evt =>
             {
-                ((VisualElement)evt.target).style.backgroundColor =
-                    defaultBackgroundColor;
-
+                pressed = false;
+                focused = true;
                 interacted = true;
+
+                var target = (VisualElement)evt.target;
+                
+                target.style.backgroundColor = defaultBackgroundColor;
+
+                if (!hovered && checkColorOnMouseUp)
+                    SetBorderColor(target, defaultBorderColor);
             },
             TrickleDown.TrickleDown);
 
         element.RegisterCallback <MouseOutEvent>(
             evt =>
             {
+                if (onlyLoseFocusOnBlur && focused)
+                    return;
+                
                 var target = (VisualElement)evt.target;
                 target.Blur();
+
+                hovered = false;
                 
                 if (!target.ClassListContains("dontChangeColorAfterInteract") || !interacted)
                     target.style.backgroundColor = defaultBackgroundColor;
                 
+                SetBorderColor(target, defaultBorderColor);
+            });
+        
+        if (!onlyLoseFocusOnBlur)
+            return;
+        
+        element.RegisterCallback <BlurEvent>(
+            evt =>
+            {
+                if (!focused)
+                    return;
+                
+                focused = false;
+                hovered = false;
+
+                var target = (VisualElement)evt.target;
+                
+                target.style.backgroundColor = defaultBackgroundColor;
+
                 SetBorderColor(target, defaultBorderColor);
             });
     }

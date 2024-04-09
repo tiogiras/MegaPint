@@ -103,7 +103,7 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
 
         UpdateButtonStyles();
 
-        //MegaPintPackageManager.UpdateAll();
+        MegaPintPackageManager.UpdateAll();
     }
 
     private void ToggleOn()
@@ -113,7 +113,7 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
 
         UpdateButtonStyles();
 
-        //MegaPintPackageManager.UpdateAll();
+        MegaPintPackageManager.UpdateAll();
     }
 
     private void UpdateButtonStyles()
