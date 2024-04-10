@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-using Editor.Scripts.Windows;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = Editor.Scripts.GUI.GUIUtility;
@@ -32,10 +32,28 @@ namespace Editor.Scripts.Settings.BaseSettings
         {
             switch (key)
             {
-                case MegaPintBaseSettingsData.SettingKey.Contact: ContactLogic(root); break;
-                case MegaPintBaseSettingsData.SettingKey.ManagePackages: ManagePackagesLogic(root); break;
-                case MegaPintBaseSettingsData.SettingKey.UsePackages: break;
-                case MegaPintBaseSettingsData.SettingKey.UpdateBasePackage: break;
+                case MegaPintBaseSettingsData.SettingKey.Contact: 
+                    ContactLogic(root);
+
+                    break;
+                case MegaPintBaseSettingsData.SettingKey.ManagePackages: 
+                    ManagePackagesLogic(root);
+
+                    break;
+                case MegaPintBaseSettingsData.SettingKey.UsePackages: 
+                    
+                    break;
+                
+                case MegaPintBaseSettingsData.SettingKey.UpdateBasePackage: 
+                    UpdateBasePackageLogic(root);
+
+                    break;
+
+                case MegaPintBaseSettingsData.SettingKey.Shortcuts:
+                    ShortcutsLogic(root);
+
+                    break;
+                
                 default: return;
             }
         }
@@ -79,11 +97,45 @@ namespace Editor.Scripts.Settings.BaseSettings
                             break;
                         
                         case "MegaPint/PackageManager":
-                            
+                            EditorApplication.ExecuteMenuItem(evt.linkID);
+                            break;
+                        
+                        case "Window/Package Manager":
+                            EditorApplication.ExecuteMenuItem(evt.linkID);
                             break;
                         
                         case "website":
                             Application.OpenURL("https://tiogiras.games");
+                            break;
+                    }
+                });
+        }
+        
+        private static void UpdateBasePackageLogic(VisualElement root)
+        {
+            GUIUtility.ActivateLinks(
+                root,
+                evt =>
+                {
+                    switch (evt.linkID)
+                    {
+                        case "website":
+                            Application.OpenURL("https://tiogiras.games");
+                            break;
+                    }
+                });
+        }        
+        
+        private static void ShortcutsLogic(VisualElement root)
+        {
+            GUIUtility.ActivateLinks(
+                root,
+                evt =>
+                {
+                    switch (evt.linkID)
+                    {
+                        case "Edit/Shortcuts...":
+                            EditorApplication.ExecuteMenuItem(evt.linkID);
                             break;
                     }
                 });

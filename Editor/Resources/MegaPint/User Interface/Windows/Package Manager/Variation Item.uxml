@@ -1,15 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=2f2b50e0e132e3a4989e6dbb646711fa&amp;type=3#MegaPint" />
-    <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; margin-bottom: 0; flex-direction: column; justify-content: space-between; align-items: flex-start; border-left-color: rgb(101, 101, 101); border-right-color: rgb(101, 101, 101); border-top-color: rgb(101, 101, 101); border-bottom-color: rgb(101, 101, 101); border-bottom-width: 1px;">
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
+    <ui:GroupBox class="mp_border_separator" style="margin-left: 0; margin-right: 0; margin-top: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; margin-bottom: 0; flex-direction: column; justify-content: space-between; align-items: flex-start; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px;">
         <ui:GroupBox style="flex-direction: row; justify-content: space-between; flex-grow: 1;">
-            <ui:Label text="Package Name" display-tooltip-when-elided="true" name="PackageName" style="-unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); white-space: normal; color: rgb(255, 255, 255);" />
+            <Editor.Scripts.GUI.Factories.Text tabindex="-1" name="PackageName" text="PackageName" style="white-space: normal;" />
             <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; flex-grow: 1; justify-content: flex-end;">
-                <ui:Label text="1.0.0" display-tooltip-when-elided="true" name="Version" style="-unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); white-space: nowrap; color: rgb(176, 38, 31);" />
-                <ui:Button text="Import" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Import" class="megapint-button-nomargin" style="margin-right: 0;" />
-                <ui:Button text="Update" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Update" class="megapint-button-nomargin" style="margin-right: 5px;" />
-                <ui:Button text="Remove" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Remove" class="megapint-button-nomargin" />
+                <Editor.Scripts.GUI.Factories.Text tabindex="-1" text="1.0.0" name="Version" class="mpTextRed" style="white-space: normal;" />
+                <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Import" text="Import" />
+                <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Update" text="Update" />
+                <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Remove" text="Remove" />
             </ui:GroupBox>
         </ui:GroupBox>
-        <ui:Foldout text="Dependencies" name="Dependencies" value="false" style="-unity-font-style: bold; width: 100%;" />
+        <ui:Foldout text="Dependencies" name="Dependencies" value="false" class="mpFont mpTextColor" style="-unity-font-style: bold; width: 100%;" />
     </ui:GroupBox>
 </ui:UXML>

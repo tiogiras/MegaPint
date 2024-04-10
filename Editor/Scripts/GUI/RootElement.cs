@@ -32,6 +32,10 @@ public static class RootElement
         public static Color Separator => s_separatorColor.Value();
         
         public static Color ButtonColor => s_buttonColor.Value();
+        
+        public static Color TextRed => s_textRed.Value();
+        
+        public static Color TextGreen => s_textGreen.Value();
     }
 
     private class ThemedColor
@@ -108,6 +112,18 @@ public static class RootElement
         darkColor = new Color(0.35f, 0.35f, 0.35f),
         lightColor = new Color(0.35f, 0.35f, 0.35f)
     };
+    
+    private static readonly ThemedColor s_textRed = new()
+    {
+        darkColor = new Color(0.69f, 0.15f, 0.12f),
+        lightColor = new Color(0.69f, 0.15f, 0.12f)
+    };
+    
+    private static readonly ThemedColor s_textGreen = new()
+    {
+        darkColor = new Color(0.19f, 0.69f, 0.12f),
+        lightColor = new Color(0.19f, 0.69f, 0.12f)
+    };
 
     public static readonly Dictionary <string, Action <List <VisualElement>>> Overwrites = new()
     {
@@ -119,13 +135,38 @@ public static class RootElement
         {Overwrite.mpBackground2.ToString(), OverwriteBackgroundColor2},
         {Overwrite.mpBackground3.ToString(), OverwriteBackgroundColor3},
         {Overwrite.mpInteraction.ToString(), OverwriteInteraction},
+        {Overwrite.mpInteractionImageOnly.ToString(), OverwriteInteractionImageOnly},
         {Overwrite.mpBg1AsBorderColor.ToString(), OverwriteBg1AsBorderColor},
-        {Overwrite.mpPrimaryAsImageTint.ToString(), OverwritePrimaryAsImageTint}
+        {Overwrite.mpPrimaryAsImageTint.ToString(), OverwritePrimaryAsImageTint},
+        {Overwrite.mpTextSecondaryAsImageTint.ToString(), OverwriteTextSecondaryAsImageTint},
+        {Overwrite.mpTextRed.ToString(), OverwriteTextRed},
+        {Overwrite.mpTextGreen.ToString(), OverwriteTextGreen},
+        {Overwrite.mp_border_separator.ToString(), OverwriteBorderSeparator},
     };
 
     private static void OverwritePrimaryAsImageTint(List <VisualElement> elements)
     {
         Color color = Colors.Primary;
+
+        foreach (VisualElement element in elements)
+        {
+            element.style.unityBackgroundImageTintColor = color;
+        }
+    }  
+    
+    private static void OverwriteBorderSeparator(List <VisualElement> elements)
+    {
+        Color color = Colors.Separator;
+
+        foreach (VisualElement element in elements)
+        {
+            GUIUtility.SetBorderColor(element, color);
+        }
+    }  
+    
+    private static void OverwriteTextSecondaryAsImageTint(List <VisualElement> elements)
+    {
+        Color color = Colors.SecondaryText;
 
         foreach (VisualElement element in elements)
         {
@@ -146,6 +187,26 @@ public static class RootElement
     private static void OverwritePrimaryColorText(List <VisualElement> elements)
     {
         Color color = Colors.Primary;
+
+        foreach (VisualElement element in elements)
+        {
+            element.style.color = color;
+        }
+    }
+    
+    private static void OverwriteTextRed(List <VisualElement> elements)
+    {
+        Color color = Colors.TextRed;
+
+        foreach (VisualElement element in elements)
+        {
+            element.style.color = color;
+        }
+    }
+    
+    private static void OverwriteTextGreen(List <VisualElement> elements)
+    {
+        Color color = Colors.TextGreen;
 
         foreach (VisualElement element in elements)
         {
@@ -218,6 +279,14 @@ public static class RootElement
         foreach (VisualElement element in elements)
         {
             GUIUtility.SubscribeInteractable(element);
+        }
+    }
+    
+    private static void OverwriteInteractionImageOnly(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            GUIUtility.SubscribeInteractableImageOnly(element);
         }
     }
 }

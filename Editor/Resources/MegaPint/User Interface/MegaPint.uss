@@ -3,30 +3,66 @@
     -unity-font-definition: initial;
 }
 
-.link-cursor{
+.link-cursor {
     cursor: link;
 }
 
-.mpLink{}
+.mpLink {
+}
 
-.mpPrimaryColorText {}
+.mpPrimaryColorText {
+}
 
-.mpPrimaryColorBorder {}
+.mpTextRed{
+    
+}
 
-.mpTextColor {}
+.mpTextGreen{
+    
+}
 
-.mpTextColorSecondary {}
+.mpPrimaryColorBorder {
+}
 
-.mpBackground1 {}
+.mpTextColor {
+}
 
-.mpBackground2 {}
+.mpTextColorSecondary {
+}
 
-.mpBackground3 {}
+.mpBackground1 {
+}
 
-.mpInteraction {}
+.mpBackground2 {
+}
 
-.mpBg1AsBorderColor {}
+.mpBackground3 {
+}
 
-.mpPrimaryAsImageTint {}
+.mpInteraction {
+}
 
-.dontChangeColorAfterInteract {}
+.mpInteractionImageOnly {
+}
+
+.mpBg1AsBorderColor {
+}
+
+.mpPrimaryAsImageTint {
+}
+
+.mpTextSecondaryAsImageTint {
+}
+
+.onlyLoseFocusOnBlur {
+}
+
+.checkColorOnMouseUp {
+}
+
+.dontChangeColorAfterInteract {
+}
+
+.mp_border_separator{
+    
+}

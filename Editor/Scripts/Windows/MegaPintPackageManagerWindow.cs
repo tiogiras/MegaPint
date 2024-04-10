@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Editor.Scripts.GUI;
 using Editor.Scripts.PackageManager;
 using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.PackageManager.Packages;
@@ -11,6 +12,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using GUIUtility = Editor.Scripts.GUI.GUIUtility;
 
 namespace Editor.Scripts.Windows
 {
@@ -18,12 +20,14 @@ namespace Editor.Scripts.Windows
     {
         #region Const
 
-        private const string ListItemTemplate = "User Interface/Import/MegaPintPackageItem";
-        private const string VariationsListItemTemplate = "User Interface/Import/MegaPintVariationItem";
-        private const string DependencyItemTemplate = "User Interface/Import/MegaPintDependencyItem";
+        private const string Path = "MegaPint/User Interface/Windows/Package Manager";
         
-        private readonly Color _normalColor = new (0.823529422f, 0.823529422f, 0.823529422f);
-        private readonly Color _wrongVersionColor = new (0.688679218f,0.149910346f,0.12019401f);
+        private const string ListItemTemplate = Path + "/Package Item";
+        private const string VariationsListItemTemplate = Path + "/Variation Item";
+        private const string DependencyItemTemplate = Path + "/Dependency Item";
+
+        private readonly Color _normalColor = RootElement.Colors.Text;
+        private readonly Color _wrongVersionColor = RootElement.Colors.TextRed;
 
         #endregion
 
@@ -31,23 +35,24 @@ namespace Editor.Scripts.Windows
 
         private VisualElement _root;
         
-        private GroupBox _rightPane;
+        private VisualElement _rightPane;
         private GroupBox _content;
         
         private Label _packageName;
-        private Label _version;
-        private Label _lastUpdate;
-        private Label _unityVersion;
-        private Label _megaPintVersion;
         private Label _infoText;
+        
+        private VisualElement _installedVersion;
+        private VisualElement _newestVersion;
+        
+        private VisualElement _lastUpdate;
+        private VisualElement _unityVersion;
+        private VisualElement _megaPintVersion;
 
-        private GroupBox _packageVariationsParent;
+        private VisualElement _packageVariationsParent;
         private ListView _packageVariations;
 
         private Foldout _dependencies;
-        private VisualElement _separator;
-
-        private ScrollView _packages;
+        //private VisualElement _separator;
 
         private ListView _list;
         
@@ -78,7 +83,7 @@ namespace Editor.Scripts.Windows
 
         #region Override Methods
 
-        protected override string BasePath() => "User Interface/Import/MegaPintPackageManager";
+        protected override string BasePath() => Path;
 
         public override MegaPintEditorWindowBase ShowWindow()
         {
@@ -106,27 +111,31 @@ namespace Editor.Scripts.Windows
 
         private void CreateGUIContent(VisualElement root)
         {
-            VisualElement content = _baseWindow.Instantiate();
+            VisualElement content = GUIUtility.Instantiate(_baseWindow, root);
 
             #region References
 
-            _packages = content.Q<ScrollView>("Packages");
             _list = content.Q<ListView>("MainList");
 
-            _rightPane = content.Q<GroupBox>("RightPane");
+            _rightPane = content.Q<VisualElement>("RightPane");
             _packageName = _rightPane.Q<Label>("PackageName");
             _content = _rightPane.Q<GroupBox>("Content");
-            _version = _content.Q<Label>("NewestVersion");
-            _lastUpdate = _content.Q<Label>("LastUpdate");
-            _unityVersion = _content.Q<Label>("UnityVersion");
-            _megaPintVersion = _content.Q<Label>("MegaPintVersion");
+            
             _infoText = _content.Q <Label>("InfoText");
+            
+            _installedVersion = _content.Q<VisualElement>("InstalledVersion");
+            _newestVersion = _content.Q<VisualElement>("NewestVersion");
+            
+            _lastUpdate = _content.Q<VisualElement>("LastUpdate");
+            _unityVersion = _content.Q<VisualElement>("UnityVersion");
+            _megaPintVersion = _content.Q<VisualElement>("MegaPintVersion");
 
-            _packageVariationsParent = _content.Q <GroupBox>("PackageVariationsParent");
+            _packageVariationsParent = _content.Q <VisualElement>("PackageVariationsParent");
             _packageVariations = _content.Q <ListView>("PackageVariations");
 
             _dependencies = _content.Q <Foldout>("Dependencies");
-            _separator = _content.Q <VisualElement>("Separator");
+            
+            //_separator = _content.Q <VisualElement>("DependencySeparator");
 
             _btnImport = _rightPane.Q<Button>("BTN_Import");
             _btnRemove = _rightPane.Q<Button>("BTN_Remove");
@@ -140,7 +149,7 @@ namespace Editor.Scripts.Windows
             
             #region List
             
-            _list.makeItem = () => _listItem.Instantiate();
+            _list.makeItem = () => GUIUtility.Instantiate(_listItem);
 
             _list.bindItem = UpdateItem;
 
@@ -150,7 +159,7 @@ namespace Editor.Scripts.Windows
 
             #region Variations List
 
-            _packageVariations.makeItem = () => _variationsListItem.Instantiate();
+            _packageVariations.makeItem = () => GUIUtility.Instantiate(_variationsListItem);
 
             _packageVariations.bindItem = UpdateVariationItem;
 
@@ -161,8 +170,6 @@ namespace Editor.Scripts.Windows
             SetDisplayedPackages(_packageSearch.value);
 
             OnUpdateRightPane();
-
-            root.Add(content);
         }
 
         protected override bool LoadResources()
@@ -186,7 +193,7 @@ namespace Editor.Scripts.Windows
 
         private void StartCacheRefresh()
         {
-            GUI.GUIUtility.DisplaySplashScreen(_root, () => {CreateGUIContent(_root);});
+            GUIUtility.DisplaySplashScreen(_root, () => {CreateGUIContent(_root);});
         }
 
         private void ButtonSubscriptions(bool status)
@@ -240,16 +247,19 @@ namespace Editor.Scripts.Windows
             
             CachedPackage package = _displayedPackages[_currentIndex];
             _packageName.text = package.DisplayName;
-            _version.text = package.Version;
-            _lastUpdate.text = package.LastUpdate;
-            _unityVersion.text = package.UnityVersion;
-            _megaPintVersion.text = package.ReqMpVersion;
+            
+            _newestVersion.tooltip = $"Newest Version: {package.Version}";
+            _installedVersion.tooltip = $"Installed Version: {package.CurrentVersion}";
+            _lastUpdate.tooltip = $"Last Update: {package.LastUpdate}";
+            _unityVersion.tooltip = $"Unity Version: {package.UnityVersion}";
+            _megaPintVersion.tooltip = $"MegaPint Version: {package.ReqMpVersion}";
+            
             _infoText.text = package.Description;
 
             var hasVariation = package.Variations is {Count: > 0};
             var hasDependency = package.Dependencies is {Count: > 0};
-
-            _separator.style.display = hasVariation || hasDependency ? DisplayStyle.Flex : DisplayStyle.None;
+            
+            //_separator.style.display = hasVariation || hasDependency ? DisplayStyle.Flex : DisplayStyle.None;
 
             if (hasVariation)
             {
@@ -268,7 +278,7 @@ namespace Editor.Scripts.Windows
 
                 foreach (Dependency dependency in package.Dependencies)
                 {
-                    TemplateContainer item = _dependencyItem.Instantiate();
+                    VisualElement item = GUIUtility.Instantiate(_dependencyItem);
                     item.Q <Label>("PackageName").text = dependency.name;
 
                     var imported = PackageCache.IsInstalled(dependency.key);
@@ -455,7 +465,7 @@ namespace Editor.Scripts.Windows
 
                 foreach (Dependency dependency in variation.dependencies)
                 {
-                    TemplateContainer item = _dependencyItem.Instantiate();
+                    VisualElement item = GUIUtility.Instantiate(_dependencyItem);
                     item.Q <Label>("PackageName").text = dependency.name;
 
                     var imported = PackageCache.IsInstalled(dependency.key);
@@ -502,7 +512,7 @@ namespace Editor.Scripts.Windows
 
         private void SetDisplayedPackages(string searchString)
         {
-            _packages.style.display = DisplayStyle.Flex;
+            _list.style.display = DisplayStyle.Flex;
             
             _displayedPackages = searchString.Equals("") ? 
                 PackageCache.GetAllMpPackages() :

@@ -50,6 +50,12 @@ namespace Editor.Scripts.Settings.BaseSettings
                                 settingKey = SettingKey.UsePackages,
                                 settingName = "How To: Use Packages",
                                 intendLevel = 2
+                            },
+                            new ()
+                            {
+                                settingKey = SettingKey.Shortcuts,
+                                settingName = "How To: Shortcuts",
+                                intendLevel = 2
                             }
                         }
                     }
@@ -65,7 +71,7 @@ namespace Editor.Scripts.Settings.BaseSettings
         
         public enum SettingKey
         {
-            Contact, UpdateBasePackage, ManagePackages, UsePackages
+            Contact, UpdateBasePackage, ManagePackages, UsePackages, Shortcuts
         }
     }
 }
