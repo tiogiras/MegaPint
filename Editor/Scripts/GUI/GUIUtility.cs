@@ -14,6 +14,16 @@ public static class GUIUtility
 {
     private const string LinkCursorClassName = "link-cursor";
 
+    public static VisualElement Instantiate(VisualTreeAsset asset, VisualElement root = null)
+    {
+        TemplateContainer element = asset.Instantiate();
+        ApplyTheme(element);
+
+        root?.Add(element);
+
+        return element;
+    }
+    
     public static void ActivateLinks(VisualElement root, EventCallback <PointerUpLinkTagEvent> linkCallback)
     {
         UQueryBuilder <Label> links = root.Query<Label>(className: "mpLink");
@@ -300,6 +310,24 @@ public static class GUIUtility
                 target.style.backgroundColor = defaultBackgroundColor;
 
                 SetBorderColor(target, defaultBorderColor);
+            });
+    }
+
+    public static void SubscribeInteractableImageOnly(VisualElement element)
+    {
+        StyleColor defaultColor = element.style.unityBackgroundImageTintColor;
+        
+        element.RegisterCallback <MouseOverEvent>(
+            evt =>
+            {
+                ((VisualElement)evt.target).style.unityBackgroundImageTintColor =
+                    RootElement.Colors.PrimaryInteracted;
+            });
+
+        element.RegisterCallback <MouseOutEvent>(
+            evt =>
+            {
+                ((VisualElement)evt.target).style.unityBackgroundImageTintColor = defaultColor;
             });
     }
 }

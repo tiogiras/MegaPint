@@ -13,6 +13,14 @@
 .mpPrimaryColorText {
 }
 
+.mpTextRed{
+    
+}
+
+.mpTextGreen{
+    
+}
+
 .mpPrimaryColorBorder {
 }
 
@@ -34,10 +42,16 @@
 .mpInteraction {
 }
 
+.mpInteractionImageOnly {
+}
+
 .mpBg1AsBorderColor {
 }
 
 .mpPrimaryAsImageTint {
+}
+
+.mpTextSecondaryAsImageTint {
 }
 
 .onlyLoseFocusOnBlur {
@@ -47,4 +61,8 @@
 }
 
 .dontChangeColorAfterInteract {
+}
+
+.mp_border_separator{
+    
 }
