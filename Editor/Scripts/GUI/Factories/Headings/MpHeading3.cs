@@ -19,7 +19,7 @@ public class MpHeading3 : Label
             base.Init(element, attributes, context);
 
             element.AddToClassList(RootElement.FontClass);
-            element.style.color = RootElement.Colors.SecondaryText;
+            element.style.color = RootElement.Colors.TextSecondary;
         }
 
         #endregion

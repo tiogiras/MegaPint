@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace Editor.Scripts.Windows
 {
     internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
     {
+        private static Action <PackageKey> s_showWithLink;
+        
         #region Const
 
         private const string Path = "MegaPint/User Interface/Windows/Package Manager";
@@ -184,6 +187,8 @@ namespace Editor.Scripts.Windows
 
         protected override void RegisterCallbacks()
         {
+            s_showWithLink += OnShowLink;
+            
             _packageSearch.RegisterValueChangedCallback(OnSearchStringChanged);
             
             _list.selectedIndicesChanged += OnUpdateRightPane;
@@ -218,6 +223,8 @@ namespace Editor.Scripts.Windows
 
         protected override void UnRegisterCallbacks()
         {
+            s_showWithLink -= OnShowLink;
+            
             PackageCache.onCacheStartRefreshing -= StartCacheRefresh;
             
             _packageSearch.UnregisterValueChangedCallback(OnSearchStringChanged);
@@ -225,6 +232,32 @@ namespace Editor.Scripts.Windows
             _list.selectedIndicesChanged -= OnUpdateRightPane;
             
             ButtonSubscriptions(false);
+        }
+
+        private void OnShowLink(PackageKey key)
+        {
+            _packageSearch.value = "";
+            SetDisplayedPackages(_packageSearch.value);
+            
+            
+            var targetIndex = -1;
+
+            for (var i = 0; i < _displayedPackages.Count; i++)
+            {
+                CachedPackage package = _displayedPackages[i];
+
+                if (package.Key != key)
+                    continue;
+
+                targetIndex = i;
+
+                break;
+            }
+
+            if (targetIndex == -1)
+                return;
+            
+            _list.selectedIndex = targetIndex;
         }
 
         #endregion
@@ -525,6 +558,12 @@ namespace Editor.Scripts.Windows
         }
 
         #endregion
+
+        public static void OpenPerLink(PackageKey key)
+        {
+            MegaPintBaseWindow.OnOpenPackageManager();
+            s_showWithLink?.Invoke(key);
+        }
     }
 }
 #endif

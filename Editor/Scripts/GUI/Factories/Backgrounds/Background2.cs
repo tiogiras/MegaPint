@@ -18,7 +18,7 @@ public class Background2 : VisualElement
         {
             base.Init(element, attributes, context);
             
-            element.style.backgroundColor = RootElement.Colors.SecondaryBack;
+            element.style.backgroundColor = RootElement.Colors.Bg2;
         }
 
         #endregion

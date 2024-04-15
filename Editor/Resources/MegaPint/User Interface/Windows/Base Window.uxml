@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
     <Editor.Scripts.GUI.Factories.Backgrounds.Background1 name="Title" style="flex-direction: row; align-items: center; justify-content: center; border-bottom-width: 1px; border-bottom-color: rgb(0, 0, 0);">
-        <ui:Button text="MegaPint of Code" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_DevMode" class="mpFont mpPrimaryColorText" style="-unity-font-style: bold; font-size: 24px; color: rgb(209, 0, 114); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; margin-top: 5px; margin-right: 0; margin-bottom: 5px; margin-left: 0; background-color: rgba(88, 88, 88, 0); white-space: normal;" />
+        <ui:Button text="MegaPint of Code" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_DevMode" class="mp_font mp_textColor_primary" style="-unity-font-style: bold; font-size: 24px; color: rgb(209, 0, 114); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; margin-top: 5px; margin-right: 0; margin-bottom: 5px; margin-left: 0; background-color: rgba(88, 88, 88, 0); white-space: normal;" />
         <Editor.Scripts.GUI.Factories.TextSecondary tabindex="-1" text="v1.0.0" name="VersionNumber" style="position: absolute; right: 0; bottom: 0; height: 100%; font-size: 10px; -unity-text-align: lower-left; padding-top: 10px; padding-bottom: 10px;" />
     </Editor.Scripts.GUI.Factories.Backgrounds.Background1>
     <Editor.Scripts.GUI.Factories.Backgrounds.Background2 name="UpdateBasePackage" style="flex-direction: row-reverse; align-items: center; border-bottom-width: 1px; border-bottom-color: rgb(0, 0, 0);">
@@ -14,9 +14,9 @@
                 <Editor.Scripts.GUI.Factories.Interactive.Button text="Packages" name="BTN_Packages" style="align-items: center; justify-content: center; width: 48%;" />
                 <Editor.Scripts.GUI.Factories.Interactive.Button text="Info" name="BTN_Settings" style="align-items: center; justify-content: center; width: 48%;" />
             </ui:GroupBox>
-            <ui:IMGUIContainer style="background-image: none; height: 1.5px; margin-left: 4px; margin-right: 4px; margin-top: 4px; margin-bottom: 4px; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; background-color: rgb(88, 88, 88);" />
+            <Editor.Scripts.GUI.Factories.Separator />
             <uie:Toolbar style="background-color: rgba(60, 60, 60, 0); width: 100%; padding-right: 5px;">
-                <uie:ToolbarSearchField focusable="true" name="SearchField" class="mpInteraction onlyLoseFocusOnBlur checkColorOnMouseUp" style="padding-right: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%;" />
+                <uie:ToolbarSearchField focusable="true" name="SearchField" class="mp_interaction mp_interaction_onlyLoseFocusOnBlur mp_interaction_checkColorOnMouseUp" style="padding-right: 0; padding-top: 0; padding-bottom: 0; padding-left: 0; width: 100%;" />
             </uie:Toolbar>
             <ui:ListView focusable="true" name="PackagesList" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None" style="margin-left: 5px; margin-right: 0; flex-grow: 1;" />
             <ui:ListView focusable="true" name="SettingsList" virtualization-method="DynamicHeight" show-alternating-row-backgrounds="None" style="margin-left: 5px; margin-right: 0; flex-grow: 1;" />

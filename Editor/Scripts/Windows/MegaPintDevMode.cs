@@ -56,7 +56,7 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
         _btnOff = content.Q <Button>("BTN_Off");
 
         s_onColor = RootElement.Colors.Primary;
-        s_offColor = RootElement.Colors.ButtonColor;
+        s_offColor = RootElement.Colors.Button;
 
         UpdateButtonStyles();
 

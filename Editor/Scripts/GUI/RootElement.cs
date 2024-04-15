@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,7 +10,7 @@ namespace Editor.Scripts.GUI
 public static class RootElement
 {
 
-    public static string FontClass => "mpFont";
+    public static string FontClass => "mp_font";
     
     public static class Colors
     {
@@ -21,21 +22,21 @@ public static class RootElement
 
         public static Color Text => s_primaryText.Value();
 
-        public static Color SecondaryText => s_secondaryText.Value();
-
-        public static Color Back => s_primaryBack.Value();
-
-        public static Color SecondaryBack => s_secondaryBack.Value();
-
-        public static Color TertiaryBack => s_tertiaryBack.Value();
-        
-        public static Color Separator => s_separatorColor.Value();
-        
-        public static Color ButtonColor => s_buttonColor.Value();
+        public static Color TextSecondary => s_secondaryText.Value();
         
         public static Color TextRed => s_textRed.Value();
         
         public static Color TextGreen => s_textGreen.Value();
+
+        public static Color Bg1 => s_primaryBack.Value();
+
+        public static Color Bg2 => s_secondaryBack.Value();
+
+        public static Color Bg3 => s_tertiaryBack.Value();
+        
+        public static Color Separator => s_separatorColor.Value();
+        
+        public static Color Button => s_buttonColor.Value();
     }
 
     private class ThemedColor
@@ -127,150 +128,98 @@ public static class RootElement
 
     public static readonly Dictionary <string, Action <List <VisualElement>>> Overwrites = new()
     {
-        {Overwrite.mpPrimaryColorText.ToString(), OverwritePrimaryColorText},
-        {Overwrite.mpPrimaryColorBorder.ToString(), OverwritePrimaryColorBorder},
-        {Overwrite.mpTextColor.ToString(), OverwriteTextColor},
-        {Overwrite.mpTextColorSecondary.ToString(), OverwriteTextColorSecondary},
-        {Overwrite.mpBackground1.ToString(), OverwriteBackgroundColor1},
-        {Overwrite.mpBackground2.ToString(), OverwriteBackgroundColor2},
-        {Overwrite.mpBackground3.ToString(), OverwriteBackgroundColor3},
-        {Overwrite.mpInteraction.ToString(), OverwriteInteraction},
-        {Overwrite.mpInteractionImageOnly.ToString(), OverwriteInteractionImageOnly},
-        {Overwrite.mpBg1AsBorderColor.ToString(), OverwriteBg1AsBorderColor},
-        {Overwrite.mpPrimaryAsImageTint.ToString(), OverwritePrimaryAsImageTint},
-        {Overwrite.mpTextSecondaryAsImageTint.ToString(), OverwriteTextSecondaryAsImageTint},
-        {Overwrite.mpTextRed.ToString(), OverwriteTextRed},
-        {Overwrite.mpTextGreen.ToString(), OverwriteTextGreen},
-        {Overwrite.mp_border_separator.ToString(), OverwriteBorderSeparator},
+        // Text Color
+        {Overwrite.mp_textColor_primary.ToString(), elements => {OverwriteTextColor(elements, Colors.Primary);}},
+        {Overwrite.mp_textColor_normal.ToString(), elements => {OverwriteTextColor(elements, Colors.Text);}},
+        {Overwrite.mp_textColor_secondary.ToString(), elements => {OverwriteTextColor(elements, Colors.TextSecondary);}},
+        {Overwrite.mp_textColor_red.ToString(), elements => {OverwriteTextColor(elements, Colors.TextRed);}},
+        {Overwrite.mp_textColor_green.ToString(), elements => {OverwriteTextColor(elements, Colors.TextGreen);}},
+        
+        // Border Color
+        {Overwrite.mp_borderColor_primary.ToString(), elements => {OverwriteBorderColor(elements, Colors.Primary);}},
+        {Overwrite.mp_borderColor_bg1.ToString(), elements => {OverwriteBorderColor(elements, Colors.Bg1);}},
+        {Overwrite.mp_borderColor_separator.ToString(), elements => {OverwriteBorderColor(elements, Colors.Separator);}},
+        
+        // Background Color
+        {Overwrite.mp_bg1.ToString(), elements => {OverwriteBackgroundColor(elements, Colors.Bg1);}},
+        {Overwrite.mp_bg2.ToString(), elements => {OverwriteBackgroundColor(elements, Colors.Bg2);}},
+        {Overwrite.mp_bg3.ToString(), elements => {OverwriteBackgroundColor(elements, Colors.Bg3);}},
+        {Overwrite.mp_bg_primary.ToString(), elements => {OverwriteBackgroundColor(elements, Colors.Primary);}},
+        
+        // Image Tint
+        {Overwrite.mp_imageTint_primary.ToString(), elements => {OverwriteImageTint(elements, Colors.Primary);}},
+        {Overwrite.mp_imageTint_textSecondary.ToString(), elements => {OverwriteImageTint(elements, Colors.TextSecondary);}},
+
+        // Interaction
+        {Overwrite.mp_interaction.ToString(), OverwriteInteraction},
+        {Overwrite.mp_interaction_imageOnly.ToString(), OverwriteInteractionImageOnly},
+        
+        // Others
+        {Overwrite.mp_listSelection_primary.ToString(), elements => {OverwriteListSelection(elements, Colors.PrimaryInteracted);}}
     };
 
-    private static void OverwritePrimaryAsImageTint(List <VisualElement> elements)
+    private static void OverwriteListSelection(List <VisualElement> elements, Color color)
     {
-        Color color = Colors.Primary;
+        foreach (VisualElement element in elements)
+        {
+            if (element is not ListView list)
+                continue;
 
+            List <VisualElement> lastSelected = new();
+            
+            list.selectedIndicesChanged += _ =>
+            {
+                UQueryBuilder <VisualElement> items = element.Query(className: "unity-collection-view__item--selected");
+
+                if (lastSelected.Count > 0)
+                {
+                    foreach (VisualElement visualElement in lastSelected)
+                    {
+                        visualElement.style.backgroundColor = new Color(0, 0, 0, 0);
+                    }
+                    
+                    lastSelected.Clear();
+                }
+
+                items.ForEach(
+                    ve =>
+                    {
+                        lastSelected.Add(ve);
+                        ve.style.backgroundColor = color;
+                    });
+            };
+        }
+    }
+
+    private static void OverwriteTextColor(List <VisualElement> elements, Color color)
+    {
+        foreach (VisualElement element in elements)
+        {
+            element.style.color = color;
+        }
+    }
+    
+    private static void OverwriteBorderColor(List <VisualElement> elements, Color color)
+    {
+        foreach (VisualElement element in elements)
+        {
+            GUIUtility.SetBorderColor(element, color);
+        }
+    }
+    
+    private static void OverwriteBackgroundColor(List <VisualElement> elements, Color color)
+    {
+        foreach (VisualElement element in elements)
+        {
+            element.style.backgroundColor = color;
+        }
+    }
+    
+    private static void OverwriteImageTint(List <VisualElement> elements, Color color)
+    {
         foreach (VisualElement element in elements)
         {
             element.style.unityBackgroundImageTintColor = color;
-        }
-    }  
-    
-    private static void OverwriteBorderSeparator(List <VisualElement> elements)
-    {
-        Color color = Colors.Separator;
-
-        foreach (VisualElement element in elements)
-        {
-            GUIUtility.SetBorderColor(element, color);
-        }
-    }  
-    
-    private static void OverwriteTextSecondaryAsImageTint(List <VisualElement> elements)
-    {
-        Color color = Colors.SecondaryText;
-
-        foreach (VisualElement element in elements)
-        {
-            element.style.unityBackgroundImageTintColor = color;
-        }
-    }
-
-    private static void OverwriteBg1AsBorderColor(List <VisualElement> elements)
-    {
-        Color color = Colors.Back;
-
-        foreach (VisualElement element in elements)
-        {
-            GUIUtility.SetBorderColor(element, color);
-        }
-    }
-
-    private static void OverwritePrimaryColorText(List <VisualElement> elements)
-    {
-        Color color = Colors.Primary;
-
-        foreach (VisualElement element in elements)
-        {
-            element.style.color = color;
-        }
-    }
-    
-    private static void OverwriteTextRed(List <VisualElement> elements)
-    {
-        Color color = Colors.TextRed;
-
-        foreach (VisualElement element in elements)
-        {
-            element.style.color = color;
-        }
-    }
-    
-    private static void OverwriteTextGreen(List <VisualElement> elements)
-    {
-        Color color = Colors.TextGreen;
-
-        foreach (VisualElement element in elements)
-        {
-            element.style.color = color;
-        }
-    }
-    
-    private static void OverwritePrimaryColorBorder(List <VisualElement> elements)
-    {
-        Color color = Colors.Primary;
-
-        foreach (VisualElement element in elements)
-        {
-            GUIUtility.SetBorderColor(element, color);
-        }
-    }
-    
-    private static void OverwriteTextColor(List <VisualElement> elements)
-    {
-        Color color = Colors.Text;
-
-        foreach (VisualElement element in elements)
-        {
-            element.style.color = color;
-        }
-    }
-    
-    private static void OverwriteTextColorSecondary(List <VisualElement> elements)
-    {
-        Color color = Colors.SecondaryText;
-
-        foreach (VisualElement element in elements)
-        {
-            element.style.color = color;
-        }
-    }    
-    
-    private static void OverwriteBackgroundColor1(List <VisualElement> elements)
-    {
-        Color color = Colors.Back;
-
-        foreach (VisualElement element in elements)
-        {
-            element.style.backgroundColor = color;
-        }
-    }
-    
-    private static void OverwriteBackgroundColor2(List <VisualElement> elements)
-    {
-        Color color = Colors.SecondaryBack;
-
-        foreach (VisualElement element in elements)
-        {
-            element.style.backgroundColor = color;
-        }
-    }
-    
-    private static void OverwriteBackgroundColor3(List <VisualElement> elements)
-    {
-        Color color = Colors.TertiaryBack;
-
-        foreach (VisualElement element in elements)
-        {
-            element.style.backgroundColor = color;
         }
     }
 

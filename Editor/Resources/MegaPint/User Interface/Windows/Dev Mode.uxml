@@ -9,8 +9,8 @@
         </Editor.Scripts.GUI.Factories.Backgrounds.Background2>
         <Editor.Scripts.GUI.Factories.Text tabindex="-1" text="By activating this setting all packages and the base package will be updated to their latest development states. These states may not be tested or work with your MegaPint version.&#10;&#10;&lt;b&gt;Therefor do not activate this setting if you do not intend the above.&lt;/b&gt;" style="white-space: normal; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; overflow: hidden;" />
         <ui:GroupBox style="flex-direction: row; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; justify-content: center; align-items: center;">
-            <Editor.Scripts.GUI.Factories.Interactive.Button text="ON" name="BTN_On" class="dontChangeColorAfterInteract" />
-            <Editor.Scripts.GUI.Factories.Interactive.Button text="OFF" name="BTN_Off" class="dontChangeColorAfterInteract" />
+            <Editor.Scripts.GUI.Factories.Interactive.Button text="ON" name="BTN_On" class="mp_interaction_dontChangeColorAfterInteract" />
+            <Editor.Scripts.GUI.Factories.Interactive.Button text="OFF" name="BTN_Off" class="mp_interaction_dontChangeColorAfterInteract" />
         </ui:GroupBox>
     </ui:ScrollView>
 </ui:UXML>

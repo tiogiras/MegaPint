@@ -1,4 +1,4 @@
-.mpFont {
+.mp_font {
     -unity-font: resource('Roboto Mono');
     -unity-font-definition: initial;
 }
@@ -7,62 +7,66 @@
     cursor: link;
 }
 
-.mpLink {
+.mp_link {
 }
 
-.mpPrimaryColorText {
+.mp_textColor_primary {
 }
 
-.mpTextRed{
-    
+.mp_textColor_normal {
 }
 
-.mpTextGreen{
-    
+.mp_textColor_secondary {
 }
 
-.mpPrimaryColorBorder {
+.mp_textColor_red {
 }
 
-.mpTextColor {
+.mp_textColor_green {
 }
 
-.mpTextColorSecondary {
+.mp_borderColor_primary {
 }
 
-.mpBackground1 {
+.mp_borderColor_bg1 {
 }
 
-.mpBackground2 {
+.mp_borderColor_separator {
 }
 
-.mpBackground3 {
+.mp_bg1 {
 }
 
-.mpInteraction {
+.mp_bg2 {
 }
 
-.mpInteractionImageOnly {
+.mp_bg3 {
 }
 
-.mpBg1AsBorderColor {
+.mp_bg_primary {
 }
 
-.mpPrimaryAsImageTint {
+.mp_imageTint_primary {
 }
 
-.mpTextSecondaryAsImageTint {
+.mp_imageTint_textSecondary {
 }
 
-.onlyLoseFocusOnBlur {
+.mp_interaction {
 }
 
-.checkColorOnMouseUp {
+.mp_interaction_imageOnly {
 }
 
-.dontChangeColorAfterInteract {
+.mp_interaction_onlyLoseFocusOnBlur {
 }
 
-.mp_border_separator{
-    
+.mp_interaction_checkColorOnMouseUp {
 }
+
+.mp_interaction_dontChangeColorAfterInteract {
+}
+
+.mp_listSelection_primary {
+}
+

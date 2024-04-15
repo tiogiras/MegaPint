@@ -10,6 +10,7 @@ using Editor.Scripts.Settings.BaseSettings;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using GUIUtility = Editor.Scripts.GUI.GUIUtility;
 
@@ -20,6 +21,8 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
 {
     public static Action onRightPaneInitialization;
     public static Action onRightPaneClose;
+
+    [FormerlySerializedAs("ignoreUpdate")] public bool ignoreNextUpdate;
 
     private static bool _DevMode =>
         MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
@@ -45,7 +48,7 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
 
     public static void OnOpenPackageManager()
     {
-        ContextMenu.TryOpen <MegaPintPackageManagerWindow>(true, "Package Manager");
+        ContextMenu.TryOpen <MegaPintPackageManagerWindow>(false, "Package Manager");
     }
 
     public override MegaPintEditorWindowBase ShowWindow()
@@ -370,6 +373,12 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
 
     private void OnUpdateRightPane(IEnumerable <int> _)
     {
+        if (ignoreNextUpdate)
+        {
+            ignoreNextUpdate = false;
+            return;   
+        }
+
         ClearRightPane();
 
         if (_packagesList.style.display == DisplayStyle.Flex)
@@ -394,14 +403,11 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
             if (template == null)
                 return;
 
-            TemplateContainer content = template.Instantiate();
-            GUIUtility.ApplyTheme(content);
-
+            VisualElement content = GUIUtility.Instantiate(template, _rightPane);
             DisplayContent.DisplayRightPane(currentPackageKey, content);
-
-            _rightPane.Add(content);
         }
-
+        
+        ignoreNextUpdate = true;
         _packagesList.ClearSelection();
 
         if (_settingsList.style.display == DisplayStyle.Flex)

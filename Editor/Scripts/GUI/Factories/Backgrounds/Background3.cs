@@ -18,7 +18,7 @@ public class Background3 : VisualElement
         {
             base.Init(element, attributes, context);
             
-            element.style.backgroundColor = RootElement.Colors.TertiaryBack;
+            element.style.backgroundColor = RootElement.Colors.Bg3;
         }
 
         #endregion
