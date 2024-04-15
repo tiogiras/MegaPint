@@ -59,6 +59,8 @@ internal class CachedPackage : IComparable <CachedPackage>
 
     /// <summary> All dependencies that this package has </summary>
     public List <Dependency> Dependencies {get; private set;}
+    
+    public List <string> Images {get; private set;}
 
     private List <Dependency> _myDependants;
 
@@ -80,6 +82,7 @@ internal class CachedPackage : IComparable <CachedPackage>
         Version = packageData.version;
         UnityVersion = packageData.unityVersion;
         Repository = packageData.repository;
+        Images = packageData.images;
 
         // PackageInfo Information
         IsInstalled = packageInfo != null;

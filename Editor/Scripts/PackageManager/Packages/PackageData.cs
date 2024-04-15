@@ -38,6 +38,8 @@ internal class PackageData
     
     /// <summary> All variations of this package </summary>
     public List <Variation> variations;
+
+    public List <string> images;
 }
 
 }
