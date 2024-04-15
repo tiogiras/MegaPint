@@ -182,6 +182,27 @@ public static class GUIUtility
         return elements;
     }
 
+    public static void AddClickInteraction(VisualElement element, Action action)
+    {
+        StyleColor defaultColor = element.style.unityBackgroundImageTintColor;
+        
+        element.RegisterCallback<MouseDownEvent>(
+            _ =>
+            {
+                defaultColor = element.style.unityBackgroundImageTintColor;
+                element.style.unityBackgroundImageTintColor = RootElement.Colors.PrimaryInteracted;
+            }, 
+            TrickleDown.TrickleDown);
+        
+        element.RegisterCallback<MouseUpEvent>(
+            _ =>
+            {
+                element.style.unityBackgroundImageTintColor = defaultColor;
+                action?.Invoke();
+            }, 
+            TrickleDown.TrickleDown);
+    }
+    
     public static void SetBorderWidth(VisualElement element, float width)
     {
         element.style.borderTopWidth = width;
@@ -332,11 +353,11 @@ public static class GUIUtility
     {
         StyleColor defaultColor = element.style.unityBackgroundImageTintColor;
         
-        element.RegisterCallback <MouseOverEvent>(
+        element.RegisterCallback <MouseEnterEvent>(
             evt =>
             {
                 ((VisualElement)evt.target).style.unityBackgroundImageTintColor =
-                    RootElement.Colors.PrimaryInteracted;
+                    RootElement.Colors.Primary;
             });
 
         element.RegisterCallback <MouseOutEvent>(

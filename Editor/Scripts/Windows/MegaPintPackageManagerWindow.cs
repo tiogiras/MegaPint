@@ -31,8 +31,6 @@ namespace Editor.Scripts.Windows
         private const string DependencyItemTemplate = Path + "/Dependency Item";
         private const string ImageItemTemplate = Path + "/Image Item";
 
-        private const string ImageFolderPath = "MegaPint/Images/Packages/xxx/";
-
         private readonly Color _normalColor = RootElement.Colors.Text;
         private readonly Color _wrongVersionColor = RootElement.Colors.TextRed;
 
@@ -294,27 +292,17 @@ namespace Editor.Scripts.Windows
             _megaPintVersion.tooltip = $"MegaPint Version: {package.ReqMpVersion}";
             
             _infoText.text = package.Description;
+
+            var hasImages = package.Images is {Count: > 0};
+            var galleryButton = _content.Q <VisualElement>("Gallery");
             
-            var images = _content.Q <VisualElement>("Images");
-            images.Clear();
-
-            if (package.Images is {Count: > 0})
-            {
-                foreach (var path in package.Images)
-                {
-                    var p = System.IO.Path.Combine(
-                        ImageFolderPath.Replace("xxx", package.Key.ToString()),
-                        path);
-
-                    var image = Resources.Load <Texture2D>(p);
-
-                    VisualElement imageItem = GUIUtility.Instantiate(_imageItem, images);
-                    var panel = imageItem.Q <AspectRatioPanel>();
-                    panel.style.backgroundImage = new StyleBackground(image);
-                    panel.aspectRatioX = image.width;
-                    panel.aspectRatioY = image.height;
-                }
-            }
+            galleryButton.style.display = hasImages ? DisplayStyle.Flex : DisplayStyle.None;
+            GUIUtility.AddClickInteraction(galleryButton,
+                                           () =>
+                                           {
+                                               var gallery = (Gallery)ContextMenu.TryOpen <Gallery>(true);
+                                               gallery.Initialize(package);
+                                           });
 
             var hasVariation = package.Variations is {Count: > 0};
             var hasDependency = package.Dependencies is {Count: > 0};

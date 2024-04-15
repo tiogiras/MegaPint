@@ -35,10 +35,6 @@ internal static class PackageDataAlphaButton
                     devBranch = "validatorsIntegration/development",
                     dependencies = new List <Dependency> {new() {name = "Validators", key = PackageKey.Validators}}
                 }
-            },
-            images = new List <string>
-            {
-                "Inspector"
             }
         };
     }
