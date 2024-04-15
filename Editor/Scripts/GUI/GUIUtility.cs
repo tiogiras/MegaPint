@@ -26,7 +26,7 @@ public static class GUIUtility
     
     public static void ActivateLinks(VisualElement root, EventCallback <PointerUpLinkTagEvent> linkCallback)
     {
-        UQueryBuilder <Label> links = root.Query<Label>(className: "mpLink");
+        UQueryBuilder <Label> links = root.Query<Label>(className: "mp_link");
 
         links.ForEach(
             link =>
@@ -227,8 +227,8 @@ public static class GUIUtility
         var focused = false;
         var interacted = false;
 
-        var onlyLoseFocusOnBlur = element.ClassListContains("onlyLoseFocusOnBlur");
-        var checkColorOnMouseUp = element.ClassListContains("checkColorOnMouseUp");
+        var onlyLoseFocusOnBlur = element.ClassListContains("mp_interaction_onlyLoseFocusOnBlur");
+        var checkColorOnMouseUp = element.ClassListContains("mp_interaction_checkColorOnMouseUp");
         
         element.RegisterCallback <MouseOverEvent>(
             evt =>
@@ -287,7 +287,7 @@ public static class GUIUtility
 
                 hovered = false;
                 
-                if (!target.ClassListContains("dontChangeColorAfterInteract") || !interacted)
+                if (!target.ClassListContains("mp_interaction_dontChangeColorAfterInteract") || !interacted)
                     target.style.backgroundColor = defaultBackgroundColor;
                 
                 SetBorderColor(target, defaultBorderColor);

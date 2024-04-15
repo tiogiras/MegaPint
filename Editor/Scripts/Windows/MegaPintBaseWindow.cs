@@ -394,15 +394,11 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
             if (template == null)
                 return;
 
-            TemplateContainer content = template.Instantiate();
-            GUIUtility.ApplyTheme(content);
-
+            VisualElement content = GUIUtility.Instantiate(template, _rightPane);
             DisplayContent.DisplayRightPane(currentPackageKey, content);
-
-            _rightPane.Add(content);
         }
 
-        _packagesList.ClearSelection();
+        _packagesList.SetSelectionWithoutNotify(null);
 
         if (_settingsList.style.display == DisplayStyle.Flex)
         {
