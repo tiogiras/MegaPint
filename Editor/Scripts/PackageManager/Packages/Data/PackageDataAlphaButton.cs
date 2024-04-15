@@ -23,7 +23,7 @@ internal static class PackageDataAlphaButton
             name = "com.tiogiras.megapint-alphabutton",
             displayName = "AlphaButton",
             description =
-                "This package adds a new component based on the normal button component that is only clickable where the alpha is greater than a certain threshold.",
+                "<b>STOP</b> with simple rectangular buttons!\n\nAlphaButton is an improved Button component that allows you to utilize the alpha of your sprites to make the button only clickable when the mouse is over the actual graphic.",
             repository = "https://github.com/tiogiras/MegaPint-AlphaButton.git",
             variations = new List <Variation>
             {
