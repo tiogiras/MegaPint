@@ -66,3 +66,7 @@
 
 .mp_interaction_dontChangeColorAfterInteract {
 }
+
+.mp_listSelection_primary {
+}
+

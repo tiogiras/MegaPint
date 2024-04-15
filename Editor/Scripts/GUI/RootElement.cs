@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -152,7 +153,43 @@ public static class RootElement
         // Interaction
         {Overwrite.mp_interaction.ToString(), OverwriteInteraction},
         {Overwrite.mp_interaction_imageOnly.ToString(), OverwriteInteractionImageOnly},
+        
+        // Others
+        {Overwrite.mp_listSelection_primary.ToString(), elements => {OverwriteListSelection(elements, Colors.PrimaryInteracted);}}
     };
+
+    private static void OverwriteListSelection(List <VisualElement> elements, Color color)
+    {
+        foreach (VisualElement element in elements)
+        {
+            if (element is not ListView list)
+                continue;
+
+            List <VisualElement> lastSelected = new();
+            
+            list.selectedIndicesChanged += _ =>
+            {
+                UQueryBuilder <VisualElement> items = element.Query(className: "unity-collection-view__item--selected");
+
+                if (lastSelected.Count > 0)
+                {
+                    foreach (VisualElement visualElement in lastSelected)
+                    {
+                        visualElement.style.backgroundColor = new Color(0, 0, 0, 0);
+                    }
+                    
+                    lastSelected.Clear();
+                }
+
+                items.ForEach(
+                    ve =>
+                    {
+                        lastSelected.Add(ve);
+                        ve.style.backgroundColor = color;
+                    });
+            };
+        }
+    }
 
     private static void OverwriteTextColor(List <VisualElement> elements, Color color)
     {

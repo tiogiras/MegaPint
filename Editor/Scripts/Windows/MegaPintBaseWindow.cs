@@ -10,6 +10,7 @@ using Editor.Scripts.Settings.BaseSettings;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using GUIUtility = Editor.Scripts.GUI.GUIUtility;
 
@@ -20,6 +21,8 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
 {
     public static Action onRightPaneInitialization;
     public static Action onRightPaneClose;
+
+    [FormerlySerializedAs("ignoreUpdate")] public bool ignoreNextUpdate;
 
     private static bool _DevMode =>
         MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
@@ -370,6 +373,12 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
 
     private void OnUpdateRightPane(IEnumerable <int> _)
     {
+        if (ignoreNextUpdate)
+        {
+            ignoreNextUpdate = false;
+            return;   
+        }
+
         ClearRightPane();
 
         if (_packagesList.style.display == DisplayStyle.Flex)
@@ -397,8 +406,9 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
             VisualElement content = GUIUtility.Instantiate(template, _rightPane);
             DisplayContent.DisplayRightPane(currentPackageKey, content);
         }
-
-        _packagesList.SetSelectionWithoutNotify(null);
+        
+        ignoreNextUpdate = true;
+        _packagesList.ClearSelection();
 
         if (_settingsList.style.display == DisplayStyle.Flex)
         {

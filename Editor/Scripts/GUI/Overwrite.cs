@@ -19,7 +19,8 @@ public enum Overwrite
     mp_imageTint_primary,
     mp_imageTint_textSecondary,
     mp_interaction,
-    mp_interaction_imageOnly
+    mp_interaction_imageOnly,
+    mp_listSelection_primary
 }
 
 }
