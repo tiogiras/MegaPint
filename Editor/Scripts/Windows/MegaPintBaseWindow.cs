@@ -45,7 +45,7 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
 
     public static void OnOpenPackageManager()
     {
-        ContextMenu.TryOpen <MegaPintPackageManagerWindow>(true, "Package Manager");
+        ContextMenu.TryOpen <MegaPintPackageManagerWindow>(false, "Package Manager");
     }
 
     public override MegaPintEditorWindowBase ShowWindow()
