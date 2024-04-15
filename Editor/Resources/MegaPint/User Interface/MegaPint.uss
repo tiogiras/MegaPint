@@ -20,11 +20,9 @@
 }
 
 .mp_textColor_red {
-    
 }
 
 .mp_textColor_green {
-    
 }
 
 .mp_borderColor_primary {
@@ -43,6 +41,9 @@
 }
 
 .mp_bg3 {
+}
+
+.mp_bg_primary {
 }
 
 .mp_imageTint_primary {

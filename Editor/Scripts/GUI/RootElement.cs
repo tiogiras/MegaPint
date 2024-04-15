@@ -143,6 +143,7 @@ public static class RootElement
         {Overwrite.mp_bg1.ToString(), elements => {OverwriteBackgroundColor(elements, Colors.Bg1);}},
         {Overwrite.mp_bg2.ToString(), elements => {OverwriteBackgroundColor(elements, Colors.Bg2);}},
         {Overwrite.mp_bg3.ToString(), elements => {OverwriteBackgroundColor(elements, Colors.Bg3);}},
+        {Overwrite.mp_bg_primary.ToString(), elements => {OverwriteBackgroundColor(elements, Colors.Primary);}},
         
         // Image Tint
         {Overwrite.mp_imageTint_primary.ToString(), elements => {OverwriteImageTint(elements, Colors.Primary);}},

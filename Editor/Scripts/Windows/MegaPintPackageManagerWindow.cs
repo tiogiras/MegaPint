@@ -239,6 +239,7 @@ namespace Editor.Scripts.Windows
             _packageSearch.value = "";
             SetDisplayedPackages(_packageSearch.value);
             
+            
             var targetIndex = -1;
 
             for (var i = 0; i < _displayedPackages.Count; i++)

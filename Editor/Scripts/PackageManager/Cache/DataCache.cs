@@ -27,7 +27,7 @@ internal static class DataCache
     public static string BasePackageName => "com.tiogiras.megapint";
 
     /// <summary> Get all defined megaPint packages </summary>
-    public static IEnumerable <PackageData> AllPackages => s_data.Values.ToList();
+    public static PackageData[] AllPackages => s_data.Values.ToArray();
 
     #region Public Methods
 

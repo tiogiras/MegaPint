@@ -81,12 +81,10 @@ public static class GUIUtility
     {
         var treeAsset = Resources.Load <VisualTreeAsset>("MegaPint/User Interface/Windows/Splash Screen");
 
-        VisualElement splashScreen = treeAsset.Instantiate();
+        VisualElement splashScreen = Instantiate(treeAsset, root);
         splashScreen.style.flexGrow = 1;
         splashScreen.style.flexShrink = 1;
-        
-        root.Add(splashScreen);
-        
+
         loadingIcon = GetLoadingIcon(splashScreen.Q("Loading"));
         logo = splashScreen.Q("Logo");
 
@@ -105,11 +103,23 @@ public static class GUIUtility
         var cacheRefreshed = false;
         
         PackageCache.onCacheRefreshed += () => {cacheRefreshed = true;};
-        
+
         var loadingTime = 0;
         var fadeInProgress = 0f;
+        
+        var targetProgress = 0f;
+        var currentProgress = 0f;
+        
+        PackageCache.onCacheProgressChanged += progress => {targetProgress = progress;};
+        
+        var progressBar = splashScreen.Q <VisualElement>("Progress");
+        progressBar.style.width = 0;
 
-        while (!cacheRefreshed || fadeInProgress < 1)
+        var processText = splashScreen.Q <Label>("Process");
+
+        PackageCache.onCacheProcessChanged += process => {processText.text = process;};
+
+        while (!cacheRefreshed || fadeInProgress < 1 || Math.Abs(targetProgress - currentProgress) > 0.001f)
         {
             if (fadeInProgress < 1)
             {
@@ -121,6 +131,11 @@ public static class GUIUtility
             loadingTime += refreshRate;
             HandleLoadingIcon(loadingIcon, loadingTime);
 
+            currentProgress = Mathf.Lerp(currentProgress, targetProgress, refreshRate * speed * 4);
+            currentProgress = Mathf.Clamp01(currentProgress);
+            
+            progressBar.style.width = Length.Percent(currentProgress * 100);
+
             await Task.Delay(refreshRate);
         }
 
@@ -128,7 +143,7 @@ public static class GUIUtility
 
         method?.Invoke();
     }
-    
+
     private static void HandleLoadingIcon(IReadOnlyList <VisualElement> elements, int loadingTime)
     {
         const float CycleTime = 20f;

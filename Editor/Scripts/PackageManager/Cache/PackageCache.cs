@@ -7,6 +7,7 @@ using Editor.Scripts.DevModeUtil;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
+using UnityEngine;
 
 [assembly: InternalsVisibleTo("tiogiras.megapint.Editor.Tests")]
 namespace Editor.Scripts.PackageManager.Cache
@@ -17,6 +18,11 @@ internal static class PackageCache
 {
     /// <summary> Called when the cache was refreshed </summary>
     public static Action onCacheRefreshed;
+
+    public static Action<float> onCacheProgressChanged;
+    public static Action<string> onCacheProcessChanged;
+
+    public static float currentProgress;
 
     public static Action onCacheStartRefreshing;
 
@@ -159,21 +165,51 @@ internal static class PackageCache
         }
     }
 
+    private static void SetProgressTo(float progress)
+    {
+        currentProgress = progress;
+        onCacheProgressChanged?.Invoke(currentProgress);
+    }
+
+    private static void IncreaseProgressBy(float delta)
+    {
+        currentProgress += delta;
+        onCacheProgressChanged?.Invoke(currentProgress);
+    }
+
+    public static void SetProcess(string process)
+    {
+        onCacheProcessChanged?.Invoke(process);
+    }
+    
     private static async void Initialize()
     {
         onCacheStartRefreshing?.Invoke();
-        
-        IEnumerable <PackageData> mpPackages = DataCache.AllPackages;
-        List <PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages();
 
+        SetProgressTo(0);
+
+        SetProcess("Reading Data Cache");
+        PackageData[] mpPackages = DataCache.AllPackages;
+        IncreaseProgressBy(.15f);
+
+        SetProcess("Reading Unity's PackageInfo");
+        List <PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages();
+        IncreaseProgressBy(.3f);
+        
+        SetProcess("Collecting Packages");
         GetInstalledPackageNames(installedPackages, out List <string> installedPackagesNames);
+        IncreaseProgressBy(.05f);
 
         s_cache.Clear();
 
         Dictionary <PackageKey, List <Dependency>> allDependencies = new();
 
+        var step = .3f / mpPackages.Length;
+        
         foreach (PackageData packageData in mpPackages)
         {
+            SetProcess($"Creating Cache: {packageData.displayName}");
+            
             var package = new CachedPackage(
                 packageData,
                 installedPackagesNames.Contains(packageData.name) ? installedPackages[installedPackagesNames.IndexOf(packageData.name)] : null,
@@ -189,13 +225,26 @@ internal static class PackageCache
             }
 
             s_cache.Add(package.Key, package);
+            
+            IncreaseProgressBy(step);
         }
+        
+        SetProgressTo(.8f);
 
+        step = .2f / allDependencies.Count;
+        
         foreach (KeyValuePair <PackageKey, List <Dependency>> valuePair in allDependencies)
         {
+            SetProcess($"Registering Dependencies: {valuePair.Key}");
+            
             CachedPackage cachedPackage = s_cache[valuePair.Key];
             cachedPackage.RegisterDependencies(valuePair.Value);
+            
+            IncreaseProgressBy(step);
         }
+        
+        SetProcess("Finalizing Cache");
+        SetProgressTo(1f);
 
         WasInitialized = true;
         

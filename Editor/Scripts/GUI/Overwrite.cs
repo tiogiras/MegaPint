@@ -15,6 +15,7 @@ public enum Overwrite
     mp_bg1,
     mp_bg2,
     mp_bg3,
+    mp_bg_primary,
     mp_imageTint_primary,
     mp_imageTint_textSecondary,
     mp_interaction,
