@@ -29,19 +29,32 @@ public static class GUIUtility
     
     public static void ActivateLinks(VisualElement root, EventCallback <PointerUpLinkTagEvent> linkCallback)
     {
-        UQueryBuilder <Label> links = root.Query<Label>(className: "mp_link");
+        UQueryBuilder <TextElement> links = root.Query<TextElement>(className: "mp_link");
 
         links.ForEach(
             link =>
             {
                 link.text = ColorLinks(link.text);
-                
-                if (linkCallback != null)
-                    link.RegisterCallback(linkCallback);
-                
-                link.RegisterCallback<PointerOverLinkTagEvent>(HyperlinkOnPointerOver);
-                link.RegisterCallback<PointerOutLinkTagEvent>(HyperlinkOnPointerOut);
+                HandleLink(link, linkCallback);
             });
+        
+        UQueryBuilder <Foldout> foldouts = root.Query<Foldout>(className: "mp_link");
+
+        foldouts.ForEach(
+            link =>
+            {
+                link.text = ColorLinks(link.text);
+                HandleLink(link, linkCallback);
+            });
+    }
+
+    private static void HandleLink(CallbackEventHandler link, EventCallback <PointerUpLinkTagEvent> linkCallback)
+    {
+        if (linkCallback != null)
+            link.RegisterCallback(linkCallback);
+                
+        link.RegisterCallback<PointerOverLinkTagEvent>(HyperlinkOnPointerOver);
+        link.RegisterCallback<PointerOutLinkTagEvent>(HyperlinkOnPointerOut);
     }
 
     private static string ColorLinks(string str)

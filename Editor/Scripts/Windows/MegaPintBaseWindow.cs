@@ -146,7 +146,8 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
     private void ClearRightPane()
     {
         onRightPaneClose?.Invoke();
-        _rightPane.Clear();
+        
+        _tabContent.Clear();
     }
 
     private void CreateGUIContent(VisualElement root)
@@ -173,6 +174,10 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
 
         _updateBasePackage = content.Q <VisualElement>("UpdateBasePackage");
         _btnUpdate = _updateBasePackage.Q <Button>("BTN_Update");
+        
+        _packageName = _rightPane.Q<Label>("PackageName");
+        _tabContent = _rightPane.Q<VisualElement>("TabContent");
+        _tabs = _rightPane.Q<VisualElement>("Tabs");
 
         #endregion
 
@@ -263,6 +268,8 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
         _versionNumber.text = _DevMode ? "Development" : $"v{PackageCache.BasePackage.version}";
         _versionNumber.style.display = DisplayStyle.Flex;
 
+        _rightPane.style.display = DisplayStyle.None;
+        
         SetDisplayedPackages(_searchField.value);
 
         if (!PackageCache.NeedsBasePackageUpdate())
@@ -378,8 +385,9 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
             ignoreNextUpdate = false;
             return;   
         }
-
+        
         ClearRightPane();
+        _rightPane.style.display = DisplayStyle.Flex;
 
         if (_packagesList.style.display == DisplayStyle.Flex)
         {
@@ -395,16 +403,16 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
             visualElement.style.borderLeftWidth = 2.5f;
             _currentVisualElementPackages = visualElement;
 
-            PackageKey currentPackageKey = ((CachedPackage)_packagesList.selectedItem).Key;
-            var contentPath = RightPaneContentBase.Replace("xxx", currentPackageKey.ToString());
+            var currentPackage = (CachedPackage)_packagesList.selectedItem;
 
-            var template = Resources.Load <VisualTreeAsset>(contentPath);
-
-            if (template == null)
-                return;
-
-            VisualElement content = GUIUtility.Instantiate(template, _rightPane);
-            DisplayContent.DisplayRightPane(currentPackageKey, content);
+            _packageName.text = currentPackage.DisplayName;
+            
+            DisplayContent.DisplayRightPane(new DisplayContent.DisplayContentReferences
+            {
+                package = currentPackage,
+                tabContent = _tabContent,
+                tabs = _tabs
+            });
         }
         
         ignoreNextUpdate = true;
@@ -528,7 +536,7 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
     #region Const
 
     private const string ContentPath = "MegaPint/User Interface/Windows/Base Window/";
-    private const string RightPaneContentBase = "xxx/User Interface/Display Content";
+    
 
     private const string PackageItem = ContentPath + "Package Item";
     private const string SettingItem = ContentPath + "Setting Item";
@@ -556,6 +564,10 @@ internal class MegaPintBaseWindow : MegaPintEditorWindowBase
     private VisualElement _root;
     private VisualElement _rightPane;
     private VisualElement _updateBasePackage;
+
+    private Label _packageName;
+    private VisualElement _tabContent;
+    private VisualElement _tabs;
 
     private Label _versionNumber;
 
