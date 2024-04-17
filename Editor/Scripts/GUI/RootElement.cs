@@ -15,6 +15,8 @@ public static class RootElement
     public static class Colors
     {
         public static Color Link => s_linkColor.Value();
+        
+        public static Color Info => s_infoColor.Value();
 
         public static Color Primary => s_primary.Value();
 
@@ -59,6 +61,12 @@ public static class RootElement
         darkColor = new Color(0.82f, 0f, 0.45f),
         lightColor = new Color(0.82f, 0f, 0.45f)
     };
+    
+    private static readonly ThemedColor s_infoColor = new()
+    {
+        darkColor = new Color(0.82f, 0.32f, 0.54f),
+        lightColor = new Color(0.82f, 0.47f, 0f)
+    };
 
     private static readonly ThemedColor s_primary = new()
     {
@@ -81,7 +89,7 @@ public static class RootElement
     private static readonly ThemedColor s_secondaryText = new()
     {
         darkColor = new Color(0.63f, 0.63f, 0.63f),
-        lightColor = new Color(0.84f, 0.84f, 0.84f)
+        lightColor = new Color(0.63f, 0.63f, 0.63f)
     };
 
     private static readonly ThemedColor s_primaryBack = new()
@@ -153,10 +161,36 @@ public static class RootElement
         // Interaction
         {Overwrite.mp_interaction.ToString(), OverwriteInteraction},
         {Overwrite.mp_interaction_imageOnly.ToString(), OverwriteInteractionImageOnly},
+        {Overwrite.mp_useCustomTooltip.ToString(), OverwriteTooltip},
         
         // Others
         {Overwrite.mp_listSelection_primary.ToString(), elements => {OverwriteListSelection(elements, Colors.PrimaryInteracted);}}
     };
+
+    private static void OverwriteTooltip(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            var tooltip = "";
+            
+            element.RegisterCallback<MouseEnterEvent>(
+                _ =>
+                {
+                    tooltip = element.tooltip;
+                    element.tooltip = "";
+                    GUIUtility.DisplayTooltip(element, tooltip);
+                },
+                TrickleDown.TrickleDown);
+            
+            element.RegisterCallback<MouseOutEvent>(
+                _ =>
+                {
+                    element.tooltip = tooltip;
+                    GUIUtility.HideTooltip(element);
+                },
+                TrickleDown.TrickleDown);
+        }
+    }
 
     private static void OverwriteListSelection(List <VisualElement> elements, Color color)
     {

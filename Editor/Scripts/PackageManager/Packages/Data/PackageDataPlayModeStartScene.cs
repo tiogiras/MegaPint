@@ -20,7 +20,7 @@ internal static class PackageDataPlayModeStartScene
             lastUpdate = "22.02.2024",
             name = "com.tiogiras.megapint-playmodestartscene",
             displayName = "PlayMode Start Scene",
-            description = "This package allows you to set a starting scene for entering playmode.",
+            description = "Tired of switching scenes after editing a scene just to start the game from the MainMenu?\n\nThis package allows you to set a starting scene that will be opened whenever your enter the PlayMode.",
             repository = "https://github.com/tiogiras/megapint-playmodestartscene.git"
         };
     }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Editor.Scripts.Factories;
 using Editor.Scripts.GUI;
 using Editor.Scripts.PackageManager;
 using Editor.Scripts.PackageManager.Cache;
@@ -28,6 +29,7 @@ namespace Editor.Scripts.Windows
         private const string ListItemTemplate = Path + "/Package Item";
         private const string VariationsListItemTemplate = Path + "/Variation Item";
         private const string DependencyItemTemplate = Path + "/Dependency Item";
+        private const string ImageItemTemplate = Path + "/Image Item";
 
         private readonly Color _normalColor = RootElement.Colors.Text;
         private readonly Color _wrongVersionColor = RootElement.Colors.TextRed;
@@ -74,6 +76,7 @@ namespace Editor.Scripts.Windows
         private VisualTreeAsset _listItem;
         private VisualTreeAsset _variationsListItem;
         private VisualTreeAsset _dependencyItem;
+        private VisualTreeAsset _imageItem;
 
         private List<CachedPackage> _displayedPackages;
 
@@ -181,8 +184,9 @@ namespace Editor.Scripts.Windows
             _listItem = Resources.Load<VisualTreeAsset>(ListItemTemplate);
             _variationsListItem = Resources.Load <VisualTreeAsset>(VariationsListItemTemplate);
             _dependencyItem = Resources.Load <VisualTreeAsset>(DependencyItemTemplate);
+            _imageItem = Resources.Load <VisualTreeAsset>(ImageItemTemplate);
             
-            return _baseWindow != null && _listItem != null && _variationsListItem != null && _dependencyItem != null;
+            return _baseWindow != null && _listItem != null && _variationsListItem != null && _dependencyItem != null && _imageItem != null;
         }
 
         protected override void RegisterCallbacks()
@@ -288,6 +292,17 @@ namespace Editor.Scripts.Windows
             _megaPintVersion.tooltip = $"MegaPint Version: {package.ReqMpVersion}";
             
             _infoText.text = package.Description;
+
+            var hasImages = package.Images is {Count: > 0};
+            var galleryButton = _content.Q <VisualElement>("Gallery");
+            
+            galleryButton.style.display = hasImages ? DisplayStyle.Flex : DisplayStyle.None;
+            GUIUtility.AddClickInteraction(galleryButton,
+                                           () =>
+                                           {
+                                               var gallery = (Gallery)ContextMenu.TryOpen <Gallery>(true);
+                                               gallery.Initialize(package);
+                                           });
 
             var hasVariation = package.Variations is {Count: > 0};
             var hasDependency = package.Dependencies is {Count: > 0};

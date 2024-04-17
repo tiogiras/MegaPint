@@ -21,7 +21,7 @@ internal static class PackageDataValidators
             name = "com.tiogiras.megapint-validators",
             displayName = "Validators",
             description =
-                "This package adds an option to use and create own validations for MonoBehaviours. The results of the validations are easily readable in one window and can be automatically fixed.",
+                "You don't want to recheck all settings for all items or GameObjects?\n\nWith the Validators package you can create custom validators that display the status of your GameObject. See all issues in a scene or your complete project in one window.\n\nWhile you can select from a predefined collection of requirements to create your validations you can also create your own requirements to completely customize the validators to your needs.",
             repository = "https://github.com/tiogiras/MegaPint-Validators.git"
         };
     }

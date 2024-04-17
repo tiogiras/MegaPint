@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Editor.Scripts.PackageManager.Cache;
@@ -13,6 +14,8 @@ namespace Editor.Scripts.GUI
 public static class GUIUtility
 {
     private const string LinkCursorClassName = "link-cursor";
+
+    private const string TooltipPath = "MegaPint/User Interface/Windows/Tooltip";
 
     public static VisualElement Instantiate(VisualTreeAsset asset, VisualElement root = null)
     {
@@ -44,10 +47,13 @@ public static class GUIUtility
         var linkStarts = str.Split("<link=");
 
         var builder = new StringBuilder(linkStarts[0]);
+
+        var linkStart = $"<b><color=#{ColorUtility.ToHtmlStringRGB(RootElement.Colors.Link)}><link=";
+        var infoStart = $"<b><color=#{ColorUtility.ToHtmlStringRGB(RootElement.Colors.Info)}><link=";
         
         for (var i = 1; i < linkStarts.Length; i++)
         {
-            builder.Append("<b><color=#D10072><link=");
+            builder.Append(linkStarts[i].StartsWith("\"info_") ? infoStart : linkStart);
             builder.Append(linkStarts[i]);
         }
         
@@ -65,15 +71,83 @@ public static class GUIUtility
         return builder.ToString();
     }
 
+    public static void DisplayTooltip(VisualElement root, string tooltip)
+    {
+        s_tooltip = Instantiate(Resources.Load <VisualTreeAsset>(TooltipPath), GetRootVisualElement(root));
+        s_tooltip.style.display = DisplayStyle.None;
+        
+        s_tooltipLabel = s_tooltip.Q <Label>();
+        s_tooltipLabel.text = tooltip;
+        
+        s_tooltip.style.position = new StyleEnum <Position>(Position.Absolute);
+        
+        root.RegisterCallback<MouseMoveEvent>(TooltipMove);
+    }
+
+    public static void HideTooltip(CallbackEventHandler root)
+    {
+        if (s_tooltip == null)
+            return;
+        
+        s_tooltip.Clear();
+        s_tooltip.parent.Remove(s_tooltip);
+        s_tooltip = null;
+        
+        root.UnregisterCallback<MouseMoveEvent>(TooltipMove);
+    }
+
+    private static void TooltipMove(MouseMoveEvent evt)
+    {
+        s_tooltip.style.display = DisplayStyle.Flex;
+        
+        Vector2 mousePos = evt.mousePosition;
+        var contentWidth = s_tooltipLabel.contentRect.width;
+        
+        if (contentWidth + mousePos.x > s_tooltip.parent.contentRect.width)
+            s_tooltip.transform.position = mousePos - new Vector2(contentWidth, 0);
+        else
+            s_tooltip.transform.position = mousePos;
+    }
+
+    private static VisualElement s_tooltip;
+    private static Label s_tooltipLabel;
+
+    private static VisualElement GetRootVisualElement(VisualElement root)
+    {
+        VisualElement check = root;
+
+        while (check.parent != null)
+        {
+            if (!string.IsNullOrEmpty(check.parent.viewDataKey))
+            {
+                if (check.parent.viewDataKey.Equals("rootVisualContainer"))
+                    break;
+            }
+            
+            check = check.parent;
+        }
+
+        return check;
+    }
+
     private static void HyperlinkOnPointerOver(PointerOverLinkTagEvent evt)
     {
         var target = (VisualElement)evt.target;
+        
+        if (evt.linkID.StartsWith("info_"))
+        {
+            DisplayTooltip(target, InfoLinkData.Get(evt.linkID.Replace("\"", "").Replace("info_", "")));
+            return;
+        }
+
         target.AddToClassList(LinkCursorClassName);
     }
     
     private static void HyperlinkOnPointerOut(PointerOutLinkTagEvent evt)
     {
         var target = (VisualElement)evt.target;
+        
+        HideTooltip(target);
         target.RemoveFromClassList(LinkCursorClassName);
     }
 
@@ -182,6 +256,27 @@ public static class GUIUtility
         return elements;
     }
 
+    public static void AddClickInteraction(VisualElement element, Action action)
+    {
+        StyleColor defaultColor = element.style.unityBackgroundImageTintColor;
+        
+        element.RegisterCallback<MouseDownEvent>(
+            _ =>
+            {
+                defaultColor = element.style.unityBackgroundImageTintColor;
+                element.style.unityBackgroundImageTintColor = RootElement.Colors.PrimaryInteracted;
+            }, 
+            TrickleDown.TrickleDown);
+        
+        element.RegisterCallback<MouseUpEvent>(
+            _ =>
+            {
+                element.style.unityBackgroundImageTintColor = defaultColor;
+                action?.Invoke();
+            }, 
+            TrickleDown.TrickleDown);
+    }
+    
     public static void SetBorderWidth(VisualElement element, float width)
     {
         element.style.borderTopWidth = width;
@@ -332,11 +427,11 @@ public static class GUIUtility
     {
         StyleColor defaultColor = element.style.unityBackgroundImageTintColor;
         
-        element.RegisterCallback <MouseOverEvent>(
+        element.RegisterCallback <MouseEnterEvent>(
             evt =>
             {
                 ((VisualElement)evt.target).style.unityBackgroundImageTintColor =
-                    RootElement.Colors.PrimaryInteracted;
+                    RootElement.Colors.Primary;
             });
 
         element.RegisterCallback <MouseOutEvent>(

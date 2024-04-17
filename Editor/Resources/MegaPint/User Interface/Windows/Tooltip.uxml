@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
+    <Editor.Scripts.GUI.Factories.Backgrounds.Background2 picking-mode="Ignore" class="mp_borderColor_bg1" style="position: absolute; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; max-width: 350px;">
+        <Editor.Scripts.GUI.Factories.TextSecondary tabindex="-1" picking-mode="Ignore" text="Hello World!" style="margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; white-space: normal;" />
+    </Editor.Scripts.GUI.Factories.Backgrounds.Background2>
+</ui:UXML>
