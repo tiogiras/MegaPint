@@ -36,7 +36,9 @@ public static class GUIUtility
             {
                 link.text = ColorLinks(link.text);
                 
-                link.RegisterCallback(linkCallback);
+                if (linkCallback != null)
+                    link.RegisterCallback(linkCallback);
+                
                 link.RegisterCallback<PointerOverLinkTagEvent>(HyperlinkOnPointerOver);
                 link.RegisterCallback<PointerOutLinkTagEvent>(HyperlinkOnPointerOut);
             });

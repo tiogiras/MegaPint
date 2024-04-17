@@ -73,7 +73,7 @@ internal static partial class DisplayContent
         }
     }
 
-    private static void SetTabContentLocation(string location, int tabCount)
+    private static void SetTabContentLocations(string location, int tabCount)
     {
         s_tabsContentLocations.Clear();
         s_tabsContainer.Clear();
