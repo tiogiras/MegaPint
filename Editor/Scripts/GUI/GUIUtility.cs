@@ -99,10 +99,15 @@ public static class GUIUtility
     private static void TooltipMove(MouseMoveEvent evt)
     {
         s_tooltip.style.display = DisplayStyle.Flex;
-        
+
         Vector2 mousePos = evt.mousePosition;
         var contentWidth = s_tooltipLabel.contentRect.width;
+
+        s_tooltip.style.opacity = contentWidth == 0 ? 0 : 1;
         
+        if (contentWidth == 0)
+            return;
+
         if (contentWidth + mousePos.x > s_tooltip.parent.contentRect.width)
             s_tooltip.transform.position = mousePos - new Vector2(contentWidth, 0);
         else
