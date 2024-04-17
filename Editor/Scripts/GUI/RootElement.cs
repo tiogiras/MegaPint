@@ -161,10 +161,36 @@ public static class RootElement
         // Interaction
         {Overwrite.mp_interaction.ToString(), OverwriteInteraction},
         {Overwrite.mp_interaction_imageOnly.ToString(), OverwriteInteractionImageOnly},
+        {Overwrite.mp_useCustomTooltip.ToString(), OverwriteTooltip},
         
         // Others
         {Overwrite.mp_listSelection_primary.ToString(), elements => {OverwriteListSelection(elements, Colors.PrimaryInteracted);}}
     };
+
+    private static void OverwriteTooltip(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            var tooltip = "";
+            
+            element.RegisterCallback<MouseEnterEvent>(
+                _ =>
+                {
+                    tooltip = element.tooltip;
+                    element.tooltip = "";
+                    GUIUtility.DisplayTooltip(element, tooltip);
+                },
+                TrickleDown.TrickleDown);
+            
+            element.RegisterCallback<MouseOutEvent>(
+                _ =>
+                {
+                    element.tooltip = tooltip;
+                    GUIUtility.HideTooltip(element);
+                },
+                TrickleDown.TrickleDown);
+        }
+    }
 
     private static void OverwriteListSelection(List <VisualElement> elements, Color color)
     {

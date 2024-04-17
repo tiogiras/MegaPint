@@ -71,17 +71,20 @@ public static class GUIUtility
         return builder.ToString();
     }
 
-    private static void DisplayTooltip(VisualElement root, string tooltip)
+    public static void DisplayTooltip(VisualElement root, string tooltip)
     {
         s_tooltip = Instantiate(Resources.Load <VisualTreeAsset>(TooltipPath), GetRootVisualElement(root));
-        s_tooltip.Q <Label>().text = tooltip;
+        s_tooltip.style.display = DisplayStyle.None;
+        
+        s_tooltipLabel = s_tooltip.Q <Label>();
+        s_tooltipLabel.text = tooltip;
         
         s_tooltip.style.position = new StyleEnum <Position>(Position.Absolute);
         
         root.RegisterCallback<MouseMoveEvent>(TooltipMove);
     }
 
-    private static void HideTooltip(CallbackEventHandler root)
+    public static void HideTooltip(CallbackEventHandler root)
     {
         if (s_tooltip == null)
             return;
@@ -95,10 +98,19 @@ public static class GUIUtility
 
     private static void TooltipMove(MouseMoveEvent evt)
     {
-        s_tooltip.transform.position = evt.mousePosition;
+        s_tooltip.style.display = DisplayStyle.Flex;
+        
+        Vector2 mousePos = evt.mousePosition;
+        var contentWidth = s_tooltipLabel.contentRect.width;
+        
+        if (contentWidth + mousePos.x > s_tooltip.parent.contentRect.width)
+            s_tooltip.transform.position = mousePos - new Vector2(contentWidth, 0);
+        else
+            s_tooltip.transform.position = mousePos;
     }
 
     private static VisualElement s_tooltip;
+    private static Label s_tooltipLabel;
 
     private static VisualElement GetRootVisualElement(VisualElement root)
     {
