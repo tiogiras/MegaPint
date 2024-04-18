@@ -13,6 +13,8 @@ public static class InfoLinkData
         {"alphaButton","AlphaButton is a class derived from the standard Button class that includes a slider for the alpha threshold."},
         {"button","The Button component is a default ui element of the unity engine."},
         {"shortcut","Shortcuts can be applied to menu items. Whenever the shortcut is pressed, the corresponding menu item is executed.\n\n<b>You can set shortcuts via Edit/Shortcuts...</b>"},
+        {"cameraCapture","CameraCapture is a class that can render and export a camera's view via the inspector or the designated shortcut.\n\n<b>Assembly:</b>tiogiras.megapint.screenshot.runtime"},
+        {"camera","Camera's are default unity components for rendering an image of the game."},
         // {"",""},
     };
 
