@@ -29,17 +29,32 @@ public static class GUIUtility
     
     public static void ActivateLinks(VisualElement root, EventCallback <PointerUpLinkTagEvent> linkCallback)
     {
-        UQueryBuilder <Label> links = root.Query<Label>(className: "mp_link");
+        UQueryBuilder <TextElement> links = root.Query<TextElement>(className: "mp_link");
 
         links.ForEach(
             link =>
             {
                 link.text = ColorLinks(link.text);
-                
-                link.RegisterCallback(linkCallback);
-                link.RegisterCallback<PointerOverLinkTagEvent>(HyperlinkOnPointerOver);
-                link.RegisterCallback<PointerOutLinkTagEvent>(HyperlinkOnPointerOut);
+                HandleLink(link, linkCallback);
             });
+        
+        UQueryBuilder <Foldout> foldouts = root.Query<Foldout>(className: "mp_link");
+
+        foldouts.ForEach(
+            link =>
+            {
+                link.text = ColorLinks(link.text);
+                HandleLink(link, linkCallback);
+            });
+    }
+
+    private static void HandleLink(CallbackEventHandler link, EventCallback <PointerUpLinkTagEvent> linkCallback)
+    {
+        if (linkCallback != null)
+            link.RegisterCallback(linkCallback);
+                
+        link.RegisterCallback<PointerOverLinkTagEvent>(HyperlinkOnPointerOver);
+        link.RegisterCallback<PointerOutLinkTagEvent>(HyperlinkOnPointerOut);
     }
 
     private static string ColorLinks(string str)
@@ -99,10 +114,15 @@ public static class GUIUtility
     private static void TooltipMove(MouseMoveEvent evt)
     {
         s_tooltip.style.display = DisplayStyle.Flex;
-        
+
         Vector2 mousePos = evt.mousePosition;
         var contentWidth = s_tooltipLabel.contentRect.width;
+
+        s_tooltip.style.opacity = contentWidth == 0 ? 0 : 1;
         
+        if (contentWidth == 0)
+            return;
+
         if (contentWidth + mousePos.x > s_tooltip.parent.contentRect.width)
             s_tooltip.transform.position = mousePos - new Vector2(contentWidth, 0);
         else
