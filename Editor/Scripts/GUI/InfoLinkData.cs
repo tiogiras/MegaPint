@@ -12,6 +12,7 @@ public static class InfoLinkData
         {"monoBehaviour","MonoBehaviours are scripts that inherit from the base class MonoBehaviour.\n\nOnly MonoBehaviours can be added to GameObjects."},
         {"alphaButton","AlphaButton is a class derived from the standard Button class that includes a slider for the alpha threshold."},
         {"button","The Button component is a default ui element of the unity engine."},
+        {"shortcut","Shortcuts can be applied to menu items. Whenever the shortcut is pressed, the corresponding menu item is executed.\n\n<b>You can set shortcuts via Edit/Shortcuts...</b>"},
         // {"",""},
     };
 
