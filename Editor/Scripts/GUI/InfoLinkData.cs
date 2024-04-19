@@ -15,6 +15,11 @@ public static class InfoLinkData
         {"shortcut","Shortcuts can be applied to menu items. Whenever the shortcut is pressed, the corresponding menu item is executed.\n\n<b>You can set shortcuts via Edit/Shortcuts...</b>"},
         {"cameraCapture","CameraCapture is a class that can render and export a camera's view via the inspector or the designated shortcut.\n\n<b>Assembly:</b>tiogiras.megapint.screenshot.runtime"},
         {"camera","Camera's are default unity components for rendering an image of the game."},
+        {"scriptableValidationRequirement","ScriptableValidationRequirement is a base class for requirements that can be used in the validation process of a ValidatableMonoBehaviour.\n\n<b>Assembly:</b>tiogiras.megapint.validators.runtime"},
+        {"validatableMonoBehaviour","ValidatableMonoBehaviour is a base class derived from the MonoBehaviour class. It holds certain requirements that if not met, display issues on the GameObject.\n\n<b>Assembly:</b>tiogiras.megapint.validators.runtime"},
+        {"requirement","Requirements are validations that will be run on MonoBehaviours.\n\n <b>Created via ScriptableValidationRequirement</b>"},
+        {"validationStatus","ValidatableMonoBehaviourStatus is a MonoBehaviour added by a ValidatableMonoBehaviour. It collects all behaviours of this GameObject and displays their status and possible fixes."},
+        {"fixAction","FixActions are methods added to the occured issue. They should contain an automatic fix for the issue."},
         // {"",""},
     };
 
