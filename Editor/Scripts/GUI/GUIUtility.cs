@@ -117,16 +117,22 @@ public static class GUIUtility
 
         Vector2 mousePos = evt.mousePosition;
         var contentWidth = s_tooltipLabel.contentRect.width;
+        var contentHeight = s_tooltipLabel.contentRect.height;
 
         s_tooltip.style.opacity = contentWidth == 0 ? 0 : 1;
         
         if (contentWidth == 0)
             return;
 
+        Vector2 targetPos = mousePos;
+        
         if (contentWidth + mousePos.x > s_tooltip.parent.contentRect.width)
-            s_tooltip.transform.position = mousePos - new Vector2(contentWidth, 0);
-        else
-            s_tooltip.transform.position = mousePos;
+            targetPos -= new Vector2(contentWidth + 10, 0);
+
+        if (contentHeight + mousePos.y > s_tooltip.parent.contentRect.height)
+            targetPos -= new Vector2(0, contentHeight + 25);
+        
+        s_tooltip.transform.position = targetPos;
     }
 
     private static VisualElement s_tooltip;
