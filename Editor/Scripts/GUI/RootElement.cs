@@ -29,6 +29,8 @@ public static class RootElement
         public static Color TextRed => s_textRed.Value();
         
         public static Color TextGreen => s_textGreen.Value();
+        
+        public static Color TextOrange => s_textOrange.Value();
 
         public static Color Bg1 => s_primaryBack.Value();
 
@@ -124,14 +126,20 @@ public static class RootElement
     
     private static readonly ThemedColor s_textRed = new()
     {
-        darkColor = new Color(0.69f, 0.15f, 0.12f),
-        lightColor = new Color(0.69f, 0.15f, 0.12f)
+        darkColor = new Color(0.69f, 0.12f, 0.12f),
+        lightColor = new Color(0.69f, 0.12f, 0.12f)
+    };
+    
+    private static readonly ThemedColor s_textOrange = new()
+    {
+        darkColor = new Color(0.69f, 0.42f, 0.12f),
+        lightColor = new Color(0.69f, 0.42f, 0.12f)
     };
     
     private static readonly ThemedColor s_textGreen = new()
     {
-        darkColor = new Color(0.19f, 0.69f, 0.12f),
-        lightColor = new Color(0.19f, 0.69f, 0.12f)
+        darkColor = new Color(0.12f, 0.69f, 0.12f),
+        lightColor = new Color(0.12f, 0.69f, 0.12f)
     };
 
     public static readonly Dictionary <string, Action <List <VisualElement>>> Overwrites = new()
@@ -142,6 +150,7 @@ public static class RootElement
         {Overwrite.mp_textColor_secondary.ToString(), elements => {OverwriteTextColor(elements, Colors.TextSecondary);}},
         {Overwrite.mp_textColor_red.ToString(), elements => {OverwriteTextColor(elements, Colors.TextRed);}},
         {Overwrite.mp_textColor_green.ToString(), elements => {OverwriteTextColor(elements, Colors.TextGreen);}},
+        {Overwrite.mp_textColor_orange.ToString(), elements => {OverwriteTextColor(elements, Colors.TextOrange);}},
         
         // Border Color
         {Overwrite.mp_borderColor_primary.ToString(), elements => {OverwriteBorderColor(elements, Colors.Primary);}},

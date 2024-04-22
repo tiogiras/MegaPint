@@ -9,6 +9,7 @@ public enum Overwrite
     mp_textColor_secondary,
     mp_textColor_red,
     mp_textColor_green,
+    mp_textColor_orange,
     mp_borderColor_primary,
     mp_borderColor_bg1,
     mp_borderColor_separator,
