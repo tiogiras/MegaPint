@@ -17,6 +17,8 @@ public static class GUIUtility
 
     private const string TooltipPath = "MegaPint/User Interface/Windows/Tooltip";
 
+    private static bool s_linkCooldown;
+
     public static VisualElement Instantiate(VisualTreeAsset asset, VisualElement root = null)
     {
         TemplateContainer element = asset.Instantiate();
@@ -51,10 +53,28 @@ public static class GUIUtility
     private static void HandleLink(CallbackEventHandler link, EventCallback <PointerUpLinkTagEvent> linkCallback)
     {
         if (linkCallback != null)
-            link.RegisterCallback(linkCallback);
-                
+        {
+            link.RegisterCallback<PointerUpLinkTagEvent>(
+                evt =>
+                {
+                    if (s_linkCooldown)
+                        return;
+                    
+                    s_linkCooldown = true;
+                    linkCallback.Invoke(evt);
+                    
+                    ReenableLinks();
+                });
+        }
+
         link.RegisterCallback<PointerOverLinkTagEvent>(HyperlinkOnPointerOver);
         link.RegisterCallback<PointerOutLinkTagEvent>(HyperlinkOnPointerOut);
+    }
+
+    private static async void ReenableLinks()
+    {
+        await Task.Delay(100);
+        s_linkCooldown = false;
     }
 
     private static string ColorLinks(string str)
@@ -113,6 +133,9 @@ public static class GUIUtility
 
     private static void TooltipMove(MouseMoveEvent evt)
     {
+        if (s_tooltip == null)
+            return;
+        
         s_tooltip.style.display = DisplayStyle.Flex;
 
         Vector2 mousePos = evt.mousePosition;

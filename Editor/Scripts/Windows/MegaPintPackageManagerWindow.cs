@@ -576,7 +576,7 @@ namespace Editor.Scripts.Windows
 
         public static void OpenPerLink(PackageKey key)
         {
-            MegaPintBaseWindow.OnOpenPackageManager();
+            BaseWindow.OnOpenPackageManager();
             s_showWithLink?.Invoke(key);
         }
     }
