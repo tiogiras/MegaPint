@@ -39,13 +39,13 @@ internal static partial class ContextMenu
     [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
     public static void Open()
     {
-        TryOpen <MegaPintBaseWindow>(false);
+        TryOpen <BaseWindow>(false);
     }
 
     [MenuItem(MenuItemMegaPint + "/PackageManager", false, 11)]
     private static void OpenImporter()
     {
-        MegaPintBaseWindow.OnOpenPackageManager();
+        BaseWindow.OnOpenPackageManager();
     }
 
     #endregion
