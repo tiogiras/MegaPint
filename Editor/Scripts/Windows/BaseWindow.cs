@@ -43,6 +43,8 @@ internal class BaseWindow : MegaPintEditorWindowBase
 
     private Label _versionNumber;
 
+    private bool _callbacksRegistered;
+
     #region Unity Event Functions
 
     private void OnGUI()
@@ -111,10 +113,15 @@ internal class BaseWindow : MegaPintEditorWindowBase
 
         _btnDevMode.clicked += OnDevMode;
         _btnUpdate.clicked += UpdateBasePackage;
+
+        _callbacksRegistered = true;
     }
 
     protected override void UnRegisterCallbacks()
     {
+        if (!_callbacksRegistered)
+            return;
+        
         PackageCache.onCacheStartRefreshing -= StartCacheRefresh;
 
         _btnPackages.clicked -= SwitchToPackages;
@@ -124,6 +131,8 @@ internal class BaseWindow : MegaPintEditorWindowBase
 
         _btnDevMode.clicked -= OnDevMode;
         _btnUpdate.clicked -= UpdateBasePackage;
+
+        _callbacksRegistered = false;
     }
 
     #endregion
