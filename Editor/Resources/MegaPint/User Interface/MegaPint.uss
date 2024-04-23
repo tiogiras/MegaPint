@@ -70,12 +70,24 @@
 .mp_interaction_dontChangeColorAfterInteract {
 }
 
-.mp_foldout{
-    
+.mp_foldout {
+}
+
+.mp_toggle {
+}
+
+.mp_dropdown {
+}
+
+.mp_inputField {
 }
 
 .mp_useCustomTooltip {
 }
 
 .mp_listSelection_primary {
+}
+
+.preventFocus:focus{
+    color: aquamarine;
 }

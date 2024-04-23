@@ -338,6 +338,33 @@ public static class GUIUtility
     {
         SetBorderColor(element, (StyleColor)color);
     }
+
+    public struct BorderColor
+    {
+        public StyleColor top;
+        public StyleColor bottom;
+        public StyleColor left;
+        public StyleColor right;
+    }
+
+    public static BorderColor GetBorderColor(VisualElement element)
+    {
+        return new BorderColor
+        {
+            top = element.style.borderTopColor,
+            bottom = element.style.borderBottomColor,
+            left = element.style.borderLeftColor,
+            right = element.style.borderRightColor
+        };
+    }
+
+    public static void SetBorderColor(VisualElement element, BorderColor color)
+    {
+        element.style.borderTopColor = color.top;
+        element.style.borderBottomColor = color.bottom;
+        element.style.borderLeftColor = color.left;
+        element.style.borderRightColor = color.right;
+    }
     
     public static void SetBorderColor(VisualElement element, StyleColor color)
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.GUI
@@ -175,6 +176,9 @@ public static class RootElement
         // Others
         {Overwrite.mp_listSelection_primary.ToString(), elements => {OverwriteListSelection(elements, Colors.PrimaryInteracted);}},
         {Overwrite.mp_foldout.ToString(), OverwriteFoldout},
+        {Overwrite.mp_toggle.ToString(), OverwriteToggle},
+        {Overwrite.mp_dropdown.ToString(), OverwriteDropdown},
+        {Overwrite.mp_inputField.ToString(), OverwriteInputField},
     };
 
     private static void OverwriteTooltip(List <VisualElement> elements)
@@ -211,8 +215,143 @@ public static class RootElement
             element.Q(className: "unity-toggle__text").focusable = false;
             element.Q(className: "unity-toggle__checkmark").focusable = false;
         }   
-    }
+    }  
     
+    private static void OverwriteDropdown(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            element.focusable = false;
+
+            VisualElement label = element.Q(className: "unity-base-field__label");
+            
+            label.style.color = Colors.TextSecondary;
+            label.focusable = false;
+        }   
+    }     
+    
+    private static void OverwriteInputField(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            VisualElement label = element.Q(className: "unity-base-field__label");
+            VisualElement inputElement = element.Q(className: "unity-base-text-field__input");
+
+            inputElement.focusable = false;
+            label.focusable = false;
+
+            GUIUtility.BorderColor defaultBorderColor = GUIUtility.GetBorderColor(inputElement);
+            
+            label.style.color = Colors.TextSecondary;
+
+            var focused = false;
+            var hovered = false;
+            
+            element.RegisterCallback<PointerEnterEvent>(
+                evt =>
+                {
+                    hovered = true;
+
+                    GUIUtility.SetBorderColor(inputElement, Colors.Primary);
+                });
+            
+            element.RegisterCallback<FocusEvent>(
+                evt =>
+                {
+                    focused = true;
+                });
+            
+            element.RegisterCallback<PointerLeaveEvent>(
+                evt =>
+                {
+                    hovered = false;
+                    
+                    if (focused)
+                        return;
+                    
+                    GUIUtility.SetBorderColor(inputElement, defaultBorderColor);
+                });
+            
+            element.RegisterCallback<BlurEvent>(
+                evt =>
+                {
+                    focused = false;
+                    
+                    if (hovered)
+                        return;
+                    
+                    GUIUtility.SetBorderColor(inputElement, defaultBorderColor);
+                });
+        }   
+    }  
+    
+    private static void OverwriteToggle(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            VisualElement input = element.Q(className: "unity-toggle__input");
+            VisualElement checkmark = input.Q(className: "unity-toggle__checkmark");
+            VisualElement label = element.Q(className: "unity-toggle__label");
+
+            input.focusable = false;
+            label.focusable = false;
+            
+            label.style.color = Colors.TextSecondary;
+
+            GUIUtility.BorderColor defaultBorderColor = GUIUtility.GetBorderColor(checkmark);
+
+            var pressed = false;
+            var hovered = false;
+            
+            element.RegisterCallback<PointerEnterEvent>(
+                evt =>
+                {
+                    GUIUtility.SetBorderWidth(checkmark, 1);
+                    GUIUtility.SetBorderRadius(checkmark, 2);
+                    GUIUtility.SetBorderColor(checkmark, Colors.Primary);
+
+                    hovered = true;
+                });
+            
+            element.RegisterCallback<PointerLeaveEvent>(
+                evt =>
+                {
+                    hovered = false;
+                    
+                    if (pressed)
+                        return;
+
+                    GUIUtility.SetBorderWidth(checkmark, 0);
+                    GUIUtility.SetBorderRadius(checkmark, 0);
+                    GUIUtility.SetBorderColor(checkmark, defaultBorderColor);
+                });
+            
+            element.RegisterCallback<PointerDownEvent>(
+                evt =>
+                {
+                    GUIUtility.SetBorderColor(checkmark, Colors.PrimaryInteracted);
+                    
+                    pressed = true;
+                }, TrickleDown.TrickleDown);
+            
+            element.RegisterCallback<PointerUpEvent>(
+                evt =>
+                {
+                    pressed = false;
+
+                    if (hovered)
+                    {
+                        GUIUtility.SetBorderColor(checkmark, Colors.Primary);
+                        return;   
+                    }
+
+                    GUIUtility.SetBorderWidth(checkmark, 0);
+                    GUIUtility.SetBorderRadius(checkmark, 0);
+                    GUIUtility.SetBorderColor(checkmark, defaultBorderColor);
+                });
+        }
+    }
+
     private static void OverwriteListSelection(List <VisualElement> elements, Color color)
     {
         foreach (VisualElement element in elements)
