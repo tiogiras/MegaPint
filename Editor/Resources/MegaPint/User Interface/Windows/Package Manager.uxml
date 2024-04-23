@@ -12,7 +12,7 @@
                 <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="ScrollView" style="flex-grow: 1;">
                     <ui:GroupBox>
                         <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: center;">
-                            <Editor.Scripts.GUI.Factories.Headings.MpHeading1 tabindex="-1" name="PackageName" text="Package Name" style="-unity-font-style: bold; font-size: 20px; margin-left: 10px; margin-top: 10px; margin-bottom: 10px; margin-right: 0;" />
+                            <Editor.Scripts.GUI.Factories.Headings.MpHeading1 name="PackageName" text="Package Name" style="-unity-font-style: bold; font-size: 20px; margin-left: 10px; margin-top: 10px; margin-bottom: 10px; margin-right: 0;" />
                             <ui:VisualElement tooltip="Show Package Preview" name="Gallery" class="mp_interaction_imageOnly mp_imageTint_textSecondary" style="width: 20px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/Galerie&apos;);" />
                         </ui:VisualElement>
                         <Editor.Scripts.GUI.Factories.Separator />
@@ -25,10 +25,7 @@
                                 <ui:IMGUIContainer name="MegaPintVersion" tooltip="MegaPint Version:" class="mp_interaction_imageOnly mp_imageTint_textSecondary mp_useCustomTooltip" style="width: 15px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/MegaPint Version&apos;);" />
                             </ui:VisualElement>
                             <Editor.Scripts.GUI.Factories.SeparatorVertical style="flex-shrink: 0;" />
-                            <ui:VisualElement style="flex-grow: 1; flex-direction: column;">
-                                <Editor.Scripts.GUI.Factories.Text tabindex="-1" text="Info Text ..." name="InfoText" style="margin-top: 0; margin-bottom: 0; margin-left: 10px; font-size: 12.5px; white-space: normal; flex-grow: 1; margin-right: 0; -unity-text-align: middle-left; flex-shrink: 1;" />
-                                <ui:VisualElement name="Images" style="flex-grow: 1; flex-direction: row; width: 100%;" />
-                            </ui:VisualElement>
+                            <Editor.Scripts.GUI.Factories.Text tabindex="-1" text="Info Text ..." name="InfoText" style="margin-top: 0; margin-bottom: 0; margin-left: 10px; font-size: 12.5px; white-space: normal; flex-grow: 1; margin-right: 0; -unity-text-align: middle-left; flex-shrink: 1;" />
                         </ui:VisualElement>
                         <Editor.Scripts.GUI.Factories.Separator name="DependencySeparator" Space="1.5" />
                         <Editor.Scripts.GUI.Factories.Backgrounds.Background2 name="PackageVariationsParent" style="margin-top: 10px; margin-right: 20px; margin-bottom: 10px; margin-left: 20px;">
@@ -38,9 +35,9 @@
                     </ui:GroupBox>
                 </ui:ScrollView>
                 <ui:GroupBox style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row-reverse;">
-                    <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Import" text="Import" style="height: 15px;" />
-                    <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Remove" text="Remove" style="height: 15px;" />
-                    <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Update" text="Update" style="height: 15px;" />
+                    <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Import" text="Import" display-tooltip-when-elided="true" tooltip="Import the selected package." style="height: 15px;" />
+                    <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Remove" text="Remove" display-tooltip-when-elided="true" tooltip="Remove the selected package." style="height: 15px;" />
+                    <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Update" text="Update" display-tooltip-when-elided="true" tooltip="Update the selected package." style="height: 15px;" />
                 </ui:GroupBox>
             </ui:GroupBox>
         </Editor.Scripts.GUI.Factories.Backgrounds.Background3>

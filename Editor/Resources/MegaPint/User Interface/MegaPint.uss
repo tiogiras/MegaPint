@@ -70,6 +70,10 @@
 .mp_interaction_dontChangeColorAfterInteract {
 }
 
+.mp_foldout{
+    
+}
+
 .mp_useCustomTooltip {
 }
 

@@ -67,7 +67,7 @@ public static class RootElement
     private static readonly ThemedColor s_infoColor = new()
     {
         darkColor = new Color(0.82f, 0.32f, 0.54f),
-        lightColor = new Color(0.82f, 0.47f, 0f)
+        lightColor = new Color(0.82f, 0.32f, 0.54f)
     };
 
     private static readonly ThemedColor s_primary = new()
@@ -173,7 +173,8 @@ public static class RootElement
         {Overwrite.mp_useCustomTooltip.ToString(), OverwriteTooltip},
         
         // Others
-        {Overwrite.mp_listSelection_primary.ToString(), elements => {OverwriteListSelection(elements, Colors.PrimaryInteracted);}}
+        {Overwrite.mp_listSelection_primary.ToString(), elements => {OverwriteListSelection(elements, Colors.PrimaryInteracted);}},
+        {Overwrite.mp_foldout.ToString(), OverwriteFoldout},
     };
 
     private static void OverwriteTooltip(List <VisualElement> elements)
@@ -201,6 +202,17 @@ public static class RootElement
         }
     }
 
+    private static void OverwriteFoldout(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            element.Q(className: "unity-toggle").focusable = false;
+            element.Q(className: "unity-toggle__input").focusable = false;
+            element.Q(className: "unity-toggle__text").focusable = false;
+            element.Q(className: "unity-toggle__checkmark").focusable = false;
+        }   
+    }
+    
     private static void OverwriteListSelection(List <VisualElement> elements, Color color)
     {
         foreach (VisualElement element in elements)

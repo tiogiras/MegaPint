@@ -5,9 +5,9 @@
             <Editor.Scripts.GUI.Factories.Text tabindex="-1" name="PackageName" text="PackageName" style="white-space: normal;" />
             <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; flex-grow: 1; justify-content: flex-end;">
                 <Editor.Scripts.GUI.Factories.Text tabindex="-1" text="1.0.0" name="Version" class="mp_textColor_red" style="white-space: normal;" />
-                <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Import" text="Import" />
-                <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Update" text="Update" />
-                <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Remove" text="Remove" />
+                <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Import" text="Import" tooltip="Import this variation." display-tooltip-when-elided="true" />
+                <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Update" text="Update" tooltip="Update this variation." display-tooltip-when-elided="true" />
+                <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Remove" text="Remove" display-tooltip-when-elided="true" tooltip="Remove this variation." />
             </ui:GroupBox>
         </ui:GroupBox>
         <ui:Foldout text="Dependencies" name="Dependencies" value="false" class="mp_font mp_textColor_normal" style="-unity-font-style: bold; width: 100%;" />
