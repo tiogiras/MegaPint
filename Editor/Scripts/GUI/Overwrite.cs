@@ -21,6 +21,7 @@ public enum Overwrite
     mp_imageTint_textSecondary,
     mp_interaction,
     mp_interaction_imageOnly,
+    mp_foldout,
     mp_listSelection_primary,
     mp_useCustomTooltip
 }

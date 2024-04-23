@@ -452,6 +452,18 @@ public static class GUIUtility
                 SetBorderColor(target, defaultBorderColor);
             });
         
+        element.RegisterCallback<FocusEvent>(
+            evt =>
+            {
+                SetBorderColor((VisualElement)evt.target, RootElement.Colors.Primary);
+            });
+        
+        element.RegisterCallback<BlurEvent>(
+            evt =>
+            {
+                SetBorderColor((VisualElement)evt.target, defaultBorderColor);
+            });
+        
         if (!onlyLoseFocusOnBlur)
             return;
         
@@ -467,8 +479,6 @@ public static class GUIUtility
                 var target = (VisualElement)evt.target;
                 
                 target.style.backgroundColor = defaultBackgroundColor;
-
-                SetBorderColor(target, defaultBorderColor);
             });
     }
 
