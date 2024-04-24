@@ -182,7 +182,7 @@ public static class RootElement
         {Overwrite.mp_dropdown.ToString(), OverwriteDropdown},
         {Overwrite.mp_inputField.ToString(), OverwriteInputField},
         {Overwrite.mp_colorField.ToString(), OverwriteColorField},
-        //{Overwrite.mp_objectField.ToString(), OverwriteObjectField},
+        {Overwrite.mp_objectField.ToString(), OverwriteObjectField},
     };
 
     private static void OverwriteTooltip(List <VisualElement> elements)
@@ -240,6 +240,24 @@ public static class RootElement
         {
             VisualElement label = element.Q(className: "unity-base-field__label");
             VisualElement inputElement = element.Q(className: "unity-base-text-field__input");
+            
+            switch (element)
+            {
+                case IntegerField intField:
+                    intField.selectAllOnFocus = false;
+
+                    break;
+
+                case FloatField floatField:
+                    floatField.selectAllOnFocus = false;
+
+                    break;
+
+                case TextField textField:
+                    textField.selectAllOnFocus = false;
+
+                    break;
+            }
 
             inputElement.focusable = false;
             label.focusable = false;
@@ -287,7 +305,32 @@ public static class RootElement
                     GUIUtility.SetBorderColor(inputElement, defaultBorderColor);
                 });
         }   
-    }  
+    }
+
+    private static void OverwriteObjectField(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            VisualElement label = element.Q(className: "unity-base-field__label");
+            VisualElement inputElement = element.Q(className: "unity-base-field__input");
+
+            label.style.color = Colors.TextSecondary;
+            
+            GUIUtility.BorderColor defaultBorderColor = GUIUtility.GetBorderColor(inputElement);
+            
+            element.RegisterCallback <PointerEnterEvent>(
+                _ =>
+                {
+                    GUIUtility.SetBorderColor(inputElement, Colors.Primary);
+                });
+
+            element.RegisterCallback<PointerLeaveEvent>(
+                _ =>
+                {
+                    GUIUtility.SetBorderColor(inputElement, defaultBorderColor);
+                });
+        }
+    }
     
     private static void OverwriteColorField(List <VisualElement> elements)
     {
