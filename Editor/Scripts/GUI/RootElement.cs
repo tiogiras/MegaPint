@@ -296,6 +296,8 @@ public static class RootElement
             VisualElement label = element.Q(className: "unity-base-field__label");
             VisualElement inputElement = element.Q(className: "unity-base-field__input");
 
+            inputElement.style.height = 18;
+
             var fieldNameIdentifier = $"MegaPintColorField{elements.IndexOf(element)}";
             var target = (IMGUIContainer)inputElement;
 
@@ -310,15 +312,12 @@ public static class RootElement
                 if (Event.current.type == EventType.ExecuteCommand && Event.current.commandName == "EyeDropperUpdate")
                     hasEyeUpdate = true;
 
-                if (currentCheck == 5)
+                if (currentCheck == 3)
                 {
-                    Debug.Log(hasEyeUpdate);
-
                     if (UnityEngine.GUI.GetNameOfFocusedControl() == fieldNameIdentifier && !hasEyeUpdate)
                     {
                         if (wouldRemove)
                         {
-                            Debug.Log("Focus Removed");
                             UnityEngine.GUI.FocusControl(null);
                             
                             wouldRemove = false;
@@ -335,29 +334,6 @@ public static class RootElement
                     currentCheck++;
                 }
 
-
-
-                /*if (isEyeDropperUpdate)
-                {
-                    
-                }*/
-
-                //Debug.Log($"Name: {UnityEngine.GUI.GetNameOfFocusedControl()} | Eye: {isEyeDropperUpdate}");
-
-                /*if (UnityEngine.GUI.GetNameOfFocusedControl() == fieldNameIdentifier && !isEyeDropperUpdate)
-                {
-                    if (wasFocused == 5)
-                    {
-                        Debug.Log("would remove");
-                    
-                        /*UnityEngine.GUI.FocusControl(null);#1#
-                        wasFocused = 0;
-                    }
-
-                    wasFocused++;
-                }*/
-                    
-                
                 UnityEngine.GUI.SetNextControlName(fieldNameIdentifier);
                 action?.Invoke();
             };
