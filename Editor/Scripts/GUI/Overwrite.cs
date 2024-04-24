@@ -25,6 +25,8 @@ public enum Overwrite
     mp_toggle,
     mp_dropdown,
     mp_inputField,
+    mp_colorField,
+    mp_objectField,
     mp_listSelection_primary,
     mp_useCustomTooltip
 }

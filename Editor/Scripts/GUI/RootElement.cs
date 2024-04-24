@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -179,6 +181,8 @@ public static class RootElement
         {Overwrite.mp_toggle.ToString(), OverwriteToggle},
         {Overwrite.mp_dropdown.ToString(), OverwriteDropdown},
         {Overwrite.mp_inputField.ToString(), OverwriteInputField},
+        {Overwrite.mp_colorField.ToString(), OverwriteColorField},
+        //{Overwrite.mp_objectField.ToString(), OverwriteObjectField},
     };
 
     private static void OverwriteTooltip(List <VisualElement> elements)
@@ -285,6 +289,99 @@ public static class RootElement
         }   
     }  
     
+    private static void OverwriteColorField(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            VisualElement label = element.Q(className: "unity-base-field__label");
+            VisualElement inputElement = element.Q(className: "unity-base-field__input");
+
+            var fieldNameIdentifier = $"MegaPintColorField{elements.IndexOf(element)}";
+            var target = (IMGUIContainer)inputElement;
+
+            var currentCheck = 0;
+            var hasEyeUpdate = false;
+            var wouldRemove = false;
+            
+            Action action = target.onGUIHandler;
+
+            target.onGUIHandler = () =>
+            {
+                if (Event.current.type == EventType.ExecuteCommand && Event.current.commandName == "EyeDropperUpdate")
+                    hasEyeUpdate = true;
+
+                if (currentCheck == 5)
+                {
+                    Debug.Log(hasEyeUpdate);
+
+                    if (UnityEngine.GUI.GetNameOfFocusedControl() == fieldNameIdentifier && !hasEyeUpdate)
+                    {
+                        if (wouldRemove)
+                        {
+                            Debug.Log("Focus Removed");
+                            UnityEngine.GUI.FocusControl(null);
+                            
+                            wouldRemove = false;
+                        }
+                        else
+                            wouldRemove = true;
+                    }
+
+                    hasEyeUpdate = false;
+                    currentCheck = 0;
+                }
+                else
+                {
+                    currentCheck++;
+                }
+
+
+
+                /*if (isEyeDropperUpdate)
+                {
+                    
+                }*/
+
+                //Debug.Log($"Name: {UnityEngine.GUI.GetNameOfFocusedControl()} | Eye: {isEyeDropperUpdate}");
+
+                /*if (UnityEngine.GUI.GetNameOfFocusedControl() == fieldNameIdentifier && !isEyeDropperUpdate)
+                {
+                    if (wasFocused == 5)
+                    {
+                        Debug.Log("would remove");
+                    
+                        /*UnityEngine.GUI.FocusControl(null);#1#
+                        wasFocused = 0;
+                    }
+
+                    wasFocused++;
+                }*/
+                    
+                
+                UnityEngine.GUI.SetNextControlName(fieldNameIdentifier);
+                action?.Invoke();
+            };
+
+            label.style.color = Colors.TextSecondary;
+            
+            GUIUtility.SetBorderWidth(inputElement, 1);
+            GUIUtility.SetBorderRadius(inputElement, 2);
+            GUIUtility.SetBorderColor(inputElement, Colors.Bg1);
+
+            element.RegisterCallback <PointerEnterEvent>(
+                _ =>
+                {
+                    GUIUtility.SetBorderColor(inputElement, Colors.Primary);
+                });
+
+            element.RegisterCallback<PointerLeaveEvent>(
+                _ =>
+                {
+                    GUIUtility.SetBorderColor(inputElement, Colors.Bg1);
+                });
+        }   
+    }  
+    
     private static void OverwriteToggle(List <VisualElement> elements)
     {
         foreach (VisualElement element in elements)
@@ -369,7 +466,7 @@ public static class RootElement
                 {
                     foreach (VisualElement visualElement in lastSelected)
                     {
-                        visualElement.style.backgroundColor = new Color(0, 0, 0, 0);
+                        visualElement.style.backgroundColor = StyleKeyword.Null;
                     }
                     
                     lastSelected.Clear();

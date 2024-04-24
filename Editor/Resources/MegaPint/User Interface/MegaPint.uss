@@ -82,12 +82,18 @@
 .mp_inputField {
 }
 
+.mp_colorField {
+}
+
+.mp_objectField {
+}
+
 .mp_useCustomTooltip {
 }
 
 .mp_listSelection_primary {
 }
 
-.preventFocus:focus{
-    color: aquamarine;
+.test:focus{
+    border-bottom-color: aquamarine;
 }
