@@ -228,6 +228,9 @@ public static class RootElement
             element.focusable = false;
 
             VisualElement label = element.Q(className: "unity-base-field__label");
+            
+            if (label == null)
+                continue;
 
             label.style.color = Colors.TextSecondary;
             label.focusable = false;
