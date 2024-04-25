@@ -145,7 +145,11 @@ internal class CachedPackage : IComparable <CachedPackage>
     public void RegisterDependencies(List <Dependency> dependencies)
     {
         Debug.Log($"Registering Dependencies for {Name}");
-        Debug.Log(string.Join(", ", dependencies));
+
+        foreach (Dependency dependency in dependencies)
+        {
+            Debug.Log(dependency.name);
+        }
         
         _myDependants = dependencies;
     }

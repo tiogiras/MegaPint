@@ -236,7 +236,9 @@ internal static class PackageCache
         foreach (KeyValuePair <PackageKey, List <Dependency>> valuePair in allDependencies)
         {
             SetProcess($"Registering Dependencies: {valuePair.Key}");
-            
+
+            Debug.Log(valuePair);
+
             CachedPackage cachedPackage = s_cache[valuePair.Key];
             cachedPackage.RegisterDependencies(valuePair.Value);
             
