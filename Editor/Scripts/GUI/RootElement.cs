@@ -284,6 +284,8 @@ public static class RootElement
                 evt =>
                 {
                     focused = true;
+                    
+                    GUIUtility.SetBorderColor(inputElement, Colors.Primary);
                 });
             
             element.RegisterCallback<PointerLeaveEvent>(

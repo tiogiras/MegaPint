@@ -167,6 +167,8 @@ internal class BaseWindow : MegaPintEditorWindowBase
 
     private void CreateGUIContent(VisualElement root)
     {
+        root.Clear();
+        
         VisualElement content = GUIUtility.Instantiate(_baseWindow, root);
 
         CollectVisualReferences(content);
