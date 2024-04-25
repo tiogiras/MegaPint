@@ -1,22 +1,21 @@
 ﻿#if UNITY_EDITOR
-using Editor.Scripts.Windows;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using GUIUtility = Editor.Scripts.GUI.GUIUtility;
 
 namespace Editor.Scripts.Settings.BaseSettings
 {
     internal static class MegaPintBaseSettingsDisplay
     {
-        private const string BasePath = "User Interface/MegaPint Base Settings/xxxDisplay";
+        private const string BasePath = "MegaPint/User Interface/Info Content/xxx";
 
         private static VisualElement s_element;
         
         public static void Display(VisualElement root, MegaPintBaseSettingsData.SettingKey key)
         {
-            s_element = Load(key).Instantiate();
-            root.Add(s_element);
-
-            ActivateLogic(key);
+            s_element = GUIUtility.Instantiate(Load(key), root);
+            ActivateLogic(key, root);
         }
 
         private static VisualTreeAsset Load(MegaPintBaseSettingsData.SettingKey key)
@@ -25,60 +24,118 @@ namespace Editor.Scripts.Settings.BaseSettings
         private static string GetDisplayPath(MegaPintBaseSettingsData.SettingKey key)
             => BasePath.Replace("xxx", key.ToString());
         
-        private static void ActivateLogic(MegaPintBaseSettingsData.SettingKey key)
+        private static void ActivateLogic(MegaPintBaseSettingsData.SettingKey key, VisualElement root)
         {
             switch (key)
             {
-                case MegaPintBaseSettingsData.SettingKey.Contact: RegisterCallbacksContact(); break;
-                case MegaPintBaseSettingsData.SettingKey.ManagePackages: break;
-                case MegaPintBaseSettingsData.SettingKey.UsePackages: break;
-                case MegaPintBaseSettingsData.SettingKey.UpdateBasePackage: break;
+                case MegaPintBaseSettingsData.SettingKey.Contact: 
+                    ContactLogic(root);
+
+                    break;
+                case MegaPintBaseSettingsData.SettingKey.ManagePackages: 
+                    ManagePackagesLogic(root);
+
+                    break;
+                case MegaPintBaseSettingsData.SettingKey.UsePackages: 
+                    
+                    break;
+                
+                case MegaPintBaseSettingsData.SettingKey.UpdateBasePackage: 
+                    UpdateBasePackageLogic(root);
+
+                    break;
+
+                case MegaPintBaseSettingsData.SettingKey.Shortcuts:
+                    ShortcutsLogic(root);
+
+                    break;
+                
                 default: return;
             }
         }
 
-        #region Contact
-
-        private static void RegisterCallbacksContact()
+        private static void ContactLogic(VisualElement root)
         {
-            MegaPintBaseWindow.onRightPaneClose += UnRegisterCallbacksContact;
+            GUIUtility.ActivateLinks(
+                root,
+                evt =>
+                {
+                    switch (evt.linkID)
+                    {
+                        case "discord":
+                            Application.OpenURL("https://discord.com/users/282542538819108866");
 
-            s_element.Q<Button>("BTN_Mail").clicked += ContactMail;
-            s_element.Q<Button>("BTN_Discord1").clicked += ContactDiscord;
-            s_element.Q<Button>("BTN_Discord2").clicked += ContactDiscord;
-            s_element.Q<Button>("BTN_Website").clicked += ContactWebsite;
+                            break;
+
+                        case "email":
+                            Application.OpenURL("tiogiras@gmail.com");
+
+                            break;
+
+                        case "website":
+                            Application.OpenURL("https://tiogiras.games");
+
+                            break;
+                    }
+                });
         }
         
-        private static void UnRegisterCallbacksContact()
+        private static void ManagePackagesLogic(VisualElement root)
         {
-            MegaPintBaseWindow.onRightPaneClose -= UnRegisterCallbacksContact;
-            
-            s_element.Q<Button>("BTN_Mail").clicked -= ContactMail;
-            s_element.Q<Button>("BTN_Discord1").clicked -= ContactDiscord;
-            s_element.Q<Button>("BTN_Discord2").clicked -= ContactDiscord;
-            s_element.Q<Button>("BTN_Website").clicked -= ContactWebsite;
-        }
-
-        #region Callbacks
-
-        private static void ContactMail()
-        {
-            Application.OpenURL("tiogiras@gmail.com");
+            GUIUtility.ActivateLinks(
+                root,
+                evt =>
+                {
+                    switch (evt.linkID)
+                    {
+                        case "github":
+                            Application.OpenURL("https://github.com/tiogiras/MegaPint");
+                            break;
+                        
+                        case "MegaPint/PackageManager":
+                            EditorApplication.ExecuteMenuItem(evt.linkID);
+                            break;
+                        
+                        case "Window/Package Manager":
+                            EditorApplication.ExecuteMenuItem(evt.linkID);
+                            break;
+                        
+                        case "website":
+                            Application.OpenURL("https://tiogiras.games");
+                            break;
+                    }
+                });
         }
         
-        private static void ContactDiscord()
+        private static void UpdateBasePackageLogic(VisualElement root)
         {
-            Application.OpenURL("https://discord.com/users/282542538819108866");
-        }
-
-        private static void ContactWebsite()
+            GUIUtility.ActivateLinks(
+                root,
+                evt =>
+                {
+                    switch (evt.linkID)
+                    {
+                        case "website":
+                            Application.OpenURL("https://tiogiras.games");
+                            break;
+                    }
+                });
+        }        
+        
+        private static void ShortcutsLogic(VisualElement root)
         {
-            Application.OpenURL("https://tiogiras.games");
+            GUIUtility.ActivateLinks(
+                root,
+                evt =>
+                {
+                    switch (evt.linkID)
+                    {
+                        case "Edit/Shortcuts...":
+                            EditorApplication.ExecuteMenuItem(evt.linkID);
+                            break;
+                    }
+                });
         }
-
-        #endregion
-
-        #endregion
     }
 }
 #endif

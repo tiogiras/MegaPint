@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
+    <ui:VisualElement style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
+        <Editor.Scripts.GUI.Factories.Backgrounds.Background2 class="mp_borderColor_bg1" style="border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px;">
+            <Editor.Scripts.GUI.Factories.Headings.MpHeading2 tabindex="-1" text="Contact" style="overflow: hidden; white-space: normal; -unity-text-align: upper-center; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; font-size: 16px;" />
+        </Editor.Scripts.GUI.Factories.Backgrounds.Background2>
+        <Editor.Scripts.GUI.Factories.Text tabindex="-1" text="My name is Niklas (aka. Tiogiras).&#10;&#10;If you wish to contact me to report an issue or anything else you can use my &lt;link=&quot;discord&quot;&gt;Discord&lt;/link&gt; or contact me through my &lt;link=&quot;email&quot;&gt;email adress&lt;/link&gt;.&#10;&#10;More information about MegaPint and my other projects are available on my &lt;link=&quot;website&quot;&gt;website&lt;/link&gt;." class="mp_link" style="-unity-text-align: upper-center; white-space: normal; margin-top: 5px; margin-right: 5px; margin-bottom: 20px; margin-left: 5px;" />
+    </ui:VisualElement>
+</ui:UXML>

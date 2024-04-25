@@ -20,7 +20,7 @@ internal static class PackageDataNotePad
             lastUpdate = "28.02.2024",
             name = "com.tiogiras.megapint-notepad",
             displayName = "NotePad",
-            description = "NotePad allows you to make and edit notes directly on a GameObjects MonoBehaviour.",
+            description = "You want to tell your team or remember what a certain MonoBehaviour does?\n\nNotePad allows you to take notes directly on the GameObject. Create simple \"How to's\" or note something todo right where you need it.",
             repository = "https://github.com/tiogiras/MegaPint-NotePad.git"
         };
     }

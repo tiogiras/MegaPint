@@ -53,7 +53,7 @@ internal class PackageManagerTests
         while (_waitingForCache)
             yield return null;
 
-        Assert.IsFalse(PackageCache.Get(PackageKey.Validators).CanBeRemoved(out List <Dependency> _));
+        Assert.IsFalse(PackageCache.Get(PackageKey.Validators).CanBeRemoved(out List <PackageKey> _));
     }
 
     [UnityTest] [Order(1)]

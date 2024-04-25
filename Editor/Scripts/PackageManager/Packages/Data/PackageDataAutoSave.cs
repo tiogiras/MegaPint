@@ -20,7 +20,7 @@ internal static class PackageDataAutoSave
             lastUpdate = "26.02.2024",
             name = "com.tiogiras.megapint-autosave",
             displayName = "Scene-AutoSave",
-            description = "This package allows you to enable an autosaving feature for scenes.",
+            description = "This AutoSave package adds functionality to save your opened scenes in set intervals. You can overwrite your current scene file or create timestamped backup files.\n\nCustomize once and never worry about scene saving again.",
             repository = "https://github.com/tiogiras/MegaPint-AutoSave.git"
         };
     }

@@ -1,33 +1,44 @@
 ﻿#if UNITY_EDITOR
+using Editor.Scripts.GUI;
 using Editor.Scripts.PackageManager;
-using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
+using GUIUtility = Editor.Scripts.GUI.GUIUtility;
 
 namespace Editor.Scripts.Windows
 {
 
 public class MegaPintDevMode : MegaPintEditorWindowBase
 {
-    private MegaPintSettingsBase _settings => MegaPintSettings.instance.GetSetting("General");
+    private static Color s_onColor;
+    private static Color s_offColor;
 
+    private static MegaPintSettingsBase _Settings =>
+        MegaPintSettings.instance.GetSetting("General");
+
+    private VisualTreeAsset _baseWindow;
+    private Button _btnOff;
+    private Button _btnOn;
+
+    private bool _devModeValue;
+    
     #region Public Methods
 
     public override MegaPintEditorWindowBase ShowWindow()
     {
-        titleContent.text = "Developer Mode";
+        titleContent.text = "Development Mode";
 
         return this;
     }
 
     #endregion
-
+    
     #region Protected Methods
 
     protected override string BasePath()
     {
-        return "User Interface/MegaPintDevMode";
+        return "MegaPint/User Interface/Windows/Dev Mode";
     }
 
     protected override void CreateGUI()
@@ -37,17 +48,19 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
         VisualElement root = rootVisualElement;
 
         VisualElement content = _baseWindow.Instantiate();
+        GUIUtility.ApplyTheme(content);
+
+        root.Add(content);
 
         _btnOn = content.Q <Button>("BTN_On");
         _btnOff = content.Q <Button>("BTN_Off");
 
+        s_onColor = RootElement.Colors.Primary;
+        s_offColor = RootElement.Colors.Button;
+
         UpdateButtonStyles();
 
         RegisterCallbacks();
-        
-        PackageCache.Refresh();
-
-        root.Add(content);
     }
 
     protected override bool LoadResources()
@@ -62,7 +75,7 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
         if (!base.LoadSettings())
             return false;
 
-        _devModeValue = _settings.GetValue("devMode", false);
+        _devModeValue = _Settings.GetValue("devMode", false);
 
         return true;
     }
@@ -80,23 +93,23 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
     }
 
     #endregion
-
+    
     #region Private Methods
 
     private void ToggleOff()
     {
         _devModeValue = false;
-        _settings.SetValue("devMode", _devModeValue);
+        _Settings.SetValue("devMode", _devModeValue);
 
         UpdateButtonStyles();
-        
+
         MegaPintPackageManager.UpdateAll();
     }
 
     private void ToggleOn()
     {
         _devModeValue = true;
-        _settings.SetValue("devMode", _devModeValue);
+        _Settings.SetValue("devMode", _devModeValue);
 
         UpdateButtonStyles();
 
@@ -108,25 +121,6 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
         _btnOn.style.backgroundColor = _devModeValue ? s_onColor : s_offColor;
         _btnOff.style.backgroundColor = _devModeValue ? s_offColor : s_onColor;
     }
-
-    #endregion
-
-    #region Private
-
-    /// <summary> Loaded uxml references </summary>
-    private VisualTreeAsset _baseWindow;
-
-    private bool _devModeValue;
-
-    private static readonly Color s_onColor = new(.8196078431372549f, 0f, .4470588235294118f);
-    private static readonly Color s_offColor = new(.34f, .34f, .34f);
-
-    #endregion
-
-    #region Visual References
-
-    private Button _btnOn;
-    private Button _btnOff;
 
     #endregion
 }

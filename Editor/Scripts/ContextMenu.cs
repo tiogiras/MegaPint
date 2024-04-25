@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.Settings;
 using Editor.Scripts.Windows;
 using UnityEditor;
@@ -28,17 +29,23 @@ internal static partial class ContextMenu
     #endregion
 
     #region Private Methods
+    
+    [MenuItem(MenuItemMegaPint + "/Test", false, 0)]
+    public static void Test()
+    {
+        PackageCache.Refresh();
+    }
 
     [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
     public static void Open()
     {
-        TryOpen <MegaPintBaseWindow>(false);
+        TryOpen <BaseWindow>(false);
     }
 
     [MenuItem(MenuItemMegaPint + "/PackageManager", false, 11)]
     private static void OpenImporter()
     {
-        MegaPintBaseWindow.OnOpenPackageManager();
+        BaseWindow.OnOpenPackageManager();
     }
 
     #endregion

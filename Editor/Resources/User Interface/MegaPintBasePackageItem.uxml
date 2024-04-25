@@ -1,6 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=2f2b50e0e132e3a4989e6dbb646711fa&amp;type=3#MegaPint" />
-    <ui:VisualElement style="border-bottom-width: 1px; border-bottom-color: rgb(20, 20, 20); border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;">
-        <ui:Label text="Package Name" display-tooltip-when-elided="true" name="PackageName" style="-unity-font-definition: initial; -unity-font: resource(&apos;RobotoMono-VariableFont_wght&apos;); white-space: normal; color: rgb(255, 255, 255); border-left-color: rgb(255, 0, 102); border-left-width: 2px; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; margin-left: 0; margin-right: 0; font-size: 13px;" />
-    </ui:VisualElement>
-</ui:UXML>

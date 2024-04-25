@@ -23,7 +23,7 @@ namespace Editor.Scripts.Windows
 
         #region Override Methods
 
-        protected override string BasePath() => "User Interface/First Steps/MegaPintFirstSteps";
+        protected override string BasePath() => "MegaPint/User Interface/Windows/First Steps";
 
         public override MegaPintEditorWindowBase ShowWindow()
         {

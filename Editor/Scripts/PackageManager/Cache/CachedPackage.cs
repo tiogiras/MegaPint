@@ -5,6 +5,7 @@ using System.Linq;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
+using UnityEngine;
 
 namespace Editor.Scripts.PackageManager.Cache
 {
@@ -59,8 +60,10 @@ internal class CachedPackage : IComparable <CachedPackage>
 
     /// <summary> All dependencies that this package has </summary>
     public List <Dependency> Dependencies {get; private set;}
+    
+    public List <string> Images {get; private set;}
 
-    private List <Dependency> _myDependants;
+    private List <PackageKey> _myDependants;
 
     /// <summary>
     ///     Create a new CachedPackage from the corresponding <see cref="PackageInfo" /> and <see cref="PackageData" />
@@ -80,6 +83,7 @@ internal class CachedPackage : IComparable <CachedPackage>
         Version = packageData.version;
         UnityVersion = packageData.unityVersion;
         Repository = packageData.repository;
+        Images = packageData.images;
 
         // PackageInfo Information
         IsInstalled = packageInfo != null;
@@ -129,7 +133,7 @@ internal class CachedPackage : IComparable <CachedPackage>
     /// <summary> If the package can be removed or if packages are dependant on it </summary>
     /// <param name="dependencies"> Dependencies that point to this package </param>
     /// <returns> True when no dependencies point to this package </returns>
-    public bool CanBeRemoved(out List <Dependency> dependencies)
+    public bool CanBeRemoved(out List <PackageKey> dependencies)
     {
         dependencies = _myDependants;
 
@@ -138,7 +142,7 @@ internal class CachedPackage : IComparable <CachedPackage>
 
     /// <summary> Register dependencies that point to this package </summary>
     /// <param name="dependencies"> Dependencies to register </param>
-    public void RegisterDependencies(List <Dependency> dependencies)
+    public void RegisterDependencies(List <PackageKey> dependencies)
     {
         _myDependants = dependencies;
     }
