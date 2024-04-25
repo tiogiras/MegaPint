@@ -551,7 +551,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
             EditorUtility.DisplayDialog(
                 "Remove Failed",
-                $"Cannot remove the package because [{str}] depend on it!",
+                $"Cannot remove the package because [{str}] depends on it!",
                 "Ok");
         }
     }
