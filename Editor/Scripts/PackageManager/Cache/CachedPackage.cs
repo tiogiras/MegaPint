@@ -63,7 +63,7 @@ internal class CachedPackage : IComparable <CachedPackage>
     
     public List <string> Images {get; private set;}
 
-    private List <Dependency> _myDependants;
+    private List <PackageKey> _myDependants;
 
     /// <summary>
     ///     Create a new CachedPackage from the corresponding <see cref="PackageInfo" /> and <see cref="PackageData" />
@@ -133,7 +133,7 @@ internal class CachedPackage : IComparable <CachedPackage>
     /// <summary> If the package can be removed or if packages are dependant on it </summary>
     /// <param name="dependencies"> Dependencies that point to this package </param>
     /// <returns> True when no dependencies point to this package </returns>
-    public bool CanBeRemoved(out List <Dependency> dependencies)
+    public bool CanBeRemoved(out List <PackageKey> dependencies)
     {
         dependencies = _myDependants;
 
@@ -142,13 +142,13 @@ internal class CachedPackage : IComparable <CachedPackage>
 
     /// <summary> Register dependencies that point to this package </summary>
     /// <param name="dependencies"> Dependencies to register </param>
-    public void RegisterDependencies(List <Dependency> dependencies)
+    public void RegisterDependencies(List <PackageKey> dependencies)
     {
         Debug.Log($"Registering Dependencies for {Name}");
 
-        foreach (Dependency dependency in dependencies)
+        foreach (PackageKey dependency in dependencies)
         {
-            Debug.Log(dependency.name);
+            Debug.Log(dependency);
         }
         
         _myDependants = dependencies;

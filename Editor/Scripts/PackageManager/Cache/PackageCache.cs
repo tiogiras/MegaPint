@@ -42,7 +42,7 @@ internal static class PackageCache
     /// <param name="key"> Key to the targeted package </param>
     /// <param name="dependencies"> Dependencies that point to the package </param>
     /// <returns> True when no dependencies point to the package </returns>
-    public static bool CanBeRemoved(PackageKey key, out List <Dependency> dependencies)
+    public static bool CanBeRemoved(PackageKey key, out List <PackageKey> dependencies)
     {
         return s_cache[key].CanBeRemoved(out dependencies);
     }
@@ -202,7 +202,7 @@ internal static class PackageCache
 
         s_cache.Clear();
 
-        Dictionary <PackageKey, List <Dependency>> allDependencies = new();
+        Dictionary <PackageKey, List <PackageKey>> allDependencies = new();
 
         var step = .3f / mpPackages.Length;
         
@@ -215,12 +215,17 @@ internal static class PackageCache
                 installedPackagesNames.Contains(packageData.name) ? installedPackages[installedPackagesNames.IndexOf(packageData.name)] : null,
                 out List <Dependency> dependencies);
 
+            Debug.Log(0);
+            Debug.Log(string.Join(", ", dependencies.Select(dependency => dependency.name)));
+
             if (dependencies is {Count: > 0})
             {
+                // Dependencies = Validators (from AlphaButton package)
                 foreach (Dependency dependency in dependencies)
                 {
-                    allDependencies.TryAdd(dependency.key, new List <Dependency>());
-                    allDependencies[dependency.key].Add(dependency);
+                    // Add a dependenant to the dependency package (Validators (dependency.key))
+                    allDependencies.TryAdd(dependency.key, new List <PackageKey>());
+                    allDependencies[dependency.key].Add(package.Key);
                 }
             }
 
@@ -233,11 +238,11 @@ internal static class PackageCache
 
         step = .2f / allDependencies.Count;
         
-        foreach (KeyValuePair <PackageKey, List <Dependency>> valuePair in allDependencies)
+        foreach (KeyValuePair <PackageKey, List <PackageKey>> valuePair in allDependencies)
         {
             SetProcess($"Registering Dependencies: {valuePair.Key}");
 
-            Debug.Log($"{valuePair.Key} | {string.Join(", ", valuePair.Value.Select(dependency => dependency.name))}");
+            Debug.Log($"{valuePair.Key} | {string.Join(", ", valuePair.Value.Select(dependency => dependency))}");
 
             CachedPackage cachedPackage = s_cache[valuePair.Key];
             cachedPackage.RegisterDependencies(valuePair.Value);

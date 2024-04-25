@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Editor.Scripts.GUI;
 using Editor.Scripts.PackageManager;
@@ -534,7 +535,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
     {
         CachedPackage package = _displayedPackages[_list.selectedIndex];
 
-        if (package.CanBeRemoved(out List <Dependency> dependants))
+        if (package.CanBeRemoved(out List <PackageKey> dependants))
         {
             ButtonSubscriptions(false);
             
@@ -544,7 +545,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
         }
         else
         {
-            List <string> deps = dependants.Select(dependant => dependant.name).ToList();
+            List <string> deps = dependants.Select(dependant => dependant.ToString()).ToList();
 
             var str = string.Join(", ", deps);
 
