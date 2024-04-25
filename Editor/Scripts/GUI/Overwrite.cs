@@ -22,6 +22,11 @@ public enum Overwrite
     mp_interaction,
     mp_interaction_imageOnly,
     mp_foldout,
+    mp_toggle,
+    mp_dropdown,
+    mp_inputField,
+    mp_colorField,
+    mp_objectField,
     mp_listSelection_primary,
     mp_useCustomTooltip
 }

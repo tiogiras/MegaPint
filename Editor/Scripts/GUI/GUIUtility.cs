@@ -326,6 +326,17 @@ public static class GUIUtility
             TrickleDown.TrickleDown);
     }
     
+    public static BorderWidth GetBorderWidth(VisualElement element)
+    {
+        return new BorderWidth
+        {
+            top = element.style.borderTopWidth.keyword == StyleKeyword.Null ? StyleKeyword.Null : element.style.borderTopWidth,
+            bottom = element.style.borderBottomWidth.keyword == StyleKeyword.Null ? StyleKeyword.Null : element.style.borderBottomWidth,
+            left = element.style.borderLeftWidth.keyword == StyleKeyword.Null ? StyleKeyword.Null : element.style.borderLeftWidth,
+            right = element.style.borderRightWidth.keyword == StyleKeyword.Null ? StyleKeyword.Null : element.style.borderRightWidth,
+        };
+    }
+    
     public static void SetBorderWidth(VisualElement element, float width)
     {
         element.style.borderTopWidth = width;
@@ -334,9 +345,60 @@ public static class GUIUtility
         element.style.borderLeftWidth = width;
     }
     
+    public static void SetBorderWidth(VisualElement element, BorderWidth width)
+    {
+        element.style.borderTopWidth = width.top.keyword == StyleKeyword.Null ? StyleKeyword.Null : width.top;
+        element.style.borderBottomWidth = width.bottom.keyword == StyleKeyword.Null ? StyleKeyword.Null : width.bottom;
+        element.style.borderLeftWidth = width.left.keyword == StyleKeyword.Null ? StyleKeyword.Null : width.left;
+        element.style.borderRightWidth = width.right.keyword == StyleKeyword.Null ? StyleKeyword.Null : width.right;
+    }
+    
     public static void SetBorderColor(VisualElement element, Color color)
     {
         SetBorderColor(element, (StyleColor)color);
+    }
+
+    public struct BorderColor
+    {
+        public StyleColor top;
+        public StyleColor bottom;
+        public StyleColor left;
+        public StyleColor right;
+    }
+
+    public struct BorderRadius
+    {
+        public StyleLength topLeft;
+        public StyleLength topRight;
+        public StyleLength bottomLeft;
+        public StyleLength bottomRight;
+    }
+    
+    public struct BorderWidth
+    {
+        public StyleFloat top;
+        public StyleFloat bottom;
+        public StyleFloat left;
+        public StyleFloat right;
+    }
+
+    public static BorderColor GetBorderColor(VisualElement element)
+    {
+        return new BorderColor
+        {
+            top = element.style.borderTopColor.keyword == StyleKeyword.Null ? StyleKeyword.Null : element.style.borderTopColor,
+            bottom = element.style.borderBottomColor.keyword == StyleKeyword.Null ? StyleKeyword.Null : element.style.borderBottomColor,
+            left = element.style.borderLeftColor.keyword == StyleKeyword.Null ? StyleKeyword.Null : element.style.borderLeftColor,
+            right = element.style.borderRightColor.keyword == StyleKeyword.Null ? StyleKeyword.Null : element.style.borderRightColor
+        };
+    }
+
+    public static void SetBorderColor(VisualElement element, BorderColor color)
+    {
+        element.style.borderTopColor = color.top.keyword == StyleKeyword.Null ? StyleKeyword.Null : color.top;
+        element.style.borderBottomColor = color.bottom.keyword == StyleKeyword.Null ? StyleKeyword.Null : color.bottom;
+        element.style.borderLeftColor = color.left.keyword == StyleKeyword.Null ? StyleKeyword.Null : color.left;
+        element.style.borderRightColor = color.right.keyword == StyleKeyword.Null ? StyleKeyword.Null : color.right;
     }
     
     public static void SetBorderColor(VisualElement element, StyleColor color)
@@ -347,12 +409,31 @@ public static class GUIUtility
         element.style.borderLeftColor = color;
     }
     
+    public static BorderRadius GetBorderRadius(VisualElement element)
+    {
+        return new BorderRadius
+        {
+            topLeft = element.style.borderTopLeftRadius.keyword == StyleKeyword.Null ? StyleKeyword.Null : element.style.borderTopLeftRadius,
+            topRight = element.style.borderTopRightRadius.keyword == StyleKeyword.Null ? StyleKeyword.Null : element.style.borderTopRightRadius,
+            bottomLeft = element.style.borderBottomLeftRadius.keyword == StyleKeyword.Null ? StyleKeyword.Null : element.style.borderBottomLeftRadius,
+            bottomRight = element.style.borderBottomRightRadius.keyword == StyleKeyword.Null ? StyleKeyword.Null : element.style.borderBottomRightRadius,
+        };
+    }
+    
     public static void SetBorderRadius(VisualElement element, float radius)
     {
-        element.style.borderTopRightRadius = radius;
         element.style.borderTopLeftRadius = radius;
-        element.style.borderBottomRightRadius = radius;
+        element.style.borderTopRightRadius = radius;
         element.style.borderBottomLeftRadius = radius;
+        element.style.borderBottomRightRadius = radius;
+    }
+    
+    public static void SetBorderRadius(VisualElement element, BorderRadius radius)
+    {
+        element.style.borderTopLeftRadius = radius.topLeft.keyword == StyleKeyword.Null ? StyleKeyword.Null : radius.topLeft;
+        element.style.borderTopRightRadius = radius.topRight.keyword == StyleKeyword.Null ? StyleKeyword.Null : radius.topRight;
+        element.style.borderBottomLeftRadius = radius.bottomLeft.keyword == StyleKeyword.Null ? StyleKeyword.Null : radius.bottomLeft;
+        element.style.borderBottomRightRadius = radius.bottomRight.keyword == StyleKeyword.Null ? StyleKeyword.Null : radius.bottomRight;
     }
     
     public static void SetMargin(VisualElement element, float margin)

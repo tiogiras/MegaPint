@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.GUI
@@ -175,6 +178,11 @@ public static class RootElement
         // Others
         {Overwrite.mp_listSelection_primary.ToString(), elements => {OverwriteListSelection(elements, Colors.PrimaryInteracted);}},
         {Overwrite.mp_foldout.ToString(), OverwriteFoldout},
+        {Overwrite.mp_toggle.ToString(), OverwriteToggle},
+        {Overwrite.mp_dropdown.ToString(), OverwriteDropdown},
+        {Overwrite.mp_inputField.ToString(), OverwriteInputField},
+        {Overwrite.mp_colorField.ToString(), OverwriteColorField},
+        {Overwrite.mp_objectField.ToString(), OverwriteObjectField},
     };
 
     private static void OverwriteTooltip(List <VisualElement> elements)
@@ -211,8 +219,255 @@ public static class RootElement
             element.Q(className: "unity-toggle__text").focusable = false;
             element.Q(className: "unity-toggle__checkmark").focusable = false;
         }   
+    }  
+    
+    private static void OverwriteDropdown(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            element.focusable = false;
+
+            VisualElement label = element.Q(className: "unity-base-field__label");
+
+            label.style.color = Colors.TextSecondary;
+            label.focusable = false;
+        }   
+    }     
+    
+    private static void OverwriteInputField(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            VisualElement label = element.Q(className: "unity-base-field__label");
+            VisualElement inputElement = element.Q(className: "unity-base-text-field__input");
+            
+            switch (element)
+            {
+                case IntegerField intField:
+                    intField.selectAllOnFocus = false;
+
+                    break;
+
+                case FloatField floatField:
+                    floatField.selectAllOnFocus = false;
+
+                    break;
+
+                case TextField textField:
+                    textField.selectAllOnFocus = false;
+
+                    break;
+            }
+
+            inputElement.focusable = false;
+            label.focusable = false;
+
+            GUIUtility.BorderColor defaultBorderColor = GUIUtility.GetBorderColor(inputElement);
+            
+            label.style.color = Colors.TextSecondary;
+
+            var focused = false;
+            var hovered = false;
+            
+            element.RegisterCallback<PointerEnterEvent>(
+                evt =>
+                {
+                    hovered = true;
+
+                    GUIUtility.SetBorderColor(inputElement, Colors.Primary);
+                });
+            
+            element.RegisterCallback<FocusEvent>(
+                evt =>
+                {
+                    focused = true;
+                });
+            
+            element.RegisterCallback<PointerLeaveEvent>(
+                evt =>
+                {
+                    hovered = false;
+                    
+                    if (focused)
+                        return;
+                    
+                    GUIUtility.SetBorderColor(inputElement, defaultBorderColor);
+                });
+            
+            element.RegisterCallback<BlurEvent>(
+                evt =>
+                {
+                    focused = false;
+                    
+                    if (hovered)
+                        return;
+                    
+                    GUIUtility.SetBorderColor(inputElement, defaultBorderColor);
+                });
+        }   
+    }
+
+    private static void OverwriteObjectField(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            VisualElement label = element.Q(className: "unity-base-field__label");
+            VisualElement inputElement = element.Q(className: "unity-base-field__input");
+
+            label.style.color = Colors.TextSecondary;
+            
+            GUIUtility.BorderColor defaultBorderColor = GUIUtility.GetBorderColor(inputElement);
+            
+            element.RegisterCallback <PointerEnterEvent>(
+                _ =>
+                {
+                    GUIUtility.SetBorderColor(inputElement, Colors.Primary);
+                });
+
+            element.RegisterCallback<PointerLeaveEvent>(
+                _ =>
+                {
+                    GUIUtility.SetBorderColor(inputElement, defaultBorderColor);
+                });
+        }
     }
     
+    private static void OverwriteColorField(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            VisualElement label = element.Q(className: "unity-base-field__label");
+            VisualElement inputElement = element.Q(className: "unity-base-field__input");
+
+            inputElement.style.height = 18;
+
+            var fieldNameIdentifier = $"MegaPintColorField{elements.IndexOf(element)}";
+            var target = (IMGUIContainer)inputElement;
+
+            var currentCheck = 0;
+            var hasEyeUpdate = false;
+            var wouldRemove = false;
+            
+            Action action = target.onGUIHandler;
+
+            target.onGUIHandler = () =>
+            {
+                if (Event.current.type == EventType.ExecuteCommand && Event.current.commandName == "EyeDropperUpdate")
+                    hasEyeUpdate = true;
+
+                if (currentCheck == 3)
+                {
+                    if (UnityEngine.GUI.GetNameOfFocusedControl() == fieldNameIdentifier && !hasEyeUpdate)
+                    {
+                        if (wouldRemove)
+                        {
+                            UnityEngine.GUI.FocusControl(null);
+                            
+                            wouldRemove = false;
+                        }
+                        else
+                            wouldRemove = true;
+                    }
+
+                    hasEyeUpdate = false;
+                    currentCheck = 0;
+                }
+                else
+                {
+                    currentCheck++;
+                }
+
+                UnityEngine.GUI.SetNextControlName(fieldNameIdentifier);
+                action?.Invoke();
+            };
+
+            label.style.color = Colors.TextSecondary;
+            
+            GUIUtility.SetBorderWidth(inputElement, 1);
+            GUIUtility.SetBorderRadius(inputElement, 2);
+            GUIUtility.SetBorderColor(inputElement, Colors.Bg1);
+
+            element.RegisterCallback <PointerEnterEvent>(
+                _ =>
+                {
+                    GUIUtility.SetBorderColor(inputElement, Colors.Primary);
+                });
+
+            element.RegisterCallback<PointerLeaveEvent>(
+                _ =>
+                {
+                    GUIUtility.SetBorderColor(inputElement, Colors.Bg1);
+                });
+        }   
+    }  
+    
+    private static void OverwriteToggle(List <VisualElement> elements)
+    {
+        foreach (VisualElement element in elements)
+        {
+            VisualElement input = element.Q(className: "unity-toggle__input");
+            VisualElement checkmark = input.Q(className: "unity-toggle__checkmark");
+            VisualElement label = element.Q(className: "unity-toggle__label");
+
+            input.focusable = false;
+            label.focusable = false;
+            
+            label.style.color = Colors.TextSecondary;
+
+            GUIUtility.BorderColor defaultBorderColor = GUIUtility.GetBorderColor(checkmark);
+
+            var pressed = false;
+            var hovered = false;
+            
+            element.RegisterCallback<PointerEnterEvent>(
+                evt =>
+                {
+                    GUIUtility.SetBorderWidth(checkmark, 1);
+                    GUIUtility.SetBorderRadius(checkmark, 2);
+                    GUIUtility.SetBorderColor(checkmark, Colors.Primary);
+
+                    hovered = true;
+                });
+            
+            element.RegisterCallback<PointerLeaveEvent>(
+                evt =>
+                {
+                    hovered = false;
+                    
+                    if (pressed)
+                        return;
+
+                    GUIUtility.SetBorderWidth(checkmark, 0);
+                    GUIUtility.SetBorderRadius(checkmark, 0);
+                    GUIUtility.SetBorderColor(checkmark, defaultBorderColor);
+                });
+            
+            element.RegisterCallback<PointerDownEvent>(
+                evt =>
+                {
+                    GUIUtility.SetBorderColor(checkmark, Colors.PrimaryInteracted);
+                    
+                    pressed = true;
+                }, TrickleDown.TrickleDown);
+            
+            element.RegisterCallback<PointerUpEvent>(
+                evt =>
+                {
+                    pressed = false;
+
+                    if (hovered)
+                    {
+                        GUIUtility.SetBorderColor(checkmark, Colors.Primary);
+                        return;   
+                    }
+
+                    GUIUtility.SetBorderWidth(checkmark, 0);
+                    GUIUtility.SetBorderRadius(checkmark, 0);
+                    GUIUtility.SetBorderColor(checkmark, defaultBorderColor);
+                });
+        }
+    }
+
     private static void OverwriteListSelection(List <VisualElement> elements, Color color)
     {
         foreach (VisualElement element in elements)
@@ -230,7 +485,7 @@ public static class RootElement
                 {
                     foreach (VisualElement visualElement in lastSelected)
                     {
-                        visualElement.style.backgroundColor = new Color(0, 0, 0, 0);
+                        visualElement.style.backgroundColor = StyleKeyword.Null;
                     }
                     
                     lastSelected.Clear();

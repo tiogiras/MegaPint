@@ -70,12 +70,30 @@
 .mp_interaction_dontChangeColorAfterInteract {
 }
 
-.mp_foldout{
-    
+.mp_foldout {
+}
+
+.mp_toggle {
+}
+
+.mp_dropdown {
+}
+
+.mp_inputField {
+}
+
+.mp_colorField {
+}
+
+.mp_objectField {
 }
 
 .mp_useCustomTooltip {
 }
 
 .mp_listSelection_primary {
+}
+
+.test:focus{
+    border-bottom-color: aquamarine;
 }
