@@ -237,7 +237,7 @@ internal static class PackageCache
         {
             SetProcess($"Registering Dependencies: {valuePair.Key}");
 
-            Debug.Log($"{valuePair.Key} | {valuePair.Value}");
+            Debug.Log($"{valuePair.Key} | {string.Join(", ", valuePair.Value.Select(dependency => dependency.name))}");
 
             CachedPackage cachedPackage = s_cache[valuePair.Key];
             cachedPackage.RegisterDependencies(valuePair.Value);
