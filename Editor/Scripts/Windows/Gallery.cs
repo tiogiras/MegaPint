@@ -1,9 +1,8 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.IO;
-using Editor.Scripts.Factories;
+using Editor.Scripts.GUI.Factories;
 using Editor.Scripts.PackageManager.Cache;
-using Editor.Scripts.PackageManager.Packages;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = Editor.Scripts.GUI.GUIUtility;
