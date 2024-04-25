@@ -5,6 +5,7 @@ using System.Linq;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
+using UnityEngine;
 
 namespace Editor.Scripts.PackageManager.Cache
 {
@@ -143,6 +144,9 @@ internal class CachedPackage : IComparable <CachedPackage>
     /// <param name="dependencies"> Dependencies to register </param>
     public void RegisterDependencies(List <Dependency> dependencies)
     {
+        Debug.Log($"Registering Dependencies for {Name}");
+        Debug.Log(string.Join(", ", dependencies));
+        
         _myDependants = dependencies;
     }
 

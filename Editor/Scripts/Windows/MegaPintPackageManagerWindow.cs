@@ -532,12 +532,12 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
     private void OnRemove()
     {
-        ButtonSubscriptions(false);
-
         CachedPackage package = _displayedPackages[_list.selectedIndex];
 
         if (package.CanBeRemoved(out List <Dependency> dependants))
         {
+            ButtonSubscriptions(false);
+            
             MegaPintPackageManager.onSuccess += OnRemoveSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
             MegaPintPackageManager.Remove(package.Name);
