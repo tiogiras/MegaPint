@@ -215,15 +215,10 @@ internal static class PackageCache
                 installedPackagesNames.Contains(packageData.name) ? installedPackages[installedPackagesNames.IndexOf(packageData.name)] : null,
                 out List <Dependency> dependencies);
 
-            Debug.Log(0);
-            Debug.Log(string.Join(", ", dependencies.Select(dependency => dependency.name)));
-
             if (dependencies is {Count: > 0})
             {
-                // Dependencies = Validators (from AlphaButton package)
                 foreach (Dependency dependency in dependencies)
                 {
-                    // Add a dependenant to the dependency package (Validators (dependency.key))
                     allDependencies.TryAdd(dependency.key, new List <PackageKey>());
                     allDependencies[dependency.key].Add(package.Key);
                 }
@@ -241,9 +236,7 @@ internal static class PackageCache
         foreach (KeyValuePair <PackageKey, List <PackageKey>> valuePair in allDependencies)
         {
             SetProcess($"Registering Dependencies: {valuePair.Key}");
-
-            Debug.Log($"{valuePair.Key} | {string.Join(", ", valuePair.Value.Select(dependency => dependency))}");
-
+            
             CachedPackage cachedPackage = s_cache[valuePair.Key];
             cachedPackage.RegisterDependencies(valuePair.Value);
             
