@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Editor.Scripts.Settings;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.GUI
@@ -46,6 +44,27 @@ public static class RootElement
         public static Color Button => s_buttonColor.Value();
     }
 
+    private static MegaPintSettingsBase s_settings;
+
+    private static MegaPintSettingsBase _Settings
+    {
+        get
+        {
+            //Debug.Log(MegaPintSettings.instance); // TODO THIS IS NULL
+
+            return s_settings ??= MegaPintSettings.instance.GetSetting("General");
+        }
+    }
+
+    public static string CaretColorClass =>
+        _Settings.GetValue("EditorTheme", 0) switch
+        {
+            0 => EditorGUIUtility.isProSkin ? "mp_caretColor_dark" : "mp_caretColor_light",
+            1 => "mp_caretColor_dark",
+            2 => "mp_caretColor_light",
+            var _ => "mp_caretColor_dark"
+        };
+
     private class ThemedColor
     {
         public Color darkColor;
@@ -54,8 +73,15 @@ public static class RootElement
 
         public Color Value()
         {
-            // TODO check if light theme
-            return darkColor;
+            Debug.Log(_Settings.GetValue("EditorTheme", 0));
+            
+            return _Settings.GetValue("EditorTheme", 0) switch
+                   {
+                       0 => EditorGUIUtility.isProSkin ? darkColor : lightColor,
+                       1 => darkColor,
+                       2 => lightColor,
+                       var _ => darkColor
+                   };
         }
 
         #endregion
@@ -69,7 +95,7 @@ public static class RootElement
     
     private static readonly ThemedColor s_infoColor = new()
     {
-        darkColor = new Color(0.82f, 0.32f, 0.54f),
+        darkColor = new Color(0.94f, 0.94f, 0.94f),
         lightColor = new Color(0.82f, 0.32f, 0.54f)
     };
 
@@ -100,19 +126,19 @@ public static class RootElement
     private static readonly ThemedColor s_primaryBack = new()
     {
         darkColor = new Color(0.1f, 0.1f, 0.1f),
-        lightColor = new Color(0.1f, 0.1f, 0.1f)
+        lightColor = new Color(0.54f, 0.54f, 0.54f)
     };
 
     private static readonly ThemedColor s_secondaryBack = new()
     {
         darkColor = new Color(0.15f, 0.15f, 0.15f),
-        lightColor = new Color(0.15f, 0.15f, 0.15f)
+        lightColor = new Color(0.65f, 0.65f, 0.65f)
     };
 
     private static readonly ThemedColor s_tertiaryBack = new()
     {
         darkColor = new Color(0.19f, 0.19f, 0.19f),
-        lightColor = new Color(0.19f, 0.19f, 0.19f)
+        lightColor = new Color(0.78f, 0.78f, 0.78f)
     };
 
     private static readonly ThemedColor s_separatorColor = new()
@@ -177,6 +203,7 @@ public static class RootElement
         
         // Others
         {Overwrite.mp_listSelection_primary.ToString(), elements => {OverwriteListSelection(elements, Colors.PrimaryInteracted);}},
+        {Overwrite.mp_listSelection_bg3.ToString(), elements => {OverwriteListSelection(elements, Colors.Bg3);}},
         {Overwrite.mp_foldout.ToString(), OverwriteFoldout},
         {Overwrite.mp_toggle.ToString(), OverwriteToggle},
         {Overwrite.mp_dropdown.ToString(), OverwriteDropdown},

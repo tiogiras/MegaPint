@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
+    <ui:VisualElement style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
+        <Editor.Scripts.GUI.Factories.Backgrounds.Background2 class="mp_borderColor_bg1" style="border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px;">
+            <Editor.Scripts.GUI.Factories.Headings.MpHeading2 tabindex="-1" text="Theme" style="overflow: hidden; white-space: normal; -unity-text-align: upper-center; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; font-size: 16px;" />
+        </Editor.Scripts.GUI.Factories.Backgrounds.Background2>
+        <ui:VisualElement style="flex-grow: 1; margin-top: 10px; margin-right: 10px; margin-bottom: 20px; margin-left: 10px;">
+            <ui:DropdownField label="Editor Theme" index="-1" choices="Active Editor Theme,Dark,Light" name="EditorTheme" tooltip="Theme used by all MegaPint windows." class="mp_dropdown mp_font mp_textColor_normal" style="margin-bottom: 5px;" />
+            <Editor.Scripts.GUI.Factories.Separator />
+            <Editor.Scripts.GUI.Factories.Text tabindex="-1" text="The Editor Theme setting will apply the corresponding theme to all MegaPint GUI." style="white-space: normal; margin-top: 5px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

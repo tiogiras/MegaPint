@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Editor.Scripts.Windows.BaseWindowContent.SettingsTabContent;
+using Editor.Scripts.Windows.BaseWindowContent.InfoTabContent;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -11,7 +11,7 @@ using GUIUtility = Editor.Scripts.GUI.GUIUtility;
 namespace Editor.Scripts.Windows.BaseWindowContent
 {
 
-internal class SettingsTab
+internal class InfosTab
 {
     private readonly string _itemPath = Path.Combine(Constants.BasePackage.PathWindows, "Base Window", "Info item");
 
@@ -24,25 +24,25 @@ internal class SettingsTab
     private readonly ListView _list;
 
     private bool _active;
-    private List <SettingsTabData.Setting> _allSettings;
+    private List <InfosTabData.Info> _allInfos;
 
     private VisualElement _currentVisualElement;
-    private List <SettingsTabData.Setting> _displayedSettings;
+    private List <InfosTabData.Info> _displayedInfos;
     private bool _inSearch;
 
-    private List <SettingsTabData.Setting> _openSettings;
+    private List <InfosTabData.Info> _openInfos;
     private List <VisualElement> _visualElements;
 
-    public SettingsTab(VisualElement root)
+    public InfosTab(VisualElement root)
     {
         _itemTemplate = Resources.Load <VisualTreeAsset>(_itemPath);
 
-        _list = root.Q <ListView>("SettingsList");
+        _list = root.Q <ListView>("InfosList");
         _searchField = root.Q <ToolbarSearchField>("SearchField");
 
         var rightPane = root.Q <VisualElement>("RightPane");
 
-        _content = rightPane.Q <VisualElement>("SettingsContent");
+        _content = rightPane.Q <VisualElement>("InfosContent");
 
         RegisterCallbacks();
 
@@ -70,60 +70,60 @@ internal class SettingsTab
         _searchField.value = "";
         SetDisplayed("");
 
-        _displayedSettings = SettingsTabData.Settings;
-        _openSettings = new List <SettingsTabData.Setting>();
+        _displayedInfos = InfosTabData.Infos;
+        _openInfos = new List <InfosTabData.Info>();
         _visualElements = new List <VisualElement>();
 
         _inSearch = false;
 
-        _list.itemsSource = _displayedSettings;
+        _list.itemsSource = _displayedInfos;
         _list.RefreshItems();
 
         _list.style.display = DisplayStyle.Flex;
         _active = true;
 
-        if (_allSettings != null)
+        if (_allInfos != null)
             return;
 
-        _allSettings = new List <SettingsTabData.Setting>();
+        _allInfos = new List <InfosTabData.Info>();
 
-        foreach (SettingsTabData.Setting setting in SettingsTabData.Settings)
-            _allSettings.AddRange(GetAll(setting));
+        foreach (InfosTabData.Info info in InfosTabData.Infos)
+            _allInfos.AddRange(GetAll(info));
     }
 
     #endregion
 
     #region Private Methods
 
-    private static IEnumerable <SettingsTabData.Setting> GetAll(SettingsTabData.Setting settings)
+    private static IEnumerable <InfosTabData.Info> GetAll(InfosTabData.Info infos)
     {
-        List <SettingsTabData.Setting> result = new();
+        List <InfosTabData.Info> result = new();
 
-        var isCategory = settings.subSettings is {Count: > 0};
+        var isCategory = infos.subInfos is {Count: > 0};
 
         if (!isCategory)
-            result.Add(settings);
+            result.Add(infos);
         else
         {
-            foreach (SettingsTabData.Setting subSetting in settings.subSettings)
-                result.AddRange(GetAll(subSetting));
+            foreach (InfosTabData.Info subInfo in infos.subInfos)
+                result.AddRange(GetAll(subInfo));
         }
 
         return result;
     }
 
-    private void Add(SettingsTabData.Setting setting)
+    private void Add(InfosTabData.Info info)
     {
-        _displayedSettings.Add(setting);
+        _displayedInfos.Add(info);
 
-        if (setting.subSettings is not {Count: > 0})
+        if (info.subInfos is not {Count: > 0})
             return;
 
-        if (!_openSettings.Contains(setting))
+        if (!_openInfos.Contains(info))
             return;
 
-        foreach (SettingsTabData.Setting subSettings in setting.subSettings)
-            Add(subSettings);
+        foreach (InfosTabData.Info subInfo in info.subInfos)
+            Add(subInfo);
     }
 
     private void Clear()
@@ -147,7 +147,7 @@ internal class SettingsTab
         if (_list.selectedItem == null)
             return;
 
-        var castedItem = (SettingsTabData.Setting)_list.selectedItem;
+        var castedItem = (InfosTabData.Info)_list.selectedItem;
 
         if (_currentVisualElement != null)
         {
@@ -155,23 +155,23 @@ internal class SettingsTab
             _currentVisualElement = null;
         }
 
-        if (castedItem.subSettings is {Count: > 0})
+        if (castedItem.subInfos is {Count: > 0})
         {
-            _displayedSettings = new List <SettingsTabData.Setting>();
+            _displayedInfos = new List <InfosTabData.Info>();
 
-            _openSettings ??= new List <SettingsTabData.Setting>();
+            _openInfos ??= new List <InfosTabData.Info>();
 
             _visualElements = new List <VisualElement>();
 
-            if (_openSettings.Contains(castedItem))
-                _openSettings.Remove(castedItem);
+            if (_openInfos.Contains(castedItem))
+                _openInfos.Remove(castedItem);
             else
-                _openSettings.Add(castedItem);
+                _openInfos.Add(castedItem);
 
-            foreach (SettingsTabData.Setting setting in SettingsTabData.Settings)
-                Add(setting);
+            foreach (InfosTabData.Info info in InfosTabData.Infos)
+                Add(info);
 
-            _list.itemsSource = _displayedSettings;
+            _list.itemsSource = _displayedInfos;
             _list.RefreshItems();
         }
         else
@@ -191,27 +191,27 @@ internal class SettingsTab
 
         _list.bindItem = (element, i) =>
         {
-            _openSettings ??= new List <SettingsTabData.Setting>();
+            _openInfos ??= new List <InfosTabData.Info>();
 
             _visualElements ??= new List <VisualElement>();
 
             if (!_visualElements.Contains(element))
                 _visualElements.Add(element);
 
-            SettingsTabData.Setting setting = _displayedSettings[i];
+            InfosTabData.Info info = _displayedInfos[i];
 
             var nameLabel = element.Q <Label>("Name");
-            nameLabel.text = setting.settingsName;
+            nameLabel.text = info.infoName;
             nameLabel.style.borderLeftWidth = _currentVisualElement == element ? 2.5f : 0;
 
-            element.style.marginLeft = _inSearch ? 0 : setting.intendLevel * 10;
+            element.style.marginLeft = _inSearch ? 0 : info.intendLevel * 10;
 
-            element.Q <VisualElement>("Open").style.display = _openSettings.Contains(setting)
+            element.Q <VisualElement>("Open").style.display = _openInfos.Contains(info)
                 ? DisplayStyle.Flex
                 : DisplayStyle.None;
 
-            element.Q <VisualElement>("Closed").style.display = setting.subSettings is {Count: > 0}
-                ? _openSettings.Contains(setting) ? DisplayStyle.None : DisplayStyle.Flex
+            element.Q <VisualElement>("Closed").style.display = info.subInfos is {Count: > 0}
+                ? _openInfos.Contains(info) ? DisplayStyle.None : DisplayStyle.Flex
                 : DisplayStyle.None;
         };
 
@@ -232,28 +232,28 @@ internal class SettingsTab
 
     private void SetDisplayed(string searchString)
     {
-        _displayedSettings = searchString.Equals("")
-            ? SettingsTabData.Settings
-            : _allSettings.Where(
-                               setting =>
-                                   setting.settingsName.ToLower().Contains(searchString.ToLower())).
+        _displayedInfos = searchString.Equals("")
+            ? InfosTabData.Infos
+            : _allInfos.Where(
+                               info =>
+                                   info.infoName.ToLower().Contains(searchString.ToLower())).
                            ToList();
 
         if (!searchString.Equals(""))
         {
             _inSearch = true;
-            _displayedSettings.Sort();
+            _displayedInfos.Sort();
         }
         else
             _inSearch = false;
 
-        _openSettings = new List <SettingsTabData.Setting>();
+        _openInfos = new List <InfosTabData.Info>();
         _visualElements = new List <VisualElement>();
 
         _list.ClearSelection();
         _currentVisualElement = null;
 
-        _list.itemsSource = _displayedSettings;
+        _list.itemsSource = _displayedInfos;
         _list.RefreshItems();
     }
 
@@ -264,10 +264,10 @@ internal class SettingsTab
         if (_list.selectedItem == null)
             return;
 
-        SettingsTabData.SettingsKey currentSettingKey =
-            ((SettingsTabData.Setting)_list.selectedItem).settingsKey;
+        InfosTabData.InfoKey currentInfoKey =
+            ((InfosTabData.Info)_list.selectedItem).infoKey;
 
-        SettingsTabDisplay.Display(_content, currentSettingKey);
+        InfosTabDisplay.Display(_content, currentInfoKey);
 
         BaseWindow.onRightPaneInitialization?.Invoke();
     }

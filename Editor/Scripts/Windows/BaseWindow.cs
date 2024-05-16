@@ -30,15 +30,18 @@ internal class BaseWindow : MegaPintEditorWindowBase
     private Button _btnDevMode;
     private Button _btnPackages;
     private Button _btnSettings;
+    private Button _btnInfos;
     private Button _btnUpdate;
 
     private int _currentDevModeClickCount;
     private float _currentDevModeTimer;
 
     private PackagesTab _packages;
+    private SettingsTab _settings;
+    private InfosTab _infos;
 
     private VisualElement _root;
-    private SettingsTab _settings;
+    
     private VisualElement _updateBasePackage;
 
     private Label _versionNumber;
@@ -110,6 +113,7 @@ internal class BaseWindow : MegaPintEditorWindowBase
     {
         _btnPackages.clicked += SwitchToPackages;
         _btnSettings.clicked += SwitchToSettings;
+        _btnInfos.clicked += SwitchToInfos;
 
         _btnDevMode.clicked += OnDevMode;
         _btnUpdate.clicked += UpdateBasePackage;
@@ -126,6 +130,7 @@ internal class BaseWindow : MegaPintEditorWindowBase
 
         _btnPackages.clicked -= SwitchToPackages;
         _btnSettings.clicked -= SwitchToSettings;
+        _btnInfos.clicked -= SwitchToInfos;
 
         onRightPaneClose?.Invoke();
 
@@ -157,6 +162,7 @@ internal class BaseWindow : MegaPintEditorWindowBase
     {
         _btnPackages = root.Q <Button>("BTN_Packages");
         _btnSettings = root.Q <Button>("BTN_Settings");
+        _btnInfos = root.Q <Button>("BTN_Infos");
 
         _btnDevMode = root.Q <Button>("BTN_DevMode");
         _versionNumber = root.Q <Label>("VersionNumber");
@@ -180,6 +186,7 @@ internal class BaseWindow : MegaPintEditorWindowBase
 
         _packages = new PackagesTab(content);
         _settings = new SettingsTab(content);
+        _infos = new InfosTab(content);
 
         SwitchToPackages();
 
@@ -211,6 +218,7 @@ internal class BaseWindow : MegaPintEditorWindowBase
     {
         _packages?.ResetVariables();
         _settings?.ResetVariables();
+        _infos?.ResetVariables();
         GUIUtility.DisplaySplashScreen(_root, () => {CreateGUIContent(_root);});
     }
 
@@ -218,12 +226,21 @@ internal class BaseWindow : MegaPintEditorWindowBase
     {
         _packages.Show();
         _settings.Hide();
+        _infos.Hide();
     }
 
     private void SwitchToSettings()
     {
         _packages.Hide();
         _settings.Show();
+        _infos.Hide();
+    }
+    
+    private void SwitchToInfos()
+    {
+        _packages.Hide();
+        _settings.Hide();
+        _infos.Show();
     }
 
     #endregion

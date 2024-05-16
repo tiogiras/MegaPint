@@ -1,3 +1,5 @@
+.mp_darkTheme
+
 .mp_font {
     -unity-font: resource('Roboto Mono');
     -unity-font-definition: initial;
@@ -94,6 +96,13 @@
 .mp_listSelection_primary {
 }
 
-.test:focus{
-    border-bottom-color: aquamarine;
+.mp_listSelection_bg3 {
+}
+
+.mp_caretColor_dark {
+    --unity-cursor-color: rgba(255,255,255, 1);
+}
+
+.mp_caretColor_light {
+    --unity-cursor-color: rgba(0,0,0, 1);
 }

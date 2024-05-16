@@ -28,6 +28,7 @@ public enum Overwrite
     mp_colorField,
     mp_objectField,
     mp_listSelection_primary,
+    mp_listSelection_bg3,
     mp_useCustomTooltip
 }
 

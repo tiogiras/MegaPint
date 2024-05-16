@@ -26,6 +26,11 @@ public class Button : UnityEngine.UIElements.Button
 
             element.AddToClassList(RootElement.FontClass);
 
+            element.style.backgroundColor = RootElement.Colors.Button;
+            element.style.color = RootElement.Colors.Text;
+            
+            GUIUtility.SetBorderColor(element, RootElement.Colors.Separator);
+
             GUIUtility.SubscribeInteractable(element);
         }
 

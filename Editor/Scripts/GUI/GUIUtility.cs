@@ -444,8 +444,30 @@ public static class GUIUtility
         element.style.marginLeft = margin;
     }
 
-    public static void ApplyTheme(VisualElement root)
+    private static readonly List <VisualElement> s_activeElements = new();
+
+    public static void ForceRepaint()
     {
+        for (var i = s_activeElements.Count - 1; i >= 0; i--)
+        {
+            VisualElement activeElement = s_activeElements[i];
+
+            if (activeElement == null)
+            {
+                s_activeElements.RemoveAt(i);
+                continue;
+            }
+
+            ApplyTheme(activeElement, true);
+            activeElement.MarkDirtyRepaint();
+        }
+    }
+
+    public static void ApplyTheme(VisualElement root, bool forceRepaint = false)
+    {
+        if (!forceRepaint)
+            s_activeElements.Add(root);
+        
         foreach (var overwrite in Enum.GetNames(typeof(Overwrite)))
         {
             List <VisualElement> result = root.Query(className: overwrite).ToList();
