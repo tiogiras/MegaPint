@@ -8,8 +8,8 @@ public static class StyleSheetClasses
     public static string Button => $"{ClassBase}button";
     public static string SearchField => $"{ClassBase}searchField";
     public static string CursorColor => $"{ClassBase}cursorColor";
-
     public static string Dropdown => $"{ClassBase}dropdown";
+    public static string Link => $"{ClassBase}link";
 
     public static class Background
     {
