@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.UIElements;
 
-namespace Editor.Scripts.GUI.Factories
+namespace Editor.Scripts.GUI.Factories.Structure
 {
 
 [Preserve]

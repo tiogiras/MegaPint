@@ -1,11 +1,11 @@
 ﻿using UnityEngine.UIElements;
 
-namespace Editor.Scripts.GUI.Factories.Headings
+namespace Editor.Scripts.GUI.Factories.Text
 {
 
-public class MpHeading3 : Label
+public class Text : Label
 {
-    public new class UxmlFactory : UxmlFactory <MpHeading3, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory <Text, UxmlTraits> { }
 
     public new class UxmlTraits : Label.UxmlTraits
     {
@@ -17,9 +17,8 @@ public class MpHeading3 : Label
             CreationContext context)
         {
             base.Init(element, attributes, context);
-
-            element.AddToClassList(RootElement.FontClass);
-            element.style.color = RootElement.Colors.TextSecondary;
+            
+            element.AddToClassList(StyleSheetClasses.Text.Color.Primary);
         }
 
         #endregion

@@ -3,9 +3,9 @@
 namespace Editor.Scripts.GUI.Factories.Headings
 {
 
-public class MpHeading2 : Label
+public class HadingIdentity : Label
 {
-    public new class UxmlFactory : UxmlFactory <MpHeading2, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory <HadingIdentity, UxmlTraits> { }
 
     public new class UxmlTraits : Label.UxmlTraits
     {
@@ -17,9 +17,8 @@ public class MpHeading2 : Label
             CreationContext context)
         {
             base.Init(element, attributes, context);
-
-            element.AddToClassList(RootElement.FontClass);
-            element.style.color = RootElement.Colors.Text;
+            
+            element.AddToClassList(StyleSheetClasses.Text.Color.Identity);
         }
 
         #endregion

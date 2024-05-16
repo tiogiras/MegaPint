@@ -3,9 +3,9 @@
 namespace Editor.Scripts.GUI.Factories.Backgrounds
 {
 
-public class Background3 : VisualElement
+public class BackgroundSecondary : VisualElement
 {
-    public new class UxmlFactory : UxmlFactory <Background3, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory <BackgroundSecondary, UxmlTraits> { }
 
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
@@ -18,7 +18,7 @@ public class Background3 : VisualElement
         {
             base.Init(element, attributes, context);
             
-            element.style.backgroundColor = RootElement.Colors.Bg3;
+            element.AddToClassList(StyleSheetClasses.Background.Color.Secondary);
         }
 
         #endregion

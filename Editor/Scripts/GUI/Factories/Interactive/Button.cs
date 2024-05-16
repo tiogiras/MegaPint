@@ -24,6 +24,9 @@ public class Button : UnityEngine.UIElements.Button
         {
             base.Init(element, attributes, context);
 
+            // TODO
+            
+            /*
             element.AddToClassList(RootElement.FontClass);
 
             element.style.backgroundColor = RootElement.Colors.Button;
@@ -31,7 +34,7 @@ public class Button : UnityEngine.UIElements.Button
             
             GUIUtility.SetBorderColor(element, RootElement.Colors.Separator);
 
-            GUIUtility.SubscribeInteractable(element);
+            GUIUtility.SubscribeInteractable(element);*/
         }
 
         #endregion

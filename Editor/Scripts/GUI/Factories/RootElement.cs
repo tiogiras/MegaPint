@@ -1,11 +1,11 @@
 ﻿using UnityEngine.UIElements;
 
-namespace Editor.Scripts.GUI.Factories.Backgrounds
+namespace Editor.Scripts.GUI.Factories
 {
 
-public class Background2 : VisualElement
+public class RootElement : VisualElement
 {
-    public new class UxmlFactory : UxmlFactory <Background2, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory <RootElement, UxmlTraits> { }
 
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
@@ -17,8 +17,13 @@ public class Background2 : VisualElement
             CreationContext context)
         {
             base.Init(element, attributes, context);
+
+            element.style.flexGrow = 1;
+            element.style.flexShrink = 1;
             
-            element.style.backgroundColor = RootElement.Colors.Bg2;
+            element.AddToClassList("mp");
+            
+            element.AddToClassList("mp_theme--dark"); // TODO add light theme if in light mode
         }
 
         #endregion

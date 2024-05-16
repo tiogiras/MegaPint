@@ -1,13 +1,13 @@
 ﻿using UnityEngine.UIElements;
 
-namespace Editor.Scripts.GUI.Factories
+namespace Editor.Scripts.GUI.Factories.Backgrounds
 {
 
-public class TextSecondary : Label
+public class BackgroundTertiary : VisualElement
 {
-    public new class UxmlFactory : UxmlFactory <TextSecondary, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory <BackgroundTertiary, UxmlTraits> { }
 
-    public new class UxmlTraits : Label.UxmlTraits
+    public new class UxmlTraits : VisualElement.UxmlTraits
     {
         #region Public Methods
 
@@ -18,8 +18,7 @@ public class TextSecondary : Label
         {
             base.Init(element, attributes, context);
             
-            element.AddToClassList(RootElement.FontClass);
-            element.style.color = RootElement.Colors.TextSecondary;
+            element.AddToClassList(StyleSheetClasses.Background.Color.Tertiary);
         }
 
         #endregion

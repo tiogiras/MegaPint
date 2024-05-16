@@ -19,7 +19,10 @@ public class SearchField : ToolbarSearchField
             CreationContext context)
         {
             base.Init(element, attributes, context);
+
+            // TODO
             
+            /*
             element.AddToClassList("mp_interaction");
             element.AddToClassList("mp_interaction_onlyLoseFocusOnBlur");
             element.AddToClassList("mp_interaction_checkColorOnMouseUp");
@@ -35,7 +38,7 @@ public class SearchField : ToolbarSearchField
             textElement.AddToClassList("mp_bg3");
             
             textElement.AddToClassList(RootElement.FontClass);
-            textElement.style.color = RootElement.Colors.Text;
+            textElement.style.color = RootElement.Colors.Text;*/
         }
 
         #endregion

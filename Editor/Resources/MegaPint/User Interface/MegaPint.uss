@@ -1,60 +1,161 @@
-.mp_darkTheme
-
-.mp_font {
+/* ================== MegaPint Root Element ================== */
+.mp {
     -unity-font: resource('Roboto Mono');
     -unity-font-definition: initial;
 }
 
+/* ================== Themes ================== */
+
+.mp_theme--dark {
+    /* Custom Variables */
+    --link-color: #D10072;
+    --info-color: #EFEFEF;
+    --identity-color: #D10072;
+    --identity-interacted-color: #A80054;
+    --text-primary-color: #F4F4F4;
+    --text-secondary-color: #A0A0A0;
+    --text-red-color: #AF1E1E;
+    --text-orange-color: #AF6B1E;
+    --text-green-color: #1EAF1E;
+    --background-primary-color: #191919;
+    --background-secondary-color: #262626;
+    --background-tertiary-color: #303030;
+    --separator-color: #595959;
+    --button-color: #595959;
+
+    /* Unity Variables */
+    --unity-cursor-color: rgba(255,255,255, 1);
+}
+
+.mp_theme--light {
+    /* Custom Variables */
+    --link-color: #D10072;
+    --info-color: #EFEFEF;
+    --identity-color: #D10072;
+    --identity-interacted-color: #A80054;
+    --text-primary-color: #F4F4F4;
+    --text-secondary-color: #A0A0A0;
+    --text-red-color: #AF1E1E;
+    --text-orange-color: #AF6B1E;
+    --text-green-color: #1EAF1E;
+    --background-primary-color: #898989;
+    --background-secondary-color: #A5A5A5;
+    --background-tertiary-color: #C6C6C6;
+    --separator-color: #595959;
+    --button-color: #595959;
+
+    /* Unity Variables */
+    --unity-cursor-color: rgba(0,0,0, 1);
+}
+
+/* ================== Properties ================== */
+/* ================== Text (Properties) ================== */
+
+.mp-text-color--link{
+    color: var(--link-color);
+}
+
+.mp-text-color--info{
+    color: var(--info-color);
+}
+
+.mp-text-color--identity{
+    color: var(--identity-color);
+}
+
+.mp-text-color--primary{
+    color: var(--text-primary-color);
+}
+
+.mp-text-color--secondary{
+    color: var(--text-secondary-color);
+}
+
+.mp-text-color--red{
+    color: var(--text-red-color);
+}
+
+.mp-text-color--orange{
+    color: var(--text-orange-color);
+}
+
+.mp-text-color--green{
+    color: var(--text-green-color);
+}
+
+/* ================== Background (Properties) ================== */
+
+.mp_background-color--primary {
+    background-color: var(--background-primary-color);
+}
+
+.mp_background-color--secondary {
+    background-color: var(--background-secondary-color);
+}
+
+.mp_background-color--tertiary {
+    background-color: var(--background-tertiary-color);
+}
+
+.mp_background-color--identity {
+    background-color: var(--identity-color);
+}
+
+.mp_background-color--separator {
+    background-color: var(--separator-color);
+}
+
+/* ================== Border (Properties) ================== */
+
+.mp_border-color--identity {
+    border-color: var(--identity-color);
+}
+
+.mp_border-color--black {
+    border-color: #000000;
+}
+
+.mp_border-color--primary {
+    border-color: var(--background-primary-color);
+}
+
+.mp_border-color--secondary {
+    border-color: var(--background-secondary-color);
+}
+
+.mp_border-color--tertiary {
+    border-color: var(--background-tertiary-color);
+}
+
+.mp_border-color--separator {
+    border-color: var(--separator-color);
+}
+
+/* ================== Image Tint (Properties) ================== */
+
+.mp_image-Tint--identity {
+    -unity-background-image-tint-color: var(--identity-color);
+}
+
+.mp_image-Tint--text-secondary {
+    -unity-background-image-tint-color: var(--text-secondary-color);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* ================== Classes ================== */
+
 .link-cursor {
     cursor: link;
-}
-
-.mp_link {
-}
-
-.mp_textColor_primary {
-}
-
-.mp_textColor_normal {
-}
-
-.mp_textColor_secondary {
-}
-
-.mp_textColor_red {
-}
-
-.mp_textColor_green {
-}
-
-.mp_textColor_orange {
-}
-
-.mp_borderColor_primary {
-}
-
-.mp_borderColor_bg1 {
-}
-
-.mp_borderColor_separator {
-}
-
-.mp_bg1 {
-}
-
-.mp_bg2 {
-}
-
-.mp_bg3 {
-}
-
-.mp_bg_primary {
-}
-
-.mp_imageTint_primary {
-}
-
-.mp_imageTint_textSecondary {
 }
 
 .mp_interaction {
@@ -97,12 +198,4 @@
 }
 
 .mp_listSelection_bg3 {
-}
-
-.mp_caretColor_dark {
-    --unity-cursor-color: rgba(255,255,255, 1);
-}
-
-.mp_caretColor_light {
-    --unity-cursor-color: rgba(0,0,0, 1);
 }

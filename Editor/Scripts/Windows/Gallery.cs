@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Editor.Scripts.GUI.Factories;
+using Editor.Scripts.GUI.Factories.Structure;
 using Editor.Scripts.PackageManager.Cache;
 using UnityEngine;
 using UnityEngine.UIElements;

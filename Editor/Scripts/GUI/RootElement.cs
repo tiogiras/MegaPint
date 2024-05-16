@@ -145,7 +145,7 @@ public static class RootElement
     {
         darkColor = new Color(0.35f, 0.35f, 0.35f),
         lightColor = new Color(0.35f, 0.35f, 0.35f)
-    };    
+    };
     
     private static readonly ThemedColor s_buttonColor = new()
     {
