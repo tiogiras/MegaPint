@@ -24,9 +24,12 @@ public class SearchField : ToolbarSearchField
 
             VisualElement textInput = element.Q(className: "unity-base-text-field__input");
             VisualElement textElement = textInput.Q(className: "unity-text-element");
-            
+
             textInput.AddToClassList(StyleSheetClasses.Background.Color.Tertiary);
+            textInput.parent.AddToClassList(StyleSheetClasses.CursorColor);
+            
             textElement.AddToClassList(StyleSheetClasses.Background.Color.Tertiary);
+            textElement.AddToClassList(StyleSheetClasses.Text.Color.Primary);
             
             // TODO Remove below
             

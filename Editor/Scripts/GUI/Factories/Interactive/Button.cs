@@ -9,12 +9,6 @@ public class Button : UnityEngine.UIElements.Button
 
     public new class UxmlTraits : UnityEngine.UIElements.Button.UxmlTraits
     {
-        private StyleColor _defaultBorderColor;
-        private StyleColor _defaultColor;
-        
-        private bool _hovered;
-        private bool _pressed;
-        
         #region Public Methods
 
         public override void Init(

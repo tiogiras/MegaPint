@@ -26,6 +26,8 @@
     
     --separator-color: #595959;
     
+    --cursor-color: #FFFFFF;
+    
     --button-color: #595959;
     --button-border-color-top: #303030;
     --button-border-color-bottom: #242424;
@@ -36,9 +38,6 @@
     --searchField-border-color-bottom: #212121;
     --searchField-border-color-left: #212121;
     --searchField-border-color-right: #212121;
-    
-    /* Unity Variables */
-    --unity-cursor-color: rgba(255,255,255, 1);
 }
 
 .mp_theme--light {
@@ -60,6 +59,8 @@
     --background-tertiary-color: #C6C6C6;
     
     --separator-color: #595959;
+
+    --cursor-color: #000000;
     
     --button-color: #595959;
     --button-border-color-top: #303030;
@@ -71,9 +72,6 @@
     --searchField-border-color-bottom: #212121;
     --searchField-border-color-left: #212121;
     --searchField-border-color-right: #212121;
-
-    /* Unity Variables */
-    --unity-cursor-color: rgba(0,0,0, 1);
 }
 
 /* ================== Properties ================== */
@@ -212,8 +210,34 @@
     border-color: var(--identity-color);
 }
 
+.mp_cursorColor {
+    --unity-cursor-color: var(--cursor-color);
+}
 
+/* ================== List View (Classes) ================== */
 
+.unity-list-view__item:hover {
+    background-color: var(--background-tertiary-color);
+}
+
+.unity-list-view__empty-label {
+    color: var(--text-secondary-color);
+}
+
+/* ================== Dropdown (Classes) ================== */
+
+.mp_dropdown {
+    background-color: var(--button-color);
+
+    border-top-color: var(--button-border-color-top);
+    border-bottom-color: var(--button-border-color-bottom);
+    border-left-color: var(--button-border-color-left);
+    border-right-color: var(--button-border-color-right);
+}
+
+.mp_dropdown:focus {
+    border-color: var(--identity-color);
+}
 
 
 
@@ -253,9 +277,6 @@
 }
 
 .mp_toggle {
-}
-
-.mp_dropdown {
 }
 
 .mp_inputField {

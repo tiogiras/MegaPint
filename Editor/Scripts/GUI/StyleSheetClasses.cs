@@ -7,7 +7,10 @@ public static class StyleSheetClasses
 
     public static string Button => $"{ClassBase}button";
     public static string SearchField => $"{ClassBase}searchField";
-    
+    public static string CursorColor => $"{ClassBase}cursorColor";
+
+    public static string Dropdown => $"{ClassBase}dropdown";
+
     public static class Background
     {
         private static readonly string s_background = $"{ClassBase}background";
