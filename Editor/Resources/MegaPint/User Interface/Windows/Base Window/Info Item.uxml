@@ -1,8 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
-    <ui:VisualElement class="mp_borderColor_bg1" style="border-bottom-width: 1px; border-bottom-color: rgb(20, 20, 20); align-items: center; flex-direction: row; height: 18px;">
-        <ui:VisualElement name="Closed" class="mp_imageTint_primary" style="background-image: resource(&apos;MegaPint/Images/Icons/Closed Menu&apos;); width: 5px; height: 6px; margin-left: 3px; margin-right: 3px;" />
-        <ui:VisualElement name="Open" class="mp_imageTint_primary" style="background-image: resource(&apos;MegaPint/Images/Icons/Opened Menu&apos;); width: 6px; height: 5px; margin-left: 3px; margin-right: 3px; -unity-background-image-tint-color: rgb(255, 255, 255);" />
-        <Editor.Scripts.GUI.Factories.Text tabindex="-1" display-tooltip-when-elided="true" text="Setting Name" name="Name" class="mp_borderColor_primary" style="white-space: normal; border-left-width: 2px; border-left-color: rgb(255, 255, 255); height: 100%;" />
-    </ui:VisualElement>
+    <Editor.Scripts.GUI.Factories.RootElement>
+        <ui:VisualElement class="mp_border-color--primary" style="border-bottom-width: 1px; border-bottom-color: rgb(20, 20, 20); align-items: center; flex-direction: row; height: 18px;">
+            <ui:VisualElement name="Closed" class="mp_image-tint--identity" style="background-image: resource(&apos;MegaPint/Images/Icons/Closed Menu&apos;); width: 5px; height: 6px; margin-left: 3px; margin-right: 3px;" />
+            <ui:VisualElement name="Open" class="mp_image-tint--identity" style="background-image: resource(&apos;MegaPint/Images/Icons/Opened Menu&apos;); width: 6px; height: 5px; margin-left: 3px; margin-right: 3px;" />
+            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="Name" text="Setting Name" class="mp_border-color--identity" style="-unity-text-align: middle-left; border-left-width: 2px; margin-top: 0; margin-bottom: 0; flex-grow: 1; flex-shrink: 1; white-space: normal;" />
+        </ui:VisualElement>
+    </Editor.Scripts.GUI.Factories.RootElement>
 </ui:UXML>

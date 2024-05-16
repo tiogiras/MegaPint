@@ -1,13 +1,16 @@
-﻿using UnityEngine.UIElements;
+﻿using System;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Editor.Scripts.GUI.Factories
 {
 
-public class RootElement : VisualElement
+[Obsolete] // TODO Remove
+public class TextSecondary : Label
 {
-    public new class UxmlFactory : UxmlFactory <RootElement, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory <TextSecondary, UxmlTraits> { }
 
-    public new class UxmlTraits : VisualElement.UxmlTraits
+    public new class UxmlTraits : Label.UxmlTraits
     {
         #region Public Methods
 
@@ -17,10 +20,8 @@ public class RootElement : VisualElement
             CreationContext context)
         {
             base.Init(element, attributes, context);
-
-            element.AddToClassList("mp");
             
-            element.AddToClassList("mp_theme--dark"); // TODO add light theme if in light mode
+            element.style.color = Color.red;
         }
 
         #endregion

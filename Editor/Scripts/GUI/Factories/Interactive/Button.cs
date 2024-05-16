@@ -24,7 +24,9 @@ public class Button : UnityEngine.UIElements.Button
         {
             base.Init(element, attributes, context);
 
-            // TODO
+            element.AddToClassList(StyleSheetClasses.Button);
+            
+            // TODO Remove below
             
             /*
             element.AddToClassList(RootElement.FontClass);

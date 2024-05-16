@@ -20,7 +20,15 @@ public class SearchField : ToolbarSearchField
         {
             base.Init(element, attributes, context);
 
-            // TODO
+            element.AddToClassList(StyleSheetClasses.SearchField);
+
+            VisualElement textInput = element.Q(className: "unity-base-text-field__input");
+            VisualElement textElement = textInput.Q(className: "unity-text-element");
+            
+            textInput.AddToClassList(StyleSheetClasses.Background.Color.Tertiary);
+            textElement.AddToClassList(StyleSheetClasses.Background.Color.Tertiary);
+            
+            // TODO Remove below
             
             /*
             element.AddToClassList("mp_interaction");
@@ -29,14 +37,8 @@ public class SearchField : ToolbarSearchField
             element.AddToClassList("mp_borderColor_bg1");
             element.AddToClassList("mp_bg3");
 
-            VisualElement textInput = element.Q(className: "unity-base-text-field__input");
-            VisualElement textElement = textInput.Q(className: "unity-text-element");
-            
             textInput.parent.AddToClassList(RootElement.CaretColorClass);
-            
-            textInput.AddToClassList("mp_bg3");
-            textElement.AddToClassList("mp_bg3");
-            
+    
             textElement.AddToClassList(RootElement.FontClass);
             textElement.style.color = RootElement.Colors.Text;*/
         }

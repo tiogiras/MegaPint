@@ -5,6 +5,9 @@ public static class StyleSheetClasses
 {
     private const string ClassBase = "mp_";
 
+    public static string Button => $"{ClassBase}button";
+    public static string SearchField => $"{ClassBase}searchField";
+    
     public static class Background
     {
         private static readonly string s_background = $"{ClassBase}background";
@@ -17,6 +20,23 @@ public static class StyleSheetClasses
             public static readonly string Secondary = $"{s_color}--secondary";
             public static readonly string Tertiary = $"{s_color}--tertiary";
             public static readonly string Identity = $"{s_color}--identity";
+            public static readonly string Separator = $"{s_color}--separator";
+        }
+    }
+
+    public static class Border
+    {
+        private static readonly string s_border = $"{ClassBase}border";
+
+        public static class Color
+        {
+            private static readonly string s_color = $"{s_border}-color";
+            
+            public static readonly string Identity = $"{s_color}--identity";
+            public static readonly string Black = $"{s_color}--black";
+            public static readonly string Primary = $"{s_color}--primary";
+            public static readonly string Secondary = $"{s_color}--secondary";
+            public static readonly string Tertiary = $"{s_color}--tertiary";
             public static readonly string Separator = $"{s_color}--separator";
         }
     }

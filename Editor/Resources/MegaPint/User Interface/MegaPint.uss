@@ -10,19 +10,33 @@
     /* Custom Variables */
     --link-color: #D10072;
     --info-color: #EFEFEF;
+    
     --identity-color: #D10072;
     --identity-interacted-color: #A80054;
+    
     --text-primary-color: #F4F4F4;
     --text-secondary-color: #A0A0A0;
     --text-red-color: #AF1E1E;
     --text-orange-color: #AF6B1E;
     --text-green-color: #1EAF1E;
+    
     --background-primary-color: #191919;
     --background-secondary-color: #262626;
     --background-tertiary-color: #303030;
+    
     --separator-color: #595959;
+    
     --button-color: #595959;
+    --button-border-color-top: #303030;
+    --button-border-color-bottom: #242424;
+    --button-border-color-left: #303030;
+    --button-border-color-right: #303030;
 
+    --searchField-border-color-top: #0D0D0D;
+    --searchField-border-color-bottom: #212121;
+    --searchField-border-color-left: #212121;
+    --searchField-border-color-right: #212121;
+    
     /* Unity Variables */
     --unity-cursor-color: rgba(255,255,255, 1);
 }
@@ -31,18 +45,32 @@
     /* Custom Variables */
     --link-color: #D10072;
     --info-color: #EFEFEF;
+    
     --identity-color: #D10072;
     --identity-interacted-color: #A80054;
+    
     --text-primary-color: #F4F4F4;
     --text-secondary-color: #A0A0A0;
     --text-red-color: #AF1E1E;
     --text-orange-color: #AF6B1E;
     --text-green-color: #1EAF1E;
+    
     --background-primary-color: #898989;
     --background-secondary-color: #A5A5A5;
     --background-tertiary-color: #C6C6C6;
+    
     --separator-color: #595959;
+    
     --button-color: #595959;
+    --button-border-color-top: #303030;
+    --button-border-color-bottom: #242424;
+    --button-border-color-left: #303030;
+    --button-border-color-right: #303030;
+
+    --searchField-border-color-top: #0D0D0D;
+    --searchField-border-color-bottom: #212121;
+    --searchField-border-color-left: #212121;
+    --searchField-border-color-right: #212121;
 
     /* Unity Variables */
     --unity-cursor-color: rgba(0,0,0, 1);
@@ -51,35 +79,35 @@
 /* ================== Properties ================== */
 /* ================== Text (Properties) ================== */
 
-.mp-text-color--link{
+.mp_text-color--link{
     color: var(--link-color);
 }
 
-.mp-text-color--info{
+.mp_text-color--info{
     color: var(--info-color);
 }
 
-.mp-text-color--identity{
+.mp_text-color--identity{
     color: var(--identity-color);
 }
 
-.mp-text-color--primary{
+.mp_text-color--primary{
     color: var(--text-primary-color);
 }
 
-.mp-text-color--secondary{
+.mp_text-color--secondary{
     color: var(--text-secondary-color);
 }
 
-.mp-text-color--red{
+.mp_text-color--red{
     color: var(--text-red-color);
 }
 
-.mp-text-color--orange{
+.mp_text-color--orange{
     color: var(--text-orange-color);
 }
 
-.mp-text-color--green{
+.mp_text-color--green{
     color: var(--text-green-color);
 }
 
@@ -133,12 +161,55 @@
 
 /* ================== Image Tint (Properties) ================== */
 
-.mp_image-Tint--identity {
+.mp_image-tint--identity {
     -unity-background-image-tint-color: var(--identity-color);
 }
 
-.mp_image-Tint--text-secondary {
+.mp_image-tint--text-secondary {
     -unity-background-image-tint-color: var(--text-secondary-color);
+}
+
+/* ================== Classes ================== */
+/* ================== Button (Classes) ================== */
+
+.mp_button {
+    background-color: var(--button-color);
+    color: var(--text-primary-color);
+    
+    border-top-color: var(--button-border-color-top);
+    border-bottom-color: var(--button-border-color-bottom);
+    border-left-color: var(--button-border-color-left);
+    border-right-color: var(--button-border-color-right);
+}
+
+.mp_button:hover {
+    border-color: var(--identity-color);
+}
+
+.mp_button:active {
+    border-color: var(--identity-color);
+    background-color: var(--identity-interacted-color);
+}
+
+/* ================== SearchField (Classes) ================== */
+
+.mp_searchField {
+    background-color: var(--background-tertiary-color);
+    color: var(--text-primary-color);
+    
+    border-top-color: var(--searchField-border-color-top);
+    border-bottom-color: var(--searchField-border-color-bottom);
+    border-left-color: var(--searchField-border-color-left);
+    border-right-color: var(--searchField-border-color-right);
+}
+
+.mp_searchField:hover {
+    border-color: var(--text-secondary-color);
+}
+
+
+.mp_searchField:focus {
+    border-color: var(--identity-color);
 }
 
 
@@ -152,7 +223,12 @@
 
 
 
-/* ================== Classes ================== */
+
+
+
+
+
+
 
 .link-cursor {
     cursor: link;
@@ -173,7 +249,7 @@
 .mp_interaction_dontChangeColorAfterInteract {
 }
 
-.mp_foldout {
+.mp_foldoutt {
 }
 
 .mp_toggle {

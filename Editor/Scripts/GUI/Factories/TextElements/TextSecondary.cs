@@ -1,6 +1,6 @@
 ﻿using UnityEngine.UIElements;
 
-namespace Editor.Scripts.GUI.Factories.Text
+namespace Editor.Scripts.GUI.Factories.TextElements
 {
 
 public class TextSecondary : Label
