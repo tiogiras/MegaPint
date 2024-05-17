@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Editor.Scripts.Settings.BaseSettings;
+using Editor.Scripts.Windows.BaseWindowContent.SettingsTabContent;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,36 +13,36 @@ namespace Editor.Scripts.Windows.BaseWindowContent
 
 internal class SettingsTab
 {
-    private readonly string _itemPath = Path.Combine(Constants.BasePackage.PathWindows, "Base Window", "Setting item");
+    private readonly string _itemPath = Path.Combine(Constants.BasePackage.PathWindows, "Base Window", "Info item");
 
     private readonly VisualTreeAsset _itemTemplate;
 
     private readonly ToolbarSearchField _searchField;
 
-    private readonly VisualElement _settingsContent;
+    private readonly VisualElement _content;
 
-    private readonly ListView _settingsList;
+    private readonly ListView _list;
 
     private bool _active;
-    private List <MegaPintBaseSettingsData.Setting> _allSettings;
+    private List <SettingsTabData.Setting> _allSettings;
 
     private VisualElement _currentVisualElement;
-    private List <MegaPintBaseSettingsData.Setting> _displayedSettings;
+    private List <SettingsTabData.Setting> _displayedSettings;
     private bool _inSearch;
 
-    private List <MegaPintBaseSettingsData.Setting> _openSettings;
+    private List <SettingsTabData.Setting> _openSettings;
     private List <VisualElement> _visualElements;
 
     public SettingsTab(VisualElement root)
     {
         _itemTemplate = Resources.Load <VisualTreeAsset>(_itemPath);
 
-        _settingsList = root.Q <ListView>("SettingsList");
+        _list = root.Q <ListView>("SettingsList");
         _searchField = root.Q <ToolbarSearchField>("SearchField");
 
         var rightPane = root.Q <VisualElement>("RightPane");
 
-        _settingsContent = rightPane.Q <VisualElement>("SettingsContent");
+        _content = rightPane.Q <VisualElement>("SettingsContent");
 
         RegisterCallbacks();
 
@@ -55,7 +55,7 @@ internal class SettingsTab
     {
         Clear();
 
-        _settingsList.style.display = DisplayStyle.None;
+        _list.style.display = DisplayStyle.None;
         _active = false;
     }
 
@@ -68,52 +68,51 @@ internal class SettingsTab
     public void Show()
     {
         _searchField.value = "";
-        SetDisplayedSettings("");
+        SetDisplayed("");
 
-        _displayedSettings = MegaPintBaseSettingsData.Settings;
-        _openSettings = new List <MegaPintBaseSettingsData.Setting>();
+        _displayedSettings = SettingsTabData.Settings;
+        _openSettings = new List <SettingsTabData.Setting>();
         _visualElements = new List <VisualElement>();
 
         _inSearch = false;
 
-        _settingsList.itemsSource = _displayedSettings;
-        _settingsList.RefreshItems();
+        _list.itemsSource = _displayedSettings;
+        _list.RefreshItems();
 
-        _settingsList.style.display = DisplayStyle.Flex;
+        _list.style.display = DisplayStyle.Flex;
         _active = true;
 
         if (_allSettings != null)
             return;
 
-        _allSettings = new List <MegaPintBaseSettingsData.Setting>();
+        _allSettings = new List <SettingsTabData.Setting>();
 
-        foreach (MegaPintBaseSettingsData.Setting setting in MegaPintBaseSettingsData.Settings)
-            _allSettings.AddRange(GetAllSettings(setting));
+        foreach (SettingsTabData.Setting setting in SettingsTabData.Settings)
+            _allSettings.AddRange(GetAll(setting));
     }
 
     #endregion
 
     #region Private Methods
 
-    private static IEnumerable <MegaPintBaseSettingsData.Setting> GetAllSettings(
-        MegaPintBaseSettingsData.Setting setting)
+    private static IEnumerable <SettingsTabData.Setting> GetAll(SettingsTabData.Setting settings)
     {
-        List <MegaPintBaseSettingsData.Setting> result = new();
+        List <SettingsTabData.Setting> result = new();
 
-        var isCategory = setting.subSettings is {Count: > 0};
+        var isCategory = settings.subSettings is {Count: > 0};
 
         if (!isCategory)
-            result.Add(setting);
+            result.Add(settings);
         else
         {
-            foreach (MegaPintBaseSettingsData.Setting subSetting in setting.subSettings)
-                result.AddRange(GetAllSettings(subSetting));
+            foreach (SettingsTabData.Setting subSetting in settings.subSettings)
+                result.AddRange(GetAll(subSetting));
         }
 
         return result;
     }
 
-    private void AddSetting(MegaPintBaseSettingsData.Setting setting)
+    private void Add(SettingsTabData.Setting setting)
     {
         _displayedSettings.Add(setting);
 
@@ -123,8 +122,8 @@ internal class SettingsTab
         if (!_openSettings.Contains(setting))
             return;
 
-        foreach (MegaPintBaseSettingsData.Setting subSetting in setting.subSettings)
-            AddSetting(subSetting);
+        foreach (SettingsTabData.Setting subSettings in setting.subSettings)
+            Add(subSettings);
     }
 
     private void Clear()
@@ -132,7 +131,7 @@ internal class SettingsTab
         if (!_active)
             return;
 
-        _settingsContent.Clear();
+        _content.Clear();
     }
 
     private void OnSearchFieldChange(ChangeEvent <string> evt)
@@ -140,15 +139,15 @@ internal class SettingsTab
         if (!_active)
             return;
 
-        SetDisplayedSettings(_searchField.value);
+        SetDisplayed(_searchField.value);
     }
 
     private void OnUpdateRightPane(IEnumerable <int> _)
     {
-        if (_settingsList.selectedItem == null)
+        if (_list.selectedItem == null)
             return;
 
-        var castedItem = (MegaPintBaseSettingsData.Setting)_settingsList.selectedItem;
+        var castedItem = (SettingsTabData.Setting)_list.selectedItem;
 
         if (_currentVisualElement != null)
         {
@@ -158,9 +157,9 @@ internal class SettingsTab
 
         if (castedItem.subSettings is {Count: > 0})
         {
-            _displayedSettings = new List <MegaPintBaseSettingsData.Setting>();
+            _displayedSettings = new List <SettingsTabData.Setting>();
 
-            _openSettings ??= new List <MegaPintBaseSettingsData.Setting>();
+            _openSettings ??= new List <SettingsTabData.Setting>();
 
             _visualElements = new List <VisualElement>();
 
@@ -169,40 +168,40 @@ internal class SettingsTab
             else
                 _openSettings.Add(castedItem);
 
-            foreach (MegaPintBaseSettingsData.Setting setting in MegaPintBaseSettingsData.Settings)
-                AddSetting(setting);
+            foreach (SettingsTabData.Setting setting in SettingsTabData.Settings)
+                Add(setting);
 
-            _settingsList.itemsSource = _displayedSettings;
-            _settingsList.RefreshItems();
+            _list.itemsSource = _displayedSettings;
+            _list.RefreshItems();
         }
         else
         {
-            _currentVisualElement = _visualElements[_settingsList.selectedIndex];
+            _currentVisualElement = _visualElements[_list.selectedIndex];
             _currentVisualElement.Q <Label>("Name").style.borderLeftWidth = 2.5f;
 
             UpdateRightPane();
         }
 
-        _settingsList.ClearSelection();
+        _list.ClearSelection();
     }
 
     private void RegisterCallbacks()
     {
-        _settingsList.makeItem = () => GUIUtility.Instantiate(_itemTemplate);
+        _list.makeItem = () => GUIUtility.Instantiate(_itemTemplate);
 
-        _settingsList.bindItem = (element, i) =>
+        _list.bindItem = (element, i) =>
         {
-            _openSettings ??= new List <MegaPintBaseSettingsData.Setting>();
+            _openSettings ??= new List <SettingsTabData.Setting>();
 
             _visualElements ??= new List <VisualElement>();
 
             if (!_visualElements.Contains(element))
                 _visualElements.Add(element);
 
-            MegaPintBaseSettingsData.Setting setting = _displayedSettings[i];
+            SettingsTabData.Setting setting = _displayedSettings[i];
 
             var nameLabel = element.Q <Label>("Name");
-            nameLabel.text = setting.settingName;
+            nameLabel.text = setting.settingsName;
             nameLabel.style.borderLeftWidth = _currentVisualElement == element ? 2.5f : 0;
 
             element.style.marginLeft = _inSearch ? 0 : setting.intendLevel * 10;
@@ -216,7 +215,7 @@ internal class SettingsTab
                 : DisplayStyle.None;
         };
 
-        _settingsList.destroyItem = element =>
+        _list.destroyItem = element =>
         {
             _visualElements ??= new List <VisualElement>();
 
@@ -226,18 +225,18 @@ internal class SettingsTab
             element.Clear();
         };
 
-        _settingsList.selectedIndicesChanged += OnUpdateRightPane;
+        _list.selectedIndicesChanged += OnUpdateRightPane;
 
         _searchField.RegisterValueChangedCallback(OnSearchFieldChange);
     }
 
-    private void SetDisplayedSettings(string searchString)
+    private void SetDisplayed(string searchString)
     {
         _displayedSettings = searchString.Equals("")
-            ? MegaPintBaseSettingsData.Settings
+            ? SettingsTabData.Settings
             : _allSettings.Where(
                                setting =>
-                                   setting.settingName.ToLower().Contains(searchString.ToLower())).
+                                   setting.settingsName.ToLower().Contains(searchString.ToLower())).
                            ToList();
 
         if (!searchString.Equals(""))
@@ -248,27 +247,27 @@ internal class SettingsTab
         else
             _inSearch = false;
 
-        _openSettings = new List <MegaPintBaseSettingsData.Setting>();
+        _openSettings = new List <SettingsTabData.Setting>();
         _visualElements = new List <VisualElement>();
 
-        _settingsList.ClearSelection();
+        _list.ClearSelection();
         _currentVisualElement = null;
 
-        _settingsList.itemsSource = _displayedSettings;
-        _settingsList.RefreshItems();
+        _list.itemsSource = _displayedSettings;
+        _list.RefreshItems();
     }
 
     private void UpdateRightPane()
     {
         Clear();
 
-        if (_settingsList.selectedItem == null)
+        if (_list.selectedItem == null)
             return;
 
-        MegaPintBaseSettingsData.SettingKey currentSettingKey =
-            ((MegaPintBaseSettingsData.Setting)_settingsList.selectedItem).settingKey;
+        SettingsTabData.SettingsKey currentSettingKey =
+            ((SettingsTabData.Setting)_list.selectedItem).settingsKey;
 
-        MegaPintBaseSettingsDisplay.Display(_settingsContent, currentSettingKey);
+        SettingsTabDisplay.Display(_content, currentSettingKey);
 
         BaseWindow.onRightPaneInitialization?.Invoke();
     }

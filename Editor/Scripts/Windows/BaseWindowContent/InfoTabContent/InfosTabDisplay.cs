@@ -4,48 +4,46 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = Editor.Scripts.GUI.GUIUtility;
 
-namespace Editor.Scripts.Settings.BaseSettings
+namespace Editor.Scripts.Windows.BaseWindowContent.InfoTabContent
 {
-    internal static class MegaPintBaseSettingsDisplay
+    internal static class InfosTabDisplay
     {
         private const string BasePath = "MegaPint/User Interface/Info Content/xxx";
-
-        private static VisualElement s_element;
         
-        public static void Display(VisualElement root, MegaPintBaseSettingsData.SettingKey key)
+        public static void Display(VisualElement root, InfosTabData.InfoKey key)
         {
-            s_element = GUIUtility.Instantiate(Load(key), root);
+            GUIUtility.Instantiate(Load(key), root);
             ActivateLogic(key, root);
         }
 
-        private static VisualTreeAsset Load(MegaPintBaseSettingsData.SettingKey key)
+        private static VisualTreeAsset Load(InfosTabData.InfoKey key)
             => Resources.Load<VisualTreeAsset>(GetDisplayPath(key));
 
-        private static string GetDisplayPath(MegaPintBaseSettingsData.SettingKey key)
+        private static string GetDisplayPath(InfosTabData.InfoKey key)
             => BasePath.Replace("xxx", key.ToString());
         
-        private static void ActivateLogic(MegaPintBaseSettingsData.SettingKey key, VisualElement root)
+        private static void ActivateLogic(InfosTabData.InfoKey key, VisualElement root)
         {
             switch (key)
             {
-                case MegaPintBaseSettingsData.SettingKey.Contact: 
+                case InfosTabData.InfoKey.Contact: 
                     ContactLogic(root);
 
                     break;
-                case MegaPintBaseSettingsData.SettingKey.ManagePackages: 
+                case InfosTabData.InfoKey.ManagePackages: 
                     ManagePackagesLogic(root);
 
                     break;
-                case MegaPintBaseSettingsData.SettingKey.UsePackages: 
+                case InfosTabData.InfoKey.UsePackages: 
                     
                     break;
                 
-                case MegaPintBaseSettingsData.SettingKey.UpdateBasePackage: 
+                case InfosTabData.InfoKey.UpdateBasePackage: 
                     UpdateBasePackageLogic(root);
 
                     break;
 
-                case MegaPintBaseSettingsData.SettingKey.Shortcuts:
+                case InfosTabData.InfoKey.Shortcuts:
                     ShortcutsLogic(root);
 
                     break;

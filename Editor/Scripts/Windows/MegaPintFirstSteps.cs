@@ -35,9 +35,12 @@ namespace Editor.Scripts.Windows
         {
             base.CreateGUI();
 
-            var root = rootVisualElement;
+            VisualElement root = rootVisualElement;
 
             VisualElement content = _baseWindow.Instantiate();
+
+            content.style.flexGrow = 1f;
+            content.style.flexShrink = 1f;
 
             #region References
 

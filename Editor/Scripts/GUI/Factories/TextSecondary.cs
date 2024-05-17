@@ -1,8 +1,11 @@
-﻿using UnityEngine.UIElements;
+﻿using System;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Editor.Scripts.GUI.Factories
 {
 
+[Obsolete] // TODO Remove
 public class TextSecondary : Label
 {
     public new class UxmlFactory : UxmlFactory <TextSecondary, UxmlTraits> { }
@@ -18,8 +21,7 @@ public class TextSecondary : Label
         {
             base.Init(element, attributes, context);
             
-            element.AddToClassList(RootElement.FontClass);
-            element.style.color = RootElement.Colors.TextSecondary;
+            element.style.color = Color.red;
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using UnityEngine.UIElements;
+﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Editor.Scripts.GUI.Factories.Headings
 {
@@ -18,8 +19,7 @@ public class MpHeading3 : Label
         {
             base.Init(element, attributes, context);
 
-            element.AddToClassList(RootElement.FontClass);
-            element.style.color = RootElement.Colors.TextSecondary;
+            element.style.color = Color.red;
         }
 
         #endregion

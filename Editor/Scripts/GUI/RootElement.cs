@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Editor.Scripts.Settings;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace Editor.Scripts.GUI
@@ -46,6 +44,27 @@ public static class RootElement
         public static Color Button => s_buttonColor.Value();
     }
 
+    private static MegaPintSettingsBase s_settings;
+
+    private static MegaPintSettingsBase _Settings
+    {
+        get
+        {
+            //Debug.Log(MegaPintSettings.instance); // TODO THIS IS NULL
+
+            return s_settings ??= MegaPintSettings.instance.GetSetting("General");
+        }
+    }
+
+    public static string CaretColorClass =>
+        _Settings.GetValue("EditorTheme", 0) switch
+        {
+            0 => EditorGUIUtility.isProSkin ? "mp_caretColor_dark" : "mp_caretColor_light",
+            1 => "mp_caretColor_dark",
+            2 => "mp_caretColor_light",
+            var _ => "mp_caretColor_dark"
+        };
+
     private class ThemedColor
     {
         public Color darkColor;
@@ -54,8 +73,15 @@ public static class RootElement
 
         public Color Value()
         {
-            // TODO check if light theme
-            return darkColor;
+            Debug.Log(_Settings.GetValue("EditorTheme", 0));
+            
+            return _Settings.GetValue("EditorTheme", 0) switch
+                   {
+                       0 => EditorGUIUtility.isProSkin ? darkColor : lightColor,
+                       1 => darkColor,
+                       2 => lightColor,
+                       var _ => darkColor
+                   };
         }
 
         #endregion
@@ -69,7 +95,7 @@ public static class RootElement
     
     private static readonly ThemedColor s_infoColor = new()
     {
-        darkColor = new Color(0.82f, 0.32f, 0.54f),
+        darkColor = new Color(0.94f, 0.94f, 0.94f),
         lightColor = new Color(0.82f, 0.32f, 0.54f)
     };
 
@@ -100,26 +126,26 @@ public static class RootElement
     private static readonly ThemedColor s_primaryBack = new()
     {
         darkColor = new Color(0.1f, 0.1f, 0.1f),
-        lightColor = new Color(0.1f, 0.1f, 0.1f)
+        lightColor = new Color(0.54f, 0.54f, 0.54f)
     };
 
     private static readonly ThemedColor s_secondaryBack = new()
     {
         darkColor = new Color(0.15f, 0.15f, 0.15f),
-        lightColor = new Color(0.15f, 0.15f, 0.15f)
+        lightColor = new Color(0.65f, 0.65f, 0.65f)
     };
 
     private static readonly ThemedColor s_tertiaryBack = new()
     {
         darkColor = new Color(0.19f, 0.19f, 0.19f),
-        lightColor = new Color(0.19f, 0.19f, 0.19f)
+        lightColor = new Color(0.78f, 0.78f, 0.78f)
     };
 
     private static readonly ThemedColor s_separatorColor = new()
     {
         darkColor = new Color(0.35f, 0.35f, 0.35f),
         lightColor = new Color(0.35f, 0.35f, 0.35f)
-    };    
+    };
     
     private static readonly ThemedColor s_buttonColor = new()
     {
@@ -177,6 +203,7 @@ public static class RootElement
         
         // Others
         {Overwrite.mp_listSelection_primary.ToString(), elements => {OverwriteListSelection(elements, Colors.PrimaryInteracted);}},
+        {Overwrite.mp_listSelection_bg3.ToString(), elements => {OverwriteListSelection(elements, Colors.Bg3);}},
         {Overwrite.mp_foldout.ToString(), OverwriteFoldout},
         {Overwrite.mp_toggle.ToString(), OverwriteToggle},
         {Overwrite.mp_dropdown.ToString(), OverwriteDropdown},
@@ -212,18 +239,18 @@ public static class RootElement
 
     private static void OverwriteFoldout(List <VisualElement> elements)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             element.Q(className: "unity-toggle").focusable = false;
             element.Q(className: "unity-toggle__input").focusable = false;
             element.Q(className: "unity-toggle__text").focusable = false;
             element.Q(className: "unity-toggle__checkmark").focusable = false;
-        }   
+        }  */ 
     }  
     
     private static void OverwriteDropdown(List <VisualElement> elements)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             element.focusable = false;
 
@@ -234,12 +261,12 @@ public static class RootElement
 
             label.style.color = Colors.TextSecondary;
             label.focusable = false;
-        }   
+        }  */ 
     }     
     
     private static void OverwriteInputField(List <VisualElement> elements)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             VisualElement label = element.Q(className: "unity-base-field__label");
             VisualElement inputElement = element.Q(className: "unity-base-text-field__input");
@@ -309,12 +336,12 @@ public static class RootElement
                     
                     GUIUtility.SetBorderColor(inputElement, defaultBorderColor);
                 });
-        }   
+        }   */
     }
 
     private static void OverwriteObjectField(List <VisualElement> elements)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             VisualElement label = element.Q(className: "unity-base-field__label");
             VisualElement inputElement = element.Q(className: "unity-base-field__input");
@@ -334,12 +361,12 @@ public static class RootElement
                 {
                     GUIUtility.SetBorderColor(inputElement, defaultBorderColor);
                 });
-        }
+        }*/
     }
     
     private static void OverwriteColorField(List <VisualElement> elements)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             VisualElement label = element.Q(className: "unity-base-field__label");
             VisualElement inputElement = element.Q(className: "unity-base-field__input");
@@ -403,12 +430,12 @@ public static class RootElement
                 {
                     GUIUtility.SetBorderColor(inputElement, Colors.Bg1);
                 });
-        }   
+        }   */
     }  
     
     private static void OverwriteToggle(List <VisualElement> elements)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             VisualElement input = element.Q(className: "unity-toggle__input");
             VisualElement checkmark = input.Q(className: "unity-toggle__checkmark");
@@ -470,12 +497,12 @@ public static class RootElement
                     GUIUtility.SetBorderRadius(checkmark, 0);
                     GUIUtility.SetBorderColor(checkmark, defaultBorderColor);
                 });
-        }
+        }*/
     }
 
     private static void OverwriteListSelection(List <VisualElement> elements, Color color)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             if (element is not ListView list)
                 continue;
@@ -503,55 +530,55 @@ public static class RootElement
                         ve.style.backgroundColor = color;
                     });
             };
-        }
+        }*/
     }
 
     private static void OverwriteTextColor(List <VisualElement> elements, Color color)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             element.style.color = color;
-        }
+        }*/
     }
     
     private static void OverwriteBorderColor(List <VisualElement> elements, Color color)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             GUIUtility.SetBorderColor(element, color);
-        }
+        }*/
     }
     
     private static void OverwriteBackgroundColor(List <VisualElement> elements, Color color)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             element.style.backgroundColor = color;
-        }
+        }*/
     }
     
     private static void OverwriteImageTint(List <VisualElement> elements, Color color)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             element.style.unityBackgroundImageTintColor = color;
-        }
+        }*/
     }
 
     private static void OverwriteInteraction(List <VisualElement> elements)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             GUIUtility.SubscribeInteractable(element);
-        }
+        }*/
     }
     
     private static void OverwriteInteractionImageOnly(List <VisualElement> elements)
     {
-        foreach (VisualElement element in elements)
+        /*foreach (VisualElement element in elements)
         {
             GUIUtility.SubscribeInteractableImageOnly(element);
-        }
+        }*/
     }
 }
 

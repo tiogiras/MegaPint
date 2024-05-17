@@ -1,11 +1,11 @@
 ﻿using UnityEngine.UIElements;
 
-namespace Editor.Scripts.GUI.Factories
+namespace Editor.Scripts.GUI.Factories.Structure
 {
 
-public class SeparatorVertical : VisualElement
+public class Separator : VisualElement
 {
-    public new class UxmlFactory : UxmlFactory <SeparatorVertical, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory <Separator, UxmlTraits> { }
 
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
@@ -24,9 +24,9 @@ public class SeparatorVertical : VisualElement
         {
             base.Init(element, attributes, context);
             
-            element.style.width = _space.GetValueFromBag(attributes, context);
+            element.style.height = _space.GetValueFromBag(attributes, context);
             
-            element.style.backgroundColor = RootElement.Colors.Separator;
+            element.AddToClassList(StyleSheetClasses.Background.Color.Separator);
 
             GUIUtility.SetMargin(element, 4f);
             GUIUtility.SetBorderRadius(element, 1f);
