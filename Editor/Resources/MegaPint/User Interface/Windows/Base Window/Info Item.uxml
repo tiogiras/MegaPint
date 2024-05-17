@@ -4,7 +4,7 @@
         <ui:VisualElement class="mp_border-color--primary" style="border-bottom-width: 1px; border-bottom-color: rgb(20, 20, 20); align-items: center; flex-direction: row; height: 18px;">
             <ui:VisualElement name="Closed" class="mp_image-tint--identity" style="background-image: resource(&apos;MegaPint/Images/Icons/Closed Menu&apos;); width: 5px; height: 6px; margin-left: 3px; margin-right: 3px;" />
             <ui:VisualElement name="Open" class="mp_image-tint--identity" style="background-image: resource(&apos;MegaPint/Images/Icons/Opened Menu&apos;); width: 6px; height: 5px; margin-left: 3px; margin-right: 3px;" />
-            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="Name" text="Setting Name" class="mp_border-color--identity" style="-unity-text-align: middle-left; border-left-width: 2px; margin-top: 0; margin-bottom: 0; flex-grow: 1; flex-shrink: 1; white-space: normal;" />
+            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="Name" text="Setting Name" class="mp_border-color--identity" style="-unity-text-align: middle-left; border-left-width: 2px; margin-top: 0; margin-bottom: 0; flex-grow: 1; flex-shrink: 1; white-space: nowrap; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; text-overflow: ellipsis; overflow: hidden;" />
         </ui:VisualElement>
     </Editor.Scripts.GUI.Factories.RootElement>
 </ui:UXML>

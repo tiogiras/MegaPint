@@ -3,7 +3,7 @@
     <Editor.Scripts.GUI.Factories.RootElement style="flex-grow: 1;">
         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary style="flex-grow: 1;">
             <ui:VisualElement style="width: 66%; height: 100%; justify-content: center; align-self: center;">
-                <Editor.Scripts.GUI.Factories.Structure.AspectRatioPanel name="Logo" style="width: 50%; height: 50%; background-image: resource(&apos;MegaPint/Images/Logo&apos;);" />
+                <Editor.Scripts.GUI.Factories.Structure.AspectRatioPanel name="Logo" class="mp_splashScreen" style="width: 50%; height: 50%;" />
                 <ui:VisualElement class="mp_background-color--secondary" style="flex-grow: 0; height: 10px; width: 100%; border-top-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-bottom-left-radius: 1px;">
                     <ui:VisualElement name="Progress" class="mp_background-color--identity" style="width: 22%; height: 100%; border-top-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-bottom-left-radius: 1px;" />
                 </ui:VisualElement>

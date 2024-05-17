@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
     <Editor.Scripts.GUI.Factories.RootElement style="flex-grow: 1;">
-        <ui:TwoPaneSplitView fixed-pane-initial-size="200" fixed-pane-initial-dimension="200" fixed-pane-index="0" tabindex="0" style="height: 5000px; width: auto;">
-            <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary name="BackgroundSecondary" style="width: 200px; min-width: 200px;">
+        <ui:TwoPaneSplitView fixed-pane-initial-size="200" fixed-pane-initial-dimension="225" fixed-pane-index="0" tabindex="0" style="height: 5000px; width: auto;">
+            <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary name="BackgroundSecondary" style="width: 225px; min-width: 225px;">
                 <uie:Toolbar style="width: 100%; padding-right: 5px; background-color: rgba(60, 60, 60, 0); border-bottom-width: 0;">
                     <Editor.Scripts.GUI.Factories.Interactive.SearchField focusable="true" name="PackageSearch" style="flex-grow: 1; width: 100%;" />
                 </uie:Toolbar>
@@ -14,16 +14,16 @@
                         <ui:GroupBox>
                             <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: center;">
                                 <Editor.Scripts.GUI.Factories.Headings.HeadingIdentity tabindex="-1" name="PackageName" text="PackageName" style="margin-top: 10px; margin-bottom: 10px; margin-left: 10px; white-space: normal; font-size: 20px; -unity-font-style: bold;" />
-                                <ui:VisualElement tooltip="Show Package Preview" name="Gallery" class="mp_interaction_imageOnly mp_imageTint_textSecondary" style="width: 20px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/Galerie&apos;);" />
+                                <ui:VisualElement tooltip="Show Package Preview" name="Gallery" class="mp_effect-hover-image-tint--identity mp_image-tint--button-image" style="width: 20px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/Galerie&apos;);" />
                             </ui:VisualElement>
                             <Editor.Scripts.GUI.Factories.Structure.Separator />
                             <ui:VisualElement style="flex-grow: 1; flex-direction: row; margin-left: 10px; margin-top: 10px; margin-bottom: 10px; margin-right: 10px;">
                                 <ui:VisualElement style="flex-grow: 0; width: 30px; height: auto; flex-shrink: 0;">
-                                    <ui:VisualElement tooltip="Newest Version:" name="NewestVersion" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/Newest Version&apos;);" />
-                                    <ui:VisualElement tooltip="Installed Version:" name="InstalledVersion" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/Installed Version&apos;);" />
-                                    <ui:VisualElement tooltip="Last Update:" name="LastUpdate" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/Last Edit&apos;);" />
-                                    <ui:VisualElement tooltip="Unity Version:" name="UnityVersion" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/Unity Version&apos;);" />
-                                    <ui:VisualElement tooltip="MegaPint Version:" name="MegaPintVersion" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/MegaPint Version&apos;);" />
+                                    <ui:VisualElement tooltip="Newest Version:" name="NewestVersion" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity mp_image-tint--button-image" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/Newest Version&apos;);" />
+                                    <ui:VisualElement tooltip="Installed Version:" name="InstalledVersion" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity mp_image-tint--button-image" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/Installed Version&apos;);" />
+                                    <ui:VisualElement tooltip="Last Update:" name="LastUpdate" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity mp_image-tint--button-image" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/Last Edit&apos;);" />
+                                    <ui:VisualElement tooltip="Unity Version:" name="UnityVersion" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity mp_image-tint--button-image" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/Unity Version&apos;);" />
+                                    <ui:VisualElement tooltip="MegaPint Version:" name="MegaPintVersion" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity mp_image-tint--button-image" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/MegaPint Version&apos;);" />
                                 </ui:VisualElement>
                                 <Editor.Scripts.GUI.Factories.Structure.SeparatorVertical />
                                 <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Info Text ..." name="InfoText" style="white-space: normal; -unity-text-align: middle-left; font-size: 12.5px; margin-left: 10px; flex-grow: 1; flex-shrink: 1;" />

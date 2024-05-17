@@ -2,7 +2,7 @@
     <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
     <Editor.Scripts.GUI.Factories.RootElement>
         <ui:VisualElement class="mp_border-color--separator" style="flex-grow: 1; flex-direction: row; align-items: center; justify-content: space-between; width: 99%; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; border-bottom-width: 1px;">
-            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="PackageName" text="PackageName" />
+            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="PackageName" text="PackageName" style="overflow: hidden; text-overflow: ellipsis;" />
             <ui:VisualElement style="flex-direction: row;">
                 <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="Missing" text="Missing" class="mp_text-color--red" style="white-space: normal;" />
                 <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="Imported" text="Imported" class="mp_text-color--green" style="white-space: normal;" />

@@ -11,8 +11,6 @@ namespace Editor.Scripts.Windows
 
 public class MegaPintDevMode : MegaPintEditorWindowBase
 {
-    private static Color s_onColor;
-
     private static MegaPintSettingsBase _Settings =>
         MegaPintSettings.instance.GetSetting("General");
 
@@ -47,7 +45,6 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
         VisualElement root = rootVisualElement;
 
         VisualElement content = _baseWindow.Instantiate();
-        GUIUtility.ApplyTheme(content);
 
         content.style.flexGrow = 1f;
         content.style.flexShrink = 1f;
@@ -56,8 +53,6 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
 
         _btnOn = content.Q <Button>("BTN_On");
         _btnOff = content.Q <Button>("BTN_Off");
-
-        s_onColor = RootElement.Colors.Primary;
 
         UpdateButtonStyles();
 
@@ -119,8 +114,24 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
 
     private void UpdateButtonStyles()
     {
-        _btnOn.style.backgroundColor = _devModeValue ? s_onColor : StyleKeyword.Null;
-        _btnOff.style.backgroundColor = _devModeValue ? StyleKeyword.Null : s_onColor;
+        if (_devModeValue)
+        {
+            Debug.Log("On");
+            _btnOn.AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
+            _btnOn.AddToClassList(StyleSheetClasses.Background.Color.Identity);
+            
+            _btnOff.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
+            _btnOff.RemoveFromClassList(StyleSheetClasses.Background.Color.Identity);
+        }
+        else
+        {
+            Debug.Log("Off");
+            _btnOn.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
+            _btnOn.RemoveFromClassList(StyleSheetClasses.Background.Color.Identity);
+            
+            _btnOff.AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
+            _btnOff.AddToClassList(StyleSheetClasses.Background.Color.Identity);
+        }
     }
 
     #endregion

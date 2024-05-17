@@ -175,7 +175,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
         _list.makeItem = () => GUIUtility.Instantiate(_listItem);
 
-        _list.bindItem = UpdateItem;
+        _list.bindItem = MakeItem;
 
         _list.destroyItem = element => element.Clear();
 
@@ -248,19 +248,34 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
         GUIUtility.DisplaySplashScreen(_root, () => {CreateGUIContent(_root);});
     }
 
-    private void UpdateItem(VisualElement element, int index)
+    private void MakeItem(VisualElement element, int index)
     {
         CachedPackage package = _displayedPackages[index];
         _currentPackage = package;
 
-        element.Q <Label>("PackageName").text = package.DisplayName;
+        var packageName = element.Q <Label>("PackageName");
+        packageName.text = package.DisplayName;
 
         var version = element.Q <Label>("Version");
-
         version.text = _DevMode ? "Dev" : package.CurrentVersion;
-
         version.style.display = package.IsInstalled ? DisplayStyle.Flex : DisplayStyle.None;
-        
+
+        _list.selectedIndicesChanged += _ =>
+        {
+            var isSelected = _list.selectedIndex == index;
+
+            if (isSelected)
+            {
+                packageName.AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
+                version.AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
+            }
+            else
+            {
+                packageName.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
+                version.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
+            }
+        };
+
         // TODO Apply Color change via uss classes
         /*version.style.color = !package.IsNewestVersion ? _wrongVersionColor : _normalColor;*/
     }
