@@ -260,7 +260,9 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
         version.text = _DevMode ? "Dev" : package.CurrentVersion;
 
         version.style.display = package.IsInstalled ? DisplayStyle.Flex : DisplayStyle.None;
-        version.style.color = !package.IsNewestVersion ? _wrongVersionColor : _normalColor;
+        
+        // TODO Apply Color change via uss classes
+        /*version.style.color = !package.IsNewestVersion ? _wrongVersionColor : _normalColor;*/
     }
 
     private void UpdateVariationItem(VisualElement element, int index)
@@ -317,7 +319,9 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
             var needsUpdate = PackageCache.NeedsVariationUpdate(_currentPackage.Key, variation.name);
 
             version.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
-            version.style.color = needsUpdate ? _wrongVersionColor : _normalColor;
+            
+            // TODO Apply Color change to version via uss classes
+            /*version.style.color = needsUpdate ? _wrongVersionColor : _normalColor;*/
 
             btnImport.style.display = isVariation ? DisplayStyle.None : DisplayStyle.Flex;
             btnRemove.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
@@ -342,8 +346,8 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
     private const string DependencyItemTemplate = Path + "/Dependency Item";
     private const string ImageItemTemplate = Path + "/Image Item";
 
-    private readonly Color _normalColor = RootElement.Colors.Text;
-    private readonly Color _wrongVersionColor = RootElement.Colors.TextRed;
+    /*private readonly Color _normalColor = RootElement.Colors.Text;
+    private readonly Color _wrongVersionColor = RootElement.Colors.TextRed;*/
 
     #endregion
 

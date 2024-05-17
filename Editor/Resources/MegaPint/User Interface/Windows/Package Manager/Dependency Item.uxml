@@ -1,10 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
-    <ui:GroupBox class="mp_borderColor_separator" style="margin-left: 0; margin-right: 0; margin-top: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; margin-bottom: 0; flex-direction: row; justify-content: space-between; align-items: center; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px; width: 99%;">
-        <Editor.Scripts.GUI.Factories.Text tabindex="-1" name="PackageName" text="PackageName" />
-        <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row;">
-            <Editor.Scripts.GUI.Factories.Text tabindex="-1" name="Missing" text="Missing" class="mp_textColor_red" style="white-space: normal;" />
-            <Editor.Scripts.GUI.Factories.Text tabindex="-1" name="Imported" text="Imported" class="mp_textColor_green" style="white-space: normal;" />
-        </ui:GroupBox>
-    </ui:GroupBox>
+    <Editor.Scripts.GUI.Factories.RootElement>
+        <ui:VisualElement class="mp_border-color--separator" style="flex-grow: 1; flex-direction: row; align-items: center; justify-content: space-between; width: 99%; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; border-bottom-width: 1px;">
+            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="PackageName" text="PackageName" />
+            <ui:VisualElement style="flex-direction: row;">
+                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="Missing" text="Missing" class="mp_text-color--red" style="white-space: normal;" />
+                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="Imported" text="Imported" class="mp_text-color--green" style="white-space: normal;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </Editor.Scripts.GUI.Factories.RootElement>
 </ui:UXML>

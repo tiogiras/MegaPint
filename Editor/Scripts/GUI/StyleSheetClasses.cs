@@ -6,10 +6,16 @@ public static class StyleSheetClasses
     private const string ClassBase = "mp_";
 
     public static string Button => $"{ClassBase}button";
+    
     public static string SearchField => $"{ClassBase}searchField";
+    
     public static string CursorColor => $"{ClassBase}cursorColor";
+    
     public static string Dropdown => $"{ClassBase}dropdown";
+    
     public static string Link => $"{ClassBase}link";
+    
+    public static string Foldout => $"{ClassBase}foldout";
 
     public static class Background
     {

@@ -1,115 +1,91 @@
-/* ================== MegaPint Root Element ================== */
 .mp {
     -unity-font: resource('Roboto Mono');
     -unity-font-definition: initial;
 }
 
-/* ================== Themes ================== */
-
 .mp_theme--dark {
-    /* Custom Variables */
-    --link-color: #D10072;
-    --info-color: #EFEFEF;
-    
-    --identity-color: #D10072;
-    --identity-interacted-color: #A80054;
-    
-    --text-primary-color: #F4F4F4;
-    --text-secondary-color: #A0A0A0;
-    --text-red-color: #AF1E1E;
-    --text-orange-color: #AF6B1E;
-    --text-green-color: #1EAF1E;
-    
-    --background-primary-color: #191919;
-    --background-secondary-color: #262626;
-    --background-tertiary-color: #303030;
-    
-    --separator-color: #595959;
-    
-    --cursor-color: #FFFFFF;
-    
-    --button-color: #595959;
-    --button-border-color-top: #303030;
-    --button-border-color-bottom: #242424;
-    --button-border-color-left: #303030;
-    --button-border-color-right: #303030;
-
-    --searchField-border-color-top: #0D0D0D;
-    --searchField-border-color-bottom: #212121;
-    --searchField-border-color-left: #212121;
-    --searchField-border-color-right: #212121;
+    --link-color: rgb(209, 0, 114);
+    --info-color: rgb(239, 239, 239);
+    --identity-color: rgb(209, 0, 114);
+    --identity-interacted-color: rgb(168, 0, 84);
+    --text-primary-color: rgb(244, 244, 244);
+    --text-secondary-color: rgb(160, 160, 160);
+    --text-red-color: rgb(175, 30, 30);
+    --text-orange-color: rgb(175, 107, 30);
+    --text-green-color: rgb(30, 175, 30);
+    --background-primary-color: rgb(25, 25, 25);
+    --background-secondary-color: rgb(38, 38, 38);
+    --background-tertiary-color: rgb(48, 48, 48);
+    --separator-color: rgb(89, 89, 89);
+    --cursor-color: rgb(255, 255, 255);
+    --button-color: rgb(89, 89, 89);
+    --button-border-color-top: rgb(48, 48, 48);
+    --button-border-color-bottom: rgb(36, 36, 36);
+    --button-border-color-left: rgb(48, 48, 48);
+    --button-border-color-right: rgb(48, 48, 48);
+    --searchField-border-color-top: rgb(13, 13, 13);
+    --searchField-border-color-bottom: rgb(33, 33, 33);
+    --searchField-border-color-left: rgb(33, 33, 33);
+    --searchField-border-color-right: rgb(33, 33, 33);
 }
 
 .mp_theme--light {
-    /* Custom Variables */
-    --link-color: #D10072;
-    --info-color: #EFEFEF;
-    
-    --identity-color: #D10072;
-    --identity-interacted-color: #A80054;
-    
-    --text-primary-color: #F4F4F4;
-    --text-secondary-color: #A0A0A0;
-    --text-red-color: #AF1E1E;
-    --text-orange-color: #AF6B1E;
-    --text-green-color: #1EAF1E;
-    
-    --background-primary-color: #898989;
-    --background-secondary-color: #A5A5A5;
-    --background-tertiary-color: #C6C6C6;
-    
-    --separator-color: #595959;
-
-    --cursor-color: #000000;
-    
-    --button-color: #595959;
-    --button-border-color-top: #303030;
-    --button-border-color-bottom: #242424;
-    --button-border-color-left: #303030;
-    --button-border-color-right: #303030;
-
-    --searchField-border-color-top: #0D0D0D;
-    --searchField-border-color-bottom: #212121;
-    --searchField-border-color-left: #212121;
-    --searchField-border-color-right: #212121;
+    --link-color: rgb(209, 0, 114);
+    --info-color: rgb(239, 239, 239);
+    --identity-color: rgb(209, 0, 114);
+    --identity-interacted-color: rgb(168, 0, 84);
+    --text-primary-color: rgb(244, 244, 244);
+    --text-secondary-color: rgb(160, 160, 160);
+    --text-red-color: rgb(175, 30, 30);
+    --text-orange-color: rgb(175, 107, 30);
+    --text-green-color: rgb(30, 175, 30);
+    --background-primary-color: rgb(137, 137, 137);
+    --background-secondary-color: rgb(165, 165, 165);
+    --background-tertiary-color: rgb(198, 198, 198);
+    --separator-color: rgb(89, 89, 89);
+    --cursor-color: rgb(0, 0, 0);
+    --button-color: rgb(89, 89, 89);
+    --button-border-color-top: rgb(48, 48, 48);
+    --button-border-color-bottom: rgb(36, 36, 36);
+    --button-border-color-left: rgb(48, 48, 48);
+    --button-border-color-right: rgb(48, 48, 48);
+    --searchField-border-color-top: rgb(13, 13, 13);
+    --searchField-border-color-bottom: rgb(33, 33, 33);
+    --searchField-border-color-left: rgb(33, 33, 33);
+    --searchField-border-color-right: rgb(33, 33, 33);
 }
 
-/* ================== Properties ================== */
-/* ================== Text (Properties) ================== */
-
-.mp_text-color--link{
+.mp_text-color--link {
     color: var(--link-color);
 }
 
-.mp_text-color--info{
+.mp_text-color--info {
     color: var(--info-color);
 }
 
-.mp_text-color--identity{
+.mp_text-color--identity {
     color: var(--identity-color);
 }
 
-.mp_text-color--primary{
+.mp_text-color--primary {
     color: var(--text-primary-color);
 }
 
-.mp_text-color--secondary{
+.mp_text-color--secondary {
     color: var(--text-secondary-color);
 }
 
-.mp_text-color--red{
+.mp_text-color--red {
     color: var(--text-red-color);
 }
 
-.mp_text-color--orange{
+.mp_text-color--orange {
     color: var(--text-orange-color);
 }
 
-.mp_text-color--green{
+.mp_text-color--green {
     color: var(--text-green-color);
 }
-
-/* ================== Background (Properties) ================== */
 
 .mp_background-color--primary {
     background-color: var(--background-primary-color);
@@ -131,14 +107,12 @@
     background-color: var(--separator-color);
 }
 
-/* ================== Border (Properties) ================== */
-
 .mp_border-color--identity {
     border-color: var(--identity-color);
 }
 
 .mp_border-color--black {
-    border-color: #000000;
+    border-color: rgb(0, 0, 0);
 }
 
 .mp_border-color--primary {
@@ -157,8 +131,6 @@
     border-color: var(--separator-color);
 }
 
-/* ================== Image Tint (Properties) ================== */
-
 .mp_image-tint--identity {
     -unity-background-image-tint-color: var(--identity-color);
 }
@@ -167,13 +139,9 @@
     -unity-background-image-tint-color: var(--text-secondary-color);
 }
 
-/* ================== Classes ================== */
-/* ================== Button (Classes) ================== */
-
 .mp_button {
     background-color: var(--button-color);
     color: var(--text-primary-color);
-    
     border-top-color: var(--button-border-color-top);
     border-bottom-color: var(--button-border-color-bottom);
     border-left-color: var(--button-border-color-left);
@@ -189,12 +157,9 @@
     background-color: var(--identity-interacted-color);
 }
 
-/* ================== SearchField (Classes) ================== */
-
 .mp_searchField {
     background-color: var(--background-tertiary-color);
     color: var(--text-primary-color);
-    
     border-top-color: var(--searchField-border-color-top);
     border-bottom-color: var(--searchField-border-color-bottom);
     border-left-color: var(--searchField-border-color-left);
@@ -205,7 +170,6 @@
     border-color: var(--text-secondary-color);
 }
 
-
 .mp_searchField:focus {
     border-color: var(--identity-color);
 }
@@ -214,21 +178,20 @@
     --unity-cursor-color: var(--cursor-color);
 }
 
-/* ================== List View (Classes) ================== */
-
 .unity-list-view__item:hover {
     background-color: var(--background-tertiary-color);
+}
+
+.unity-list-view__item:checked {
+    background-color: var(--identity-interacted-color);
 }
 
 .unity-list-view__empty-label {
     color: var(--text-secondary-color);
 }
 
-/* ================== Dropdown (Classes) ================== */
-
 .mp_dropdown {
     background-color: var(--button-color);
-
     border-top-color: var(--button-border-color-top);
     border-bottom-color: var(--button-border-color-bottom);
     border-left-color: var(--button-border-color-left);
@@ -239,67 +202,39 @@
     border-color: var(--identity-color);
 }
 
-
-
-
-
-
-
-.mp_link {
-    
+.unity-foldout {
+    color: var(--text-primary-color);
 }
 
+.unity-foldout__toggle>.unity-toggle__input>#unity-checkmark  {
+    background-image: resource("MegaPint/Images/Icons/Foldout Toggle");
+}
 
+.unity-foldout__toggle>.unity-toggle__input:checked>#unity-checkmark {
+    background-image: resource("MegaPint/Images/Icons/Foldout Toggle Checked");
+}
 
+.unity-foldout__toggle:active>.unity-toggle__input>#unity-checkmark {
+    background-image: resource("MegaPint/Images/Icons/Foldout Toggle");
+    -unity-background-image-tint-color: var(--identity-color);
+}
 
+.unity-foldout__toggle:active>.unity-toggle__input:checked>#unity-checkmark {
+    background-image: resource("MegaPint/Images/Icons/Foldout Toggle Checked");
+    -unity-background-image-tint-color: var(--identity-color);
+}
 
+.unity-foldout__toggle:focus>.unity-toggle__input>.unity-foldout__text {
+    color: var(--text-primary-color);
+}
 
+.mp_effect-hover-image-tint--identity:hover {
+    -unity-background-image-tint-color: var(--identity-color);
+}
 
-
-
-
-
-
+.mp_link {
+}
 
 .link-cursor {
     cursor: link;
-}
-
-.mp_interaction {
-}
-
-.mp_interaction_imageOnly {
-}
-
-.mp_interaction_onlyLoseFocusOnBlur {
-}
-
-.mp_interaction_checkColorOnMouseUp {
-}
-
-.mp_interaction_dontChangeColorAfterInteract {
-}
-
-.mp_foldoutt {
-}
-
-.mp_toggle {
-}
-
-.mp_inputField {
-}
-
-.mp_colorField {
-}
-
-.mp_objectField {
-}
-
-.mp_useCustomTooltip {
-}
-
-.mp_listSelection_primary {
-}
-
-.mp_listSelection_bg3 {
 }

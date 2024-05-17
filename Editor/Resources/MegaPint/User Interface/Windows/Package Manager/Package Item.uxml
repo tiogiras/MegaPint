@@ -1,9 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
-    <ui:GroupBox class="mp_borderColor_separator" style="margin-left: 0; margin-right: 0; margin-top: 0; padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; margin-bottom: 0; flex-direction: row; justify-content: space-between; align-items: center; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-bottom-width: 1px;">
-        <Editor.Scripts.GUI.Factories.Text tabindex="-1" text="PackageName" name="PackageName" style="white-space: normal;" />
-        <ui:GroupBox style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row-reverse;">
-            <Editor.Scripts.GUI.Factories.Text tabindex="-1" name="Version" text="1.0.0" class="mp_textColor_red" />
-        </ui:GroupBox>
-    </ui:GroupBox>
+    <Editor.Scripts.GUI.Factories.RootElement>
+        <ui:VisualElement class="mp_border-color--separator" style="flex-grow: 1; flex-direction: row; align-items: center; justify-content: space-between; width: 99%; padding-top: 2px; padding-right: 3px; padding-bottom: 2px; padding-left: 3px; border-bottom-width: 1px;">
+            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="PackageName" text="PackageName" />
+            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="Version" text="1.0.0" style="white-space: normal; -unity-text-align: upper-right;" />
+        </ui:VisualElement>
+    </Editor.Scripts.GUI.Factories.RootElement>
 </ui:UXML>

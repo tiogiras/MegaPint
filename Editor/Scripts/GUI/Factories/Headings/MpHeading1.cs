@@ -1,11 +1,12 @@
-﻿using UnityEngine.UIElements;
+﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Editor.Scripts.GUI.Factories.Headings
 {
 
-public class HadingIdentity : Label
+public class MpHeading1 : Label
 {
-    public new class UxmlFactory : UxmlFactory <HadingIdentity, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory <MpHeading1, UxmlTraits> { }
 
     public new class UxmlTraits : Label.UxmlTraits
     {
@@ -17,8 +18,8 @@ public class HadingIdentity : Label
             CreationContext context)
         {
             base.Init(element, attributes, context);
-            
-            element.AddToClassList(StyleSheetClasses.Text.Color.Identity);
+
+            element.style.color = Color.red;
         }
 
         #endregion

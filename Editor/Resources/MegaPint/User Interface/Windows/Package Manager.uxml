@@ -1,45 +1,48 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
-    <ui:TwoPaneSplitView fixed-pane-initial-size="200" fixed-pane-initial-dimension="200" fixed-pane-index="0" tabindex="0" style="height: 5000px; width: auto;">
-        <Editor.Scripts.GUI.Factories.Backgrounds.Background2 style="width: 200px; min-width: 200px;">
-            <uie:Toolbar style="background-color: rgba(60, 60, 60, 0); width: 100%; padding-right: 5px;">
-                <uie:ToolbarSearchField focusable="true" name="PackageSearch" class="mp_interaction mp_interaction_onlyLoseFocusOnBlur mp_interaction_checkColorOnMouseUp" style="width: 100%;" />
-            </uie:Toolbar>
-            <ui:ListView focusable="true" name="MainList" virtualization-method="DynamicHeight" show-bound-collection-size="false" class="mp_listSelection_primary" style="flex-grow: 1;" />
-        </Editor.Scripts.GUI.Factories.Backgrounds.Background2>
-        <Editor.Scripts.GUI.Factories.Backgrounds.Background3 name="RightPane" style="flex-grow: 1; flex-shrink: 0; min-width: 60%;">
-            <ui:GroupBox name="Content" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: space-between; flex-grow: 1; flex-shrink: 0; height: 100%; flex-basis: auto;">
-                <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="ScrollView" style="flex-grow: 1;">
-                    <ui:GroupBox>
-                        <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: center;">
-                            <Editor.Scripts.GUI.Factories.Headings.MpHeading1 name="PackageName" text="Package Name" style="-unity-font-style: bold; font-size: 20px; margin-left: 10px; margin-top: 10px; margin-bottom: 10px; margin-right: 0;" />
-                            <ui:VisualElement tooltip="Show Package Preview" name="Gallery" class="mp_interaction_imageOnly mp_imageTint_textSecondary" style="width: 20px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/Galerie&apos;);" />
-                        </ui:VisualElement>
-                        <Editor.Scripts.GUI.Factories.Separator />
-                        <ui:VisualElement style="flex-grow: 1; flex-direction: row; margin-left: 10px; margin-top: 10px; margin-bottom: 10px; margin-right: 10px;">
-                            <ui:VisualElement style="flex-grow: 0; width: 30px; height: auto; flex-shrink: 0;">
-                                <ui:IMGUIContainer tooltip="Newest Version:" name="NewestVersion" class="mp_interaction_imageOnly mp_imageTint_textSecondary mp_useCustomTooltip" style="width: 15px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/Newest Version&apos;); margin-bottom: 5px;" />
-                                <ui:IMGUIContainer name="InstalledVersion" tooltip="Installed Version:" class="mp_interaction_imageOnly mp_imageTint_textSecondary mp_useCustomTooltip" style="width: 15px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/Installed Version&apos;); margin-bottom: 5px;" />
-                                <ui:IMGUIContainer name="LastUpdate" tooltip="Last Update:" class="mp_interaction_imageOnly mp_imageTint_textSecondary mp_useCustomTooltip" style="width: 15px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/Last Edit&apos;); margin-bottom: 5px;" />
-                                <ui:IMGUIContainer name="UnityVersion" tooltip="Unity Version:" class="mp_interaction_imageOnly mp_imageTint_textSecondary mp_useCustomTooltip" style="width: 15px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/Unity Version&apos;); margin-bottom: 5px;" />
-                                <ui:IMGUIContainer name="MegaPintVersion" tooltip="MegaPint Version:" class="mp_interaction_imageOnly mp_imageTint_textSecondary mp_useCustomTooltip" style="width: 15px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/MegaPint Version&apos;);" />
+    <Editor.Scripts.GUI.Factories.RootElement style="flex-grow: 1;">
+        <ui:TwoPaneSplitView fixed-pane-initial-size="200" fixed-pane-initial-dimension="200" fixed-pane-index="0" tabindex="0" style="height: 5000px; width: auto;">
+            <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary name="BackgroundSecondary" style="width: 200px; min-width: 200px;">
+                <uie:Toolbar style="width: 100%; padding-right: 5px; background-color: rgba(60, 60, 60, 0); border-bottom-width: 0;">
+                    <Editor.Scripts.GUI.Factories.Interactive.SearchField focusable="true" name="PackageSearch" style="flex-grow: 1; width: 100%;" />
+                </uie:Toolbar>
+                <ui:ListView focusable="true" name="MainList" virtualization-method="DynamicHeight" show-bound-collection-size="false" style="flex-grow: 1;" />
+            </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+            <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary name="RightPane" style="flex-shrink: 0; flex-grow: 1; min-width: 50%;">
+                <ui:GroupBox name="Content" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; justify-content: space-between; flex-grow: 1; flex-shrink: 0; height: 100%; flex-basis: auto;">
+                    <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="ScrollView" style="flex-grow: 1;">
+                        <ui:GroupBox>
+                            <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: center;">
+                                <Editor.Scripts.GUI.Factories.Headings.HeadingIdentity tabindex="-1" name="PackageName" text="PackageName" style="margin-top: 10px; margin-bottom: 10px; margin-left: 10px; white-space: normal; font-size: 20px; -unity-font-style: bold;" />
+                                <ui:VisualElement tooltip="Show Package Preview" name="Gallery" class="mp_interaction_imageOnly mp_imageTint_textSecondary" style="width: 20px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/Galerie&apos;);" />
                             </ui:VisualElement>
-                            <Editor.Scripts.GUI.Factories.SeparatorVertical style="flex-shrink: 0;" />
-                            <Editor.Scripts.GUI.Factories.Text tabindex="-1" text="Info Text ..." name="InfoText" style="margin-top: 0; margin-bottom: 0; margin-left: 10px; font-size: 12.5px; white-space: normal; flex-grow: 1; margin-right: 0; -unity-text-align: middle-left; flex-shrink: 1;" />
-                        </ui:VisualElement>
-                        <Editor.Scripts.GUI.Factories.Separator name="DependencySeparator" Space="1.5" />
-                        <Editor.Scripts.GUI.Factories.Backgrounds.Background2 name="PackageVariationsParent" style="margin-top: 10px; margin-right: 20px; margin-bottom: 10px; margin-left: 20px;">
-                            <ui:ListView name="PackageVariations" virtualization-method="DynamicHeight" selection-type="None" focusable="false" style="border-left-color: rgb(101, 101, 101); border-right-color: rgb(101, 101, 101); border-top-color: rgb(101, 101, 101); border-bottom-color: rgb(101, 101, 101); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 0; border-left-width: 1px;" />
-                        </Editor.Scripts.GUI.Factories.Backgrounds.Background2>
-                        <ui:Foldout text="Dependencies" name="Dependencies" value="false" class="mp_textColor_normal mp_font" style="-unity-font-style: bold;" />
+                            <Editor.Scripts.GUI.Factories.Structure.Separator />
+                            <ui:VisualElement style="flex-grow: 1; flex-direction: row; margin-left: 10px; margin-top: 10px; margin-bottom: 10px; margin-right: 10px;">
+                                <ui:VisualElement style="flex-grow: 0; width: 30px; height: auto; flex-shrink: 0;">
+                                    <ui:VisualElement tooltip="Newest Version:" name="NewestVersion" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/Newest Version&apos;);" />
+                                    <ui:VisualElement tooltip="Installed Version:" name="InstalledVersion" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/Installed Version&apos;);" />
+                                    <ui:VisualElement tooltip="Last Update:" name="LastUpdate" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/Last Edit&apos;);" />
+                                    <ui:VisualElement tooltip="Unity Version:" name="UnityVersion" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/Unity Version&apos;);" />
+                                    <ui:VisualElement tooltip="MegaPint Version:" name="MegaPintVersion" class="mp_useCustomTooltip mp_effect-hover-image-tint--identity" style="width: 15px; height: 15px; margin-bottom: 5px; background-image: resource(&apos;MegaPint/Images/Icons/MegaPint Version&apos;);" />
+                                </ui:VisualElement>
+                                <Editor.Scripts.GUI.Factories.Structure.SeparatorVertical />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Info Text ..." name="InfoText" style="white-space: normal; -unity-text-align: middle-left; font-size: 12.5px; margin-left: 10px; flex-grow: 1; flex-shrink: 1;" />
+                            </ui:VisualElement>
+                            <Editor.Scripts.GUI.Factories.Structure.Separator />
+                            <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary name="PackageVariationsParent" style="margin-top: 10px; margin-right: 20px; margin-bottom: 10px; margin-left: 20px;">
+                                <ui:ListView name="PackageVariations" virtualization-method="DynamicHeight" selection-type="None" focusable="false" class="mp_border-color--separator" style="border-top-width: 1px; border-right-width: 1px; border-bottom-width: 0; border-left-width: 1px;" />
+                            </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                            <ui:Foldout text="Dependencies" name="Dependencies" value="false" class="mp_textColor_normal mp_font" style="-unity-font-style: bold;" />
+                        </ui:GroupBox>
+                    </ui:ScrollView>
+                    <ui:GroupBox style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row-reverse;">
+                        <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Import" text="Import" display-tooltip-when-elided="true" tooltip="Import the selected package." style="height: 15px;" />
+                        <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Remove" text="Remove" display-tooltip-when-elided="true" tooltip="Remove the selected package." style="height: 15px;" />
+                        <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Update" text="Update" display-tooltip-when-elided="true" tooltip="Update the selected package." style="height: 15px;" />
                     </ui:GroupBox>
-                </ui:ScrollView>
-                <ui:GroupBox style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row-reverse;">
-                    <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Import" text="Import" display-tooltip-when-elided="true" tooltip="Import the selected package." style="height: 15px;" />
-                    <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Remove" text="Remove" display-tooltip-when-elided="true" tooltip="Remove the selected package." style="height: 15px;" />
-                    <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Update" text="Update" display-tooltip-when-elided="true" tooltip="Update the selected package." style="height: 15px;" />
                 </ui:GroupBox>
-            </ui:GroupBox>
-        </Editor.Scripts.GUI.Factories.Backgrounds.Background3>
-    </ui:TwoPaneSplitView>
+            </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+        </ui:TwoPaneSplitView>
+    </Editor.Scripts.GUI.Factories.RootElement>
+    <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary />
 </ui:UXML>
