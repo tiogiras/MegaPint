@@ -2,7 +2,7 @@
     <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
     <Editor.Scripts.GUI.Factories.RootElement>
         <ui:VisualElement class="mp_border-color--separator" style="flex-grow: 1; flex-direction: row; align-items: center; justify-content: space-between; width: 99%; padding-top: 2px; padding-right: 3px; padding-bottom: 2px; padding-left: 3px; border-bottom-width: 1px;">
-            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="PackageName" text="PackageName" />
+            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="PackageName" text="Package Name" style="text-overflow: ellipsis; overflow: hidden;" />
             <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" name="Version" text="1.0.0" style="white-space: normal; -unity-text-align: upper-right;" />
         </ui:VisualElement>
     </Editor.Scripts.GUI.Factories.RootElement>

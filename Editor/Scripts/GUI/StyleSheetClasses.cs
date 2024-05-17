@@ -66,6 +66,21 @@ public static class StyleSheetClasses
             public static readonly string Red = $"{s_color}--red";
             public static readonly string Orange = $"{s_color}--orange";
             public static readonly string Green = $"{s_color}--green";
+            public static readonly string ButtonActive = $"{s_color}--buttonActive";
+        }
+    }
+
+    public static class Image
+    {
+        private static readonly string s_image = $"{ClassBase}image";
+        
+        public static class Tint
+        {
+            private static readonly string s_tint = $"{s_image}-tint";
+            
+            public static readonly string Identity = $"{s_tint}--identity";
+            public static readonly string TextSecondary = $"{s_tint}--text-secondary";
+            public static readonly string ButtonImage = $"{s_tint}--button-image";
         }
     }
 }

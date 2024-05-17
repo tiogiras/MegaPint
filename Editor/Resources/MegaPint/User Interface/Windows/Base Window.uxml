@@ -7,20 +7,24 @@
         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary name="UpdateBasePackage" class="mp_border-color--black" style="flex-direction: row-reverse; align-items: center; border-bottom-width: 1px;">
             <Editor.Scripts.GUI.Factories.Interactive.Button text="Update" name="BTN_Update" display-tooltip-when-elided="true" tooltip="Update the BasePackage to the newest version." style="margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px;" />
-            <Editor.Scripts.GUI.Factories.Text tabindex="-1" text="New MegaPint Version available." />
+            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="New MegaPint Version available." style="white-space: normal;" />
         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
         <ui:TwoPaneSplitView fixed-pane-initial-size="200" fixed-pane-initial-dimension="300" name="SplitView" style="height: 5000px; flex-shrink: 1;">
-            <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary style="flex-shrink: 0; width: 300px; min-width: 150px;">
+            <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary style="flex-shrink: 0; width: 300px; min-width: 175px;">
                 <ui:GroupBox style="flex-direction: row; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: center; justify-content: center;">
                     <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
-                        <Editor.Scripts.GUI.Factories.Interactive.Button text="Packages" name="BTN_Packages" display-tooltip-when-elided="true" tooltip="Show all installed packages." style="align-items: center; justify-content: center; width: 48%;" />
-                        <Editor.Scripts.GUI.Factories.Interactive.Button text="Info" name="BTN_Infos" tooltip="Show general information about MegaPint." display-tooltip-when-elided="true" style="align-items: center; justify-content: center; width: 48%;" />
+                        <ui:VisualElement style="flex-grow: 1; width: 50%; padding-right: 2px; padding-left: 2px;">
+                            <Editor.Scripts.GUI.Factories.Interactive.Button text="Packages" name="BTN_Packages" display-tooltip-when-elided="true" tooltip="Show all installed packages." style="align-items: center; justify-content: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; flex-grow: 1; flex-shrink: 1;" />
+                        </ui:VisualElement>
+                        <ui:VisualElement style="flex-grow: 1; width: 50%; padding-right: 2px; padding-left: 2px;">
+                            <Editor.Scripts.GUI.Factories.Interactive.Button text="Info" name="BTN_Infos" tooltip="Show general information about MegaPint." display-tooltip-when-elided="true" style="align-items: center; justify-content: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; flex-shrink: 1; flex-grow: 1;" />
+                        </ui:VisualElement>
                     </ui:VisualElement>
-                    <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Settings" style="height: 20px; width: 21px; background-image: resource(&apos;MegaPint/Images/Icons/Settings&apos;);" />
+                    <Editor.Scripts.GUI.Factories.Interactive.Button name="BTN_Settings" style="height: 20px; width: 21px; background-image: resource(&apos;MegaPint/Images/Icons/Settings&apos;); margin-top: 0; margin-right: 2px; margin-bottom: 0; margin-left: 2px;" />
                 </ui:GroupBox>
                 <Editor.Scripts.GUI.Factories.Structure.Separator />
                 <uie:Toolbar style="background-color: rgba(60, 60, 60, 0); width: 100%; padding-right: 5px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; flex-direction: row;">
-                    <Editor.Scripts.GUI.Factories.Interactive.SearchField focusable="true" name="SearchField" style="flex-grow: 1;" />
+                    <Editor.Scripts.GUI.Factories.Interactive.SearchField focusable="true" name="SearchField" style="flex-grow: 1; width: 99%;" />
                 </uie:Toolbar>
                 <ui:ListView focusable="true" name="PackagesList" virtualization-method="FixedHeight" show-alternating-row-backgrounds="None" fixed-item-height="18" style="margin-left: 5px; margin-right: 0; flex-grow: 1;" />
                 <ui:ListView focusable="true" name="InfosList" virtualization-method="FixedHeight" show-alternating-row-backgrounds="None" fixed-item-height="18" style="margin-left: 5px; margin-right: 0; flex-grow: 1;" />
@@ -31,10 +35,10 @@
                     <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
                         <Editor.Scripts.GUI.Factories.Headings.HeadingSecondary tabindex="-1" text="..." name="PackageName" style="-unity-text-align: upper-center; font-size: 16px; white-space: normal; padding-top: 5px; padding-bottom: 5px;" />
                         <ui:VisualElement name="Tabs" style="flex-grow: 1; flex-direction: row; overflow: hidden;">
-                            <Editor.Scripts.GUI.Factories.Interactive.Button text="Info" name="TabInfo" display-tooltip-when-elided="true" tooltip="Show general information about this package." class="mp_interaction_dontChangeColorAfterInteract" style="top: 3px; margin-right: 1px; margin-left: 10px;" />
-                            <Editor.Scripts.GUI.Factories.Interactive.Button text="Guides" name="TabGuides" enable-rich-text="false" tooltip="Show guides for this package." display-tooltip-when-elided="true" class="mp_interaction_dontChangeColorAfterInteract" style="top: 3px; margin-right: 1px; margin-left: 1px;" />
-                            <Editor.Scripts.GUI.Factories.Interactive.Button text="Settings" name="TabSettings" enable-rich-text="false" display-tooltip-when-elided="true" tooltip="Show any settings for this package." class="mp_interaction_dontChangeColorAfterInteract" style="top: 3px; margin-right: 1px; margin-left: 1px;" />
-                            <Editor.Scripts.GUI.Factories.Interactive.Button text="Help" name="TabHelp" enable-rich-text="false" display-tooltip-when-elided="true" tooltip="Find helpfull tips for this package." class="mp_interaction_dontChangeColorAfterInteract" style="top: 3px; margin-right: 1px; margin-left: 1px;" />
+                            <Editor.Scripts.GUI.Factories.Interactive.Button text="Info" name="TabInfo" display-tooltip-when-elided="true" tooltip="Show general information about this package." style="top: 3px; margin-right: 1px; margin-left: 10px;" />
+                            <Editor.Scripts.GUI.Factories.Interactive.Button text="Guides" name="TabGuides" enable-rich-text="false" tooltip="Show guides for this package." display-tooltip-when-elided="true" style="top: 3px; margin-right: 1px; margin-left: 1px;" />
+                            <Editor.Scripts.GUI.Factories.Interactive.Button text="Settings" name="TabSettings" enable-rich-text="false" display-tooltip-when-elided="true" tooltip="Show any settings for this package." style="top: 3px; margin-right: 1px; margin-left: 1px;" />
+                            <Editor.Scripts.GUI.Factories.Interactive.Button text="Help" name="TabHelp" enable-rich-text="false" display-tooltip-when-elided="true" tooltip="Find helpfull tips for this package." style="top: 3px; margin-right: 1px; margin-left: 1px;" />
                         </ui:VisualElement>
                     </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
                     <ui:GroupBox name="TabContent" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1;" />

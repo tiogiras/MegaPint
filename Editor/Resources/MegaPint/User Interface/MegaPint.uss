@@ -22,6 +22,8 @@
     --separator-color: rgb(89, 89, 89);
     --cursor-color: rgb(255, 255, 255);
     --button-color: rgb(89, 89, 89);
+    --button-image-tint: rgb(255, 255, 255);
+    --button-active-text-color: var(--text-primary-color);
     --button-border-color-top: rgb(48, 48, 48);
     --button-border-color-bottom: rgb(36, 36, 36);
     --button-border-color-left: rgb(48, 48, 48);
@@ -30,6 +32,8 @@
     --searchField-border-color-bottom: rgb(33, 33, 33);
     --searchField-border-color-left: rgb(33, 33, 33);
     --searchField-border-color-right: rgb(33, 33, 33);
+    --foldout-toggle-color: rgb(89, 89, 89);
+    --splash-screen-image: resource("MegaPint/Images/Logo (Dark Theme)");
 }
 
 .mp_theme--light {
@@ -37,17 +41,19 @@
     --info-color: rgb(239, 239, 239);
     --identity-color: rgb(209, 0, 114);
     --identity-interacted-color: rgb(168, 0, 84);
-    --text-primary-color: rgb(244, 244, 244);
-    --text-secondary-color: rgb(160, 160, 160);
+    --text-primary-color: rgb(23, 23, 23);
+    --text-secondary-color: rgb(37, 37, 37);
     --text-red-color: rgb(175, 30, 30);
     --text-orange-color: rgb(175, 107, 30);
     --text-green-color: rgb(30, 175, 30);
-    --background-primary-color: rgb(137, 137, 137);
-    --background-secondary-color: rgb(165, 165, 165);
-    --background-tertiary-color: rgb(198, 198, 198);
+    --background-primary-color: rgb(155, 155, 155);
+    --background-secondary-color: rgb(176, 176, 176);
+    --background-tertiary-color: rgb(210, 210, 210);
     --separator-color: rgb(89, 89, 89);
     --cursor-color: rgb(0, 0, 0);
-    --button-color: rgb(89, 89, 89);
+    --button-color: rgb(198, 198, 198);
+    --button-image-tint: rgb(84, 84, 84);
+    --button-active-text-color: rgb(244, 244, 244);
     --button-border-color-top: rgb(48, 48, 48);
     --button-border-color-bottom: rgb(36, 36, 36);
     --button-border-color-left: rgb(48, 48, 48);
@@ -56,6 +62,36 @@
     --searchField-border-color-bottom: rgb(33, 33, 33);
     --searchField-border-color-left: rgb(33, 33, 33);
     --searchField-border-color-right: rgb(33, 33, 33);
+    --foldout-toggle-color: rgb(94, 94, 94);
+    --splash-screen-image: resource("MegaPint/Images/Logo (Light Theme)");
+}
+
+.mp_splashScreen {
+    background-image: var(--splash-screen-image);
+}
+
+.mp_button {
+    background-color: var(--button-color);
+    color: var(--text-primary-color);
+
+    -unity-background-image-tint-color: var(--button-image-tint);
+
+    border-top-color: var(--button-border-color-top);
+    border-bottom-color: var(--button-border-color-bottom);
+    border-left-color: var(--button-border-color-left);
+    border-right-color: var(--button-border-color-right);
+}
+
+.mp_button:hover {
+    border-color: var(--identity-color);
+}
+
+.mp_button:active {
+    color: var(--button-active-text-color);
+    -unity-background-image-tint-color: var(--button-active-text-color);
+    
+    border-color: var(--identity-color);
+    background-color: var(--identity-interacted-color);
 }
 
 .mp_text-color--link {
@@ -88,6 +124,10 @@
 
 .mp_text-color--green {
     color: var(--text-green-color);
+}
+
+.mp_text-color--buttonActive {
+    color: var(--button-active-text-color);
 }
 
 .mp_background-color--primary {
@@ -142,22 +182,8 @@
     -unity-background-image-tint-color: var(--text-secondary-color);
 }
 
-.mp_button {
-    background-color: var(--button-color);
-    color: var(--text-primary-color);
-    border-top-color: var(--button-border-color-top);
-    border-bottom-color: var(--button-border-color-bottom);
-    border-left-color: var(--button-border-color-left);
-    border-right-color: var(--button-border-color-right);
-}
-
-.mp_button:hover {
-    border-color: var(--identity-color);
-}
-
-.mp_button:active {
-    border-color: var(--identity-color);
-    background-color: var(--identity-interacted-color);
+.mp_image-tint--button-image {
+    -unity-background-image-tint-color: var(--button-image-tint);
 }
 
 .mp_searchField {
@@ -211,10 +237,12 @@
 
 .unity-foldout__toggle>.unity-toggle__input>#unity-checkmark  {
     background-image: var(--foldout-toggle-image);
+    -unity-background-image-tint-color: var(--foldout-toggle-color);
 }
 
 .unity-foldout__toggle>.unity-toggle__input:checked>#unity-checkmark {
     background-image: var(--foldout-toggle-checked-image);
+    -unity-background-image-tint-color: var(--foldout-toggle-color);
 }
 
 .unity-foldout__toggle:active>.unity-toggle__input>#unity-checkmark {
