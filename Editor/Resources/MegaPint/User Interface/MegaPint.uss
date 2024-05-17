@@ -1,6 +1,9 @@
 .mp {
     -unity-font: resource('Roboto Mono');
     -unity-font-definition: initial;
+    
+    --foldout-toggle-image: resource("MegaPint/Images/Icons/Foldout Toggle");
+    --foldout-toggle-checked-image: resource("MegaPint/Images/Icons/Foldout Toggle Checked");
 }
 
 .mp_theme--dark {
@@ -207,20 +210,20 @@
 }
 
 .unity-foldout__toggle>.unity-toggle__input>#unity-checkmark  {
-    background-image: resource("MegaPint/Images/Icons/Foldout Toggle");
+    background-image: var(--foldout-toggle-image);
 }
 
 .unity-foldout__toggle>.unity-toggle__input:checked>#unity-checkmark {
-    background-image: resource("MegaPint/Images/Icons/Foldout Toggle Checked");
+    background-image: var(--foldout-toggle-checked-image);
 }
 
 .unity-foldout__toggle:active>.unity-toggle__input>#unity-checkmark {
-    background-image: resource("MegaPint/Images/Icons/Foldout Toggle");
+    background-image: var(--foldout-toggle-image);
     -unity-background-image-tint-color: var(--identity-color);
 }
 
 .unity-foldout__toggle:active>.unity-toggle__input:checked>#unity-checkmark {
-    background-image: resource("MegaPint/Images/Icons/Foldout Toggle Checked");
+    background-image: var(--foldout-toggle-checked-image);
     -unity-background-image-tint-color: var(--identity-color);
 }
 

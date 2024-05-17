@@ -14,7 +14,7 @@
                         <ui:GroupBox>
                             <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: center;">
                                 <Editor.Scripts.GUI.Factories.Headings.HeadingIdentity tabindex="-1" name="PackageName" text="PackageName" style="margin-top: 10px; margin-bottom: 10px; margin-left: 10px; white-space: normal; font-size: 20px; -unity-font-style: bold;" />
-                                <ui:VisualElement tooltip="Show Package Preview" name="Gallery" class="mp_interaction_imageOnly mp_imageTint_textSecondary" style="width: 20px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/Galerie&apos;);" />
+                                <ui:VisualElement tooltip="Show Package Preview" name="Gallery" class="mp_effect-hover-image-tint--identity" style="width: 20px; height: 15px; background-image: resource(&apos;MegaPint/Images/Icons/Galerie&apos;);" />
                             </ui:VisualElement>
                             <Editor.Scripts.GUI.Factories.Structure.Separator />
                             <ui:VisualElement style="flex-grow: 1; flex-direction: row; margin-left: 10px; margin-top: 10px; margin-bottom: 10px; margin-right: 10px;">
