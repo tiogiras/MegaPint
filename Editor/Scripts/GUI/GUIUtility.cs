@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Editor.Scripts.PackageManager.Cache;
+using Editor.Scripts.Windows;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
@@ -22,7 +24,6 @@ public static class GUIUtility
     public static VisualElement Instantiate(VisualTreeAsset asset, VisualElement root = null)
     {
         TemplateContainer element = asset.Instantiate();
-        ApplyTheme(element);
 
         root?.Add(element);
 
@@ -444,40 +445,7 @@ public static class GUIUtility
         element.style.marginLeft = margin;
     }
 
-    private static readonly List <VisualElement> s_activeElements = new();
-
-    public static void ForceRepaint()
-    {
-        for (var i = s_activeElements.Count - 1; i >= 0; i--)
-        {
-            VisualElement activeElement = s_activeElements[i];
-
-            if (activeElement == null)
-            {
-                s_activeElements.RemoveAt(i);
-                continue;
-            }
-
-            ApplyTheme(activeElement, true);
-            activeElement.MarkDirtyRepaint();
-        }
-    }
-
-    public static void ApplyTheme(VisualElement root, bool forceRepaint = false)
-    {
-        if (!forceRepaint)
-            s_activeElements.Add(root);
-        
-        foreach (var overwrite in Enum.GetNames(typeof(Overwrite)))
-        {
-            List <VisualElement> result = root.Query(className: overwrite).ToList();
-
-            if (result.Count == 0)
-                continue;
-            
-            RootElement.Overwrites[overwrite]?.Invoke(result);
-        }
-    }
+    public static Action onForceRepaint;
 
     public static void SubscribeInteractable(VisualElement element)
     {

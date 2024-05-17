@@ -10,10 +10,6 @@ namespace Editor.Scripts.Windows.BaseWindowContent.SettingsTabContent
     {
         private const string BasePath = "MegaPint/User Interface/Settings Content/xxx";
 
-        private static MegaPintSettingsBase s_settings;
-        
-        private static MegaPintSettingsBase _Settings => s_settings ??= MegaPintSettings.instance.GetSetting("General");
-
         private static int _editorThemeIndex = -1;
         
         public static void Display(VisualElement root, SettingsTabData.SettingsKey key)
@@ -45,7 +41,7 @@ namespace Editor.Scripts.Windows.BaseWindowContent.SettingsTabContent
             var dropdown = root.Q <DropdownField>("EditorTheme");
 
             if (_editorThemeIndex < 0)
-                _editorThemeIndex = _Settings.GetValue("EditorTheme", 0);
+                _editorThemeIndex = SaveValues.BasePackage.EditorTheme;
 
             dropdown.SetValueWithoutNotify(dropdown.choices[_editorThemeIndex]);
 
@@ -53,9 +49,7 @@ namespace Editor.Scripts.Windows.BaseWindowContent.SettingsTabContent
                 _ =>
                 {
                     _editorThemeIndex = dropdown.index;
-                    _Settings.SetValue("EditorTheme", dropdown.index);
-                    
-                    GUIUtility.ForceRepaint();
+                    SaveValues.BasePackage.EditorTheme = dropdown.index;
                 });
         }
     }

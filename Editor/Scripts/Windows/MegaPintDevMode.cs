@@ -47,7 +47,6 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
         VisualElement root = rootVisualElement;
 
         VisualElement content = _baseWindow.Instantiate();
-        GUIUtility.ApplyTheme(content);
 
         content.style.flexGrow = 1f;
         content.style.flexShrink = 1f;

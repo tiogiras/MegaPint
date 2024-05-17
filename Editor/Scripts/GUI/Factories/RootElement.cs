@@ -1,4 +1,7 @@
-﻿using UnityEngine.UIElements;
+﻿using Editor.Scripts.Settings;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Editor.Scripts.GUI.Factories
 {
@@ -17,13 +20,27 @@ public class RootElement : VisualElement
             CreationContext context)
         {
             base.Init(element, attributes, context);
-
-            element.AddToClassList("mp");
             
-            element.AddToClassList("mp_theme--dark"); // TODO add light theme if in light mode
+            ApplyTheme(element);
+            
+            GUIUtility.onForceRepaint += () => ApplyTheme(element);
         }
 
         #endregion
+
+        private static void ApplyTheme(VisualElement element)
+        {
+            var darkMode = SaveValues.BasePackage.EditorTheme switch {
+                               0 => EditorGUIUtility.isProSkin,
+                               1 => true,
+                               var _ => false
+                           };
+            
+            element.ClearClassList();
+            
+            element.AddToClassList("mp");
+            element.AddToClassList(darkMode ? "mp_theme--dark" : "mp_theme--light");
+        }
     }
 }
 
