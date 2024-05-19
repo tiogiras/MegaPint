@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Editor.Scripts.GUI;
 using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.PackageManager.Packages;
 using UnityEngine;
@@ -21,9 +22,6 @@ internal static partial class DisplayContent
     private static readonly Dictionary <Tab, Button> s_tabs = new();
     private static readonly List <string> s_tabsContentLocations = new();
     private static readonly List <VisualElement> s_tabsContainer = new();
-
-    private static readonly Color s_inactiveTabColor = new(.34f, .34f, .34f);
-    private static readonly Color s_activeTabColor = new(.19f, .19f, .19f);
 
     #region Public Methods
 
@@ -128,8 +126,13 @@ internal static partial class DisplayContent
         
         if (!enabled)
             return;
-        
-        button.style.backgroundColor = s_inactiveTabColor;
+
+        if (s_tabs.ContainsKey(tab))
+        {
+            s_tabs[tab].RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
+            s_tabs[tab].RemoveFromClassList(StyleSheetClasses.Background.Color.Identity);   
+        }
+
         button.clickable = new Clickable(() => {SwitchTab(tabContent, tab, package, tabActions);});
         
         s_tabs.Add(tab, button);
@@ -188,7 +191,8 @@ internal static partial class DisplayContent
                     s_tabsContainer[i] = content;
                 }
 
-                s_tabs[tab].style.backgroundColor = s_activeTabColor;
+                s_tabs[tab].AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
+                s_tabs[tab].AddToClassList(StyleSheetClasses.Background.Color.Identity);
 
                 continue;
             }
@@ -196,7 +200,8 @@ internal static partial class DisplayContent
             if (contentInstantiated)
                 s_tabsContainer[i].style.display = DisplayStyle.None;
 
-            s_tabs[tab].style.backgroundColor = s_inactiveTabColor;
+            s_tabs[tab].RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
+            s_tabs[tab].RemoveFromClassList(StyleSheetClasses.Background.Color.Identity);
         }
 
         switch (newTab)

@@ -35,6 +35,8 @@ internal static partial class ContextMenu
     public static void Test()
     {
         PackageCache.Refresh();
+        
+        EditorGUIUtility.systemCopyBuffer = "Hello WOrlddd!!!";
     }
 
     [MenuItem(MenuItemMegaPint + "/Open", false, 0)]

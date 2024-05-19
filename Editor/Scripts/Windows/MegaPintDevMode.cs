@@ -99,7 +99,7 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
 
         UpdateButtonStyles();
 
-        /*MegaPintPackageManager.UpdateAll();*/
+        MegaPintPackageManager.UpdateAll();
     }
 
     private void ToggleOn()
@@ -109,14 +109,13 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
 
         UpdateButtonStyles();
 
-        /*MegaPintPackageManager.UpdateAll();*/
+        MegaPintPackageManager.UpdateAll();
     }
 
     private void UpdateButtonStyles()
     {
         if (_devModeValue)
         {
-            Debug.Log("On");
             _btnOn.AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
             _btnOn.AddToClassList(StyleSheetClasses.Background.Color.Identity);
             
@@ -125,7 +124,6 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
         }
         else
         {
-            Debug.Log("Off");
             _btnOn.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
             _btnOn.RemoveFromClassList(StyleSheetClasses.Background.Color.Identity);
             

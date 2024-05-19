@@ -50,7 +50,7 @@ public static class RootElement
     {
         get
         {
-            //Debug.Log(MegaPintSettings.instance); // TODO THIS IS NULL
+            Debug.Log(MegaPintSettings.instance); // TODO THIS IS NULL
 
             return s_settings ??= MegaPintSettings.instance.GetSetting("General");
         }
