@@ -444,6 +444,14 @@ public static class GUIUtility
         element.style.marginBottom = margin;
         element.style.marginLeft = margin;
     }
+    
+    public static void SetPadding(VisualElement element, float padding)
+    {
+        element.style.paddingTop = padding;
+        element.style.paddingRight = padding;
+        element.style.paddingBottom = padding;
+        element.style.paddingLeft = padding;
+    }
 
     public static Action onForceRepaint;
 
