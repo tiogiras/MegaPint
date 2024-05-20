@@ -1,4 +1,5 @@
-﻿using UnityEngine.UIElements;
+﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Editor.Scripts.GUI.Factories.Interactive
 {
@@ -19,9 +20,12 @@ public class Button : UnityEngine.UIElements.Button
             base.Init(element, attributes, context);
 
             element.AddToClassList(StyleSheetClasses.Button);
-            
+
+            element.style.color = new StyleColor(Color.red);
+            element.style.backgroundColor = new StyleColor(Color.red);
+
             // TODO Remove below
-            
+
             /*
             element.AddToClassList(RootElement.FontClass);
 

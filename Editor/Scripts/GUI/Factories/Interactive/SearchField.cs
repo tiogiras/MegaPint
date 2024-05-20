@@ -20,6 +20,9 @@ public class SearchField : ToolbarSearchField
         {
             base.Init(element, attributes, context);
 
+            element.style.color = new StyleColor(Color.red);
+            element.style.backgroundColor = new StyleColor(Color.red);
+            
             element.AddToClassList(StyleSheetClasses.SearchField);
 
             VisualElement textInput = element.Q(className: "unity-base-text-field__input");
