@@ -1,4 +1,5 @@
-﻿using UnityEngine.UIElements;
+﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Editor.Scripts.GUI.Factories.Interactive
 {
@@ -17,8 +18,15 @@ public class Dropdown : DropdownField
             CreationContext context)
         {
             base.Init(element, attributes, context);
-            
+
             VisualElement label = element.Q(className: "unity-base-field__label");
+            
+            element.style.color = new StyleColor(Color.red);
+            element.style.backgroundColor = new StyleColor(Color.red);
+            
+            if (label == null)
+                return;
+            
             label.AddToClassList(StyleSheetClasses.Text.Color.Primary);
 
             VisualElement input = element.Q(className: "unity-base-field__input");

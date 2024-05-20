@@ -84,8 +84,9 @@ public static class GUIUtility
 
         var builder = new StringBuilder(linkStarts[0]);
 
-        var linkStart = $"<b><color=#{ColorUtility.ToHtmlStringRGB(RootElement.Colors.Link)}><link=";
-        var infoStart = $"<b><color=#{ColorUtility.ToHtmlStringRGB(RootElement.Colors.Info)}><link=";
+        // TODO Get colors from stylesheet
+        var linkStart = $"<b><color=#{ColorUtility.ToHtmlStringRGB(Color.magenta)}><link=";
+        var infoStart = $"<b><color=#{ColorUtility.ToHtmlStringRGB(Color.magenta)}><link=";
         
         for (var i = 1; i < linkStarts.Length; i++)
         {
@@ -314,7 +315,6 @@ public static class GUIUtility
             _ =>
             {
                 defaultColor = element.style.unityBackgroundImageTintColor;
-                element.style.unityBackgroundImageTintColor = RootElement.Colors.PrimaryInteracted;
             }, 
             TrickleDown.TrickleDown);
         
@@ -455,128 +455,23 @@ public static class GUIUtility
 
     public static Action onForceRepaint;
 
-    public static void SubscribeInteractable(VisualElement element)
+    public static void ToggleActiveButtonInGroup(int activeIndex, params VisualElement[] elements)
     {
-        StyleColor defaultBackgroundColor = element.style.backgroundColor;
-        StyleColor defaultBorderColor = element.style.color;
+        for (var i = 0; i < elements.Length; i++)
+        {
+            VisualElement element = elements[i];
 
-        var hovered = false;
-        var pressed = false;
-        var focused = false;
-        var interacted = false;
-
-        var onlyLoseFocusOnBlur = element.ClassListContains("mp_interaction_onlyLoseFocusOnBlur");
-        var checkColorOnMouseUp = element.ClassListContains("mp_interaction_checkColorOnMouseUp");
-        
-        element.RegisterCallback <MouseOverEvent>(
-            evt =>
+            if (i == activeIndex)
             {
-                var target = (VisualElement)evt.target;
-
-                if ((!onlyLoseFocusOnBlur || !focused) && !hovered)
-                {
-                    defaultBackgroundColor = target.style.backgroundColor;
-                    defaultBorderColor = target.style.borderTopColor;   
-                }
+                element.AddToClassList(StyleSheetClasses.Background.Color.Identity);
+                element.AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
                 
-                hovered = true;
-                interacted = false;
-
-                if (pressed)
-                    target.style.backgroundColor = RootElement.Colors.PrimaryInteracted;
-                
-                SetBorderColor(target, RootElement.Colors.Primary);
-            });
-
-        element.RegisterCallback <MouseDownEvent>(
-            evt =>
-            {
-                pressed = true;
-
-                ((VisualElement)evt.target).style.backgroundColor =
-                    RootElement.Colors.PrimaryInteracted;
-            },
-            TrickleDown.TrickleDown);
-        
-        element.RegisterCallback <MouseUpEvent>(
-            evt =>
-            {
-                pressed = false;
-                focused = true;
-                interacted = true;
-
-                var target = (VisualElement)evt.target;
-                
-                target.style.backgroundColor = defaultBackgroundColor;
-
-                if (!hovered && checkColorOnMouseUp)
-                    SetBorderColor(target, defaultBorderColor);
-            },
-            TrickleDown.TrickleDown);
-
-        element.RegisterCallback <MouseOutEvent>(
-            evt =>
-            {
-                if (onlyLoseFocusOnBlur && focused)
-                    return;
-                
-                var target = (VisualElement)evt.target;
-                target.Blur();
-
-                hovered = false;
-                
-                if (!target.ClassListContains("mp_interaction_dontChangeColorAfterInteract") || !interacted)
-                    target.style.backgroundColor = defaultBackgroundColor;
-                
-                SetBorderColor(target, defaultBorderColor);
-            });
-        
-        element.RegisterCallback<FocusEvent>(
-            evt =>
-            {
-                SetBorderColor((VisualElement)evt.target, RootElement.Colors.Primary);
-            });
-        
-        element.RegisterCallback<BlurEvent>(
-            evt =>
-            {
-                SetBorderColor((VisualElement)evt.target, defaultBorderColor);
-            });
-        
-        if (!onlyLoseFocusOnBlur)
-            return;
-        
-        element.RegisterCallback <BlurEvent>(
-            evt =>
-            {
-                if (!focused)
-                    return;
-                
-                focused = false;
-                hovered = false;
-
-                var target = (VisualElement)evt.target;
-                
-                target.style.backgroundColor = defaultBackgroundColor;
-            });
-    }
-
-    public static void SubscribeInteractableImageOnly(VisualElement element)
-    {
-        StyleColor defaultColor = element.style.unityBackgroundImageTintColor;
-        
-        element.RegisterCallback <MouseEnterEvent>(
-            evt =>
-            {
-                ((VisualElement)evt.target).style.unityBackgroundImageTintColor =
-                    RootElement.Colors.Primary;
-            });
-
-        element.RegisterCallback <MouseOutEvent>(
-            evt =>
-            {
-                ((VisualElement)evt.target).style.unityBackgroundImageTintColor = defaultColor;
-            });
+                continue;
+            }
+            
+            element.RemoveFromClassList(StyleSheetClasses.Background.Color.Identity);
+            element.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
+        }
     }
 }
 
