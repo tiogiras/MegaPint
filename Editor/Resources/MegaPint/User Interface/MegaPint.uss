@@ -4,6 +4,7 @@
     
     --foldout-toggle-image: resource("MegaPint/Images/Icons/Foldout Toggle");
     --foldout-toggle-checked-image: resource("MegaPint/Images/Icons/Foldout Toggle Checked");
+    --checkmark-image: resource("MegaPint/Images/Icons/Checkmark");
 }
 
 .mp_theme--dark {
