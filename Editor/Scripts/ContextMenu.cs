@@ -34,9 +34,9 @@ internal static partial class ContextMenu
     [MenuItem(MenuItemMegaPint + "/Test", false, 0)]
     public static void Test()
     {
-        PackageCache.Refresh();
+        //PackageCache.Refresh();
         
-        EditorGUIUtility.systemCopyBuffer = "Hello WOrlddd!!!";
+        EditorWindow.GetWindow<PlayModeStartSceneToggle>().Close();
     }
 
     [MenuItem(MenuItemMegaPint + "/Open", false, 0)]

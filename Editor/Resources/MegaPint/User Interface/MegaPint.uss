@@ -195,6 +195,14 @@
     border-right-color: var(--searchField-border-color-right);
 }
 
+.mp_searchField>#unity-search {
+    -unity-background-image-tint-color: var(--text-primary-color);
+}
+
+.mp_searchField>#unity-cancel {
+    -unity-background-image-tint-color: var(--text-primary-color);
+}
+
 .mp_searchField:hover {
     border-color: var(--text-secondary-color);
 }
