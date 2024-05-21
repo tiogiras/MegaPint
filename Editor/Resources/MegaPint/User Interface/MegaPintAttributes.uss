@@ -46,6 +46,10 @@
     background-color: var(--background-tertiary-color);
 }
 
+.mp_background-color--quaternary {
+    background-color: var(--background-quaternary-color);
+}
+
 .mp_background-color--identity {
     background-color: var(--identity-color);
 }
