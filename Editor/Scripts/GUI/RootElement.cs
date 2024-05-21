@@ -188,71 +188,7 @@ public static class RootElement
     
     private static void OverwriteColorField(List <VisualElement> elements)
     {
-        /*foreach (VisualElement element in elements)
-        {
-            VisualElement label = element.Q(className: "unity-base-field__label");
-            VisualElement inputElement = element.Q(className: "unity-base-field__input");
-
-            inputElement.style.height = 18;
-
-            var fieldNameIdentifier = $"MegaPintColorField{elements.IndexOf(element)}";
-            var target = (IMGUIContainer)inputElement;
-
-            var currentCheck = 0;
-            var hasEyeUpdate = false;
-            var wouldRemove = false;
-            
-            Action action = target.onGUIHandler;
-
-            target.onGUIHandler = () =>
-            {
-                if (Event.current.type == EventType.ExecuteCommand && Event.current.commandName == "EyeDropperUpdate")
-                    hasEyeUpdate = true;
-
-                if (currentCheck == 3)
-                {
-                    if (UnityEngine.GUI.GetNameOfFocusedControl() == fieldNameIdentifier && !hasEyeUpdate)
-                    {
-                        if (wouldRemove)
-                        {
-                            UnityEngine.GUI.FocusControl(null);
-                            
-                            wouldRemove = false;
-                        }
-                        else
-                            wouldRemove = true;
-                    }
-
-                    hasEyeUpdate = false;
-                    currentCheck = 0;
-                }
-                else
-                {
-                    currentCheck++;
-                }
-
-                UnityEngine.GUI.SetNextControlName(fieldNameIdentifier);
-                action?.Invoke();
-            };
-
-            label.style.color = Colors.TextSecondary;
-            
-            GUIUtility.SetBorderWidth(inputElement, 1);
-            GUIUtility.SetBorderRadius(inputElement, 2);
-            GUIUtility.SetBorderColor(inputElement, Colors.Bg1);
-
-            element.RegisterCallback <PointerEnterEvent>(
-                _ =>
-                {
-                    GUIUtility.SetBorderColor(inputElement, Colors.Primary);
-                });
-
-            element.RegisterCallback<PointerLeaveEvent>(
-                _ =>
-                {
-                    GUIUtility.SetBorderColor(inputElement, Colors.Bg1);
-                });
-        }   */
+        
     }  
     
     private static void OverwriteToggle(List <VisualElement> elements)

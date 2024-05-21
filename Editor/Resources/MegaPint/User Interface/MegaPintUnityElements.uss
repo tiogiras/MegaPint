@@ -22,6 +22,42 @@
     background-color: var(--identity-interacted-color);
 }
 
+.unity-toggle>.unity-label {
+    color: var(--text-primary-color);
+}
+
+.unity-toggle>.unity-label:focus {
+    color: var(--identity-color);
+}
+
+.unity-toggle>.unity-toggle__input>#unity-checkmark {
+    background-image: initial;
+
+    background-color: var(--background-secondary-color);
+    -unity-background-image-tint-color: var(--button-image-tint);
+
+    border-radius: 3px;
+    border-width: 1px;
+
+    border-top-color: var(--searchField-border-color-top);
+    border-bottom-color: var(--searchField-border-color-bottom);
+    border-left-color: var(--searchField-border-color-left);
+    border-right-color: var(--searchField-border-color-right);
+}
+
+.unity-toggle:checked>.unity-toggle__input>#unity-checkmark {
+    background-image: var(--checkmark-image);
+}
+
+.unity-toggle:active>.unity-toggle__input>#unity-checkmark {
+    background-color: var(--identity-interacted-color);
+    -unity-background-image-tint-color: var(--button-active-text-color);
+}
+
+.unity-toggle:focus>.unity-toggle__input>#unity-checkmark {
+    border-color: var(--identity-color);
+}
+
 .unity-search-field-base {
     background-color: var(--background-tertiary-color);
     color: var(--text-primary-color);
@@ -104,6 +140,13 @@
     color: var(--text-primary-color);
 }
 
+.unity-base-popup-field__arrow {
+    -unity-background-image-tint-color: var(--text-primary-color);
+    background-image: var(--foldout-toggle-checked-image);
+    
+    background-size: 75% 50%;
+}
+
 .unity-foldout {
     color: var(--text-primary-color);
 }
@@ -111,21 +154,33 @@
 .unity-foldout__toggle>.unity-toggle__input>#unity-checkmark  {
     background-image: var(--foldout-toggle-image);
     -unity-background-image-tint-color: var(--foldout-toggle-color);
+    
+    background-color: initial;
+    border-color: initial;
+    
+    border-radius: initial;
+    border-width: initial;
 }
 
 .unity-foldout__toggle>.unity-toggle__input:checked>#unity-checkmark {
     background-image: var(--foldout-toggle-checked-image);
     -unity-background-image-tint-color: var(--foldout-toggle-color);
+
+    background-color: initial;
 }
 
 .unity-foldout__toggle:active>.unity-toggle__input>#unity-checkmark {
     background-image: var(--foldout-toggle-image);
     -unity-background-image-tint-color: var(--identity-color);
+
+    background-color: initial;
 }
 
 .unity-foldout__toggle:active>.unity-toggle__input:checked>#unity-checkmark {
     background-image: var(--foldout-toggle-checked-image);
     -unity-background-image-tint-color: var(--identity-color);
+
+    background-color: initial;
 }
 
 .unity-foldout__toggle:focus>.unity-toggle__input>.unity-foldout__text {
@@ -151,42 +206,74 @@
     border-right-color: var(--searchField-border-color-right);
 }
 
+.unity-base-text-field:hover>#unity-text-input {
+    border-color: var(--separator-color);
+}
+
 .unity-base-text-field:focus>#unity-text-input {
     border-color: var(--identity-color);
 }
 
-.unity-toggle>.unity-label {
+.unity-enum-field>.unity-base-field__label {
     color: var(--text-primary-color);
 }
 
-.unity-toggle>.unity-label:focus {
+.unity-enum-field>.unity-base-field__label:focus {
     color: var(--identity-color);
 }
 
-.unity-toggle>.unity-toggle__input>#unity-checkmark {
-    background-image: initial;
-    
+.unity-enum-field>.unity-base-field__input {
+    background-color: var(--button-color);
+    border-top-color: var(--button-border-color-top);
+    border-bottom-color: var(--button-border-color-bottom);
+    border-left-color: var(--button-border-color-left);
+    border-right-color: var(--button-border-color-right);
+}
+
+.unity-enum-field>.unity-base-field__input:focus {
+    border-color: var(--identity-color);
+}
+
+.unity-enum-field>.unity-base-field__input>.unity-text-element {
+    color: var(--text-primary-color);
+}
+
+.unity-object-field>.unity-base-field__label {
+    color: var(--text-primary-color);
+}
+
+.unity-object-field>.unity-base-field__input {
     background-color: var(--background-secondary-color);
-    -unity-background-image-tint-color: var(--button-image-tint);
-    
-    border-radius: 3px;
-    border-width: 1px;
-    
+
     border-top-color: var(--searchField-border-color-top);
     border-bottom-color: var(--searchField-border-color-bottom);
     border-left-color: var(--searchField-border-color-left);
     border-right-color: var(--searchField-border-color-right);
 }
 
-.unity-toggle:checked>.unity-toggle__input>#unity-checkmark {
-    background-image: var(--checkmark-image);
+.unity-object-field:hover>.unity-base-field__input {
+    border-color: var(--separator-color);
 }
 
-.unity-toggle:active>.unity-toggle__input>#unity-checkmark {
-    background-color: var(--identity-interacted-color);
-    -unity-background-image-tint-color: var(--button-active-text-color);
+.unity-object-field>.unity-base-field__input>.unity-object-field__selector {
+    background-color: initial;
+    -unity-background-image-tint-color: var(--text-primary-color);
 }
 
-.unity-toggle:focus>.unity-toggle__input>#unity-checkmark {
+.unity-object-field>.unity-base-field__input>.unity-object-field__object>.unity-text-element {
+    color: var(--text-primary-color);
+}
+
+.unity-color-field>.unity-base-field__label {
+    color: var(--text-primary-color);
+}
+
+.unity-color-field:focus>.unity-base-field__label {
+    color: var(--identity-color);
+}
+
+.unity-color-field:focus>.unity-base-field__input {
     border-color: var(--identity-color);
+    border-width: 1px;
+    border-radius: 3px;
 }

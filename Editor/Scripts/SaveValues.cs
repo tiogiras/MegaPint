@@ -1,4 +1,5 @@
 ﻿using Editor.Scripts.Settings;
+using UnityEditor;
 using GUIUtility = Editor.Scripts.GUI.GUIUtility;
 
 namespace Editor.Scripts
@@ -22,6 +23,8 @@ public static partial class SaveValues
                 GUIUtility.onForceRepaint?.Invoke();
             }
         }
+        
+        public static bool IsDarkTheme => EditorTheme == 1 || (EditorTheme == 0 && EditorGUIUtility.isProSkin);
     }
 }
 
