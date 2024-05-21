@@ -3,6 +3,10 @@
 
 public static class StyleSheetClasses
 {
+    public const string BaseStyleSheetPath = "MegaPint/User Interface/MegaPint";
+    public const string AttributeStyleSheetPath = "MegaPint/user Interface/MegaPintAttributes";
+    public const string UnityElementsStyleSheetPath = "MegaPint/user Interface/MegaPintUnityElements";
+    
     private const string ClassBase = "mp_";
 
     public static string Button => $"{ClassBase}button";
@@ -17,6 +21,15 @@ public static class StyleSheetClasses
     
     public static string Foldout => $"{ClassBase}foldout";
 
+    public static class Theme
+    {
+        private static readonly string s_theme = $"{ClassBase}theme";
+        
+        public static readonly string Dark = $"{s_theme}--dark";
+        public static readonly string Light = $"{s_theme}--light";
+        public static string Current => SaveValues.BasePackage.IsDarkTheme ? Dark : Light;
+    }
+    
     public static class Background
     {
         private static readonly string s_background = $"{ClassBase}background";

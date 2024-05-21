@@ -51,6 +51,24 @@ public static class GUIUtility
             });
     }
 
+    public static void ApplyRootElementTheme(VisualElement element, bool subscribeToEvent = true)
+    {
+        if (subscribeToEvent)
+        {
+            onForceRepaint += () => ApplyRootElementTheme(element, false);
+            Debug.Log($"Subscribed to repaint for {element}");
+        }
+
+        Debug.Log($"Repainting {element}");
+        element.RemoveFromClassList(StyleSheetClasses.Theme.Dark);
+        element.RemoveFromClassList(StyleSheetClasses.Theme.Light);
+
+        Debug.Log(StyleSheetClasses.Theme.Current);
+        
+        element.AddToClassList("mp");
+        element.AddToClassList(StyleSheetClasses.Theme.Current);
+    }
+    
     private static void HandleLink(CallbackEventHandler link, EventCallback <PointerUpLinkTagEvent> linkCallback)
     {
         if (linkCallback != null)
