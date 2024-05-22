@@ -25,6 +25,12 @@ public static partial class SaveValues
         }
         
         public static bool IsDarkTheme => EditorTheme == 1 || (EditorTheme == 0 && EditorGUIUtility.isProSkin);
+
+        public static bool DevMode
+        {
+            get => _GeneralSettings.GetValue("DevMode", false);
+            set => _GeneralSettings.SetValue("DevMode", value);
+        }
     }
 }
 

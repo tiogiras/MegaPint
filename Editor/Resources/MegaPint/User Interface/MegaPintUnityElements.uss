@@ -133,7 +133,7 @@
 }
 
 .unity-popup-field>.unity-base-field__input:focus {
-    border-color: var(--text-primary-color);
+    border-color: var(--identity-color);
 }
 
 .unity-popup-field>.unity-base-field__input>.unity-text-element {

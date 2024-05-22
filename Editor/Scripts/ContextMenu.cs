@@ -2,6 +2,7 @@
 using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.Settings;
 using Editor.Scripts.Windows;
+using Editor.Scripts.Windows.DevMode;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ internal static partial class ContextMenu
 {
     private const string MenuItemMegaPint = "MegaPint";
     private const string MenuItemPackages = MenuItemMegaPint + "/Packages";
+    private const string MenuItemDevMode = MenuItemMegaPint + "/DevMode";
 
     #region Public Methods
 
@@ -32,11 +34,9 @@ internal static partial class ContextMenu
     #region Private Methods
     
     [MenuItem(MenuItemMegaPint + "/Test", false, 0)]
-    public static void Test()
+    private static void Test()
     {
-        //PackageCache.Refresh();
-        
-        EditorWindow.GetWindow<PlayModeStartSceneToggle>().Close();
+        PackageCache.Refresh();
     }
 
     [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
