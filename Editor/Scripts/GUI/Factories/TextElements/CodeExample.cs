@@ -113,6 +113,8 @@ public class CodeExample : VisualElement
             RemoveTag(ref text, "c");
             RemoveTag(ref text, "m");
             RemoveTag(ref text, "b");
+            RemoveTag(ref text, "cc");
+            RemoveTag(ref text, "s");
 
             text = text.Replace("\\n", Environment.NewLine);
 
@@ -133,6 +135,8 @@ public class CodeExample : VisualElement
             ColorByTag(ref text, "c", "#BC7CAA");
             ColorByTag(ref text, "m", "#38C88C");
             ColorByTag(ref text, "b", "#4D7EE3");
+            ColorByTag(ref text, "cc", "#7ABA59");
+            ColorByTag(ref text, "s", "#C88847");
 
             return text;
         }

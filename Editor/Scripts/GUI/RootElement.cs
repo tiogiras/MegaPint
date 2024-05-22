@@ -189,7 +189,7 @@ public static class RootElement
     private static void OverwriteColorField(List <VisualElement> elements)
     {
         
-    }  
+    }
     
     private static void OverwriteToggle(List <VisualElement> elements)
     {

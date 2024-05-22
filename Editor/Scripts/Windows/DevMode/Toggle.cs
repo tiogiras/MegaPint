@@ -1,15 +1,15 @@
 ﻿#if UNITY_EDITOR
+using System.IO;
 using Editor.Scripts.GUI;
 using Editor.Scripts.PackageManager;
 using Editor.Scripts.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = Editor.Scripts.GUI.GUIUtility;
 
-namespace Editor.Scripts.Windows
+namespace Editor.Scripts.Windows.DevMode
 {
 
-public class MegaPintDevMode : MegaPintEditorWindowBase
+public class Toggle : MegaPintEditorWindowBase
 {
     private static MegaPintSettingsBase _Settings =>
         MegaPintSettings.instance.GetSetting("General");
@@ -35,7 +35,7 @@ public class MegaPintDevMode : MegaPintEditorWindowBase
 
     protected override string BasePath()
     {
-        return "MegaPint/User Interface/Windows/Dev Mode";
+        return Path.Join(Constants.BasePackage.PathWindows, "Development Mode", "Toggle");
     }
 
     protected override void CreateGUI()

@@ -41,6 +41,7 @@ public static class StyleSheetClasses
             public static readonly string Primary = $"{s_color}--primary";
             public static readonly string Secondary = $"{s_color}--secondary";
             public static readonly string Tertiary = $"{s_color}--tertiary";
+            public static readonly string Quaternary = $"{s_color}--quaternary";
             public static readonly string Identity = $"{s_color}--identity";
             public static readonly string Separator = $"{s_color}--separator";
         }

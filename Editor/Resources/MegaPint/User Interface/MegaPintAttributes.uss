@@ -6,16 +6,16 @@
     color: var(--info-color);
 }
 
-.mp_text-color--identity {
-    color: var(--identity-color);
-}
-
 .mp_text-color--primary {
     color: var(--text-primary-color);
 }
 
 .mp_text-color--secondary {
     color: var(--text-secondary-color);
+}
+
+.mp_text-color--identity {
+    color: var(--identity-color);
 }
 
 .mp_text-color--red {
@@ -44,6 +44,10 @@
 
 .mp_background-color--tertiary {
     background-color: var(--background-tertiary-color);
+}
+
+.mp_background-color--quaternary {
+    background-color: var(--background-quaternary-color);
 }
 
 .mp_background-color--identity {

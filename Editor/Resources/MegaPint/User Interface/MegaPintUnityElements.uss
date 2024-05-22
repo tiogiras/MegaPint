@@ -27,7 +27,7 @@
 }
 
 .unity-toggle>.unity-label:focus {
-    color: var(--identity-color);
+    color: var(--text-primary-color);
 }
 
 .unity-toggle>.unity-toggle__input>#unity-checkmark {
@@ -101,7 +101,7 @@
 }
 
 .unity-list-view__item:checked {
-    background-color: var(--identity-interacted-color);
+    background-color: var(--list-selection-color);
 }
 
 .unity-list-view__empty-label {
@@ -121,7 +121,7 @@
 }
 
 .unity-popup-field>.unity-base-field__label:focus {
-    color: var(--identity-color);
+    color: var(--text-primary-color);
 }
 
 .unity-popup-field>.unity-base-field__input {
@@ -192,7 +192,7 @@
 }
 
 .unity-base-text-field>.unity-base-field__label:focus {
-    color: var(--identity-color);
+    color: var(--text-primary-color);
 }
 
 .unity-base-text-field>#unity-text-input {
@@ -219,7 +219,7 @@
 }
 
 .unity-enum-field>.unity-base-field__label:focus {
-    color: var(--identity-color);
+    color: var(--text-primary-color);
 }
 
 .unity-enum-field>.unity-base-field__input {
@@ -269,7 +269,7 @@
 }
 
 .unity-color-field:focus>.unity-base-field__label {
-    color: var(--identity-color);
+    color: var(--text-primary-color);
 }
 
 .unity-color-field:focus>.unity-base-field__input {

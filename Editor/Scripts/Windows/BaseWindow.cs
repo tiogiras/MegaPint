@@ -5,10 +5,12 @@ using Editor.Scripts.PackageManager;
 using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.Settings;
 using Editor.Scripts.Windows.BaseWindowContent;
+using Editor.Scripts.Windows.DevMode;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = Editor.Scripts.GUI.GUIUtility;
+using Toggle = Editor.Scripts.Windows.DevMode.Toggle;
 
 namespace Editor.Scripts.Windows
 {
@@ -28,6 +30,7 @@ internal class BaseWindow : MegaPintEditorWindowBase
     private VisualTreeAsset _baseWindow;
 
     private Button _btnDevMode;
+    private Button _btnDevCenter;
     private Button _btnPackages;
     private Button _btnSettings;
     private Button _btnInfos;
@@ -116,6 +119,7 @@ internal class BaseWindow : MegaPintEditorWindowBase
         _btnInfos.clicked += SwitchToInfos;
 
         _btnDevMode.clicked += OnDevMode;
+        _btnDevCenter.clicked += OnDevCenter;
         _btnUpdate.clicked += UpdateBasePackage;
 
         _callbacksRegistered = true;
@@ -135,6 +139,7 @@ internal class BaseWindow : MegaPintEditorWindowBase
         onRightPaneClose?.Invoke();
 
         _btnDevMode.clicked -= OnDevMode;
+        _btnDevCenter.clicked -= OnDevCenter;
         _btnUpdate.clicked -= UpdateBasePackage;
 
         _callbacksRegistered = false;
@@ -165,6 +170,7 @@ internal class BaseWindow : MegaPintEditorWindowBase
         _btnInfos = root.Q <Button>("BTN_Infos");
 
         _btnDevMode = root.Q <Button>("BTN_DevMode");
+        _btnDevCenter = root.Q <Button>("BTN_DevCenter");
         _versionNumber = root.Q <Label>("VersionNumber");
 
         _updateBasePackage = root.Q <VisualElement>("UpdateBasePackage");
@@ -181,6 +187,8 @@ internal class BaseWindow : MegaPintEditorWindowBase
 
         RegisterCallbacks();
 
+        _btnDevCenter.style.display = _DevMode ? DisplayStyle.Flex : DisplayStyle.None;
+        
         _versionNumber.text = _DevMode ? "Development" : $"v{PackageCache.BasePackage.version}";
         _versionNumber.style.display = DisplayStyle.Flex;
 
@@ -211,7 +219,12 @@ internal class BaseWindow : MegaPintEditorWindowBase
             return;
 
         _currentDevModeClickCount = 0;
-        ContextMenu.TryOpen <MegaPintDevMode>(true);
+        ContextMenu.TryOpen <Toggle>(true);
+    }
+    
+    private static void OnDevCenter()
+    {
+        ContextMenu.TryOpen <Center>(false);
     }
 
     private void StartCacheRefresh()

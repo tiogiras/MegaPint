@@ -21,6 +21,25 @@ public static class GUIUtility
 
     private static bool s_linkCooldown;
 
+    public static VisualElement SetParentFlexGrowRecursive(VisualElement startElement, int iterations, bool value)
+    {
+        VisualElement element = startElement.parent;
+        
+        for (var i = 0; i < iterations; i++)
+        {
+            if (element == null)
+                break;
+
+            Debug.Log($"{element} Set to flex growth {value}");
+            Debug.Log($"New Parent: {element.parent}");
+
+            element.style.flexGrow = value ? 1 : 0;
+            element = element.parent;
+        }
+
+        return element;
+    }
+    
     public static VisualElement Instantiate(VisualTreeAsset asset, VisualElement root = null)
     {
         TemplateContainer element = asset.Instantiate();
@@ -54,17 +73,11 @@ public static class GUIUtility
     public static void ApplyRootElementTheme(VisualElement element, bool subscribeToEvent = true)
     {
         if (subscribeToEvent)
-        {
             onForceRepaint += () => ApplyRootElementTheme(element, false);
-            Debug.Log($"Subscribed to repaint for {element}");
-        }
-
-        Debug.Log($"Repainting {element}");
+        
         element.RemoveFromClassList(StyleSheetClasses.Theme.Dark);
         element.RemoveFromClassList(StyleSheetClasses.Theme.Light);
 
-        Debug.Log(StyleSheetClasses.Theme.Current);
-        
         element.AddToClassList("mp");
         element.AddToClassList(StyleSheetClasses.Theme.Current);
     }
