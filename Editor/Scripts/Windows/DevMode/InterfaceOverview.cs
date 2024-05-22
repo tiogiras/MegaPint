@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = Editor.Scripts.GUI.GUIUtility;
@@ -37,6 +38,8 @@ public class InterfaceOverview : MegaPintEditorWindowBase
         root.style.flexShrink = 1f;
 
         rootVisualElement.Add(root);
+        
+        SetupAllLists(root);
     }
 
     protected override bool LoadResources()
@@ -55,6 +58,23 @@ public class InterfaceOverview : MegaPintEditorWindowBase
     }
 
     #endregion
+
+    private void SetupAllLists(VisualElement root)
+    {
+        root.Query <ListView>().ForEach(ListSetup);
+    }
+    
+    private static void ListSetup(ListView list)
+    {
+        list.makeItem = () => new VisualElement();
+        
+        list.bindItem = (e, i) =>
+        {
+            e.Add(new Label($"Item {i}"));
+        };
+        
+        list.itemsSource = new List<int> {0, 1, 2, 3, 4, 5};
+    }
 }
 
 }

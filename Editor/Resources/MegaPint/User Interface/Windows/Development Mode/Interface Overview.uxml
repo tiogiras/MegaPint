@@ -4,7 +4,7 @@
     <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPintAttributes.uss?fileID=7433441132597879392&amp;guid=db4b42bc58d645b8ab6f8c0e914c2a0c&amp;type=3#MegaPintAttributes" />
     <Editor.Scripts.GUI.Factories.RootElement style="flex-grow: 1;">
         <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="flex-grow: 1;">
-            <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement style="flex-grow: 1; flex-direction: row; background-color: rgb(255, 0, 237);">
                 <ui:VisualElement class="mp mp_theme--dark" style="width: 50%;">
                     <ui:VisualElement name="Backgrounds_Plane">
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="height: 30px; border-bottom-width: 1px;" />
@@ -70,6 +70,164 @@
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
                             <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 20px; margin-right: 10px; margin-bottom: 20px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_Toggles">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:Toggle label="Toggle" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:Toggle label="Toggle" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:Toggle label="Toggle" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:Toggle label="Toggle" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_TextFields">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_TextFields">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:Foldout text="Foldout" value="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:Foldout text="Foldout" value="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:Foldout text="Foldout" value="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:Foldout text="Foldout" value="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_PopUps">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:DropdownField label="Dropdown" index="-1" choices="A,B,C" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:EnumField label="Enum" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:DropdownField label="Dropdown" index="-1" choices="A,B,C" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:EnumField label="Enum" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:DropdownField label="Dropdown" index="-1" choices="A,B,C" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:EnumField label="Enum" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:DropdownField label="Dropdown" index="-1" choices="A,B,C" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:EnumField label="Enum" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_Numerics">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:IntegerField label="Integer Field" value="42" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:FloatField label="Float Field" value="42,2" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:IntegerField label="Integer Field" value="42" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:FloatField label="Float Field" value="42,2" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:IntegerField label="Integer Field" value="42" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:FloatField label="Float Field" value="42,2" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:IntegerField label="Integer Field" value="42" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:FloatField label="Float Field" value="42,2" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_ObjectFields">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <uie:ObjectField label="Object Field" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <uie:ObjectField label="Object Field" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <uie:ObjectField label="Object Field" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <uie:ObjectField label="Object Field" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_SearchFields">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:VisualElement style="flex-grow: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+                                <uie:Toolbar style="border-bottom-width: 0; background-color: rgba(60, 60, 60, 0);">
+                                    <uie:ToolbarSearchField focusable="true" style="width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                                </uie:Toolbar>
+                            </ui:VisualElement>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:VisualElement style="flex-grow: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+                                <uie:Toolbar style="border-bottom-width: 0; background-color: rgba(60, 60, 60, 0);">
+                                    <uie:ToolbarSearchField focusable="true" style="width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                                </uie:Toolbar>
+                            </ui:VisualElement>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:VisualElement style="flex-grow: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+                                <uie:Toolbar style="border-bottom-width: 0; background-color: rgba(60, 60, 60, 0);">
+                                    <uie:ToolbarSearchField focusable="true" style="width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                                </uie:Toolbar>
+                            </ui:VisualElement>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:VisualElement style="flex-grow: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+                                <uie:Toolbar style="border-bottom-width: 0; background-color: rgba(60, 60, 60, 0);">
+                                    <uie:ToolbarSearchField focusable="true" style="width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                                </uie:Toolbar>
+                            </ui:VisualElement>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_ColorFields">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <uie:ColorField label="Color" value="#AD5F18FF" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <uie:ColorField label="Color" value="#AD5F18FF" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <uie:ColorField label="Color" value="#AD5F18FF" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <uie:ColorField label="Color" value="#AD5F18FF" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_ListViews">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:ListView focusable="true" show-add-remove-footer="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:ListView focusable="true" show-add-remove-footer="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:ListView focusable="true" show-add-remove-footer="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:ListView focusable="true" show-add-remove-footer="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
                     </ui:VisualElement>
                 </ui:VisualElement>
@@ -138,6 +296,164 @@
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
                             <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 20px; margin-right: 10px; margin-bottom: 20px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_Toggles">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:Toggle label="Toggle" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:Toggle label="Toggle" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:Toggle label="Toggle" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:Toggle label="Toggle" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_TextFields">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_TextFields">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:Foldout text="Foldout" value="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:Foldout text="Foldout" value="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:Foldout text="Foldout" value="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:Foldout text="Foldout" value="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_PopUps">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:DropdownField label="Dropdown" index="-1" choices="A,B,C" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:EnumField label="Enum" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:DropdownField label="Dropdown" index="-1" choices="A,B,C" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:EnumField label="Enum" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:DropdownField label="Dropdown" index="-1" choices="A,B,C" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:EnumField label="Enum" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:DropdownField label="Dropdown" index="-1" choices="A,B,C" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:EnumField label="Enum" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_Numerics">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:IntegerField label="Integer Field" value="42" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:FloatField label="Float Field" value="42,2" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:IntegerField label="Integer Field" value="42" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:FloatField label="Float Field" value="42,2" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:IntegerField label="Integer Field" value="42" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:FloatField label="Float Field" value="42,2" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:IntegerField label="Integer Field" value="42" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <ui:FloatField label="Float Field" value="42,2" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_ObjectFields">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <uie:ObjectField label="Object Field" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <uie:ObjectField label="Object Field" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <uie:ObjectField label="Object Field" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <uie:ObjectField label="Object Field" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_SearchFields">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:VisualElement style="flex-grow: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+                                <uie:Toolbar style="border-bottom-width: 0; background-color: rgba(60, 60, 60, 0);">
+                                    <uie:ToolbarSearchField focusable="true" style="width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                                </uie:Toolbar>
+                            </ui:VisualElement>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:VisualElement style="flex-grow: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+                                <uie:Toolbar style="border-bottom-width: 0; background-color: rgba(60, 60, 60, 0);">
+                                    <uie:ToolbarSearchField focusable="true" style="width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                                </uie:Toolbar>
+                            </ui:VisualElement>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:VisualElement style="flex-grow: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+                                <uie:Toolbar style="border-bottom-width: 0; background-color: rgba(60, 60, 60, 0);">
+                                    <uie:ToolbarSearchField focusable="true" style="width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                                </uie:Toolbar>
+                            </ui:VisualElement>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:VisualElement style="flex-grow: 1; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+                                <uie:Toolbar style="border-bottom-width: 0; background-color: rgba(60, 60, 60, 0);">
+                                    <uie:ToolbarSearchField focusable="true" style="width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                                </uie:Toolbar>
+                            </ui:VisualElement>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_ColorFields">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <uie:ColorField label="Color" value="#AD5F18FF" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <uie:ColorField label="Color" value="#AD5F18FF" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <uie:ColorField label="Color" value="#AD5F18FF" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <uie:ColorField label="Color" value="#AD5F18FF" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_ListViews">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <ui:ListView focusable="true" show-add-remove-footer="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <ui:ListView focusable="true" show-add-remove-footer="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <ui:ListView focusable="true" show-add-remove-footer="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <ui:ListView focusable="true" show-add-remove-footer="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
                     </ui:VisualElement>
                 </ui:VisualElement>
