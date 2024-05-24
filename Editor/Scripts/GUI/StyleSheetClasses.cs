@@ -3,10 +3,6 @@
 
 public static class StyleSheetClasses
 {
-    public const string BaseStyleSheetPath = "MegaPint/User Interface/MegaPint";
-    public const string AttributeStyleSheetPath = "MegaPint/user Interface/MegaPintAttributes";
-    public const string UnityElementsStyleSheetPath = "MegaPint/user Interface/MegaPintUnityElements";
-    
     private const string ClassBase = "mp_";
 
     public static string Button => $"{ClassBase}button";
@@ -81,6 +77,22 @@ public static class StyleSheetClasses
             public static readonly string Orange = $"{s_color}--orange";
             public static readonly string Green = $"{s_color}--green";
             public static readonly string ButtonActive = $"{s_color}--buttonActive";
+        }
+    }
+
+    public static class Code
+    {
+        private static readonly string s_code = $"{ClassBase}code";
+
+        public static class Color
+        {
+            private static readonly string s_color = $"{s_code}-color";
+            
+            public static readonly string Basic = $"{s_color}--basic";
+            public static readonly string Class = $"{s_color}--class";
+            public static readonly string Method = $"{s_color}--method";
+            public static readonly string Comment = $"{s_color}--comment";
+            public static readonly string String = $"{s_color}--string";
         }
     }
 

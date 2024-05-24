@@ -46,6 +46,7 @@ public class CodeExample : VisualElement
             element.Add(label);
 
             label.style.whiteSpace = WhiteSpace.Normal;
+            label.AddToClassList(StyleSheetClasses.Text.Color.Primary);
             
             var cleanText = CleanText(label.text);
             
@@ -132,11 +133,11 @@ public class CodeExample : VisualElement
         
         private static string ColorText(string text)
         {
-            ColorByTag(ref text, "c", "#BC7CAA");
-            ColorByTag(ref text, "m", "#38C88C");
-            ColorByTag(ref text, "b", "#4D7EE3");
-            ColorByTag(ref text, "cc", "#7ABA59");
-            ColorByTag(ref text, "s", "#C88847");
+            ColorByTag(ref text, "c", $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeClassColor)}");
+            ColorByTag(ref text, "m", $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeMethodColor)}");
+            ColorByTag(ref text, "b", $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeBasicColor)}");
+            ColorByTag(ref text, "cc", $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeCommentColor)}");
+            ColorByTag(ref text, "s", $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeStringColor)}");
 
             return text;
         }

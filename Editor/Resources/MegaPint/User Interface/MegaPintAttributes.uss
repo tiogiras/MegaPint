@@ -34,6 +34,27 @@
     color: var(--button-active-text-color);
 }
 
+.mp_code-color--basic {
+    color: var(--code-basic-color);
+}
+
+.mp_code-color--class {
+    color: var(--code-class-color);
+}
+
+
+.mp_code-color--method {
+    color: var(--code-method-color);
+}
+
+.mp_code-color--comment {
+    color: var(--code-comment-color);
+}
+
+.mp_code-color--string {
+    color: var(--code-string-color);
+}
+
 .mp_background-color--primary {
     background-color: var(--background-primary-color);
 }

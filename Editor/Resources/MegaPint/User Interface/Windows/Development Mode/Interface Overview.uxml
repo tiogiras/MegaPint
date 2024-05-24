@@ -22,6 +22,9 @@
                             <ui:VisualElement style="width: 50%;">
                                 <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
                                 <Editor.Scripts.GUI.Factories.TextElements.TextSecondary tabindex="-1" text="Hello World!" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--red" style="margin-top: 5px;" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--orange" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--green" style="margin-bottom: 5px;" />
                             </ui:VisualElement>
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px; flex-direction: row;">
@@ -33,6 +36,9 @@
                             <ui:VisualElement style="width: 50%;">
                                 <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
                                 <Editor.Scripts.GUI.Factories.TextElements.TextSecondary tabindex="-1" text="Hello World!" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--red" style="margin-top: 5px;" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--orange" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--green" style="margin-bottom: 5px;" />
                             </ui:VisualElement>
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px; flex-direction: row;">
@@ -44,6 +50,9 @@
                             <ui:VisualElement style="width: 50%;">
                                 <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
                                 <Editor.Scripts.GUI.Factories.TextElements.TextSecondary tabindex="-1" text="Hello World!" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--red" style="margin-top: 5px;" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--orange" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--green" style="margin-bottom: 5px;" />
                             </ui:VisualElement>
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px; flex-direction: row;">
@@ -55,6 +64,9 @@
                             <ui:VisualElement style="width: 50%;">
                                 <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
                                 <Editor.Scripts.GUI.Factories.TextElements.TextSecondary tabindex="-1" text="Hello World!" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--red" style="margin-top: 5px;" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--orange" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--green" style="margin-bottom: 5px;" />
                             </ui:VisualElement>
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
                     </ui:VisualElement>
@@ -228,6 +240,50 @@
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
                             <ui:ListView focusable="true" show-add-remove-footer="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_Links_And_Infos">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="This ia a text including a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;link=&quot;info_test&quot;&gt;information&lt;/link&gt; that can be hovered." class="mp_link" style="white-space: normal; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <Editor.Scripts.GUI.Factories.Structure.Separator />
+                            <ui:Foldout text="This is a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;/link=&quot;info_test&quot;&gt;info&lt;/link&gt;" value="false" class="mp_link" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="This ia a text including a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;link=&quot;info_test&quot;&gt;information&lt;/link&gt; that can be hovered." class="mp_link" style="white-space: normal; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <Editor.Scripts.GUI.Factories.Structure.Separator />
+                            <ui:Foldout text="This is a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;/link=&quot;info_test&quot;&gt;info&lt;/link&gt;" value="false" class="mp_link" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="This ia a text including a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;link=&quot;info_test&quot;&gt;information&lt;/link&gt; that can be hovered." class="mp_link" style="white-space: normal; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <Editor.Scripts.GUI.Factories.Structure.Separator />
+                            <ui:Foldout text="This is a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;/link=&quot;info_test&quot;&gt;info&lt;/link&gt;" value="false" class="mp_link" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="This ia a text including a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;link=&quot;info_test&quot;&gt;information&lt;/link&gt; that can be hovered." class="mp_link" style="white-space: normal; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <Editor.Scripts.GUI.Factories.Structure.Separator />
+                            <ui:Foldout text="This is a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;/link=&quot;info_test&quot;&gt;info&lt;/link&gt;" value="false" class="mp_link" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_CodeExamples">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.CodeExample _string-attr="&lt;b&gt;public class&lt;/b&gt; &lt;c&gt;Test&lt;/c&gt;()\n{\n[/1/]&lt;b&gt;public string&lt;/b&gt; test = &lt;s&gt;&quot;test&quot;&lt;/s&gt;\n\n[/1/]&lt;cc&gt;// This is a sample&lt;/cc&gt;\n[/1/]&lt;b&gt;public void&lt;/b&gt; &lt;m&gt;Test&lt;/m&gt;()\n[/1/]{\n[/2/]gameObject.&lt;m&gt;SetActive&lt;/m&gt;(true);\n[/1/]}\n}" style="margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.CodeExample _string-attr="&lt;b&gt;public class&lt;/b&gt; &lt;c&gt;Test&lt;/c&gt;()\n{\n[/1/]&lt;b&gt;public string&lt;/b&gt; test = &lt;s&gt;&quot;test&quot;&lt;/s&gt;\n\n[/1/]&lt;cc&gt;// This is a sample&lt;/cc&gt;\n[/1/]&lt;b&gt;public void&lt;/b&gt; &lt;m&gt;Test&lt;/m&gt;()\n[/1/]{\n[/2/]gameObject.&lt;m&gt;SetActive&lt;/m&gt;(true);\n[/1/]}\n}" style="margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.CodeExample _string-attr="&lt;b&gt;public class&lt;/b&gt; &lt;c&gt;Test&lt;/c&gt;()\n{\n[/1/]&lt;b&gt;public string&lt;/b&gt; test = &lt;s&gt;&quot;test&quot;&lt;/s&gt;\n\n[/1/]&lt;cc&gt;// This is a sample&lt;/cc&gt;\n[/1/]&lt;b&gt;public void&lt;/b&gt; &lt;m&gt;Test&lt;/m&gt;()\n[/1/]{\n[/2/]gameObject.&lt;m&gt;SetActive&lt;/m&gt;(true);\n[/1/]}\n}" style="margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.CodeExample _string-attr="&lt;b&gt;public class&lt;/b&gt; &lt;c&gt;Test&lt;/c&gt;()\n{\n[/1/]&lt;b&gt;public string&lt;/b&gt; test = &lt;s&gt;&quot;test&quot;&lt;/s&gt;\n\n[/1/]&lt;cc&gt;// This is a sample&lt;/cc&gt;\n[/1/]&lt;b&gt;public void&lt;/b&gt; &lt;m&gt;Test&lt;/m&gt;()\n[/1/]{\n[/2/]gameObject.&lt;m&gt;SetActive&lt;/m&gt;(true);\n[/1/]}\n}" style="margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px;" />
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
                     </ui:VisualElement>
                 </ui:VisualElement>
@@ -248,6 +304,9 @@
                             <ui:VisualElement style="width: 50%;">
                                 <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
                                 <Editor.Scripts.GUI.Factories.TextElements.TextSecondary tabindex="-1" text="Hello World!" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--red" style="margin-top: 5px;" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--orange" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--green" style="margin-bottom: 5px;" />
                             </ui:VisualElement>
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px; flex-direction: row;">
@@ -259,6 +318,9 @@
                             <ui:VisualElement style="width: 50%;">
                                 <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
                                 <Editor.Scripts.GUI.Factories.TextElements.TextSecondary tabindex="-1" text="Hello World!" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--red" style="margin-top: 5px;" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--orange" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--green" style="margin-bottom: 5px;" />
                             </ui:VisualElement>
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px; flex-direction: row;">
@@ -270,6 +332,9 @@
                             <ui:VisualElement style="width: 50%;">
                                 <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
                                 <Editor.Scripts.GUI.Factories.TextElements.TextSecondary tabindex="-1" text="Hello World!" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--red" style="margin-top: 5px;" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--orange" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--green" style="margin-bottom: 5px;" />
                             </ui:VisualElement>
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px; flex-direction: row;">
@@ -281,6 +346,9 @@
                             <ui:VisualElement style="width: 50%;">
                                 <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
                                 <Editor.Scripts.GUI.Factories.TextElements.TextSecondary tabindex="-1" text="Hello World!" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--red" style="margin-top: 5px;" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--orange" />
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" class="mp_text-color--green" style="margin-bottom: 5px;" />
                             </ui:VisualElement>
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
                     </ui:VisualElement>
@@ -454,6 +522,50 @@
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
                             <ui:ListView focusable="true" show-add-remove-footer="false" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_Links_And_Infos">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="This ia a text including a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;link=&quot;info_test&quot;&gt;information&lt;/link&gt; that can be hovered." class="mp_link" style="white-space: normal; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <Editor.Scripts.GUI.Factories.Structure.Separator />
+                            <ui:Foldout text="This is a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;/link=&quot;info_test&quot;&gt;info&lt;/link&gt;" value="false" class="mp_link" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="This ia a text including a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;link=&quot;info_test&quot;&gt;information&lt;/link&gt; that can be hovered." class="mp_link" style="white-space: normal; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <Editor.Scripts.GUI.Factories.Structure.Separator />
+                            <ui:Foldout text="This is a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;/link=&quot;info_test&quot;&gt;info&lt;/link&gt;" value="false" class="mp_link" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="This ia a text including a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;link=&quot;info_test&quot;&gt;information&lt;/link&gt; that can be hovered." class="mp_link" style="white-space: normal; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <Editor.Scripts.GUI.Factories.Structure.Separator />
+                            <ui:Foldout text="This is a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;/link=&quot;info_test&quot;&gt;info&lt;/link&gt;" value="false" class="mp_link" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="This ia a text including a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;link=&quot;info_test&quot;&gt;information&lt;/link&gt; that can be hovered." class="mp_link" style="white-space: normal; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;" />
+                            <Editor.Scripts.GUI.Factories.Structure.Separator />
+                            <ui:Foldout text="This is a &lt;link=&quot;0&quot;&gt;link&lt;/link&gt; and an &lt;/link=&quot;info_test&quot;&gt;info&lt;/link&gt;" value="false" class="mp_link" style="margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                                <Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Hello World!" />
+                            </ui:Foldout>
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="Backgrounds_With_CodeExamples">
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.CodeExample _string-attr="&lt;b&gt;public class&lt;/b&gt; &lt;c&gt;Test&lt;/c&gt;()\n{\n[/1/]&lt;b&gt;public string&lt;/b&gt; test = &lt;s&gt;&quot;test&quot;&lt;/s&gt;\n\n[/1/]&lt;cc&gt;// This is a sample&lt;/cc&gt;\n[/1/]&lt;b&gt;public void&lt;/b&gt; &lt;m&gt;Test&lt;/m&gt;()\n[/1/]{\n[/2/]gameObject.&lt;m&gt;SetActive&lt;/m&gt;(true);\n[/1/]}\n}" style="margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.CodeExample _string-attr="&lt;b&gt;public class&lt;/b&gt; &lt;c&gt;Test&lt;/c&gt;()\n{\n[/1/]&lt;b&gt;public string&lt;/b&gt; test = &lt;s&gt;&quot;test&quot;&lt;/s&gt;\n\n[/1/]&lt;cc&gt;// This is a sample&lt;/cc&gt;\n[/1/]&lt;b&gt;public void&lt;/b&gt; &lt;m&gt;Test&lt;/m&gt;()\n[/1/]{\n[/2/]gameObject.&lt;m&gt;SetActive&lt;/m&gt;(true);\n[/1/]}\n}" style="margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary class="mp_border-color--secondary" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.CodeExample _string-attr="&lt;b&gt;public class&lt;/b&gt; &lt;c&gt;Test&lt;/c&gt;()\n{\n[/1/]&lt;b&gt;public string&lt;/b&gt; test = &lt;s&gt;&quot;test&quot;&lt;/s&gt;\n\n[/1/]&lt;cc&gt;// This is a sample&lt;/cc&gt;\n[/1/]&lt;b&gt;public void&lt;/b&gt; &lt;m&gt;Test&lt;/m&gt;()\n[/1/]{\n[/2/]gameObject.&lt;m&gt;SetActive&lt;/m&gt;(true);\n[/1/]}\n}" style="margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px;" />
+                        </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+                        <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary class="mp_border-color--tertiary" style="border-bottom-width: 1px;">
+                            <Editor.Scripts.GUI.Factories.TextElements.CodeExample _string-attr="&lt;b&gt;public class&lt;/b&gt; &lt;c&gt;Test&lt;/c&gt;()\n{\n[/1/]&lt;b&gt;public string&lt;/b&gt; test = &lt;s&gt;&quot;test&quot;&lt;/s&gt;\n\n[/1/]&lt;cc&gt;// This is a sample&lt;/cc&gt;\n[/1/]&lt;b&gt;public void&lt;/b&gt; &lt;m&gt;Test&lt;/m&gt;()\n[/1/]{\n[/2/]gameObject.&lt;m&gt;SetActive&lt;/m&gt;(true);\n[/1/]}\n}" style="margin-top: 20px; margin-right: 20px; margin-bottom: 20px; margin-left: 20px;" />
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
                     </ui:VisualElement>
                 </ui:VisualElement>

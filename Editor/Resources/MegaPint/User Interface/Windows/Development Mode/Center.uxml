@@ -10,6 +10,9 @@
             <Editor.Scripts.GUI.Factories.Headings.HeadingPrimary tabindex="-1" text="Development Mode" style="white-space: normal; -unity-text-align: upper-center; font-size: 16px;" />
         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary style="flex-grow: 1; padding-top: 10px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;">
+            <ui:VisualElement style="flex-direction: row-reverse;">
+                <ui:Button text="Force Repaint" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Repaint" />
+            </ui:VisualElement>
             <ui:Button text="Toggle" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Toggle" />
             <ui:Button text="Interface Overview" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_InterfaceOverview" />
         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>

@@ -19,8 +19,8 @@ public static partial class SaveValues
             set
             {
                 _GeneralSettings.SetValue("EditorTheme", value);
-                
-                GUIUtility.onForceRepaint?.Invoke();
+
+                GUIUtility.ForceRepaint();
             }
         }
         
