@@ -33,7 +33,7 @@
 .unity-toggle>.unity-toggle__input>#unity-checkmark {
     background-image: initial;
 
-    background-color: var(--background-secondary-color);
+    background-color: var(--inputField-background-color);
     -unity-background-image-tint-color: var(--button-image-tint);
 
     border-radius: 3px;
@@ -43,6 +43,10 @@
     border-bottom-color: var(--searchField-border-color-bottom);
     border-left-color: var(--searchField-border-color-left);
     border-right-color: var(--searchField-border-color-right);
+}
+
+.unity-toggle:hover>.unity-toggle__input>#unity-checkmark {
+    border-color: var(--inputField-hover-color);
 }
 
 .unity-toggle:checked>.unity-toggle__input>#unity-checkmark {
@@ -89,7 +93,7 @@
 }
 
 .unity-search-field-base:hover {
-    border-color: var(--text-secondary-color);
+    border-color: var(--inputField-hover-color);
 }
 
 .unity-search-field-base:focus {
@@ -97,7 +101,7 @@
 }
 
 .unity-list-view__item:hover {
-    background-color: var(--background-tertiary-color);
+    background-color: var(--list-hover-color);
 }
 
 .unity-list-view__item:checked {
@@ -187,6 +191,10 @@
     color: var(--text-primary-color);
 }
 
+.unity-base-text-field {
+    --unity-selection-color: var(--text-selection-color);
+}
+
 .unity-base-text-field>.unity-base-field__label {
     color: var(--text-primary-color);
 }
@@ -198,7 +206,7 @@
 .unity-base-text-field>#unity-text-input {
     color: var(--text-primary-color);
 
-    background-color: var(--background-secondary-color);
+    background-color: var(--inputField-background-color);
     
     border-top-color: var(--searchField-border-color-top);
     border-bottom-color: var(--searchField-border-color-bottom);
@@ -207,7 +215,7 @@
 }
 
 .unity-base-text-field:hover>#unity-text-input {
-    border-color: var(--separator-color);
+    border-color: var(--inputField-hover-color);
 }
 
 .unity-base-text-field:focus>#unity-text-input {
@@ -243,7 +251,7 @@
 }
 
 .unity-object-field>.unity-base-field__input {
-    background-color: var(--background-secondary-color);
+    background-color: var(--inputField-background-color);
 
     border-top-color: var(--searchField-border-color-top);
     border-bottom-color: var(--searchField-border-color-bottom);
@@ -252,7 +260,7 @@
 }
 
 .unity-object-field:hover>.unity-base-field__input {
-    border-color: var(--separator-color);
+    border-color: var(--inputField-hover-color);
 }
 
 .unity-object-field>.unity-base-field__input>.unity-object-field__selector {
@@ -272,8 +280,16 @@
     color: var(--text-primary-color);
 }
 
-.unity-color-field:focus>.unity-base-field__input {
-    border-color: var(--identity-color);
+.unity-color-field>.unity-base-field__input {
+    border-color: initial;
     border-width: 1px;
     border-radius: 3px;
+}
+
+.unity-color-field:hover>.unity-base-field__input {
+    border-color: var(--inputField-hover-color);
+}
+
+.unity-color-field:focus>.unity-base-field__input {
+    border-color: var(--identity-color);
 }

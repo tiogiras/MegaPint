@@ -20,6 +20,7 @@ public static class InfoLinkData
         {"requirement","Requirements are validations that will be run on MonoBehaviours.\n\n <b>Created via ScriptableValidationRequirement</b>"},
         {"validationStatus","ValidatableMonoBehaviourStatus is a MonoBehaviour added by a ValidatableMonoBehaviour. It collects all behaviours of this GameObject and displays their status and possible fixes."},
         {"fixAction","FixActions are methods added to the occured issue. They should contain an automatic fix for the issue."},
+        {"test","This is a test tooltip for development purposes."},
         // {"",""},
     };
 

@@ -12,6 +12,7 @@ public class Center : MegaPintEditorWindowBase
     
     private Button _btnToggle;
     private Button _btnInterfaceOverview;
+    private Button _btnRepaint;
 
     #region Public Methods
 
@@ -43,6 +44,7 @@ public class Center : MegaPintEditorWindowBase
         
         _btnToggle = root.Q<Button>("BTN_Toggle");
         _btnInterfaceOverview = root.Q<Button>("BTN_InterfaceOverview");
+        _btnRepaint = root.Q<Button>("BTN_Repaint");
         
         RegisterCallbacks();
     }
@@ -58,12 +60,14 @@ public class Center : MegaPintEditorWindowBase
     {
         _btnToggle.clicked += OnToggle;
         _btnInterfaceOverview.clicked += OnInterfaceOverview;
+        _btnRepaint.clicked += OnRepaint;
     }
 
     protected override void UnRegisterCallbacks()
     {
         _btnToggle.clicked -= OnToggle;
         _btnInterfaceOverview.clicked -= OnInterfaceOverview;
+        _btnRepaint.clicked -= OnRepaint;
     }
 
     #endregion
@@ -76,6 +80,11 @@ public class Center : MegaPintEditorWindowBase
     private static void OnInterfaceOverview()
     {
         ContextMenu.TryOpen <InterfaceOverview>(false);
+    }
+
+    private static void OnRepaint()
+    {
+        GUIUtility.ForceRepaint();
     }
 }
 

@@ -36,6 +36,8 @@ public class InterfaceOverview : MegaPintEditorWindowBase
         VisualElement root = GUIUtility.Instantiate(_baseWindow);
         root.style.flexGrow = 1f;
         root.style.flexShrink = 1f;
+        
+        GUIUtility.ActivateLinks(root, _ => {});
 
         rootVisualElement.Add(root);
         

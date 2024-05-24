@@ -30,9 +30,6 @@ public static class GUIUtility
             if (element == null)
                 break;
 
-            Debug.Log($"{element} Set to flex growth {value}");
-            Debug.Log($"New Parent: {element.parent}");
-
             element.style.flexGrow = value ? 1 : 0;
             element = element.parent;
         }
@@ -48,15 +45,18 @@ public static class GUIUtility
 
         return element;
     }
-    
+
     public static void ActivateLinks(VisualElement root, EventCallback <PointerUpLinkTagEvent> linkCallback)
     {
+        var linkColorHtml = ColorUtility.ToHtmlStringRGB(StyleSheetValues.LinkColor);
+        var infoColorHtml = ColorUtility.ToHtmlStringRGB(StyleSheetValues.InfoColor);
+                
         UQueryBuilder <TextElement> links = root.Query<TextElement>(className: "mp_link");
 
         links.ForEach(
             link =>
             {
-                link.text = ColorLinks(link.text);
+                link.text = ColorLinks(linkColorHtml, infoColorHtml, link.text);
                 HandleLink(link, linkCallback);
             });
         
@@ -65,21 +65,23 @@ public static class GUIUtility
         foldouts.ForEach(
             link =>
             {
-                link.text = ColorLinks(link.text);
+                link.text = ColorLinks(linkColorHtml, infoColorHtml, link.text);
                 HandleLink(link, linkCallback);
             });
     }
 
-    public static void ApplyRootElementTheme(VisualElement element, bool subscribeToEvent = true)
+    public static void ApplyRootElementTheme(VisualElement element, Action<VisualElement> onRepaintAction = null, bool subscribeToEvent = true)
     {
         if (subscribeToEvent)
-            onForceRepaint += () => ApplyRootElementTheme(element, false);
+            onForceRepaint += () => ApplyRootElementTheme(element, onRepaintAction, false);
         
         element.RemoveFromClassList(StyleSheetClasses.Theme.Dark);
         element.RemoveFromClassList(StyleSheetClasses.Theme.Light);
 
         element.AddToClassList("mp");
         element.AddToClassList(StyleSheetClasses.Theme.Current);
+        
+        onRepaintAction?.Invoke(element);
     }
     
     private static void HandleLink(CallbackEventHandler link, EventCallback <PointerUpLinkTagEvent> linkCallback)
@@ -109,19 +111,26 @@ public static class GUIUtility
         s_linkCooldown = false;
     }
 
-    private static string ColorLinks(string str)
+    private static string ColorLinks(string linkColor, string infoColor, string str)
     {
         var linkStarts = str.Split("<link=");
+        var linkTypes = new bool[linkStarts.Length + 1];
 
         var builder = new StringBuilder(linkStarts[0]);
 
-        // TODO Get colors from stylesheet
-        var linkStart = $"<b><color=#{ColorUtility.ToHtmlStringRGB(Color.magenta)}><link=";
-        var infoStart = $"<b><color=#{ColorUtility.ToHtmlStringRGB(Color.magenta)}><link=";
+        var linkStart = $"<b><color=#{linkColor}><link=";
+        var infoStart = $"<u><color=#{infoColor}><link=";
+        
+        const string LinkEnd = "</link></color></b>";
+        const string InfoEnd = "</link></color></u>";
         
         for (var i = 1; i < linkStarts.Length; i++)
         {
-            builder.Append(linkStarts[i].StartsWith("\"info_") ? infoStart : linkStart);
+            var isInfo = linkStarts[i].StartsWith("\"info_");
+            
+            linkTypes[i] = isInfo;
+            
+            builder.Append(isInfo ? infoStart : linkStart);
             builder.Append(linkStarts[i]);
         }
         
@@ -132,7 +141,7 @@ public static class GUIUtility
 
         for (var i = 1; i < linkEnds.Length; i++)
         {
-            builder.Append("</link></color></b>");
+            builder.Append(linkTypes[i] ? InfoEnd : LinkEnd);
             builder.Append(linkEnds[i]);
         }
 
@@ -484,7 +493,13 @@ public static class GUIUtility
         element.style.paddingLeft = padding;
     }
 
-    public static Action onForceRepaint;
+    private static Action onForceRepaint;
+
+    public static void ForceRepaint()
+    {
+        StyleSheetValues.Reset();
+        onForceRepaint?.Invoke();
+    }
 
     public static void ToggleActiveButtonInGroup(int activeIndex, params VisualElement[] elements)
     {
