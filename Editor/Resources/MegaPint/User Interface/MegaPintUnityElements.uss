@@ -100,6 +100,10 @@
     border-color: var(--identity-color);
 }
 
+.unity-list-view__item {
+    color: var(--text-primary-color);
+}
+
 .unity-list-view__item:hover {
     background-color: var(--list-hover-color);
 }
@@ -205,6 +209,8 @@
 
 .unity-base-text-field>#unity-text-input {
     color: var(--text-primary-color);
+
+    --unity-cursor-color: var(--cursor-color);
 
     background-color: var(--inputField-background-color);
     

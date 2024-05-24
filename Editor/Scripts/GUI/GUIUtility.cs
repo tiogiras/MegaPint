@@ -493,7 +493,7 @@ public static class GUIUtility
         element.style.paddingLeft = padding;
     }
 
-    private static Action onForceRepaint;
+    public static Action onForceRepaint;
 
     public static void ForceRepaint()
     {
