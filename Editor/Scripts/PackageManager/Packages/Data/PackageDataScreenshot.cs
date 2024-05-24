@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-namespace Editor.Scripts.PackageManager.Packages.Data
+namespace MegaPint.Editor.Scripts.PackageManager.Packages.Data
 {
 
 /// <summary> Data for the Screenshot package </summary>
@@ -20,7 +20,8 @@ internal static class PackageDataScreenshot
             lastUpdate = "01.04.2024",
             name = "com.tiogiras.megapint-screenshot",
             displayName = "Screenshot",
-            description = "Want to take screenshots during development? \n\nThis package allows you to render your in game camera's as well as editor windows. Setup different camera angles and capture different screenshots at runtime from all angles with one button press.",
+            description =
+                "Want to take screenshots during development? \n\nThis package allows you to render your in game camera's as well as editor windows. Setup different camera angles and capture different screenshots at runtime from all angles with one button press.",
             repository = "https://github.com/tiogiras/MegaPint-Screenshot.git"
         };
     }

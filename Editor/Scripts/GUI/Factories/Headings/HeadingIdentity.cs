@@ -5,7 +5,7 @@ namespace MegaPint.Editor.Scripts.GUI.Factories.Headings
 {
 
 /// <summary> Uxml factory to create a <see cref="VisualElement" /> with the settings of a heading using the identity color </summary>
-public class HeadingIdentity : Label
+internal class HeadingIdentity : Label
 {
     public new class UxmlFactory : UxmlFactory <HeadingIdentity, UxmlTraits>
     {

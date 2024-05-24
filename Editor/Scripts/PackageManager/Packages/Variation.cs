@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Editor.Scripts.PackageManager.Packages
+namespace MegaPint.Editor.Scripts.PackageManager.Packages
 {
 
 /// <summary> Stores data about a megaPint package variation that is set before distribution </summary>

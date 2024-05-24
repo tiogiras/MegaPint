@@ -1,36 +1,35 @@
 ﻿#if UNITY_EDITOR
 using System;
-using UnityEngine;
 
-namespace Editor.Scripts.Settings
+namespace MegaPint.Editor.Scripts.Settings
 {
 
 [Serializable]
-public class MegaPintSettingsBase
+internal class SettingsBase
 {
     public string name;
 
-    public MegaPintSerializableDictionary <string, MegaPintSettingsStruct> structValues;
-    public MegaPintSerializableDictionary <string, string> stringValues;
-    public MegaPintSerializableDictionary <string, float> floatValues;
-    public MegaPintSerializableDictionary <string, bool> boolValues;
-    public MegaPintSerializableDictionary <string, int> intValues;
+    public SerializableDictionary <string, SettingsStruct> structValues;
+    public SerializableDictionary <string, string> stringValues;
+    public SerializableDictionary <string, float> floatValues;
+    public SerializableDictionary <string, bool> boolValues;
+    public SerializableDictionary <string, int> intValues;
 
-    public MegaPintSettingsBase(string name)
+    public SettingsBase(string name)
     {
         this.name = name;
-        structValues = new MegaPintSerializableDictionary <string, MegaPintSettingsStruct>();
-        stringValues = new MegaPintSerializableDictionary <string, string>();
-        floatValues = new MegaPintSerializableDictionary <string, float>();
-        boolValues = new MegaPintSerializableDictionary <string, bool>();
-        intValues = new MegaPintSerializableDictionary <string, int>();
+        structValues = new SerializableDictionary <string, SettingsStruct>();
+        stringValues = new SerializableDictionary <string, string>();
+        floatValues = new SerializableDictionary <string, float>();
+        boolValues = new SerializableDictionary <string, bool>();
+        intValues = new SerializableDictionary <string, int>();
     }
 
     #region Struct
 
-    public MegaPintSettingsStruct GetStruct(string key, MegaPintSettingsStruct defaultValue)
+    public SettingsStruct GetStruct(string key, SettingsStruct defaultValue)
     {
-        if (TryGetStruct(key, out MegaPintSettingsStruct value))
+        if (TryGetStruct(key, out SettingsStruct value))
             return value;
 
         SetStruct(key, defaultValue);
@@ -38,30 +37,30 @@ public class MegaPintSettingsBase
         return defaultValue;
     }
 
-    private bool TryGetStruct(string key, out MegaPintSettingsStruct structValue)
+    private bool TryGetStruct(string key, out SettingsStruct structValue)
     {
-        structValues ??= new MegaPintSerializableDictionary <string, MegaPintSettingsStruct>();
+        structValues ??= new SerializableDictionary <string, SettingsStruct>();
 
         return structValues.TryGetValue(key, out structValue);
     }
 
-    public void SetStruct(string key, MegaPintSettingsStruct value)
+    public void SetStruct(string key, SettingsStruct value)
     {
-        structValues ??= new MegaPintSerializableDictionary <string, MegaPintSettingsStruct>();
+        structValues ??= new SerializableDictionary <string, SettingsStruct>();
         structValues.SetValue(key, value);
 
-        MegaPintSettings.Save();
+        Settings.Save();
     }
 
     public void SetStructValue(string structKey, string valueKey, string value)
     {
-        MegaPintSettingsStruct structValue = GetStruct(structKey, new MegaPintSettingsStruct());
+        SettingsStruct structValue = GetStruct(structKey, new SettingsStruct());
         structValue.SetValue(valueKey, value);
     }
 
     public string GetStructValue(string structKey, string valueKey, string defaultValue)
     {
-        if (TryGetStruct(structKey, out MegaPintSettingsStruct structValue))
+        if (TryGetStruct(structKey, out SettingsStruct structValue))
             return structValue.GetValue(valueKey, defaultValue);
 
         SetStructValue(structKey, valueKey, defaultValue);
@@ -71,13 +70,13 @@ public class MegaPintSettingsBase
 
     public void SetStructValue(string structKey, string valueKey, float value)
     {
-        MegaPintSettingsStruct structValue = GetStruct(structKey, new MegaPintSettingsStruct());
+        SettingsStruct structValue = GetStruct(structKey, new SettingsStruct());
         structValue.SetValue(valueKey, value);
     }
 
     public float GetStructValue(string structKey, string valueKey, float defaultValue)
     {
-        if (TryGetStruct(structKey, out MegaPintSettingsStruct structValue))
+        if (TryGetStruct(structKey, out SettingsStruct structValue))
             return structValue.GetValue(valueKey, defaultValue);
 
         SetStructValue(structKey, valueKey, defaultValue);
@@ -87,13 +86,13 @@ public class MegaPintSettingsBase
 
     public void SetStructValue(string structKey, string valueKey, bool value)
     {
-        MegaPintSettingsStruct structValue = GetStruct(structKey, new MegaPintSettingsStruct());
+        SettingsStruct structValue = GetStruct(structKey, new SettingsStruct());
         structValue.SetValue(valueKey, value);
     }
 
     public bool GetStructValue(string structKey, string valueKey, bool defaultValue)
     {
-        if (TryGetStruct(structKey, out MegaPintSettingsStruct structValue))
+        if (TryGetStruct(structKey, out SettingsStruct structValue))
             return structValue.GetValue(valueKey, defaultValue);
 
         SetStructValue(structKey, valueKey, defaultValue);
@@ -103,13 +102,13 @@ public class MegaPintSettingsBase
 
     public void SetStructValue(string structKey, string valueKey, int value)
     {
-        MegaPintSettingsStruct structValue = GetStruct(structKey, new MegaPintSettingsStruct());
+        SettingsStruct structValue = GetStruct(structKey, new SettingsStruct());
         structValue.SetValue(valueKey, value);
     }
 
     public int GetStructValue(string structKey, string valueKey, int defaultValue)
     {
-        if (TryGetStruct(structKey, out MegaPintSettingsStruct structValue))
+        if (TryGetStruct(structKey, out SettingsStruct structValue))
             return structValue.GetValue(valueKey, defaultValue);
 
         SetStructValue(structKey, valueKey, defaultValue);
@@ -123,7 +122,7 @@ public class MegaPintSettingsBase
 
     public string GetValue(string key, string defaultValue)
     {
-        stringValues ??= new MegaPintSerializableDictionary <string, string>();
+        stringValues ??= new SerializableDictionary <string, string>();
 
         if (stringValues.TryGetValue(key, out var value))
             return value;
@@ -135,7 +134,7 @@ public class MegaPintSettingsBase
 
     public float GetValue(string key, float defaultValue)
     {
-        floatValues ??= new MegaPintSerializableDictionary <string, float>();
+        floatValues ??= new SerializableDictionary <string, float>();
 
         if (floatValues.TryGetValue(key, out var value))
             return value;
@@ -147,7 +146,7 @@ public class MegaPintSettingsBase
 
     public bool GetValue(string key, bool defaultValue)
     {
-        boolValues ??= new MegaPintSerializableDictionary <string, bool>();
+        boolValues ??= new SerializableDictionary <string, bool>();
 
         if (boolValues.TryGetValue(key, out var value))
             return value;
@@ -159,7 +158,7 @@ public class MegaPintSettingsBase
 
     public int GetValue(string key, int defaultValue)
     {
-        intValues ??= new MegaPintSerializableDictionary <string, int>();
+        intValues ??= new SerializableDictionary <string, int>();
 
         if (intValues.TryGetValue(key, out var value))
             return value;
@@ -171,38 +170,38 @@ public class MegaPintSettingsBase
 
     public void SetValue(string key, string value, bool suppressSaving = false)
     {
-        stringValues ??= new MegaPintSerializableDictionary <string, string>();
+        stringValues ??= new SerializableDictionary <string, string>();
         stringValues.SetValue(key, value);
 
         if (!suppressSaving)
-            MegaPintSettings.Save();
+            Settings.Save();
     }
 
     public void SetValue(string key, float value, bool suppressSaving = false)
     {
-        floatValues ??= new MegaPintSerializableDictionary <string, float>();
+        floatValues ??= new SerializableDictionary <string, float>();
         floatValues.SetValue(key, value);
-        
+
         if (!suppressSaving)
-            MegaPintSettings.Save();
+            Settings.Save();
     }
 
     public void SetValue(string key, bool value, bool suppressSaving = false)
     {
-        boolValues ??= new MegaPintSerializableDictionary <string, bool>();
+        boolValues ??= new SerializableDictionary <string, bool>();
         boolValues.SetValue(key, value);
 
         if (!suppressSaving)
-            MegaPintSettings.Save();
+            Settings.Save();
     }
 
     public void SetValue(string key, int value, bool suppressSaving = false)
     {
-        intValues ??= new MegaPintSerializableDictionary <string, int>();
+        intValues ??= new SerializableDictionary <string, int>();
         intValues.SetValue(key, value);
 
         if (!suppressSaving)
-            MegaPintSettings.Save();
+            Settings.Save();
     }
 
     #endregion

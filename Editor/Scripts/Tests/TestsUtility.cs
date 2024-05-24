@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 using UnityEngine;
 
-namespace Editor.Scripts.Tests
+namespace MegaPint.Editor.Scripts.Tests
 {
 
 /// <summary> Utility class for unit testing </summary>

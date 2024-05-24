@@ -1,23 +1,27 @@
-﻿using System.IO;
-using MegaPint.Editor.Scripts;
+﻿#if UNITY_EDITOR
+using System.IO;
+using Editor.Scripts.Windows;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ContextMenu = MegaPint.Editor.Scripts.ContextMenu;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
+using Toggle = MegaPint.Editor.Scripts.Windows.DevMode.Toggle;
 
-namespace Editor.Scripts.Windows.DevMode
+namespace MegaPint.Editor.Scripts.Windows.DevMode
 {
 
-public class Center : MegaPintEditorWindowBase
+/// <summary> Editor window to access various development mode utiliy </summary>
+internal class Center : EditorWindowBase
 {
     private VisualTreeAsset _baseWindow;
-    
-    private Button _btnToggle;
     private Button _btnInterfaceOverview;
     private Button _btnRepaint;
 
+    private Button _btnToggle;
+
     #region Public Methods
 
-    public override MegaPintEditorWindowBase ShowWindow()
+    public override EditorWindowBase ShowWindow()
     {
         titleContent.text = "Dev Center";
 
@@ -30,7 +34,9 @@ public class Center : MegaPintEditorWindowBase
 
     protected override string BasePath()
     {
-        return Path.Join(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Development Mode", "Center");
+        return Path.Join(
+            Constants.BasePackage.Resources.UserInterface.Windows.DevelopmentModePath,
+            "Center");
     }
 
     protected override void CreateGUI()
@@ -42,11 +48,11 @@ public class Center : MegaPintEditorWindowBase
         root.style.flexShrink = 1f;
 
         rootVisualElement.Add(root);
-        
-        _btnToggle = root.Q<Button>("BTN_Toggle");
-        _btnInterfaceOverview = root.Q<Button>("BTN_InterfaceOverview");
-        _btnRepaint = root.Q<Button>("BTN_Repaint");
-        
+
+        _btnToggle = root.Q <Button>("BTN_Toggle");
+        _btnInterfaceOverview = root.Q <Button>("BTN_InterfaceOverview");
+        _btnRepaint = root.Q <Button>("BTN_Repaint");
+
         RegisterCallbacks();
     }
 
@@ -73,20 +79,28 @@ public class Center : MegaPintEditorWindowBase
 
     #endregion
 
-    private static void OnToggle()
-    {
-        ContextMenu.TryOpen <Toggle>(false);
-    }
-    
+    #region Private Methods
+
+    /// <summary> Open InterfaceOverview </summary>
     private static void OnInterfaceOverview()
     {
         ContextMenu.TryOpen <InterfaceOverview>(false);
     }
 
+    /// <summary> Call Force Repaint </summary>
     private static void OnRepaint()
     {
         GUIUtility.ForceRepaint();
     }
+
+    /// <summary> Open Toggle </summary>
+    private static void OnToggle()
+    {
+        ContextMenu.TryOpen <Toggle>(false);
+    }
+
+    #endregion
 }
 
 }
+#endif

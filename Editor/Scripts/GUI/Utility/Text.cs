@@ -4,7 +4,7 @@ namespace MegaPint.Editor.Scripts.GUI.Utility
 {
 
 /// <summary> Partial utility class containing text specific utility functions </summary>
-public static partial class GUIUtility
+internal static partial class GUIUtility
 {
     #region Private Methods
 

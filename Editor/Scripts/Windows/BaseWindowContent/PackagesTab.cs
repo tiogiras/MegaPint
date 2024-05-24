@@ -2,19 +2,27 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Editor.Scripts.PackageManager.Cache;
-using MegaPint.Editor.Scripts;
+using Editor.Scripts;
+using Editor.Scripts.Windows;
+using MegaPint.Editor.Scripts.PackageManager.Cache;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
-namespace Editor.Scripts.Windows.BaseWindowContent
+namespace MegaPint.Editor.Scripts.Windows.BaseWindowContent
 {
 
+/// <summary> Manages the packages tab of the base window </summary>
 internal class PackagesTab
 {
-    private readonly string _itemPath = Path.Combine(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Base Window", "Package Item");
+    private static string s_itemPath;
+
+    private static string _ItemPath =>
+        s_itemPath ??= Path.Combine(
+            Constants.BasePackage.Resources.UserInterface.WindowsPath,
+            "Base Window",
+            "Package item");
 
     private readonly VisualTreeAsset _itemTemplate;
 
@@ -36,7 +44,7 @@ internal class PackagesTab
 
     public PackagesTab(VisualElement root)
     {
-        _itemTemplate = Resources.Load <VisualTreeAsset>(_itemPath);
+        _itemTemplate = Resources.Load <VisualTreeAsset>(_ItemPath);
 
         _packagesList = root.Q <ListView>("PackagesList");
         _searchField = root.Q <ToolbarSearchField>("SearchField");
@@ -54,6 +62,7 @@ internal class PackagesTab
 
     #region Public Methods
 
+    /// <summary> Hide the tab </summary>
     public void Hide()
     {
         Clear();
@@ -66,6 +75,7 @@ internal class PackagesTab
         _active = false;
     }
 
+    /// <summary> Reset the tab </summary>
     public void ResetVariables()
     {
         _displayedPackages = null;
@@ -73,6 +83,7 @@ internal class PackagesTab
         _visualElements = null;
     }
 
+    /// <summary> Show the tab </summary>
     public void Show()
     {
         _searchField.value = "";
@@ -90,6 +101,7 @@ internal class PackagesTab
 
     #region Private Methods
 
+    /// <summary> Clear the tab </summary>
     private void Clear()
     {
         if (!_active)
@@ -99,6 +111,8 @@ internal class PackagesTab
         _tabContent.Clear();
     }
 
+    /// <summary> SearchField Callback </summary>
+    /// <param name="evt"> Callback event </param>
     private void OnSearchFieldChange(ChangeEvent <string> evt)
     {
         if (!_active)
@@ -107,6 +121,8 @@ internal class PackagesTab
         SetDisplayedPackages();
     }
 
+    /// <summary> ListView Callback </summary>
+    /// <param name="_"> Callback event </param>
     private void OnUpdateRightPane(IEnumerable <int> _)
     {
         if (_ignoreNextUpdate)
@@ -147,6 +163,7 @@ internal class PackagesTab
         BaseWindow.onRightPaneInitialization?.Invoke();
     }
 
+    /// <summary> Register all callbacks </summary>
     private void RegisterCallbacks()
     {
         _packagesList.makeItem = () => GUIUtility.Instantiate(_itemTemplate);
@@ -176,6 +193,7 @@ internal class PackagesTab
         _searchField.RegisterValueChangedCallback(OnSearchFieldChange);
     }
 
+    /// <summary> Set the displayed packages based on the search string </summary>
     private void SetDisplayedPackages()
     {
         List <CachedPackage> allPackages = PackageCache.GetAllMpPackages();

@@ -5,7 +5,7 @@ namespace MegaPint.Editor.Scripts.GUI
 {
 
 /// <summary> Lookup table for stylesheet classes </summary>
-public static class StyleSheetClasses
+internal static class StyleSheetClasses
 {
     public static class Background
     {

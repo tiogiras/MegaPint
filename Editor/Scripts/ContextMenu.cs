@@ -1,14 +1,11 @@
 ﻿#if UNITY_EDITOR
-using Editor.Scripts.PackageManager.Cache;
-using Editor.Scripts.Settings;
-using Editor.Scripts.Windows;
-using Editor.Scripts.Windows.DevMode;
+using MegaPint.Editor.Scripts.Windows;
 using UnityEditor;
-using UnityEngine;
 
-namespace Editor.Scripts
+namespace MegaPint.Editor.Scripts
 {
 
+/// <summary> Partial class used to store MenuItems </summary>
 internal static partial class ContextMenu
 {
     private const string MenuItemMegaPint = "MegaPint";
@@ -17,33 +14,32 @@ internal static partial class ContextMenu
 
     #region Public Methods
 
-    public static MegaPintEditorWindowBase TryOpen <T>(bool utility, string title = "") where T : MegaPintEditorWindowBase
+    [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
+    public static void Open()
     {
-        if (typeof(T) == typeof(MegaPintFirstSteps))
+        TryOpen <BaseWindow>(false);
+    }
+
+    /// <summary> Try opening an editor window derived from the <see cref="EditorWindowBase" /> </summary>
+    /// <param name="utility"> If the window should be an utility window </param>
+    /// <param name="title"> Title of the window </param>
+    /// <typeparam name="T"> Type of the wanted window </typeparam>
+    /// <returns> Editor window of the selected parameters </returns>
+    public static EditorWindowBase TryOpen <T>(bool utility, string title = "") where T : EditorWindowBase
+    {
+        if (typeof(T) == typeof(FirstSteps))
             return EditorWindow.GetWindow <T>(utility, title).ShowWindow();
 
-        var exists = MegaPintSettings.Exists();
+        var exists = Settings.Settings.Exists();
 
         return !exists
-            ? EditorWindow.GetWindow <MegaPintFirstSteps>(utility, title).ShowWindow()
+            ? EditorWindow.GetWindow <FirstSteps>(utility, title).ShowWindow()
             : EditorWindow.GetWindow <T>(utility, title).ShowWindow();
     }
 
     #endregion
 
     #region Private Methods
-    
-    [MenuItem(MenuItemMegaPint + "/Test", false, 0)]
-    private static void Test()
-    {
-        PackageCache.Refresh();
-    }
-
-    [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
-    public static void Open()
-    {
-        TryOpen <BaseWindow>(false);
-    }
 
     [MenuItem(MenuItemMegaPint + "/PackageManager", false, 11)]
     private static void OpenImporter()

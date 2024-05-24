@@ -8,7 +8,7 @@ namespace MegaPint.Editor.Scripts.GUI.Factories.Headings
 ///     Uxml factory to create a <see cref="VisualElement" /> with the settings of a heading using the secondary text
 ///     color
 /// </summary>
-public class HeadingSecondary : Label
+internal class HeadingSecondary : Label
 {
     public new class UxmlFactory : UxmlFactory <HeadingSecondary, UxmlTraits>
     {

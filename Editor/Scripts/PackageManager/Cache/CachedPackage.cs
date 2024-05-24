@@ -2,12 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Editor.Scripts.PackageManager.Packages;
-using Editor.Scripts.PackageManager.Utility;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
+using MegaPint.Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
-using UnityEngine;
 
-namespace Editor.Scripts.PackageManager.Cache
+namespace MegaPint.Editor.Scripts.PackageManager.Cache
 {
 
 /// <summary> Stores combined data from <see cref="PackageInfo" /> and <see cref="PackageData" /> </summary>
@@ -60,7 +59,7 @@ internal class CachedPackage : IComparable <CachedPackage>
 
     /// <summary> All dependencies that this package has </summary>
     public List <Dependency> Dependencies {get; private set;}
-    
+
     public List <string> Images {get; private set;}
 
     private List <PackageKey> _myDependants;
@@ -127,7 +126,9 @@ internal class CachedPackage : IComparable <CachedPackage>
         if (ReferenceEquals(this, other))
             return 0;
 
-        return ReferenceEquals(null, other) ? 1 : string.Compare(DisplayName, other.DisplayName, StringComparison.Ordinal);
+        return ReferenceEquals(null, other)
+            ? 1
+            : string.Compare(DisplayName, other.DisplayName, StringComparison.Ordinal);
     }
 
     /// <summary> If the package can be removed or if packages are dependant on it </summary>
@@ -161,7 +162,11 @@ internal class CachedPackage : IComparable <CachedPackage>
         if (packageData.variations is not {Count: > 0})
             return;
 
-        Variations = packageData.variations.Select(variation => PackageManagerUtility.VariationToCache(variation, CurrentVersion, Repository)).
+        Variations = packageData.variations.Select(
+                                     variation => PackageManagerUtility.VariationToCache(
+                                         variation,
+                                         CurrentVersion,
+                                         Repository)).
                                  ToList();
 
         if (packageInfo == null)

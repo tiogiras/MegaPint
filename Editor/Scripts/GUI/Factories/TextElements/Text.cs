@@ -5,7 +5,7 @@ namespace MegaPint.Editor.Scripts.GUI.Factories.TextElements
 {
 
 /// <summary> Uxml factory to create a <see cref="VisualElement" /> with the settings of a primary text </summary>
-public class Text : Label
+internal class Text : Label
 {
     public new class UxmlFactory : UxmlFactory <Text, UxmlTraits>
     {

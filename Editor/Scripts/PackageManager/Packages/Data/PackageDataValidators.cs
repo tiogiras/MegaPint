@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-namespace Editor.Scripts.PackageManager.Packages.Data
+namespace MegaPint.Editor.Scripts.PackageManager.Packages.Data
 {
 
 /// <summary> Data for the Validators package </summary>

@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-namespace Editor.Scripts.PackageManager.Packages.Data
+namespace MegaPint.Editor.Scripts.PackageManager.Packages.Data
 {
 
 /// <summary> Data for the PlayModeStartScene package </summary>
@@ -20,7 +20,8 @@ internal static class PackageDataPlayModeStartScene
             lastUpdate = "22.02.2024",
             name = "com.tiogiras.megapint-playmodestartscene",
             displayName = "PlayMode Start Scene",
-            description = "Tired of switching scenes after editing a scene just to start the game from the MainMenu?\n\nThis package allows you to set a starting scene that will be opened whenever your enter the PlayMode.",
+            description =
+                "Tired of switching scenes after editing a scene just to start the game from the MainMenu?\n\nThis package allows you to set a starting scene that will be opened whenever your enter the PlayMode.",
             repository = "https://github.com/tiogiras/megapint-playmodestartscene.git"
         };
     }

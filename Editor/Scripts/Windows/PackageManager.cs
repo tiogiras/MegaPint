@@ -2,38 +2,39 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Editor.Scripts.PackageManager;
-using Editor.Scripts.PackageManager.Cache;
-using Editor.Scripts.PackageManager.Packages;
-using Editor.Scripts.PackageManager.Utility;
-using Editor.Scripts.Settings;
+using Editor.Scripts;
 using MegaPint.Editor.Scripts.GUI;
+using MegaPint.Editor.Scripts.PackageManager;
+using MegaPint.Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
+using MegaPint.Editor.Scripts.PackageManager.Utility;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ContextMenu = MegaPint.Editor.Scripts.ContextMenu;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
-namespace Editor.Scripts.Windows
+namespace MegaPint.Editor.Scripts.Windows
 {
 
-internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
+/// <summary> Editor window to display and handle everything related to the internal package manager </summary>
+internal class PackageManager : EditorWindowBase
 {
     private static Action <PackageKey> s_showWithLink;
 
-    private static bool _DevMode => MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
-
     #region Public Methods
 
+    /// <summary> Open the package manager via link </summary>
+    /// <param name="key"> Package to be shown on open </param>
     public static void OpenPerLink(PackageKey key)
     {
         BaseWindow.OnOpenPackageManager();
         s_showWithLink?.Invoke(key);
     }
 
-    public override MegaPintEditorWindowBase ShowWindow()
+    public override EditorWindowBase ShowWindow()
     {
         titleContent.text = "Package Manager";
 
@@ -46,7 +47,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
     protected override string BasePath()
     {
-        return Path;
+        return Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath;
     }
 
     protected override void CreateGUI()
@@ -66,10 +67,10 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
     protected override bool LoadResources()
     {
         _baseWindow = Resources.Load <VisualTreeAsset>(BasePath());
-        _listItem = Resources.Load <VisualTreeAsset>(ListItemTemplate);
-        _variationsListItem = Resources.Load <VisualTreeAsset>(VariationsListItemTemplate);
-        _dependencyItem = Resources.Load <VisualTreeAsset>(DependencyItemTemplate);
-        _imageItem = Resources.Load <VisualTreeAsset>(ImageItemTemplate);
+        _listItem = Resources.Load <VisualTreeAsset>(s_listItemTemplate);
+        _variationsListItem = Resources.Load <VisualTreeAsset>(s_variationsListItemTemplate);
+        _dependencyItem = Resources.Load <VisualTreeAsset>(s_dependencyItemTemplate);
+        _imageItem = Resources.Load <VisualTreeAsset>(s_imageItemTemplate);
 
         return _baseWindow != null &&
                _listItem != null &&
@@ -111,6 +112,8 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
     #region Private Methods
 
+    /// <summary> Handle button subscriptions </summary>
+    /// <param name="status"> Status of the buttons </param>
     private void ButtonSubscriptions(bool status)
     {
         _btnImport.style.opacity = status ? 1f : .5f;
@@ -159,8 +162,6 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
         _dependencies = _content.Q <Foldout>("Dependencies");
 
-        //_separator = _content.Q <VisualElement>("DependencySeparator");
-
         _btnImport = _rightPane.Q <Button>("BTN_Import");
         _btnRemove = _rightPane.Q <Button>("BTN_Remove");
         _btnUpdate = _rightPane.Q <Button>("BTN_Update");
@@ -196,6 +197,43 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
         OnUpdateRightPane();
     }
 
+    /// <summary> Make list view item </summary>
+    /// <param name="element"> List view item </param>
+    /// <param name="index"> Index of the list view item </param>
+    private void MakeItem(VisualElement element, int index)
+    {
+        CachedPackage package = _displayedPackages[index];
+        _currentPackage = package;
+
+        var packageName = element.Q <Label>("PackageName");
+        packageName.text = package.DisplayName;
+
+        var version = element.Q <Label>("Version");
+        version.text = SaveValues.BasePackage.DevMode ? "Dev" : package.CurrentVersion;
+        version.style.display = package.IsInstalled ? DisplayStyle.Flex : DisplayStyle.None;
+
+        _list.selectedIndicesChanged += _ =>
+        {
+            var isSelected = _list.selectedIndex == index;
+
+            if (isSelected)
+            {
+                packageName.AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
+                version.AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
+            }
+            else
+            {
+                packageName.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
+                version.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
+            }
+        };
+
+        // TODO Apply Color change via uss classes
+        /*version.style.color = !package.IsNewestVersion ? _wrongVersionColor : _normalColor;*/
+    }
+
+    /// <summary> Show package via link </summary>
+    /// <param name="key"> Selected package </param>
     private void OnShowLink(PackageKey key)
     {
         _packageSearch.value = "";
@@ -221,12 +259,16 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
         _list.selectedIndex = targetIndex;
     }
 
+    /// <summary> Reselect the list view item after a delay </summary>
+    /// <param name="index"> Index of the targeted item </param>
     private async void ReselectItem(int index)
     {
         await Task.Delay(500);
         _list.selectedIndex = index;
     }
 
+    /// <summary> Set the displayed packages via the searchString </summary>
+    /// <param name="searchString"> String to filter the packages with </param>
     private void SetDisplayedPackages(string searchString)
     {
         _list.style.display = DisplayStyle.Flex;
@@ -243,43 +285,15 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
         _list.RefreshItems();
     }
 
+    /// <summary> Prepare for a <see cref="PackageCache" /> refresh </summary>
     private void StartCacheRefresh()
     {
         GUIUtility.DisplaySplashScreen(_root, () => {CreateGUIContent(_root);});
     }
 
-    private void MakeItem(VisualElement element, int index)
-    {
-        CachedPackage package = _displayedPackages[index];
-        _currentPackage = package;
-
-        var packageName = element.Q <Label>("PackageName");
-        packageName.text = package.DisplayName;
-
-        var version = element.Q <Label>("Version");
-        version.text = _DevMode ? "Dev" : package.CurrentVersion;
-        version.style.display = package.IsInstalled ? DisplayStyle.Flex : DisplayStyle.None;
-
-        _list.selectedIndicesChanged += _ =>
-        {
-            var isSelected = _list.selectedIndex == index;
-
-            if (isSelected)
-            {
-                packageName.AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
-                version.AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
-            }
-            else
-            {
-                packageName.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
-                version.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
-            }
-        };
-
-        // TODO Apply Color change via uss classes
-        /*version.style.color = !package.IsNewestVersion ? _wrongVersionColor : _normalColor;*/
-    }
-
+    /// <summary> Update a variation item </summary>
+    /// <param name="element"> List view item </param>
+    /// <param name="index"> Index of the list view item </param>
     private void UpdateVariationItem(VisualElement element, int index)
     {
         CachedVariation variation = _displayedPackageVariations[index];
@@ -325,7 +339,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
         }
         else
         {
-            version.text = _DevMode ? "Development" : _currentPackage.CurrentVersion;
+            version.text = SaveValues.BasePackage.DevMode ? "Development" : _currentPackage.CurrentVersion;
 
             var isVariation = PackageCache.IsVariation(
                 _currentPackage.Key,
@@ -334,7 +348,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
             var needsUpdate = PackageCache.NeedsVariationUpdate(_currentPackage.Key, variation.name);
 
             version.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
-            
+
             // TODO Apply Color change to version via uss classes
             /*version.style.color = needsUpdate ? _wrongVersionColor : _normalColor;*/
 
@@ -354,15 +368,17 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
     #region Const
 
-    private const string Path = "MegaPint/User Interface/Windows/Package Manager";
+    private static readonly string s_listItemTemplate =
+        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath + "/Package Item";
 
-    private const string ListItemTemplate = Path + "/Package Item";
-    private const string VariationsListItemTemplate = Path + "/Variation Item";
-    private const string DependencyItemTemplate = Path + "/Dependency Item";
-    private const string ImageItemTemplate = Path + "/Image Item";
+    private static readonly string s_variationsListItemTemplate =
+        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath + "/Variation Item";
 
-    /*private readonly Color _normalColor = RootElement.Colors.Text;
-    private readonly Color _wrongVersionColor = RootElement.Colors.TextRed;*/
+    private static readonly string s_dependencyItemTemplate =
+        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath + "/Dependency Item";
+
+    private static readonly string s_imageItemTemplate =
+        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath + "/Image Item";
 
     #endregion
 
@@ -388,8 +404,6 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
     private Foldout _dependencies;
 
-    //private VisualElement _separator;
-
     private ListView _list;
 
     private ToolbarSearchField _packageSearch;
@@ -402,7 +416,6 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
     #region Private
 
-    /// <summary> Loaded uxml references </summary>
     private VisualTreeAsset _baseWindow;
 
     private VisualTreeAsset _listItem;
@@ -423,11 +436,15 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
     #region Callbacks
 
+    /// <summary> SearchField callback </summary>
+    /// <param name="evt"> Callback event </param>
     private void OnSearchStringChanged(ChangeEvent <string> evt)
     {
         SetDisplayedPackages(_packageSearch.value);
     }
 
+    /// <summary> ListView callback </summary>
+    /// <param name="_"> Callback event </param>
     private void OnUpdateRightPane(IEnumerable <int> _ = null)
     {
         _currentIndex = _list.selectedIndex;
@@ -467,8 +484,6 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
         var hasVariation = package.Variations is {Count: > 0};
         var hasDependency = package.Dependencies is {Count: > 0};
-
-        //_separator.style.display = hasVariation || hasDependency ? DisplayStyle.Flex : DisplayStyle.None;
 
         if (hasVariation)
         {
@@ -514,6 +529,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
     #region Import
 
+    /// <summary> Import the displayed package </summary>
     private void OnImport()
     {
         ButtonSubscriptions(false);
@@ -525,6 +541,8 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 #pragma warning restore CS4014
     }
 
+    /// <summary> Import the variation of the displayed package </summary>
+    /// <param name="variation"> Targeted variation </param>
     private void OnImportVariation(CachedVariation variation)
     {
         ButtonSubscriptions(false);
@@ -536,6 +554,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 #pragma warning restore CS4014
     }
 
+    /// <summary> Called on successful import </summary>
     private void OnImportSuccess()
     {
         ButtonSubscriptions(true);
@@ -550,6 +569,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
     #region Remove
 
+    /// <summary> Remove the displayed package </summary>
     private void OnRemove()
     {
         CachedPackage package = _displayedPackages[_list.selectedIndex];
@@ -557,7 +577,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
         if (package.CanBeRemoved(out List <PackageKey> dependants))
         {
             ButtonSubscriptions(false);
-            
+
             MegaPintPackageManager.onSuccess += OnRemoveSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
             MegaPintPackageManager.Remove(package.Name);
@@ -575,11 +595,13 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
         }
     }
 
+    /// <summary> Remove the variation of the displayed package </summary>
     private void OnRemoveVariation()
     {
         OnImport();
     }
 
+    /// <summary> Called on successful remove </summary>
     private void OnRemoveSuccess()
     {
         ButtonSubscriptions(true);
@@ -594,6 +616,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
     #region Update
 
+    /// <summary> Update the displayed package </summary>
     private void OnUpdate()
     {
         ButtonSubscriptions(false);
@@ -605,6 +628,8 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 #pragma warning restore CS4014
     }
 
+    /// <summary> Update the variation of the displayed package </summary>
+    /// <param name="variation"> Targeted variation </param>
     private void OnUpdateVariation(CachedVariation variation)
     {
         ButtonSubscriptions(false);
@@ -616,6 +641,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 #pragma warning restore CS4014
     }
 
+    /// <summary> Called on successful update </summary>
     private void OnUpdateSuccess()
     {
         ButtonSubscriptions(true);
@@ -628,6 +654,7 @@ internal class MegaPintPackageManagerWindow : MegaPintEditorWindowBase
 
     #endregion
 
+    /// <summary> Called on failure </summary>
     private void OnFailure(string error)
     {
         ButtonSubscriptions(true);

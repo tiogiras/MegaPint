@@ -1,22 +1,23 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.IO;
-using Editor.Scripts.PackageManager;
-using Editor.Scripts.PackageManager.Cache;
-using Editor.Scripts.Settings;
-using Editor.Scripts.Windows.BaseWindowContent;
-using Editor.Scripts.Windows.DevMode;
-using MegaPint.Editor.Scripts;
+using Editor.Scripts;
+using Editor.Scripts.Windows;
+using MegaPint.Editor.Scripts.PackageManager;
+using MegaPint.Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts.Windows.BaseWindowContent;
+using MegaPint.Editor.Scripts.Windows.DevMode;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ContextMenu = MegaPint.Editor.Scripts.ContextMenu;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
-using Toggle = Editor.Scripts.Windows.DevMode.Toggle;
+using Toggle = MegaPint.Editor.Scripts.Windows.DevMode.Toggle;
 
-namespace Editor.Scripts.Windows
+namespace MegaPint.Editor.Scripts.Windows
 {
 
-internal class BaseWindow : MegaPintEditorWindowBase
+internal class BaseWindow : EditorWindowBase
 {
     private const float MaxDevModeTimer = 50;
     private const int MaxDevModeClickCount = 10;
@@ -24,33 +25,33 @@ internal class BaseWindow : MegaPintEditorWindowBase
     public static Action onRightPaneInitialization;
     public static Action onRightPaneClose;
 
-    private static bool _DevMode => MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
-
-    private readonly string _contentPath = Path.Combine(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Base Window");
+    private readonly string _contentPath = Path.Combine(
+        Constants.BasePackage.Resources.UserInterface.WindowsPath,
+        "Base Window");
 
     private VisualTreeAsset _baseWindow;
+    private Button _btnDevCenter;
 
     private Button _btnDevMode;
-    private Button _btnDevCenter;
+    private Button _btnInfos;
     private Button _btnPackages;
     private Button _btnSettings;
-    private Button _btnInfos;
     private Button _btnUpdate;
+
+    private bool _callbacksRegistered;
 
     private int _currentDevModeClickCount;
     private float _currentDevModeTimer;
-
-    private PackagesTab _packages;
-    private SettingsTab _settings;
     private InfosTab _infos;
 
+    private PackagesTab _packages;
+
     private VisualElement _root;
-    
+    private SettingsTab _settings;
+
     private VisualElement _updateBasePackage;
 
     private Label _versionNumber;
-
-    private bool _callbacksRegistered;
 
     #region Unity Event Functions
 
@@ -73,10 +74,10 @@ internal class BaseWindow : MegaPintEditorWindowBase
 
     public static void OnOpenPackageManager()
     {
-        ContextMenu.TryOpen <MegaPintPackageManagerWindow>(false, "Package Manager");
+        ContextMenu.TryOpen <PackageManager>(false, "Package Manager");
     }
 
-    public override MegaPintEditorWindowBase ShowWindow()
+    public override EditorWindowBase ShowWindow()
     {
         titleContent.text = "MegaPint";
 
@@ -130,7 +131,7 @@ internal class BaseWindow : MegaPintEditorWindowBase
     {
         if (!_callbacksRegistered)
             return;
-        
+
         PackageCache.onCacheStartRefreshing -= StartCacheRefresh;
 
         _btnPackages.clicked -= SwitchToPackages;
@@ -150,6 +151,13 @@ internal class BaseWindow : MegaPintEditorWindowBase
 
     #region Private Methods
 
+    /// <summary> Open the development center </summary>
+    private static void OnDevCenter()
+    {
+        ContextMenu.TryOpen <Center>(false);
+    }
+
+    /// <summary> Update the BasePackage </summary>
     private static void UpdateBasePackage()
     {
         if (!EditorUtility.DisplayDialog(
@@ -164,6 +172,8 @@ internal class BaseWindow : MegaPintEditorWindowBase
 #pragma warning restore CS4014
     }
 
+    /// <summary> Collect the specified visual references </summary>
+    /// <param name="root"> RootVisualElement </param>
     private void CollectVisualReferences(VisualElement root)
     {
         _btnPackages = root.Q <Button>("BTN_Packages");
@@ -181,16 +191,16 @@ internal class BaseWindow : MegaPintEditorWindowBase
     private void CreateGUIContent(VisualElement root)
     {
         root.Clear();
-        
+
         VisualElement content = GUIUtility.Instantiate(_baseWindow, root);
 
         CollectVisualReferences(content);
 
         RegisterCallbacks();
 
-        _btnDevCenter.style.display = _DevMode ? DisplayStyle.Flex : DisplayStyle.None;
-        
-        _versionNumber.text = _DevMode ? "Development" : $"v{PackageCache.BasePackage.version}";
+        _btnDevCenter.style.display = SaveValues.BasePackage.DevMode ? DisplayStyle.Flex : DisplayStyle.None;
+
+        _versionNumber.text = SaveValues.BasePackage.DevMode ? "Development" : $"v{PackageCache.BasePackage.version}";
         _versionNumber.style.display = DisplayStyle.Flex;
 
         _packages = new PackagesTab(content);
@@ -209,6 +219,7 @@ internal class BaseWindow : MegaPintEditorWindowBase
         _updateBasePackage.style.display = DisplayStyle.Flex;
     }
 
+    /// <summary> Try to open the development center </summary>
     private void OnDevMode()
     {
         if (_currentDevModeClickCount == 0)
@@ -222,12 +233,8 @@ internal class BaseWindow : MegaPintEditorWindowBase
         _currentDevModeClickCount = 0;
         ContextMenu.TryOpen <Toggle>(true);
     }
-    
-    private static void OnDevCenter()
-    {
-        ContextMenu.TryOpen <Center>(false);
-    }
 
+    /// <summary> Prepare for refreshing the <see cref="PackageCache" /> </summary>
     private void StartCacheRefresh()
     {
         _packages?.ResetVariables();
@@ -236,6 +243,15 @@ internal class BaseWindow : MegaPintEditorWindowBase
         GUIUtility.DisplaySplashScreen(_root, () => {CreateGUIContent(_root);});
     }
 
+    /// <summary> Switch to the info tab </summary>
+    private void SwitchToInfos()
+    {
+        _packages.Hide();
+        _settings.Hide();
+        _infos.Show();
+    }
+
+    /// <summary> Switch to the packages tab </summary>
     private void SwitchToPackages()
     {
         _packages.Show();
@@ -243,18 +259,12 @@ internal class BaseWindow : MegaPintEditorWindowBase
         _infos.Hide();
     }
 
+    /// <summary> Switch to the settings tab </summary>
     private void SwitchToSettings()
     {
         _packages.Hide();
         _settings.Show();
         _infos.Hide();
-    }
-    
-    private void SwitchToInfos()
-    {
-        _packages.Hide();
-        _settings.Hide();
-        _infos.Show();
     }
 
     #endregion

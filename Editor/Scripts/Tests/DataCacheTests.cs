@@ -3,22 +3,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Editor.Scripts.PackageManager;
-using Editor.Scripts.PackageManager.Cache;
-using Editor.Scripts.PackageManager.Packages;
+using MegaPint.Editor.Scripts.PackageManager;
+using MegaPint.Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
+using NUnit.Framework;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.TestTools;
-using NUnit.Framework;
 
-namespace Editor.Scripts.Tests
+namespace MegaPint.Editor.Scripts.Tests
 {
 
-/// <summary> Unit tests regarding the <see cref="DataCache"/> </summary>
+/// <summary> Unit tests regarding the <see cref="DataCache" /> </summary>
 internal class DataCacheTests : MonoBehaviour
 {
     #region Tests
-    
+
     [Test]
     public void BasePackage()
     {
@@ -48,14 +48,43 @@ internal class DataCacheTests : MonoBehaviour
         {
             PackageKey key = packageData.key;
             TestsUtility.Validate(ref valid, key == PackageKey.Undefined, "PackageKey is missing!");
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageData.reqMpVersion), $"Package[{key}] missing [reqMpVersion]!");
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageData.version), $"Package[{key}] missing [version]!");
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageData.unityVersion), $"Package[{key}] missing [unityVersion]!");
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageData.lastUpdate), $"Package[{key}] missing [lastUpdate]!");
+
+            TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(packageData.reqMpVersion),
+                $"Package[{key}] missing [reqMpVersion]!");
+
+            TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(packageData.version),
+                $"Package[{key}] missing [version]!");
+
+            TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(packageData.unityVersion),
+                $"Package[{key}] missing [unityVersion]!");
+
+            TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(packageData.lastUpdate),
+                $"Package[{key}] missing [lastUpdate]!");
+
             TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageData.name), $"Package[{key}] missing [name]!");
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageData.displayName), $"Package[{key}] missing [displayName]!");
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageData.description), $"Package[{key}] missing [description]!");
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageData.repository), $"Package[{key}] missing [repository]!");
+
+            TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(packageData.displayName),
+                $"Package[{key}] missing [displayName]!");
+
+            TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(packageData.description),
+                $"Package[{key}] missing [description]!");
+
+            TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(packageData.repository),
+                $"Package[{key}] missing [repository]!");
 
             TestsUtility.Validate(ref valid, !ValidateDependencies(packageData.dependencies, key));
             TestsUtility.Validate(ref valid, !ValidateVariations(packageData.variations, key));
@@ -128,29 +157,54 @@ internal class DataCacheTests : MonoBehaviour
         if (!TestsUtility.Validate(ref valid, string.IsNullOrEmpty(name), "PackageInfo is missing a name!"))
             TestsUtility.Validate(ref valid, !name!.Equals(packageData.name), $"PackageInfo[{name}] non-equal [name]!");
 
-        TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageInfo.displayName), $"PackageInfo[{name}] missing [displayName]!");
+        TestsUtility.Validate(
+            ref valid,
+            string.IsNullOrEmpty(packageInfo.displayName),
+            $"PackageInfo[{name}] missing [displayName]!");
 
         TestsUtility.Validate(ref valid, packageInfo.author == null, $"PackageInfo[{name}] missing [author]!");
 
-        if (!TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageInfo.version), $"PackageInfo[{name}] missing [version]!"))
-            TestsUtility.Validate(ref valid, !packageInfo.version.Equals(packageData.version), $"PackageInfo[{name}] non-equal [version]!");
+        if (!TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(packageInfo.version),
+                $"PackageInfo[{name}] missing [version]!"))
+            TestsUtility.Validate(
+                ref valid,
+                !packageInfo.version.Equals(packageData.version),
+                $"PackageInfo[{name}] non-equal [version]!");
 
-        TestsUtility.Validate(ref valid, !packageInfo.category.Equals("Tools"), $"PackageInfo[{name}] incorrect [category]!");
+        TestsUtility.Validate(
+            ref valid,
+            !packageInfo.category.Equals("Tools"),
+            $"PackageInfo[{name}] incorrect [category]!");
 
-        if (!TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageInfo.description), $"PackageInfo[{name}] missing [description]!"))
+        if (!TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(packageInfo.description),
+                $"PackageInfo[{name}] missing [description]!"))
+        {
             TestsUtility.Validate(
                 ref valid,
                 !packageInfo.description.Equals(packageData.description),
                 $"PackageInfo[{name}] non-equal [description]!");
+        }
 
-        if (TestsUtility.Validate(ref valid, packageInfo.repository == null, $"PackageInfo[{name}] missing [repository]!"))
+        if (TestsUtility.Validate(
+                ref valid,
+                packageInfo.repository == null,
+                $"PackageInfo[{name}] missing [repository]!"))
             return valid;
 
-        if (!TestsUtility.Validate(ref valid, string.IsNullOrEmpty(packageInfo.repository!.url), $"PackageInfo[{name}] missing [repository.url]!"))
+        if (!TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(packageInfo.repository!.url),
+                $"PackageInfo[{name}] missing [repository.url]!"))
+        {
             TestsUtility.Validate(
                 ref valid,
                 !packageInfo.repository.url.Equals(packageData.repository),
                 $"PackageInfo[{name}] non-equal [repository.url]!");
+        }
 
         return valid;
     }
@@ -164,14 +218,20 @@ internal class DataCacheTests : MonoBehaviour
 
         foreach (Variation variation in variations)
         {
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(variation.name), $"Package[{parent}] Variation is missing a name");
+            TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(variation.name),
+                $"Package[{parent}] Variation is missing a name");
 
             TestsUtility.Validate(
                 ref valid,
                 string.IsNullOrEmpty(variation.version),
                 $"Package[{parent}] Variation[{variation.name}] missing [version]!");
 
-            TestsUtility.Validate(ref valid, string.IsNullOrEmpty(variation.tag), $"Package[{parent}] Variation[{variation.name}] missing [tag]!");
+            TestsUtility.Validate(
+                ref valid,
+                string.IsNullOrEmpty(variation.tag),
+                $"Package[{parent}] Variation[{variation.name}] missing [tag]!");
 
             TestsUtility.Validate(
                 ref valid,

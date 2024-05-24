@@ -2,27 +2,33 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Editor.Scripts.Windows.BaseWindowContent.SettingsTabContent;
-using MegaPint.Editor.Scripts;
+using Editor.Scripts.Windows;
+using MegaPint.Editor.Scripts.Windows.BaseWindowContent.SettingsTabContent;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
-namespace Editor.Scripts.Windows.BaseWindowContent
+namespace MegaPint.Editor.Scripts.Windows.BaseWindowContent
 {
 
 internal class SettingsTab
 {
-    private readonly string _itemPath = Path.Combine(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Base Window", "Info item");
+    private static string s_itemPath;
 
-    private readonly VisualTreeAsset _itemTemplate;
-
-    private readonly ToolbarSearchField _searchField;
+    private static string _ItemPath =>
+        s_itemPath ??= Path.Combine(
+            Constants.BasePackage.Resources.UserInterface.WindowsPath,
+            "Base Window",
+            "Package item");
 
     private readonly VisualElement _content;
 
+    private readonly VisualTreeAsset _itemTemplate;
+
     private readonly ListView _list;
+
+    private readonly ToolbarSearchField _searchField;
 
     private bool _active;
     private List <SettingsTabData.Setting> _allSettings;
@@ -36,7 +42,7 @@ internal class SettingsTab
 
     public SettingsTab(VisualElement root)
     {
-        _itemTemplate = Resources.Load <VisualTreeAsset>(_itemPath);
+        _itemTemplate = Resources.Load <VisualTreeAsset>(_ItemPath);
 
         _list = root.Q <ListView>("SettingsList");
         _searchField = root.Q <ToolbarSearchField>("SearchField");
@@ -52,6 +58,7 @@ internal class SettingsTab
 
     #region Public Methods
 
+    /// <summary> Hide the tab </summary>
     public void Hide()
     {
         Clear();
@@ -60,12 +67,14 @@ internal class SettingsTab
         _active = false;
     }
 
+    /// <summary> Reset the tab </summary>
     public void ResetVariables()
     {
         _currentVisualElement = null;
         _visualElements = null;
     }
 
+    /// <summary> Show the tab </summary>
     public void Show()
     {
         _searchField.value = "";
@@ -96,6 +105,9 @@ internal class SettingsTab
 
     #region Private Methods
 
+    /// <summary> Collect all settings </summary>
+    /// <param name="settings"> All settings </param>
+    /// <returns> Converted settings </returns>
     private static IEnumerable <SettingsTabData.Setting> GetAll(SettingsTabData.Setting settings)
     {
         List <SettingsTabData.Setting> result = new();
@@ -113,6 +125,8 @@ internal class SettingsTab
         return result;
     }
 
+    /// <summary> Add setting to displayedSettings </summary>
+    /// <param name="setting"> Setting to be added </param>
     private void Add(SettingsTabData.Setting setting)
     {
         _displayedSettings.Add(setting);
@@ -127,6 +141,7 @@ internal class SettingsTab
             Add(subSettings);
     }
 
+    /// <summary> Clear the tab </summary>
     private void Clear()
     {
         if (!_active)
@@ -135,6 +150,8 @@ internal class SettingsTab
         _content.Clear();
     }
 
+    /// <summary> SearchField Callback </summary>
+    /// <param name="evt"> Callback event </param>
     private void OnSearchFieldChange(ChangeEvent <string> evt)
     {
         if (!_active)
@@ -143,6 +160,8 @@ internal class SettingsTab
         SetDisplayed(_searchField.value);
     }
 
+    /// <summary> ListView Callback </summary>
+    /// <param name="_"> Callback event </param>
     private void OnUpdateRightPane(IEnumerable <int> _)
     {
         if (_list.selectedItem == null)
@@ -186,6 +205,7 @@ internal class SettingsTab
         _list.ClearSelection();
     }
 
+    /// <summary> Register all callbacks </summary>
     private void RegisterCallbacks()
     {
         _list.makeItem = () => GUIUtility.Instantiate(_itemTemplate);
@@ -231,6 +251,8 @@ internal class SettingsTab
         _searchField.RegisterValueChangedCallback(OnSearchFieldChange);
     }
 
+    /// <summary> Set the displayed settings based on the search string </summary>
+    /// <param name="searchString"> String to filter settings </param>
     private void SetDisplayed(string searchString)
     {
         _displayedSettings = searchString.Equals("")
@@ -258,6 +280,7 @@ internal class SettingsTab
         _list.RefreshItems();
     }
 
+    /// <summary> Update the right pane </summary>
     private void UpdateRightPane()
     {
         Clear();

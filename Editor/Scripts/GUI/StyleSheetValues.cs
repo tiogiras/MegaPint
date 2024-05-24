@@ -8,7 +8,7 @@ namespace MegaPint.Editor.Scripts.GUI
 {
 
 /// <summary> Lookup table for stylesheet values </summary>
-public static class StyleSheetValues
+internal static class StyleSheetValues
 {
     private const string BaseStyleSheetPath = "MegaPint/User Interface/MegaPint";
     private const string AttributeStyleSheetPath = "MegaPint/user Interface/MegaPintAttributes";

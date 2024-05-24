@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Editor.Scripts.PackageManager.Packages;
-using Editor.Scripts.PackageManager.Utility;
 using MegaPint.Editor.Scripts.DevMode;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
+using MegaPint.Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
-using UnityEngine;
 
 [assembly: InternalsVisibleTo("tiogiras.megapint.Editor.Tests")]
-namespace Editor.Scripts.PackageManager.Cache
+
+namespace MegaPint.Editor.Scripts.PackageManager.Cache
 {
 
 /// <summary> Sores all information about the installed and non installed MegaPint packages </summary>
@@ -19,10 +19,10 @@ internal static class PackageCache
     /// <summary> Called when the cache was refreshed </summary>
     public static Action onCacheRefreshed;
 
-    public static Action<float> onCacheProgressChanged;
-    public static Action<string> onCacheProcessChanged;
+    public static Action <float> onCacheProgressChanged;
+    public static Action <string> onCacheProcessChanged;
 
-    public static float currentProgress;
+    private static float s_currentProgress;
 
     public static Action onCacheStartRefreshing;
 
@@ -33,7 +33,7 @@ internal static class PackageCache
 
     /// <summary> Newest Version of the MegaPint basePackage </summary>
     public static string NewestBasePackageVersion {get; private set;}
-    
+
     public static bool WasInitialized {get; private set;}
 
     #region Public Methods
@@ -140,6 +140,11 @@ internal static class PackageCache
         Initialize();
     }
 
+    private static void SetProcess(string process)
+    {
+        onCacheProcessChanged?.Invoke(process);
+    }
+
     #endregion
 
     #region Private Methods
@@ -165,23 +170,12 @@ internal static class PackageCache
         }
     }
 
-    private static void SetProgressTo(float progress)
-    {
-        currentProgress = progress;
-        onCacheProgressChanged?.Invoke(currentProgress);
-    }
-
     private static void IncreaseProgressBy(float delta)
     {
-        currentProgress += delta;
-        onCacheProgressChanged?.Invoke(currentProgress);
+        s_currentProgress += delta;
+        onCacheProgressChanged?.Invoke(s_currentProgress);
     }
 
-    public static void SetProcess(string process)
-    {
-        onCacheProcessChanged?.Invoke(process);
-    }
-    
     private static async void Initialize()
     {
         onCacheStartRefreshing?.Invoke();
@@ -195,7 +189,7 @@ internal static class PackageCache
         SetProcess("Reading Unity's PackageInfo");
         List <PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages();
         IncreaseProgressBy(.3f);
-        
+
         SetProcess("Collecting Packages");
         GetInstalledPackageNames(installedPackages, out List <string> installedPackagesNames);
         IncreaseProgressBy(.05f);
@@ -205,14 +199,16 @@ internal static class PackageCache
         Dictionary <PackageKey, List <PackageKey>> allDependencies = new();
 
         var step = .3f / mpPackages.Length;
-        
+
         foreach (PackageData packageData in mpPackages)
         {
             SetProcess($"Creating Cache: {packageData.displayName}");
-            
+
             var package = new CachedPackage(
                 packageData,
-                installedPackagesNames.Contains(packageData.name) ? installedPackages[installedPackagesNames.IndexOf(packageData.name)] : null,
+                installedPackagesNames.Contains(packageData.name)
+                    ? installedPackages[installedPackagesNames.IndexOf(packageData.name)]
+                    : null,
                 out List <Dependency> dependencies);
 
             if (dependencies is {Count: > 0})
@@ -225,30 +221,36 @@ internal static class PackageCache
             }
 
             s_cache.Add(package.Key, package);
-            
+
             IncreaseProgressBy(step);
         }
-        
+
         SetProgressTo(.8f);
 
         step = .2f / allDependencies.Count;
-        
+
         foreach (KeyValuePair <PackageKey, List <PackageKey>> valuePair in allDependencies)
         {
             SetProcess($"Registering Dependencies: {valuePair.Key}");
-            
+
             CachedPackage cachedPackage = s_cache[valuePair.Key];
             cachedPackage.RegisterDependencies(valuePair.Value);
-            
+
             IncreaseProgressBy(step);
         }
-        
+
         SetProcess("Finalizing Cache");
         SetProgressTo(1f);
 
         WasInitialized = true;
-        
+
         onCacheRefreshed?.Invoke();
+    }
+
+    private static void SetProgressTo(float progress)
+    {
+        s_currentProgress = progress;
+        onCacheProgressChanged?.Invoke(s_currentProgress);
     }
 
     #endregion

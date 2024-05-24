@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-namespace Editor.Scripts.PackageManager.Packages
+namespace MegaPint.Editor.Scripts.PackageManager.Packages
 {
 
 /// <summary> Key for internal referencing of MegaPint packages </summary>
