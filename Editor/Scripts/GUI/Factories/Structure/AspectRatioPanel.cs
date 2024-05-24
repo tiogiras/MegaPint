@@ -4,9 +4,13 @@ using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.UIElements;
 
-namespace Editor.Scripts.GUI.Factories.Structure
+namespace MegaPint.Editor.Scripts.GUI.Factories.Structure
 {
 
+/// <summary>
+///     Uxml factory to create a <see cref="VisualElement" /> that displays the background image in a selected aspect
+///     ratio
+/// </summary>
 [Preserve]
 internal class AspectRatioPanel : VisualElement
 {
@@ -28,29 +32,16 @@ internal class AspectRatioPanel : VisualElement
 
         private readonly UxmlIntAttributeDescription _aspectRatioX = new()
         {
-            name = "aspect-ratio-x",
-            defaultValue = 16,
-            restriction = new UxmlValueBounds
-            {
-                min = "1"
-            }
+            name = "aspect-ratio-x", defaultValue = 16, restriction = new UxmlValueBounds {min = "1"}
         };
 
         private readonly UxmlIntAttributeDescription _aspectRatioY = new()
         {
-            name = "aspect-ratio-y",
-            defaultValue = 9,
-            restriction = new UxmlValueBounds
-            {
-                min = "1"
-            }
+            name = "aspect-ratio-y", defaultValue = 9, restriction = new UxmlValueBounds {min = "1"}
         };
 
-        private readonly UxmlFloatAttributeDescription _scale = new()
-        {
-            name = "scale",
-            defaultValue = 1f
-        };
+        private readonly UxmlFloatAttributeDescription _scale = new() {name = "scale", defaultValue = 1f};
+
         #region Public Methods
 
         public override void Init(
@@ -123,6 +114,7 @@ internal class AspectRatioPanel : VisualElement
     }
 
     #endregion
+
     #region Private Methods
 
     private void OnAttachToPanelEvent(AttachToPanelEvent e)

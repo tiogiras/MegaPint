@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = Editor.Scripts.GUI.GUIUtility;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
 namespace Editor.Scripts.Windows.BaseWindowContent
 {
 
 internal class PackagesTab
 {
-    private readonly string _itemPath = Path.Combine(Constants.BasePackage.PathWindows, "Base Window", "Package Item");
+    private readonly string _itemPath = Path.Combine(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Base Window", "Package Item");
 
     private readonly VisualTreeAsset _itemTemplate;
 

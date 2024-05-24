@@ -1,7 +1,8 @@
 ﻿using System.IO;
+using MegaPint.Editor.Scripts;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = Editor.Scripts.GUI.GUIUtility;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
 namespace Editor.Scripts.Windows.DevMode
 {
@@ -29,7 +30,7 @@ public class Center : MegaPintEditorWindowBase
 
     protected override string BasePath()
     {
-        return Path.Join(Constants.BasePackage.PathWindows, "Development Mode", "Center");
+        return Path.Join(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Development Mode", "Center");
     }
 
     protected override void CreateGUI()

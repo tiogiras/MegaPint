@@ -1,7 +1,8 @@
 ﻿#if UNITY_EDITOR
+using Editor.Scripts;
 using UnityEngine;
 
-namespace Editor.Scripts.DevModeUtil
+namespace MegaPint.Editor.Scripts.DevMode
 {
 
 /// <summary> Utility class to log messages only when the development mode is activated. </summary>

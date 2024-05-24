@@ -4,17 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Editor.Scripts.GUI;
 using Editor.Scripts.PackageManager;
 using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.PackageManager.Packages;
 using Editor.Scripts.PackageManager.Utility;
 using Editor.Scripts.Settings;
+using MegaPint.Editor.Scripts.GUI;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = Editor.Scripts.GUI.GUIUtility;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
 namespace Editor.Scripts.Windows
 {

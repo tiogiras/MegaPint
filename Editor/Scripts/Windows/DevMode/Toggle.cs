@@ -1,10 +1,12 @@
 ﻿#if UNITY_EDITOR
 using System.IO;
-using Editor.Scripts.GUI;
 using Editor.Scripts.PackageManager;
 using Editor.Scripts.Settings;
+using MegaPint.Editor.Scripts;
+using MegaPint.Editor.Scripts.GUI;
 using UnityEngine;
 using UnityEngine.UIElements;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
 namespace Editor.Scripts.Windows.DevMode
 {
@@ -35,7 +37,7 @@ public class Toggle : MegaPintEditorWindowBase
 
     protected override string BasePath()
     {
-        return Path.Join(Constants.BasePackage.PathWindows, "Development Mode", "Toggle");
+        return Path.Join(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Development Mode", "Toggle");
     }
 
     protected override void CreateGUI()
@@ -44,7 +46,7 @@ public class Toggle : MegaPintEditorWindowBase
 
         VisualElement root = rootVisualElement;
 
-        VisualElement content = _baseWindow.Instantiate();
+        VisualElement content = GUIUtility.Instantiate(_baseWindow);
 
         content.style.flexGrow = 1f;
         content.style.flexShrink = 1f;

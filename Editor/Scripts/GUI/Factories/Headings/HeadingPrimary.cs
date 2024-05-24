@@ -1,11 +1,18 @@
-﻿using UnityEngine.UIElements;
+﻿#if UNITY_EDITOR
+using UnityEngine.UIElements;
 
-namespace Editor.Scripts.GUI.Factories.Headings
+namespace MegaPint.Editor.Scripts.GUI.Factories.Headings
 {
 
+/// <summary>
+///     Uxml factory to create a <see cref="VisualElement" /> with the settings of a heading using the primary text
+///     color
+/// </summary>
 public class HeadingPrimary : Label
 {
-    public new class UxmlFactory : UxmlFactory <HeadingPrimary, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory <HeadingPrimary, UxmlTraits>
+    {
+    }
 
     public new class UxmlTraits : Label.UxmlTraits
     {
@@ -26,3 +33,4 @@ public class HeadingPrimary : Label
 }
 
 }
+#endif

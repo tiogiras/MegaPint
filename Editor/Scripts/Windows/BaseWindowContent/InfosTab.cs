@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Editor.Scripts.Windows.BaseWindowContent.InfoTabContent;
+using MegaPint.Editor.Scripts;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = Editor.Scripts.GUI.GUIUtility;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
 namespace Editor.Scripts.Windows.BaseWindowContent
 {
 
 internal class InfosTab
 {
-    private readonly string _itemPath = Path.Combine(Constants.BasePackage.PathWindows, "Base Window", "Info item");
+    private readonly string _itemPath = Path.Combine(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Base Window", "Info item");
 
     private readonly VisualTreeAsset _itemTemplate;
 
