@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using MegaPint.Editor.Scripts;
+using MegaPint.Editor.Scripts.GUI.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = MegaPint.Editor.Scripts.GUI.GUIUtility;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
 namespace Editor.Scripts.Windows.DevMode
 {
@@ -27,7 +28,7 @@ public class InterfaceOverview : MegaPintEditorWindowBase
 
     protected override string BasePath()
     {
-        return Path.Join(Constants.BasePackage.PathWindows, "Development Mode", "Interface Overview");
+        return Path.Join(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Development Mode", "Interface Overview");
     }
 
     protected override void CreateGUI()
@@ -38,7 +39,7 @@ public class InterfaceOverview : MegaPintEditorWindowBase
         root.style.flexGrow = 1f;
         root.style.flexShrink = 1f;
         
-        GUIUtility.ActivateLinks(root, _ => {});
+        root.ActivateLinks(_ => {});
 
         rootVisualElement.Add(root);
         

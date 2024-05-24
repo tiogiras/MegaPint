@@ -1,8 +1,9 @@
 ﻿#if UNITY_EDITOR
+using MegaPint.Editor.Scripts.GUI.Utility;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = MegaPint.Editor.Scripts.GUI.GUIUtility;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
 namespace Editor.Scripts.Windows.BaseWindowContent.InfoTabContent
 {
@@ -54,61 +55,56 @@ namespace Editor.Scripts.Windows.BaseWindowContent.InfoTabContent
 
         private static void ContactLogic(VisualElement root)
         {
-            GUIUtility.ActivateLinks(
-                root,
-                evt =>
+            root.ActivateLinks(evt =>
+            {
+                switch (evt.linkID)
                 {
-                    switch (evt.linkID)
-                    {
-                        case "discord":
-                            Application.OpenURL("https://discord.com/users/282542538819108866");
+                    case "discord":
+                        Application.OpenURL("https://discord.com/users/282542538819108866");
 
-                            break;
+                        break;
 
-                        case "email":
-                            Application.OpenURL("tiogiras@gmail.com");
+                    case "email":
+                        Application.OpenURL("tiogiras@gmail.com");
 
-                            break;
+                        break;
 
-                        case "website":
-                            Application.OpenURL("https://tiogiras.games");
+                    case "website":
+                        Application.OpenURL("https://tiogiras.games");
 
-                            break;
-                    }
-                });
+                        break;
+                }
+            });
         }
         
         private static void ManagePackagesLogic(VisualElement root)
         {
-            GUIUtility.ActivateLinks(
-                root,
-                evt =>
+            root.ActivateLinks(evt =>
+            {
+                switch (evt.linkID)
                 {
-                    switch (evt.linkID)
-                    {
-                        case "github":
-                            Application.OpenURL("https://github.com/tiogiras/MegaPint");
-                            break;
+                    case "github":
+                        Application.OpenURL("https://github.com/tiogiras/MegaPint");
+                        break;
                         
-                        case "MegaPint/PackageManager":
-                            EditorApplication.ExecuteMenuItem(evt.linkID);
-                            break;
+                    case "MegaPint/PackageManager":
+                        EditorApplication.ExecuteMenuItem(evt.linkID);
+                        break;
                         
-                        case "Window/Package Manager":
-                            EditorApplication.ExecuteMenuItem(evt.linkID);
-                            break;
+                    case "Window/Package Manager":
+                        EditorApplication.ExecuteMenuItem(evt.linkID);
+                        break;
                         
-                        case "website":
-                            Application.OpenURL("https://tiogiras.games");
-                            break;
-                    }
-                });
+                    case "website":
+                        Application.OpenURL("https://tiogiras.games");
+                        break;
+                }
+            });
         }
         
         private static void UpdateBasePackageLogic(VisualElement root)
         {
-            GUIUtility.ActivateLinks(
-                root,
+            root.ActivateLinks(
                 evt =>
                 {
                     switch (evt.linkID)
@@ -122,8 +118,7 @@ namespace Editor.Scripts.Windows.BaseWindowContent.InfoTabContent
         
         private static void ShortcutsLogic(VisualElement root)
         {
-            GUIUtility.ActivateLinks(
-                root,
+            root.ActivateLinks(
                 evt =>
                 {
                     switch (evt.linkID)

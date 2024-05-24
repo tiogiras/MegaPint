@@ -1,9 +1,9 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using MegaPint.Editor.Scripts.GUI.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = MegaPint.Editor.Scripts.GUI.GUIUtility;
 
 namespace MegaPint.Editor.Scripts.GUI.Factories
 {
@@ -43,7 +43,7 @@ public class RootElement : VisualElement
 
             element.name = "RootElement";
 
-            GUIUtility.ApplyRootElementTheme(element, TryInitializeStyleSheetValues);
+            element.ApplyRootElementTheme(TryInitializeStyleSheetValues);
 
             element.schedule.Execute(
                 () => {ExecuteForAllOfClass("unity-color-field", element, ColorFieldOverwrite);});

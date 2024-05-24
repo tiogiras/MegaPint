@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using MegaPint.Editor.Scripts.GUI.Utility;
 using UnityEngine.UIElements;
 
 namespace MegaPint.Editor.Scripts.GUI.Factories.Structure
@@ -28,8 +29,8 @@ public class SeparatorVertical : VisualElement
 
             element.AddToClassList(StyleSheetClasses.Background.Color.Separator);
 
-            GUIUtility.SetMargin(element, 4f);
-            GUIUtility.SetBorderRadius(element, 1f);
+            element.SetMargin(4f);
+            element.SetBorderRadius(1f);
         }
 
         #endregion

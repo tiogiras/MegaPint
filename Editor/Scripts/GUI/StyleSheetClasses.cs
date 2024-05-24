@@ -108,6 +108,8 @@ public static class StyleSheetClasses
     public static string LinkText => $"{ClassBase}link";
 
     public static string Foldout => $"{ClassBase}foldout";
+
+    public static string LinkCursor => "link-cursor";
 }
 
 }

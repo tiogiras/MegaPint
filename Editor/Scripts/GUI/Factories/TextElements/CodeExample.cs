@@ -2,10 +2,10 @@
 using System;
 using System.IO;
 using System.Text;
+using MegaPint.Editor.Scripts.GUI.Utility;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = MegaPint.Editor.Scripts.GUI.GUIUtility;
 
 namespace MegaPint.Editor.Scripts.GUI.Factories.TextElements
 {
@@ -47,10 +47,10 @@ public class CodeExample : VisualElement
 
             element.AddToClassList(StyleSheetClasses.Background.Color.Secondary);
             element.AddToClassList(StyleSheetClasses.Border.Color.Black);
-
-            GUIUtility.SetPadding(element, 5f);
-            GUIUtility.SetBorderWidth(element, 1f);
-            GUIUtility.SetBorderRadius(element, 3f);
+            
+            element.SetPadding(5f);
+            element.SetBorderWidth(1f);
+            element.SetBorderRadius(3f);
 
             element.Clear();
 
@@ -83,8 +83,8 @@ public class CodeExample : VisualElement
 
             button.AddToClassList(StyleSheetClasses.Button);
 
-            GUIUtility.SetMargin(button, 0f);
-            GUIUtility.SetPadding(button, 0f);
+            button.SetMargin(0f);
+            button.SetPadding(0f);
         }
 
         #endregion
@@ -130,11 +130,11 @@ public class CodeExample : VisualElement
         /// <returns> Cleaned text </returns>
         private static string CleanText(string text)
         {
-            GUIUtility.RemoveTag(ref text, "c");
-            GUIUtility.RemoveTag(ref text, "m");
-            GUIUtility.RemoveTag(ref text, "b");
-            GUIUtility.RemoveTag(ref text, "cc");
-            GUIUtility.RemoveTag(ref text, "s");
+            text = text.RemoveTag("c");
+            text = text.RemoveTag("m");
+            text = text.RemoveTag("b");
+            text = text.RemoveTag("cc");
+            text = text.RemoveTag("s");
 
             text = text.Replace("\\n", Environment.NewLine);
 
@@ -146,11 +146,11 @@ public class CodeExample : VisualElement
         /// <returns> Colored text </returns>
         private string ColorText(string text)
         {
-            GUIUtility.ColorByTag(ref text, "c", _classColorString);
-            GUIUtility.ColorByTag(ref text, "m", _methodColorString);
-            GUIUtility.ColorByTag(ref text, "b", _basicColorString);
-            GUIUtility.ColorByTag(ref text, "cc", _commentColorString);
-            GUIUtility.ColorByTag(ref text, "s", _stringColorString);
+            text = text.ColorByTag("c", _classColorString);
+            text = text.ColorByTag("m", _methodColorString);
+            text = text.ColorByTag("b", _basicColorString);
+            text = text.ColorByTag("cc", _commentColorString);
+            text = text.ColorByTag("s", _stringColorString);
 
             return text;
         }

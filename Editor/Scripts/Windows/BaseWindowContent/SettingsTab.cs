@@ -7,14 +7,14 @@ using MegaPint.Editor.Scripts;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = MegaPint.Editor.Scripts.GUI.GUIUtility;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
 namespace Editor.Scripts.Windows.BaseWindowContent
 {
 
 internal class SettingsTab
 {
-    private readonly string _itemPath = Path.Combine(Constants.BasePackage.PathWindows, "Base Window", "Info item");
+    private readonly string _itemPath = Path.Combine(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Base Window", "Info item");
 
     private readonly VisualTreeAsset _itemTemplate;
 

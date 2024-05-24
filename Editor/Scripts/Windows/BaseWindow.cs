@@ -10,7 +10,7 @@ using MegaPint.Editor.Scripts;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = MegaPint.Editor.Scripts.GUI.GUIUtility;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 using Toggle = Editor.Scripts.Windows.DevMode.Toggle;
 
 namespace Editor.Scripts.Windows
@@ -26,7 +26,7 @@ internal class BaseWindow : MegaPintEditorWindowBase
 
     private static bool _DevMode => MegaPintSettings.instance.GetSetting("General").GetValue("devMode", false);
 
-    private readonly string _contentPath = Path.Combine(Constants.BasePackage.PathWindows, "Base Window");
+    private readonly string _contentPath = Path.Combine(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Base Window");
 
     private VisualTreeAsset _baseWindow;
 
