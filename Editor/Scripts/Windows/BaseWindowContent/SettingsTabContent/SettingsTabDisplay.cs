@@ -2,7 +2,7 @@
 using Editor.Scripts.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = Editor.Scripts.GUI.GUIUtility;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.GUIUtility;
 
 namespace Editor.Scripts.Windows.BaseWindowContent.SettingsTabContent
 {

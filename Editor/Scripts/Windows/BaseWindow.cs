@@ -6,10 +6,11 @@ using Editor.Scripts.PackageManager.Cache;
 using Editor.Scripts.Settings;
 using Editor.Scripts.Windows.BaseWindowContent;
 using Editor.Scripts.Windows.DevMode;
+using MegaPint.Editor.Scripts;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = Editor.Scripts.GUI.GUIUtility;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.GUIUtility;
 using Toggle = Editor.Scripts.Windows.DevMode.Toggle;
 
 namespace Editor.Scripts.Windows

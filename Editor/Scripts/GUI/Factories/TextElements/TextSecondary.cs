@@ -1,11 +1,15 @@
-﻿using UnityEngine.UIElements;
+﻿#if UNITY_EDITOR
+using UnityEngine.UIElements;
 
-namespace Editor.Scripts.GUI.Factories.TextElements
+namespace MegaPint.Editor.Scripts.GUI.Factories.TextElements
 {
 
+/// <summary> Uxml factory to create a <see cref="VisualElement" /> with the settings of a secondary text </summary>
 public class TextSecondary : Label
 {
-    public new class UxmlFactory : UxmlFactory <TextSecondary, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory <TextSecondary, UxmlTraits>
+    {
+    }
 
     public new class UxmlTraits : Label.UxmlTraits
     {
@@ -17,7 +21,7 @@ public class TextSecondary : Label
             CreationContext context)
         {
             base.Init(element, attributes, context);
-            
+
             element.AddToClassList(StyleSheetClasses.Text.Color.Secondary);
         }
 
@@ -26,3 +30,4 @@ public class TextSecondary : Label
 }
 
 }
+#endif

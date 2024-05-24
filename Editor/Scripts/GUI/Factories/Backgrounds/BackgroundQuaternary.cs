@@ -1,11 +1,15 @@
-﻿using UnityEngine.UIElements;
+﻿#if UNITY_EDITOR
+using UnityEngine.UIElements;
 
-namespace Editor.Scripts.GUI.Factories.Backgrounds
+namespace MegaPint.Editor.Scripts.GUI.Factories.Backgrounds
 {
 
+/// <summary> Uxml factory to create a <see cref="VisualElement" /> with the settings of a quaternary background </summary>
 public class BackgroundQuaternary : VisualElement
 {
-    public new class UxmlFactory : UxmlFactory <BackgroundQuaternary, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory <BackgroundQuaternary, UxmlTraits>
+    {
+    }
 
     public new class UxmlTraits : VisualElement.UxmlTraits
     {
@@ -17,7 +21,7 @@ public class BackgroundQuaternary : VisualElement
             CreationContext context)
         {
             base.Init(element, attributes, context);
-            
+
             element.AddToClassList(StyleSheetClasses.Background.Color.Quaternary);
         }
 
@@ -26,3 +30,4 @@ public class BackgroundQuaternary : VisualElement
 }
 
 }
+#endif

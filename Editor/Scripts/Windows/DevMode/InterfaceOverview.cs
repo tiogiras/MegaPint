@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using MegaPint.Editor.Scripts;
 using UnityEngine;
 using UnityEngine.UIElements;
-using GUIUtility = Editor.Scripts.GUI.GUIUtility;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.GUIUtility;
 
 namespace Editor.Scripts.Windows.DevMode
 {

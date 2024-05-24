@@ -1,6 +1,6 @@
 ﻿using Editor.Scripts.Settings;
 using UnityEditor;
-using GUIUtility = Editor.Scripts.GUI.GUIUtility;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.GUIUtility;
 
 namespace Editor.Scripts
 {

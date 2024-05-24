@@ -1,19 +1,17 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Editor.Scripts.PackageManager.Cache;
-using Editor.Scripts.Windows;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
-namespace Editor.Scripts.GUI
+namespace MegaPint.Editor.Scripts.GUI
 {
 
-public static class GUIUtility
+public static partial class GUIUtility
 {
     private const string LinkCursorClassName = "link-cursor";
 
@@ -21,31 +19,21 @@ public static class GUIUtility
 
     private static bool s_linkCooldown;
 
-    public static VisualElement SetParentFlexGrowRecursive(VisualElement startElement, int iterations, bool value)
+
+    
+
+
+
+    
+    public static void RemoveTag(ref string text, string tag)
     {
-        VisualElement element = startElement.parent;
-        
-        for (var i = 0; i < iterations; i++)
-        {
-            if (element == null)
-                break;
+        var startTag = $"<{tag}>";
+        var endTag = $"</{tag}>";
 
-            element.style.flexGrow = value ? 1 : 0;
-            element = element.parent;
-        }
-
-        return element;
+        text = text.Replace(startTag, "");
+        text = text.Replace(endTag, "");
     }
     
-    public static VisualElement Instantiate(VisualTreeAsset asset, VisualElement root = null)
-    {
-        TemplateContainer element = asset.Instantiate();
-
-        root?.Add(element);
-
-        return element;
-    }
-
     public static void ActivateLinks(VisualElement root, EventCallback <PointerUpLinkTagEvent> linkCallback)
     {
         var linkColorHtml = ColorUtility.ToHtmlStringRGB(StyleSheetValues.LinkColor);
@@ -522,3 +510,4 @@ public static class GUIUtility
 }
 
 }
+#endif

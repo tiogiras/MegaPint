@@ -1,11 +1,15 @@
-﻿using UnityEngine.UIElements;
+﻿#if UNITY_EDITOR
+using UnityEngine.UIElements;
 
-namespace Editor.Scripts.GUI.Factories.Headings
+namespace MegaPint.Editor.Scripts.GUI.Factories.Headings
 {
 
+/// <summary> Uxml factory to create a <see cref="VisualElement" /> with the settings of a heading using the identity color </summary>
 public class HeadingIdentity : Label
 {
-    public new class UxmlFactory : UxmlFactory <HeadingIdentity, UxmlTraits> { }
+    public new class UxmlFactory : UxmlFactory <HeadingIdentity, UxmlTraits>
+    {
+    }
 
     public new class UxmlTraits : Label.UxmlTraits
     {
@@ -17,7 +21,7 @@ public class HeadingIdentity : Label
             CreationContext context)
         {
             base.Init(element, attributes, context);
-            
+
             element.AddToClassList(StyleSheetClasses.Text.Color.Identity);
         }
 
@@ -26,3 +30,4 @@ public class HeadingIdentity : Label
 }
 
 }
+#endif

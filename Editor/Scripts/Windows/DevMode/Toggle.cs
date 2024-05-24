@@ -1,8 +1,9 @@
 ﻿#if UNITY_EDITOR
 using System.IO;
-using Editor.Scripts.GUI;
 using Editor.Scripts.PackageManager;
 using Editor.Scripts.Settings;
+using MegaPint.Editor.Scripts;
+using MegaPint.Editor.Scripts.GUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
