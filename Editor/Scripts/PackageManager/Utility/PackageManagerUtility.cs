@@ -1,11 +1,12 @@
 ﻿#if UNITY_EDITOR
 using System.Linq;
 using System.Text;
-using Editor.Scripts.PackageManager.Cache;
-using Editor.Scripts.PackageManager.Packages;
+using Editor.Scripts;
+using MegaPint.Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
 using UnityEngine.UIElements;
 
-namespace Editor.Scripts.PackageManager.Utility
+namespace MegaPint.Editor.Scripts.PackageManager.Utility
 {
 
 /// <summary> Utility class for the internal MegaPint packageManager </summary>

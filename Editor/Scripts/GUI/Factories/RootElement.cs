@@ -12,7 +12,7 @@ namespace MegaPint.Editor.Scripts.GUI.Factories
 ///     Uxml factory to create a <see cref="VisualElement" />> that manages the theme of the child objects by
 ///     changing the added theme class
 /// </summary>
-public class RootElement : VisualElement
+internal class RootElement : VisualElement
 {
     public new class UxmlFactory : UxmlFactory <RootElement, UxmlTraits>
     {

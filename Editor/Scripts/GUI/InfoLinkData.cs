@@ -5,7 +5,7 @@ namespace MegaPint.Editor.Scripts.GUI
 {
 
 /// <summary> Lookup table for information tooltips </summary>
-public static class InfoLinkData
+internal static class InfoLinkData
 {
     private static readonly Dictionary <string, string> s_data = new()
     {

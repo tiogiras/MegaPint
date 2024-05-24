@@ -1,61 +1,79 @@
 ﻿#if UNITY_EDITOR
+using System.IO;
 using MegaPint.Editor.Scripts.GUI.Utility;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
-namespace Editor.Scripts.Windows.BaseWindowContent.InfoTabContent
+namespace MegaPint.Editor.Scripts.Windows.BaseWindowContent.InfoTabContent
 {
-    internal static class InfosTabDisplay
+
+/// <summary> Contains logic for displaying the info tabs </summary>
+internal static class InfosTabDisplay
+{
+    private static string s_basePath;
+
+    private static string _BasePath =>
+        s_basePath ??= Path.Combine(Constants.BasePackage.Resources.UserInterfacePath, "Info Content", "xxx");
+
+    #region Public Methods
+
+    /// <summary> Display the info based on the given key </summary>
+    /// <param name="root"> Root <see cref="VisualElement" /> the info is added to </param>
+    /// <param name="key"> Key corresponding to the target info </param>
+    public static void Display(VisualElement root, InfosTabData.InfoKey key)
     {
-        private const string BasePath = "MegaPint/User Interface/Info Content/xxx";
-        
-        public static void Display(VisualElement root, InfosTabData.InfoKey key)
+        GUIUtility.Instantiate(Load(key), root);
+        ActivateLogic(key, root);
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    /// <summary> Invoked when the info is added to it's parent </summary>
+    /// <param name="key"> Key of the added info </param>
+    /// <param name="root"> Info as <see cref="VisualElement" /> </param>
+    private static void ActivateLogic(InfosTabData.InfoKey key, VisualElement root)
+    {
+        switch (key)
         {
-            GUIUtility.Instantiate(Load(key), root);
-            ActivateLogic(key, root);
+            case InfosTabData.InfoKey.Contact:
+                ContactLogic(root);
+
+                break;
+
+            case InfosTabData.InfoKey.ManagePackages:
+                ManagePackagesLogic(root);
+
+                break;
+
+            case InfosTabData.InfoKey.UsePackages:
+
+                break;
+
+            case InfosTabData.InfoKey.UpdateBasePackage:
+                UpdateBasePackageLogic(root);
+
+                break;
+
+            case InfosTabData.InfoKey.Shortcuts:
+                ShortcutsLogic(root);
+
+                break;
+
+            default:
+                return;
         }
+    }
 
-        private static VisualTreeAsset Load(InfosTabData.InfoKey key)
-            => Resources.Load<VisualTreeAsset>(GetDisplayPath(key));
-
-        private static string GetDisplayPath(InfosTabData.InfoKey key)
-            => BasePath.Replace("xxx", key.ToString());
-        
-        private static void ActivateLogic(InfosTabData.InfoKey key, VisualElement root)
-        {
-            switch (key)
-            {
-                case InfosTabData.InfoKey.Contact: 
-                    ContactLogic(root);
-
-                    break;
-                case InfosTabData.InfoKey.ManagePackages: 
-                    ManagePackagesLogic(root);
-
-                    break;
-                case InfosTabData.InfoKey.UsePackages: 
-                    
-                    break;
-                
-                case InfosTabData.InfoKey.UpdateBasePackage: 
-                    UpdateBasePackageLogic(root);
-
-                    break;
-
-                case InfosTabData.InfoKey.Shortcuts:
-                    ShortcutsLogic(root);
-
-                    break;
-                
-                default: return;
-            }
-        }
-
-        private static void ContactLogic(VisualElement root)
-        {
-            root.ActivateLinks(evt =>
+    /// <summary> Logic of the contact info </summary>
+    /// <param name="root"> Info as <see cref="VisualElement" /> </param>
+    private static void ContactLogic(VisualElement root)
+    {
+        root.ActivateLinks(
+            evt =>
             {
                 switch (evt.linkID)
                 {
@@ -75,60 +93,84 @@ namespace Editor.Scripts.Windows.BaseWindowContent.InfoTabContent
                         break;
                 }
             });
-        }
-        
-        private static void ManagePackagesLogic(VisualElement root)
-        {
-            root.ActivateLinks(evt =>
+    }
+
+    /// <summary> Load the uxml file of the selected info </summary>
+    /// <param name="key"> Key corresponding to the targeted information </param>
+    /// <returns> Loaded uxml file </returns>
+    private static VisualTreeAsset Load(InfosTabData.InfoKey key)
+    {
+        return Resources.Load <VisualTreeAsset>(_BasePath.Replace("xxx", key.ToString()));
+    }
+
+    /// <summary> Logic of the managePackages info </summary>
+    /// <param name="root"> Info as <see cref="VisualElement" /> </param>
+    private static void ManagePackagesLogic(VisualElement root)
+    {
+        root.ActivateLinks(
+            evt =>
             {
                 switch (evt.linkID)
                 {
                     case "github":
                         Application.OpenURL("https://github.com/tiogiras/MegaPint");
+
                         break;
-                        
+
                     case "MegaPint/PackageManager":
                         EditorApplication.ExecuteMenuItem(evt.linkID);
+
                         break;
-                        
+
                     case "Window/Package Manager":
                         EditorApplication.ExecuteMenuItem(evt.linkID);
+
                         break;
-                        
+
                     case "website":
                         Application.OpenURL("https://tiogiras.games");
+
                         break;
                 }
             });
-        }
-        
-        private static void UpdateBasePackageLogic(VisualElement root)
-        {
-            root.ActivateLinks(
-                evt =>
-                {
-                    switch (evt.linkID)
-                    {
-                        case "website":
-                            Application.OpenURL("https://tiogiras.games");
-                            break;
-                    }
-                });
-        }        
-        
-        private static void ShortcutsLogic(VisualElement root)
-        {
-            root.ActivateLinks(
-                evt =>
-                {
-                    switch (evt.linkID)
-                    {
-                        case "Edit/Shortcuts...":
-                            EditorApplication.ExecuteMenuItem(evt.linkID);
-                            break;
-                    }
-                });
-        }
     }
+
+    /// <summary> Logic of the shortcuts info </summary>
+    /// <param name="root"> Info as <see cref="VisualElement" /> </param>
+    private static void ShortcutsLogic(VisualElement root)
+    {
+        root.ActivateLinks(
+            evt =>
+            {
+                switch (evt.linkID)
+                {
+                    case "Edit/Shortcuts...":
+                        EditorApplication.ExecuteMenuItem(evt.linkID);
+
+                        break;
+                }
+            });
+    }
+
+    /// <summary> Logic of the updateBasePackage info </summary>
+    /// <param name="root"> Info as <see cref="VisualElement" /> </param>
+    private static void UpdateBasePackageLogic(VisualElement root)
+    {
+        root.ActivateLinks(
+            evt =>
+            {
+                switch (evt.linkID)
+                {
+                    case "website":
+                        Application.OpenURL("https://tiogiras.games");
+
+                        break;
+                }
+            });
+    }
+
+    #endregion
+}
+
 }
 #endif

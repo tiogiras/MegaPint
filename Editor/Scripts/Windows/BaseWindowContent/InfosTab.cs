@@ -2,27 +2,34 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Editor.Scripts.Windows.BaseWindowContent.InfoTabContent;
-using MegaPint.Editor.Scripts;
+using Editor.Scripts.Windows;
+using MegaPint.Editor.Scripts.Windows.BaseWindowContent.InfoTabContent;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
-namespace Editor.Scripts.Windows.BaseWindowContent
+namespace MegaPint.Editor.Scripts.Windows.BaseWindowContent
 {
 
+/// <summary> Manages the info tab of the base window </summary>
 internal class InfosTab
 {
-    private readonly string _itemPath = Path.Combine(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Base Window", "Info item");
+    private static string s_itemPath;
 
-    private readonly VisualTreeAsset _itemTemplate;
-
-    private readonly ToolbarSearchField _searchField;
+    private static string _ItemPath =>
+        s_itemPath ??= Path.Combine(
+            Constants.BasePackage.Resources.UserInterface.WindowsPath,
+            "Base Window",
+            "Info item");
 
     private readonly VisualElement _content;
 
+    private readonly VisualTreeAsset _itemTemplate;
+
     private readonly ListView _list;
+
+    private readonly ToolbarSearchField _searchField;
 
     private bool _active;
     private List <InfosTabData.Info> _allInfos;
@@ -36,7 +43,7 @@ internal class InfosTab
 
     public InfosTab(VisualElement root)
     {
-        _itemTemplate = Resources.Load <VisualTreeAsset>(_itemPath);
+        _itemTemplate = Resources.Load <VisualTreeAsset>(_ItemPath);
 
         _list = root.Q <ListView>("InfosList");
         _searchField = root.Q <ToolbarSearchField>("SearchField");
@@ -52,6 +59,7 @@ internal class InfosTab
 
     #region Public Methods
 
+    /// <summary> Hide the tab </summary>
     public void Hide()
     {
         Clear();
@@ -60,12 +68,14 @@ internal class InfosTab
         _active = false;
     }
 
+    /// <summary> Reset the tab </summary>
     public void ResetVariables()
     {
         _currentVisualElement = null;
         _visualElements = null;
     }
 
+    /// <summary> Show the tab </summary>
     public void Show()
     {
         _searchField.value = "";
@@ -96,6 +106,9 @@ internal class InfosTab
 
     #region Private Methods
 
+    /// <summary> Collect all infos </summary>
+    /// <param name="infos"> All infos </param>
+    /// <returns> Converted infos </returns>
     private static IEnumerable <InfosTabData.Info> GetAll(InfosTabData.Info infos)
     {
         List <InfosTabData.Info> result = new();
@@ -113,6 +126,8 @@ internal class InfosTab
         return result;
     }
 
+    /// <summary> Add info to displayedInfos </summary>
+    /// <param name="info"> Info to be added </param>
     private void Add(InfosTabData.Info info)
     {
         _displayedInfos.Add(info);
@@ -127,6 +142,7 @@ internal class InfosTab
             Add(subInfo);
     }
 
+    /// <summary> Clear the tab </summary>
     private void Clear()
     {
         if (!_active)
@@ -135,6 +151,8 @@ internal class InfosTab
         _content.Clear();
     }
 
+    /// <summary> SearchField Callback </summary>
+    /// <param name="evt"> Callback event </param>
     private void OnSearchFieldChange(ChangeEvent <string> evt)
     {
         if (!_active)
@@ -143,6 +161,8 @@ internal class InfosTab
         SetDisplayed(_searchField.value);
     }
 
+    /// <summary> ListView Callback </summary>
+    /// <param name="_"> Callback event </param>
     private void OnUpdateRightPane(IEnumerable <int> _)
     {
         if (_list.selectedItem == null)
@@ -186,6 +206,7 @@ internal class InfosTab
         _list.ClearSelection();
     }
 
+    /// <summary> Register all callbacks </summary>
     private void RegisterCallbacks()
     {
         _list.makeItem = () => GUIUtility.Instantiate(_itemTemplate);
@@ -231,14 +252,16 @@ internal class InfosTab
         _searchField.RegisterValueChangedCallback(OnSearchFieldChange);
     }
 
+    /// <summary> Set the displayed infos based on the search string </summary>
+    /// <param name="searchString"> String to filter infos </param>
     private void SetDisplayed(string searchString)
     {
         _displayedInfos = searchString.Equals("")
             ? InfosTabData.Infos
             : _allInfos.Where(
-                               info =>
-                                   info.infoName.ToLower().Contains(searchString.ToLower())).
-                           ToList();
+                            info =>
+                                info.infoName.ToLower().Contains(searchString.ToLower())).
+                        ToList();
 
         if (!searchString.Equals(""))
         {
@@ -258,6 +281,7 @@ internal class InfosTab
         _list.RefreshItems();
     }
 
+    /// <summary> Update the right pane </summary>
     private void UpdateRightPane()
     {
         Clear();

@@ -11,7 +11,7 @@ namespace MegaPint.Editor.Scripts.GUI.Factories.TextElements
 {
 
 /// <summary> Uxml factory to create a <see cref="VisualElement" /> that can hold, color and copy the given code </summary>
-public class CodeExample : VisualElement
+internal class CodeExample : VisualElement
 {
     public new class UxmlFactory : UxmlFactory <CodeExample, UxmlTraits>
     {

@@ -1,21 +1,23 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+using System.Collections.Generic;
 using System.IO;
-using MegaPint.Editor.Scripts;
+using Editor.Scripts.Windows;
 using MegaPint.Editor.Scripts.GUI.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
-namespace Editor.Scripts.Windows.DevMode
+namespace MegaPint.Editor.Scripts.Windows.DevMode
 {
 
-public class InterfaceOverview : MegaPintEditorWindowBase
+/// <summary> Editor window to display various combinations of interface elements </summary>
+public class InterfaceOverview : EditorWindowBase
 {
     private VisualTreeAsset _baseWindow;
 
     #region Public Methods
 
-    public override MegaPintEditorWindowBase ShowWindow()
+    public override EditorWindowBase ShowWindow()
     {
         titleContent.text = "Interface Overview";
 
@@ -28,7 +30,9 @@ public class InterfaceOverview : MegaPintEditorWindowBase
 
     protected override string BasePath()
     {
-        return Path.Join(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Development Mode", "Interface Overview");
+        return Path.Join(
+            Constants.BasePackage.Resources.UserInterface.Windows.DevelopmentModePath,
+            "Interface Overview");
     }
 
     protected override void CreateGUI()
@@ -38,11 +42,11 @@ public class InterfaceOverview : MegaPintEditorWindowBase
         VisualElement root = GUIUtility.Instantiate(_baseWindow);
         root.style.flexGrow = 1f;
         root.style.flexShrink = 1f;
-        
-        root.ActivateLinks(_ => {});
+
+        root.ActivateLinks(_ => { });
 
         rootVisualElement.Add(root);
-        
+
         SetupAllLists(root);
     }
 
@@ -63,22 +67,36 @@ public class InterfaceOverview : MegaPintEditorWindowBase
 
     #endregion
 
-    private void SetupAllLists(VisualElement root)
-    {
-        root.Query <ListView>().ForEach(ListSetup);
-    }
-    
+    #region Private Methods
+
+    /// <summary> Execute setup for a list view </summary>
+    /// <param name="list"> Targeted list view </param>
     private static void ListSetup(ListView list)
     {
         list.makeItem = () => new VisualElement();
-        
-        list.bindItem = (e, i) =>
+
+        list.bindItem = (e, i) => {e.Add(new Label($"Item {i}"));};
+
+        list.itemsSource = new List <int>
         {
-            e.Add(new Label($"Item {i}"));
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
         };
-        
-        list.itemsSource = new List<int> {0, 1, 2, 3, 4, 5};
     }
+
+    /// <summary> Call setup for all list views </summary>
+    /// <param name="root"> Root element containing the list views </param>
+    private static void SetupAllLists(VisualElement root)
+    {
+        root.Query <ListView>().ForEach(ListSetup);
+    }
+
+    #endregion
 }
 
 }
+#endif

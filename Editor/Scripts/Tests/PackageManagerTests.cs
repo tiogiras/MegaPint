@@ -2,14 +2,14 @@
 #if UNITY_INCLUDE_TESTS
 using System.Collections;
 using System.Collections.Generic;
-using Editor.Scripts.PackageManager;
-using Editor.Scripts.PackageManager.Cache;
-using Editor.Scripts.PackageManager.Packages;
+using MegaPint.Editor.Scripts.PackageManager;
+using MegaPint.Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Editor.Scripts.Tests
+namespace MegaPint.Editor.Scripts.Tests
 {
 
 /// <summary> Unit tests regarding the <see cref="MegaPintPackageManager" /> </summary>

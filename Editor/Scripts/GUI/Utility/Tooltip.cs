@@ -7,7 +7,7 @@ namespace MegaPint.Editor.Scripts.GUI.Utility
 {
 
 /// <summary> Partial utility class containing tooltip specific utility functions </summary>
-public static partial class GUIUtility
+internal static partial class GUIUtility
 {
     private static string s_tooltipPath;
 
@@ -17,12 +17,12 @@ public static partial class GUIUtility
     private static string _TooltipPath =>
         s_tooltipPath ??= Path.Combine(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Tooltip");
 
-    #region Public Methods
+    #region Private Methods
 
     /// <summary> Display a tooltip on the given element </summary>
     /// <param name="root"> Element the tooltip should be displayed on </param>
     /// <param name="tooltip"> Tooltip text </param>
-    public static void DisplayTooltip(VisualElement root, string tooltip)
+    private static void DisplayTooltip(VisualElement root, string tooltip)
     {
         s_tooltip = Instantiate(Resources.Load <VisualTreeAsset>(_TooltipPath), root.GetRootVisualElement());
         s_tooltip.style.display = DisplayStyle.None;
@@ -37,7 +37,7 @@ public static partial class GUIUtility
 
     /// <summary> Hide the tooltip from the given element </summary>
     /// <param name="root"> Element the tooltip should be removed from </param>
-    public static void HideTooltip(CallbackEventHandler root)
+    private static void HideTooltip(CallbackEventHandler root)
     {
         if (s_tooltip == null)
             return;
@@ -48,10 +48,6 @@ public static partial class GUIUtility
 
         root.UnregisterCallback <MouseMoveEvent>(TooltipMove);
     }
-
-    #endregion
-
-    #region Private Methods
 
     /// <summary> Move the tooltip </summary>
     /// <param name="evt"> The mouse event of the move </param>

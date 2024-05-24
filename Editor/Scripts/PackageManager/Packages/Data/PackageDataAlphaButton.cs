@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
 
-namespace Editor.Scripts.PackageManager.Packages.Data
+namespace MegaPint.Editor.Scripts.PackageManager.Packages.Data
 {
 
 /// <summary> Data for the AlphaButton package </summary>
@@ -33,7 +33,10 @@ internal static class PackageDataAlphaButton
                     version = "1.0.0",
                     tag = "a",
                     devBranch = "validatorsIntegration/development",
-                    dependencies = new List <Dependency> {new() {name = "Validators", key = PackageKey.Validators}}
+                    dependencies = new List <Dependency>
+                    {
+                        new() {name = "Validators", key = PackageKey.Validators}
+                    }
                 }
             }
         };

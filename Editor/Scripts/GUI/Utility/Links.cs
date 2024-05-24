@@ -9,7 +9,7 @@ namespace MegaPint.Editor.Scripts.GUI.Utility
 {
 
 /// <summary> Partial utility class containing link specific utility functions </summary>
-public static partial class GUIUtility
+internal static partial class GUIUtility
 {
     private static bool s_linkCooldown;
 

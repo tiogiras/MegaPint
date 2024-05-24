@@ -1,6 +1,6 @@
 {
-    "name": "tiogiras.megapint-validators.runtime.scripts",
-    "rootNamespace": "",
+    "name": "tiogiras.megapint.validators.runtime",
+    "rootNamespace": "MegaPint",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

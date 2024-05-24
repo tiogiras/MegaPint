@@ -1,30 +1,27 @@
 ﻿#if UNITY_EDITOR
 using System.IO;
-using Editor.Scripts.PackageManager;
-using Editor.Scripts.Settings;
-using MegaPint.Editor.Scripts;
-using MegaPint.Editor.Scripts.GUI;
+using Editor.Scripts;
+using Editor.Scripts.Windows;
+using MegaPint.Editor.Scripts.PackageManager;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
-namespace Editor.Scripts.Windows.DevMode
+namespace MegaPint.Editor.Scripts.Windows.DevMode
 {
 
-public class Toggle : MegaPintEditorWindowBase
+/// <summary> Editor window to toggle on/off the development mode </summary>
+public class Toggle : EditorWindowBase
 {
-    private static MegaPintSettingsBase _Settings =>
-        MegaPintSettings.instance.GetSetting("General");
-
     private VisualTreeAsset _baseWindow;
     private Button _btnOff;
     private Button _btnOn;
 
     private bool _devModeValue;
-    
+
     #region Public Methods
 
-    public override MegaPintEditorWindowBase ShowWindow()
+    public override EditorWindowBase ShowWindow()
     {
         titleContent.text = "Development Mode";
 
@@ -32,12 +29,14 @@ public class Toggle : MegaPintEditorWindowBase
     }
 
     #endregion
-    
+
     #region Protected Methods
 
     protected override string BasePath()
     {
-        return Path.Join(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Development Mode", "Toggle");
+        return Path.Join(
+            Constants.BasePackage.Resources.UserInterface.Windows.DevelopmentModePath,
+            "Toggle");
     }
 
     protected override void CreateGUI()
@@ -73,7 +72,7 @@ public class Toggle : MegaPintEditorWindowBase
         if (!base.LoadSettings())
             return false;
 
-        _devModeValue = _Settings.GetValue("devMode", false);
+        _devModeValue = SaveValues.BasePackage.DevMode;
 
         return true;
     }
@@ -91,47 +90,35 @@ public class Toggle : MegaPintEditorWindowBase
     }
 
     #endregion
-    
+
     #region Private Methods
 
+    /// <summary> Turn off development mode </summary>
     private void ToggleOff()
     {
         _devModeValue = false;
-        _Settings.SetValue("devMode", _devModeValue);
+        SaveValues.BasePackage.DevMode = _devModeValue;
 
         UpdateButtonStyles();
 
         MegaPintPackageManager.UpdateAll();
     }
 
+    /// <summary> Turn on development mode </summary>
     private void ToggleOn()
     {
         _devModeValue = true;
-        _Settings.SetValue("devMode", _devModeValue);
+        SaveValues.BasePackage.DevMode = _devModeValue;
 
         UpdateButtonStyles();
 
         MegaPintPackageManager.UpdateAll();
     }
 
+    /// <summary> Update the state of the buttons </summary>
     private void UpdateButtonStyles()
     {
-        if (_devModeValue)
-        {
-            _btnOn.AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
-            _btnOn.AddToClassList(StyleSheetClasses.Background.Color.Identity);
-            
-            _btnOff.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
-            _btnOff.RemoveFromClassList(StyleSheetClasses.Background.Color.Identity);
-        }
-        else
-        {
-            _btnOn.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
-            _btnOn.RemoveFromClassList(StyleSheetClasses.Background.Color.Identity);
-            
-            _btnOff.AddToClassList(StyleSheetClasses.Text.Color.ButtonActive);
-            _btnOff.AddToClassList(StyleSheetClasses.Background.Color.Identity);
-        }
+        GUIUtility.ToggleActiveButtonInGroup(_devModeValue ? 0 : 1, _btnOn, _btnOff);
     }
 
     #endregion

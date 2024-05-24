@@ -1,8 +1,8 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
-using Editor.Scripts.PackageManager.Packages;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
 
-namespace Editor.Scripts.PackageManager.Cache
+namespace MegaPint.Editor.Scripts.PackageManager.Cache
 {
 
 /// <summary> Stores references to values of a <see cref="Variation" /> </summary>

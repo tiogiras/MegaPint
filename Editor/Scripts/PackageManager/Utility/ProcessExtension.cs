@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace Editor.Scripts.PackageManager.Utility
+namespace MegaPint.Editor.Scripts.PackageManager.Utility
 {
 
 /// <summary> Extension to the <see cref="Process" /> to run processes like git in unity </summary>

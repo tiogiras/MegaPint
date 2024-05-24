@@ -5,7 +5,7 @@ namespace MegaPint.Editor.Scripts.GUI.Factories.Backgrounds
 {
 
 /// <summary> Uxml factory to create a <see cref="VisualElement" /> with the settings of a secondary background </summary>
-public class BackgroundSecondary : VisualElement
+internal class BackgroundSecondary : VisualElement
 {
     public new class UxmlFactory : UxmlFactory <BackgroundSecondary, UxmlTraits>
     {

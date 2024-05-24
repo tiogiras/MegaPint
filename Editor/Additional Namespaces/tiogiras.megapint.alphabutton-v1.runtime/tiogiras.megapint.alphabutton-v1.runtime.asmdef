@@ -1,6 +1,6 @@
 {
     "name": "tiogiras.megapint.alphabutton-v1.runtime",
-    "rootNamespace": "",
+    "rootNamespace": "MegaPint",
     "references": [
         "GUID:0e40976153628db4fbfccfcc6ab8f1bf"
     ],

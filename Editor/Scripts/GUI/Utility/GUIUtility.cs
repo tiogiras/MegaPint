@@ -1,14 +1,16 @@
 ﻿#if UNITY_EDITOR
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine.UIElements;
 
+[assembly: InternalsVisibleTo("tiogiras.megapint.validators.editor")]
 namespace MegaPint.Editor.Scripts.GUI.Utility
 {
 
 /// <summary> Partial utility class containing general gui utility functions </summary>
-public static partial class GUIUtility
+internal static partial class GUIUtility
 {
-    public static Action onForceRepaint;
+    private static Action s_onForceRepaint;
 
     #region Public Methods
 
@@ -16,7 +18,7 @@ public static partial class GUIUtility
     public static void ForceRepaint()
     {
         StyleSheetValues.Reset();
-        onForceRepaint?.Invoke();
+        s_onForceRepaint?.Invoke();
     }
 
     /// <summary> Instantiate a <see cref="VisualElement" /> </summary>

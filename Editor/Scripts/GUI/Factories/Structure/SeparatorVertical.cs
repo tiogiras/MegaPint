@@ -6,7 +6,7 @@ namespace MegaPint.Editor.Scripts.GUI.Factories.Structure
 {
 
 /// <summary> Uxml factory to create a <see cref="VisualElement" /> that acts as a separator between other elements </summary>
-public class SeparatorVertical : VisualElement
+internal class SeparatorVertical : VisualElement
 {
     public new class UxmlFactory : UxmlFactory <SeparatorVertical, UxmlTraits>
     {

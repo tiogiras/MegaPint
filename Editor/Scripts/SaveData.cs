@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-using Editor.Scripts.Settings;
+using MegaPint.Editor.Scripts.Settings;
 
 namespace Editor.Scripts
 {
@@ -7,7 +7,7 @@ namespace Editor.Scripts
 /// <summary> Stores references to settings values </summary>
 internal static class SaveData
 {
-    private static MegaPintSettingsBase s_settings;
+    private static SettingsBase s_settings;
 
     #region Public Methods
 
@@ -15,7 +15,7 @@ internal static class SaveData
     /// <returns> DeveloperMode state </returns>
     public static bool DevMode()
     {
-        s_settings ??= MegaPintSettings.instance.GetSetting("General");
+        s_settings ??= MegaPint.Editor.Scripts.Settings.Settings.instance.GetSetting("General");
 
         return s_settings.GetValue("devMode", false);
     }

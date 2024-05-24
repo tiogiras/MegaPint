@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts.PackageManager.Cache;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,7 +11,7 @@ namespace MegaPint.Editor.Scripts.GUI.Utility
 {
 
 /// <summary> Partial utility class containing splash screen specific utility functions </summary>
-public static partial class GUIUtility
+internal static partial class GUIUtility
 {
     private static string s_splashScreenPath;
 

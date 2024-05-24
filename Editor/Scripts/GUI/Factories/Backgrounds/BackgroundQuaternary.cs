@@ -5,7 +5,7 @@ namespace MegaPint.Editor.Scripts.GUI.Factories.Backgrounds
 {
 
 /// <summary> Uxml factory to create a <see cref="VisualElement" /> with the settings of a quaternary background </summary>
-public class BackgroundQuaternary : VisualElement
+internal class BackgroundQuaternary : VisualElement
 {
     public new class UxmlFactory : UxmlFactory <BackgroundQuaternary, UxmlTraits>
     {

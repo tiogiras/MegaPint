@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Editor.Scripts.PackageManager.Utility
+namespace MegaPint.Editor.Scripts.PackageManager.Utility
 {
 
 /// <summary> Class to get information via git methods </summary>
