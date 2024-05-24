@@ -18,8 +18,8 @@
     --text-orange-color: rgb(175, 107, 30);
     --text-green-color: rgb(26, 154, 26);
     --code-basic-color: rgb(70, 112, 198);
-    --code-class-color: rgb(191, 144, 253);
-    --code-method-color: rgb(54, 169, 98);
+    --code-class-color: rgb(148, 121, 182);
+    --code-method-color: rgb(214, 200, 158);
     --code-comment-color: rgb(110, 166, 81);
     --code-string-color: rgb(173, 119, 65);
     --background-primary-color: rgb(25, 25, 25);
@@ -58,11 +58,11 @@
     --text-red-color: rgb(175, 30, 30);
     --text-orange-color: rgb(175, 107, 30);
     --text-green-color: rgb(23, 131, 23);
-    --code-basic-color: rgb(70, 112, 198);
-    --code-class-color: rgb(191, 144, 253);
-    --code-method-color: rgb(54, 169, 98);
-    --code-comment-color: rgb(110, 166, 81);
-    --code-string-color: rgb(173, 119, 65);
+    --code-basic-color: rgb(217, 101, 18);
+    --code-class-color: rgb(39, 126, 201);
+    --code-method-color: rgb(227, 146, 11);
+    --code-comment-color: rgb(89, 89, 89);
+    --code-string-color: rgb(102, 126, 4);
     --background-primary-color: rgb(160, 160, 160);
     --background-secondary-color: rgb(176, 176, 176);
     --background-tertiary-color: rgb(210, 210, 210);

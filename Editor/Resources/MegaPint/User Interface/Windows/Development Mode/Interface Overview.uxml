@@ -5,7 +5,7 @@
     <Editor.Scripts.GUI.Factories.RootElement style="flex-grow: 1;">
         <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="flex-grow: 1;">
             <ui:VisualElement style="flex-grow: 1; flex-direction: row; background-color: rgb(255, 0, 237);">
-                <ui:VisualElement class="mp mp_theme--dark" style="width: 50%;">
+                <ui:VisualElement name="DarkTheme" class="mp mp_theme--dark" style="width: 50%;">
                     <ui:VisualElement name="Backgrounds_Plane">
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="height: 30px; border-bottom-width: 1px;" />
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px; height: 30px;" />
@@ -287,7 +287,7 @@
                         </Editor.Scripts.GUI.Factories.Backgrounds.BackgroundQuaternary>
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement class="mp mp_theme--light" style="width: 50%;">
+                <ui:VisualElement name="LightTheme" class="mp mp_theme--light" style="width: 50%;">
                     <ui:VisualElement name="Backgrounds_Plane">
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary class="mp_border-color--black" style="height: 30px; border-bottom-width: 1px;" />
                         <Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px; height: 30px;" />
