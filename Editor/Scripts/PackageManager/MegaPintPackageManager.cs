@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Editor.Scripts;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.PackageManager.Utility;

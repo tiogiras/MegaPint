@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Editor.Scripts;
-using Editor.Scripts.Windows;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using UnityEditor.UIElements;
 using UnityEngine;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Editor.Scripts.Windows;
 using MegaPint.Editor.Scripts.Windows.BaseWindowContent.InfoTabContent;
 using UnityEditor.UIElements;
 using UnityEngine;

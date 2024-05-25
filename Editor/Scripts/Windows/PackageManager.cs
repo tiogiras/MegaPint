@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Editor.Scripts;
 using MegaPint.Editor.Scripts.GUI;
 using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
@@ -13,7 +12,6 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using ContextMenu = MegaPint.Editor.Scripts.ContextMenu;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
 namespace MegaPint.Editor.Scripts.Windows
