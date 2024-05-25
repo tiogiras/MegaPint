@@ -8,7 +8,7 @@ namespace MegaPint.Editor.Scripts
 {
 
 /// <summary> Partial class storing saveData values (BasePackage) </summary>
-public static partial class SaveValues
+internal static partial class SaveValues
 {
     public static class BasePackage
     {
