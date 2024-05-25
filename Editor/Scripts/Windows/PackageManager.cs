@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.GUI;
@@ -21,6 +22,61 @@ namespace MegaPint.Editor.Scripts.Windows
 internal class PackageManager : EditorWindowBase
 {
     private static Action <PackageKey> s_showWithLink;
+
+    private readonly string _dependencyItemPath = Path.Combine(
+        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath,
+        "Dependency Item");
+
+    private readonly string _listItemPath = Path.Combine(
+        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath,
+        "Package Item");
+
+    private readonly string _variationsListItemPath = Path.Combine(
+        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath,
+        "Variation Item");
+
+    private VisualTreeAsset _baseWindow;
+
+    private Button _btnImport;
+    private Button _btnRemove;
+    private Button _btnUpdate;
+
+    private bool _callbacksRegistered;
+    private GroupBox _content;
+    private int _currentIndex;
+
+    private CachedPackage _currentPackage;
+
+    private Foldout _dependencies;
+    private VisualTreeAsset _dependencyItem;
+
+    private List <CachedPackage> _displayedPackages;
+
+    private List <CachedVariation> _displayedPackageVariations;
+    private Label _infoText;
+
+    private VisualElement _installedVersion;
+
+    private VisualElement _lastUpdate;
+
+    private ListView _list;
+
+    private VisualTreeAsset _listItem;
+    private VisualElement _megaPintVersion;
+    private VisualElement _newestVersion;
+
+    private Label _packageName;
+
+    private ToolbarSearchField _packageSearch;
+    private ListView _packageVariations;
+
+    private VisualElement _packageVariationsParent;
+
+    private VisualElement _rightPane;
+
+    private VisualElement _root;
+    private VisualElement _unityVersion;
+    private VisualTreeAsset _variationsListItem;
 
     #region Public Methods
 
@@ -65,16 +121,14 @@ internal class PackageManager : EditorWindowBase
     protected override bool LoadResources()
     {
         _baseWindow = Resources.Load <VisualTreeAsset>(BasePath());
-        _listItem = Resources.Load <VisualTreeAsset>(s_listItemTemplate);
-        _variationsListItem = Resources.Load <VisualTreeAsset>(s_variationsListItemTemplate);
-        _dependencyItem = Resources.Load <VisualTreeAsset>(s_dependencyItemTemplate);
-        _imageItem = Resources.Load <VisualTreeAsset>(s_imageItemTemplate);
+        _listItem = Resources.Load <VisualTreeAsset>(_listItemPath);
+        _variationsListItem = Resources.Load <VisualTreeAsset>(_variationsListItemPath);
+        _dependencyItem = Resources.Load <VisualTreeAsset>(_dependencyItemPath);
 
         return _baseWindow != null &&
                _listItem != null &&
                _variationsListItem != null &&
-               _dependencyItem != null &&
-               _imageItem != null;
+               _dependencyItem != null;
     }
 
     protected override void RegisterCallbacks()
@@ -138,8 +192,6 @@ internal class PackageManager : EditorWindowBase
     {
         VisualElement content = GUIUtility.Instantiate(_baseWindow, root);
 
-        #region References
-
         _list = content.Q <ListView>("MainList");
 
         _rightPane = content.Q <VisualElement>("RightPane");
@@ -166,11 +218,7 @@ internal class PackageManager : EditorWindowBase
 
         _packageSearch = content.Q <ToolbarSearchField>("PackageSearch");
 
-        #endregion
-
         RegisterCallbacks();
-
-        #region List
 
         _list.makeItem = () => GUIUtility.Instantiate(_listItem);
 
@@ -178,17 +226,11 @@ internal class PackageManager : EditorWindowBase
 
         _list.destroyItem = element => element.Clear();
 
-        #endregion
-
-        #region Variations List
-
         _packageVariations.makeItem = () => GUIUtility.Instantiate(_variationsListItem);
 
         _packageVariations.bindItem = UpdateVariationItem;
 
         _packageVariations.destroyItem = element => element.Clear();
-
-        #endregion
 
         SetDisplayedPackages(_packageSearch.value);
 
@@ -230,6 +272,99 @@ internal class PackageManager : EditorWindowBase
         /*version.style.color = !package.IsNewestVersion ? _wrongVersionColor : _normalColor;*/
     }
 
+    /// <summary> Called on failure </summary>
+    private void OnFailure(string error)
+    {
+        ButtonSubscriptions(true);
+        Debug.LogError(error);
+    }
+
+    /// <summary> Import the displayed package </summary>
+    private void OnImport()
+    {
+        ButtonSubscriptions(false);
+
+        MegaPintPackageManager.onSuccess += OnImportSuccess;
+        MegaPintPackageManager.onFailure += OnFailure;
+#pragma warning disable CS4014
+        MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex]);
+#pragma warning restore CS4014
+    }
+
+    /// <summary> Called on successful import </summary>
+    private void OnImportSuccess()
+    {
+        ButtonSubscriptions(true);
+        ReselectItem(_currentIndex);
+        _list.ClearSelection();
+
+        MegaPintPackageManager.onSuccess -= OnImportSuccess;
+        MegaPintPackageManager.onFailure -= OnFailure;
+    }
+
+    /// <summary> Import the variation of the displayed package </summary>
+    /// <param name="variation"> Targeted variation </param>
+    private void OnImportVariation(CachedVariation variation)
+    {
+        ButtonSubscriptions(false);
+
+        MegaPintPackageManager.onSuccess += OnImportSuccess;
+        MegaPintPackageManager.onFailure += OnFailure;
+#pragma warning disable CS4014
+        MegaPintPackageManager.AddEmbedded(variation);
+#pragma warning restore CS4014
+    }
+
+    /// <summary> Remove the displayed package </summary>
+    private void OnRemove()
+    {
+        CachedPackage package = _displayedPackages[_list.selectedIndex];
+
+        if (package.CanBeRemoved(out List <PackageKey> dependants))
+        {
+            ButtonSubscriptions(false);
+
+            MegaPintPackageManager.onSuccess += OnRemoveSuccess;
+            MegaPintPackageManager.onFailure += OnFailure;
+            MegaPintPackageManager.Remove(package.Name);
+        }
+        else
+        {
+            List <string> deps = dependants.Select(dependant => dependant.ToString()).ToList();
+
+            var str = string.Join(", ", deps);
+
+            EditorUtility.DisplayDialog(
+                "Remove Failed",
+                $"Cannot remove the package because [{str}] depends on it!",
+                "Ok");
+        }
+    }
+
+    /// <summary> Called on successful remove </summary>
+    private void OnRemoveSuccess()
+    {
+        ButtonSubscriptions(true);
+        ReselectItem(_currentIndex);
+        _list.ClearSelection();
+
+        MegaPintPackageManager.onSuccess -= OnRemoveSuccess;
+        MegaPintPackageManager.onFailure -= OnFailure;
+    }
+
+    /// <summary> Remove the variation of the displayed package </summary>
+    private void OnRemoveVariation()
+    {
+        OnImport();
+    }
+
+    /// <summary> SearchField callback </summary>
+    /// <param name="evt"> Callback event </param>
+    private void OnSearchStringChanged(ChangeEvent <string> evt)
+    {
+        SetDisplayedPackages(_packageSearch.value);
+    }
+
     /// <summary> Show package via link </summary>
     /// <param name="key"> Selected package </param>
     private void OnShowLink(PackageKey key)
@@ -255,6 +390,126 @@ internal class PackageManager : EditorWindowBase
             return;
 
         _list.selectedIndex = targetIndex;
+    }
+
+    /// <summary> Update the displayed package </summary>
+    private void OnUpdate()
+    {
+        ButtonSubscriptions(false);
+
+        MegaPintPackageManager.onSuccess += OnUpdateSuccess;
+        MegaPintPackageManager.onFailure += OnFailure;
+#pragma warning disable CS4014
+        MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex]);
+#pragma warning restore CS4014
+    }
+
+    /// <summary> ListView callback </summary>
+    /// <param name="_"> Callback event </param>
+    private void OnUpdateRightPane(IEnumerable <int> _ = null)
+    {
+        _currentIndex = _list.selectedIndex;
+
+        if (_currentIndex < 0)
+        {
+            _content.style.display = DisplayStyle.None;
+
+            return;
+        }
+
+        _content.style.display = DisplayStyle.Flex;
+
+        CachedPackage package = _displayedPackages[_currentIndex];
+        _packageName.text = package.DisplayName;
+
+        _newestVersion.tooltip = $"Newest Version: {package.Version}";
+        _installedVersion.tooltip = $"Installed Version: {package.CurrentVersion}";
+        _lastUpdate.tooltip = $"Last Update: {package.LastUpdate}";
+        _unityVersion.tooltip = $"Unity Version: {package.UnityVersion}";
+        _megaPintVersion.tooltip = $"MegaPint Version: {package.ReqMpVersion}";
+
+        _infoText.text = package.Description;
+
+        var hasImages = package.Images is {Count: > 0};
+        var galleryButton = _content.Q <VisualElement>("Gallery");
+
+        galleryButton.style.display = hasImages ? DisplayStyle.Flex : DisplayStyle.None;
+
+        GUIUtility.AddClickInteraction(
+            galleryButton,
+            () =>
+            {
+                var gallery = (Gallery)ContextMenu.TryOpen <Gallery>(true);
+                gallery.Initialize(package);
+            });
+
+        var hasVariation = package.Variations is {Count: > 0};
+        var hasDependency = package.Dependencies is {Count: > 0};
+
+        if (hasVariation)
+        {
+            _packageVariationsParent.style.display = DisplayStyle.Flex;
+
+            _displayedPackageVariations = package.Variations;
+            _packageVariations.itemsSource = _displayedPackageVariations;
+            _packageVariations.RefreshItems();
+        }
+        else
+            _packageVariationsParent.style.display = DisplayStyle.None;
+
+        if (hasDependency)
+        {
+            _dependencies.Clear();
+
+            foreach (Dependency dependency in package.Dependencies)
+            {
+                VisualElement item = GUIUtility.Instantiate(_dependencyItem);
+                item.Q <Label>("PackageName").text = dependency.name;
+
+                var imported = PackageCache.IsInstalled(dependency.key);
+
+                item.Q <Label>("Missing").style.display = imported ? DisplayStyle.None : DisplayStyle.Flex;
+                item.Q <Label>("Imported").style.display = imported ? DisplayStyle.Flex : DisplayStyle.None;
+
+                _dependencies.Add(item);
+            }
+
+            _dependencies.style.display = DisplayStyle.Flex;
+        }
+        else
+            _dependencies.style.display = DisplayStyle.None;
+
+        var isImported = PackageCache.IsInstalled(package.Key);
+        _btnImport.style.display = isImported ? DisplayStyle.None : DisplayStyle.Flex;
+        _btnRemove.style.display = isImported ? DisplayStyle.Flex : DisplayStyle.None;
+
+        _btnUpdate.style.display = isImported && PackageCache.NeedsUpdate(package.Key)
+            ? DisplayStyle.Flex
+            : DisplayStyle.None;
+    }
+
+    /// <summary> Called on successful update </summary>
+    private void OnUpdateSuccess()
+    {
+        ButtonSubscriptions(true);
+        ReselectItem(_currentIndex);
+        _list.ClearSelection();
+
+        MegaPintPackageManager.onSuccess -= OnUpdateSuccess;
+        MegaPintPackageManager.onFailure -= OnFailure;
+    }
+
+    /// <summary> Update the variation of the displayed package </summary>
+    /// <param name="variation"> Targeted variation </param>
+    private void OnUpdateVariation(CachedVariation variation)
+    {
+        ButtonSubscriptions(false);
+
+        MegaPintPackageManager.onSuccess += OnUpdateSuccess;
+        MegaPintPackageManager.onFailure += OnFailure;
+#pragma warning disable CS4014
+        MegaPintPackageManager.AddEmbedded(variation);
+#pragma warning restore CS4014
     }
 
     /// <summary> Reselect the list view item after a delay </summary>
@@ -360,303 +615,6 @@ internal class PackageManager : EditorWindowBase
 
             btnUpdate.clickable = new Clickable(() => {OnUpdateVariation(variation);});
         }
-    }
-
-    #endregion
-
-    #region Const
-
-    private static readonly string s_listItemTemplate =
-        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath + "/Package Item";
-
-    private static readonly string s_variationsListItemTemplate =
-        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath + "/Variation Item";
-
-    private static readonly string s_dependencyItemTemplate =
-        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath + "/Dependency Item";
-
-    private static readonly string s_imageItemTemplate =
-        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath + "/Image Item";
-
-    #endregion
-
-    #region Visual References
-
-    private VisualElement _root;
-
-    private VisualElement _rightPane;
-    private GroupBox _content;
-
-    private Label _packageName;
-    private Label _infoText;
-
-    private VisualElement _installedVersion;
-    private VisualElement _newestVersion;
-
-    private VisualElement _lastUpdate;
-    private VisualElement _unityVersion;
-    private VisualElement _megaPintVersion;
-
-    private VisualElement _packageVariationsParent;
-    private ListView _packageVariations;
-
-    private Foldout _dependencies;
-
-    private ListView _list;
-
-    private ToolbarSearchField _packageSearch;
-
-    private Button _btnImport;
-    private Button _btnRemove;
-    private Button _btnUpdate;
-
-    #endregion
-
-    #region Private
-
-    private VisualTreeAsset _baseWindow;
-
-    private VisualTreeAsset _listItem;
-    private VisualTreeAsset _variationsListItem;
-    private VisualTreeAsset _dependencyItem;
-    private VisualTreeAsset _imageItem;
-
-    private List <CachedPackage> _displayedPackages;
-
-    private List <CachedVariation> _displayedPackageVariations;
-
-    private CachedPackage _currentPackage;
-    private int _currentIndex;
-
-    private bool _callbacksRegistered;
-
-    #endregion
-
-    #region Callbacks
-
-    /// <summary> SearchField callback </summary>
-    /// <param name="evt"> Callback event </param>
-    private void OnSearchStringChanged(ChangeEvent <string> evt)
-    {
-        SetDisplayedPackages(_packageSearch.value);
-    }
-
-    /// <summary> ListView callback </summary>
-    /// <param name="_"> Callback event </param>
-    private void OnUpdateRightPane(IEnumerable <int> _ = null)
-    {
-        _currentIndex = _list.selectedIndex;
-
-        if (_currentIndex < 0)
-        {
-            _content.style.display = DisplayStyle.None;
-
-            return;
-        }
-
-        _content.style.display = DisplayStyle.Flex;
-
-        CachedPackage package = _displayedPackages[_currentIndex];
-        _packageName.text = package.DisplayName;
-
-        _newestVersion.tooltip = $"Newest Version: {package.Version}";
-        _installedVersion.tooltip = $"Installed Version: {package.CurrentVersion}";
-        _lastUpdate.tooltip = $"Last Update: {package.LastUpdate}";
-        _unityVersion.tooltip = $"Unity Version: {package.UnityVersion}";
-        _megaPintVersion.tooltip = $"MegaPint Version: {package.ReqMpVersion}";
-
-        _infoText.text = package.Description;
-
-        var hasImages = package.Images is {Count: > 0};
-        var galleryButton = _content.Q <VisualElement>("Gallery");
-
-        galleryButton.style.display = hasImages ? DisplayStyle.Flex : DisplayStyle.None;
-
-        GUIUtility.AddClickInteraction(
-            galleryButton,
-            () =>
-            {
-                var gallery = (Gallery)ContextMenu.TryOpen <Gallery>(true);
-                gallery.Initialize(package);
-            });
-
-        var hasVariation = package.Variations is {Count: > 0};
-        var hasDependency = package.Dependencies is {Count: > 0};
-
-        if (hasVariation)
-        {
-            _packageVariationsParent.style.display = DisplayStyle.Flex;
-
-            _displayedPackageVariations = package.Variations;
-            _packageVariations.itemsSource = _displayedPackageVariations;
-            _packageVariations.RefreshItems();
-        }
-        else
-            _packageVariationsParent.style.display = DisplayStyle.None;
-
-        if (hasDependency)
-        {
-            _dependencies.Clear();
-
-            foreach (Dependency dependency in package.Dependencies)
-            {
-                VisualElement item = GUIUtility.Instantiate(_dependencyItem);
-                item.Q <Label>("PackageName").text = dependency.name;
-
-                var imported = PackageCache.IsInstalled(dependency.key);
-
-                item.Q <Label>("Missing").style.display = imported ? DisplayStyle.None : DisplayStyle.Flex;
-                item.Q <Label>("Imported").style.display = imported ? DisplayStyle.Flex : DisplayStyle.None;
-
-                _dependencies.Add(item);
-            }
-
-            _dependencies.style.display = DisplayStyle.Flex;
-        }
-        else
-            _dependencies.style.display = DisplayStyle.None;
-
-        var isImported = PackageCache.IsInstalled(package.Key);
-        _btnImport.style.display = isImported ? DisplayStyle.None : DisplayStyle.Flex;
-        _btnRemove.style.display = isImported ? DisplayStyle.Flex : DisplayStyle.None;
-
-        _btnUpdate.style.display = isImported && PackageCache.NeedsUpdate(package.Key)
-            ? DisplayStyle.Flex
-            : DisplayStyle.None;
-    }
-
-    #region Import
-
-    /// <summary> Import the displayed package </summary>
-    private void OnImport()
-    {
-        ButtonSubscriptions(false);
-
-        MegaPintPackageManager.onSuccess += OnImportSuccess;
-        MegaPintPackageManager.onFailure += OnFailure;
-#pragma warning disable CS4014
-        MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex]);
-#pragma warning restore CS4014
-    }
-
-    /// <summary> Import the variation of the displayed package </summary>
-    /// <param name="variation"> Targeted variation </param>
-    private void OnImportVariation(CachedVariation variation)
-    {
-        ButtonSubscriptions(false);
-
-        MegaPintPackageManager.onSuccess += OnImportSuccess;
-        MegaPintPackageManager.onFailure += OnFailure;
-#pragma warning disable CS4014
-        MegaPintPackageManager.AddEmbedded(variation);
-#pragma warning restore CS4014
-    }
-
-    /// <summary> Called on successful import </summary>
-    private void OnImportSuccess()
-    {
-        ButtonSubscriptions(true);
-        ReselectItem(_currentIndex);
-        _list.ClearSelection();
-
-        MegaPintPackageManager.onSuccess -= OnImportSuccess;
-        MegaPintPackageManager.onFailure -= OnFailure;
-    }
-
-    #endregion
-
-    #region Remove
-
-    /// <summary> Remove the displayed package </summary>
-    private void OnRemove()
-    {
-        CachedPackage package = _displayedPackages[_list.selectedIndex];
-
-        if (package.CanBeRemoved(out List <PackageKey> dependants))
-        {
-            ButtonSubscriptions(false);
-
-            MegaPintPackageManager.onSuccess += OnRemoveSuccess;
-            MegaPintPackageManager.onFailure += OnFailure;
-            MegaPintPackageManager.Remove(package.Name);
-        }
-        else
-        {
-            List <string> deps = dependants.Select(dependant => dependant.ToString()).ToList();
-
-            var str = string.Join(", ", deps);
-
-            EditorUtility.DisplayDialog(
-                "Remove Failed",
-                $"Cannot remove the package because [{str}] depends on it!",
-                "Ok");
-        }
-    }
-
-    /// <summary> Remove the variation of the displayed package </summary>
-    private void OnRemoveVariation()
-    {
-        OnImport();
-    }
-
-    /// <summary> Called on successful remove </summary>
-    private void OnRemoveSuccess()
-    {
-        ButtonSubscriptions(true);
-        ReselectItem(_currentIndex);
-        _list.ClearSelection();
-
-        MegaPintPackageManager.onSuccess -= OnRemoveSuccess;
-        MegaPintPackageManager.onFailure -= OnFailure;
-    }
-
-    #endregion
-
-    #region Update
-
-    /// <summary> Update the displayed package </summary>
-    private void OnUpdate()
-    {
-        ButtonSubscriptions(false);
-
-        MegaPintPackageManager.onSuccess += OnUpdateSuccess;
-        MegaPintPackageManager.onFailure += OnFailure;
-#pragma warning disable CS4014
-        MegaPintPackageManager.AddEmbedded(_displayedPackages[_list.selectedIndex]);
-#pragma warning restore CS4014
-    }
-
-    /// <summary> Update the variation of the displayed package </summary>
-    /// <param name="variation"> Targeted variation </param>
-    private void OnUpdateVariation(CachedVariation variation)
-    {
-        ButtonSubscriptions(false);
-
-        MegaPintPackageManager.onSuccess += OnUpdateSuccess;
-        MegaPintPackageManager.onFailure += OnFailure;
-#pragma warning disable CS4014
-        MegaPintPackageManager.AddEmbedded(variation);
-#pragma warning restore CS4014
-    }
-
-    /// <summary> Called on successful update </summary>
-    private void OnUpdateSuccess()
-    {
-        ButtonSubscriptions(true);
-        ReselectItem(_currentIndex);
-        _list.ClearSelection();
-
-        MegaPintPackageManager.onSuccess -= OnUpdateSuccess;
-        MegaPintPackageManager.onFailure -= OnFailure;
-    }
-
-    #endregion
-
-    /// <summary> Called on failure </summary>
-    private void OnFailure(string error)
-    {
-        ButtonSubscriptions(true);
-        Debug.LogError(error);
     }
 
     #endregion
