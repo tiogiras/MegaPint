@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System;
+using MegaPint.Editor.Scripts.DevMode;
 using UnityEditor;
 
 namespace MegaPint.Editor.Scripts.Windows
@@ -35,7 +36,10 @@ public abstract class EditorWindowBase : EditorWindow
     protected virtual void CreateGUI()
     {
         if (!LoadResources())
-            return;
+        {
+            DevLog.LogError($"Could not load resources for window: {GetType().Name}");
+            return;   
+        }
 
         LoadSettings();
         onCreate?.Invoke(this);

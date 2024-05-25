@@ -14,11 +14,10 @@ using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 namespace MegaPint.Editor.Scripts
 {
 
-// TODO continue Commenting here
-
 /// <summary> Partial class used to display the right pane in the BaseWindow </summary>
 internal static partial class DisplayContent
 {
+    /// <summary> Contains which tab is currently open </summary>
     public class TabSettings
     {
         public bool guides;
@@ -27,6 +26,7 @@ internal static partial class DisplayContent
         public bool settings;
     }
 
+    /// <summary> Contains the actions for when a tab is opened </summary>
     private class TabActions
     {
         public Action <VisualElement> guides;
@@ -56,7 +56,9 @@ internal static partial class DisplayContent
     private static readonly List <VisualElement> s_tabsContainer = new();
 
     #region Public Methods
-    
+
+    /// <summary> Display the right pane </summary>
+    /// <param name="refs"> References needed to display the right pane </param>
     public static void DisplayRightPane(DisplayContentReferences refs)
     {
         s_onSelectedPackageChanged?.Invoke();
@@ -68,6 +70,9 @@ internal static partial class DisplayContent
 
     #region Private Methods
 
+    /// <summary> Call method via reflection </summary>
+    /// <param name="name"> Name of the method to call </param>
+    /// <param name="parameters"> Parameters of the method </param>
     private static void CallMethodByName(string name, object[] parameters)
     {
         MethodInfo method = typeof(DisplayContent).GetMethod(name, BindingFlags.NonPublic | BindingFlags.Static);
@@ -76,6 +81,11 @@ internal static partial class DisplayContent
             method.Invoke(typeof(DisplayContent), parameters);
     }
 
+    /// <summary> Initialize the display content displayed in the right pane </summary>
+    /// <param name="refs"> References needed to display the right pane </param>
+    /// <param name="settings"> Tab settings </param>
+    /// <param name="actions"> Tab actions </param>
+    /// <returns> Instantiated content </returns>
     private static VisualElement InitializeDisplayContent(
         DisplayContentReferences refs,
         TabSettings settings = null,
@@ -104,6 +114,10 @@ internal static partial class DisplayContent
         return null;
     }
 
+    /// <summary> Register callbacks for the tab buttons </summary>
+    /// <param name="refs"> References needed to display the right pane </param>
+    /// <param name="settings"> Tab settings </param>
+    /// <param name="tabActions"> Tab actions </param>
     private static void RegisterTabCallbacks(DisplayContentReferences refs, TabSettings settings, TabActions tabActions)
     {
         UnregisterAllTabCallbacks();
@@ -115,6 +129,9 @@ internal static partial class DisplayContent
         TryToEnableTabButton(refs.tabs, refs.tabContent, Tab.Help, settings.help, refs.package, tabActions);
     }
 
+    /// <summary> Set the locations of the different tab uxml files </summary>
+    /// <param name="key"> Targeted package </param>
+    /// <param name="settings"> Tab settings </param>
     private static void SetTabContentLocations(PackageKey key, TabSettings settings)
     {
         s_tabsContentLocations.Clear();
@@ -147,6 +164,12 @@ internal static partial class DisplayContent
         }
     }
 
+    /// <summary> Switch the active tab </summary>
+    /// <param name="tabContentParent"> Parent of the element containing the tab content </param>
+    /// <param name="newTab"> New tab to open </param>
+    /// <param name="package"> Targeted package </param>
+    /// <param name="tabActions"> Tab executed on opening the tabs </param>
+    /// <exception cref="ArgumentOutOfRangeException"> Tab not found </exception>
     private static void SwitchTab(
         VisualElement tabContentParent,
         Tab newTab,
@@ -213,6 +236,14 @@ internal static partial class DisplayContent
         }
     }
 
+    /// <summary> Enable the tab button </summary>
+    /// <param name="parent"> Parent of the button </param>
+    /// <param name="tabContent"> Parent of the content containing the tabs </param>
+    /// <param name="tab"> Targeted tab </param>
+    /// <param name="enabled"> If the tab should be enabled </param>
+    /// <param name="package"> Targeted package </param>
+    /// <param name="tabActions"> Actions invoked when opening the tabs </param>
+    /// <exception cref="ArgumentOutOfRangeException"> Tab not found </exception>
     private static void TryToEnableTabButton(
         VisualElement parent,
         VisualElement tabContent,
@@ -247,6 +278,7 @@ internal static partial class DisplayContent
         s_tabs.Add(tab, button);
     }
 
+    /// <summary> Unregister all callbacks for tabs </summary>
     private static void UnregisterAllTabCallbacks()
     {
         foreach (Button tab in s_tabs.Values)
