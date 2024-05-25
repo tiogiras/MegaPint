@@ -53,7 +53,7 @@ public abstract class EditorWindowBase : EditorWindow
     /// <returns> If all needed settings can be loaded </returns>
     protected virtual bool LoadSettings()
     {
-        return Settings.Settings.Exists();
+        return Settings.MegaPintSettings.Exists();
     }
 
     /// <summary> Register all callbacks </summary>

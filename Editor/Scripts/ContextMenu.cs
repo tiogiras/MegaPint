@@ -30,7 +30,7 @@ internal static partial class ContextMenu
         if (typeof(T) == typeof(FirstSteps))
             return EditorWindow.GetWindow <T>(utility, title).ShowWindow();
 
-        var exists = Settings.Settings.Exists();
+        var exists = Settings.MegaPintSettings.Exists();
 
         return !exists
             ? EditorWindow.GetWindow <FirstSteps>(utility, title).ShowWindow()

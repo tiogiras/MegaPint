@@ -49,7 +49,7 @@ internal class SettingsBase
         structValues ??= new SerializableDictionary <string, SettingsStruct>();
         structValues.SetValue(key, value);
 
-        Settings.Save();
+        MegaPintSettings.Save();
     }
 
     public void SetStructValue(string structKey, string valueKey, string value)
@@ -174,7 +174,7 @@ internal class SettingsBase
         stringValues.SetValue(key, value);
 
         if (!suppressSaving)
-            Settings.Save();
+            MegaPintSettings.Save();
     }
 
     public void SetValue(string key, float value, bool suppressSaving = false)
@@ -183,7 +183,7 @@ internal class SettingsBase
         floatValues.SetValue(key, value);
 
         if (!suppressSaving)
-            Settings.Save();
+            MegaPintSettings.Save();
     }
 
     public void SetValue(string key, bool value, bool suppressSaving = false)
@@ -192,7 +192,7 @@ internal class SettingsBase
         boolValues.SetValue(key, value);
 
         if (!suppressSaving)
-            Settings.Save();
+            MegaPintSettings.Save();
     }
 
     public void SetValue(string key, int value, bool suppressSaving = false)
@@ -201,7 +201,7 @@ internal class SettingsBase
         intValues.SetValue(key, value);
 
         if (!suppressSaving)
-            Settings.Save();
+            MegaPintSettings.Save();
     }
 
     #endregion

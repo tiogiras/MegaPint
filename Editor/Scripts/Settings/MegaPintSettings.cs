@@ -10,15 +10,15 @@ namespace MegaPint.Editor.Scripts.Settings
 {
 
 [InitializeOnLoad]
-internal class Settings : ScriptableObject
+internal class MegaPintSettings : ScriptableObject
 {
-    public static Settings instance;
+    public static MegaPintSettings instance;
 
     public static Action onLoaded;
 
     [SerializeField] private List <SettingsBase> _settings;
 
-    static Settings()
+    static MegaPintSettings()
     {
         Initialize();
     }
@@ -35,7 +35,7 @@ internal class Settings : ScriptableObject
         if (search.Length == 0)
             return false;
 
-        instance = AssetDatabase.LoadAssetAtPath <Settings>(AssetDatabase.GUIDToAssetPath(search[0]));
+        instance = AssetDatabase.LoadAssetAtPath <MegaPintSettings>(AssetDatabase.GUIDToAssetPath(search[0]));
 
         return instance != null;
     }
@@ -83,7 +83,7 @@ internal class Settings : ScriptableObject
     #endregion
 }
 
-[CustomEditor(typeof(Settings))]
+[CustomEditor(typeof(MegaPintSettings))]
 public class MegaPintSettingsDrawer : UnityEditor.Editor
 {
     #region Public Methods

@@ -105,12 +105,12 @@ internal class FirstSteps : EditorWindowBase
 
         path = path.Replace(Application.dataPath, "Assets");
 
-        Settings.Settings.instance = CreateInstance <Settings.Settings>();
-        AssetDatabase.CreateAsset(Settings.Settings.instance, path);
+        Settings.MegaPintSettings.instance = CreateInstance <Settings.MegaPintSettings>();
+        AssetDatabase.CreateAsset(Settings.MegaPintSettings.instance, path);
 
         EditorUtility.DisplayDialog(
             "MegaPint settings asset",
-            Settings.Settings.instance != null
+            Settings.MegaPintSettings.instance != null
                 ? $"Successfully created a new MegaPint settings asset at {path}."
                 : "Could not connect asset due to an unknown issue.",
             "OK");

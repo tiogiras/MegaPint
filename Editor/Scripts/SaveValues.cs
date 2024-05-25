@@ -142,8 +142,8 @@ public static partial class SaveValues
     {
         get
         {
-            if (Settings.Settings.Exists())
-                return s_generalSettings ??= Settings.Settings.instance.GetSetting("General");
+            if (Settings.MegaPintSettings.Exists())
+                return s_generalSettings ??= Settings.MegaPintSettings.instance.GetSetting("General");
 
             return null;
         }
