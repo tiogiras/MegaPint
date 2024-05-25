@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using Editor.Scripts;
 using UnityEngine;
 
 namespace MegaPint.Editor.Scripts.DevMode

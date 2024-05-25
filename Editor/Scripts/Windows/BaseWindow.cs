@@ -1,8 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.IO;
-using Editor.Scripts;
-using Editor.Scripts.Windows;
 using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.Windows.BaseWindowContent;
@@ -10,7 +8,6 @@ using MegaPint.Editor.Scripts.Windows.DevMode;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using ContextMenu = MegaPint.Editor.Scripts.ContextMenu;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 using Toggle = MegaPint.Editor.Scripts.Windows.DevMode.Toggle;
 

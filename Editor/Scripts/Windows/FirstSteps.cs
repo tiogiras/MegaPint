@@ -3,7 +3,6 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using ContextMenu = MegaPint.Editor.Scripts.ContextMenu;
 
 namespace MegaPint.Editor.Scripts.Windows
 {

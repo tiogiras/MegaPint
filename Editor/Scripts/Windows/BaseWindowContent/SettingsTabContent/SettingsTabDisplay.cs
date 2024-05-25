@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 using System.IO;
-using Editor.Scripts;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
