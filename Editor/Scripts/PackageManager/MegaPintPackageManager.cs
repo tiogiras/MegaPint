@@ -99,7 +99,7 @@ internal static class MegaPintPackageManager
                 await AddEmbedded(variation);
         }
 
-        var url = SaveData.DevMode()
+        var url = SaveValues.BasePackage.DevMode
             ? $"{PackageCache.BasePackage.repository.url}#{DataCache.BasePackageDevBranch}"
             : $"{PackageCache.BasePackage.repository.url}#v{version}";
 
@@ -111,7 +111,7 @@ internal static class MegaPintPackageManager
     /// <summary> Update the basePackage to it's newest possible version </summary>
     public static async Task UpdateBasePackage()
     {
-        var url = SaveData.DevMode()
+        var url = SaveValues.BasePackage.DevMode
             ? $"{PackageCache.BasePackage.repository.url}#{DataCache.BasePackageDevBranch}"
             : $"{PackageCache.BasePackage.repository.url}#v{PackageCache.NewestBasePackageVersion}";
 

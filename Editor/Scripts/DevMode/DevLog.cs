@@ -14,7 +14,7 @@ internal static class DevLog
     /// <param name="msg"> Message to be logged </param>
     public static void Log(string msg)
     {
-        if (SaveData.DevMode())
+        if (SaveValues.BasePackage.DevMode)
             Debug.Log($"[DevMode]: {msg}");
     }
 
@@ -22,7 +22,7 @@ internal static class DevLog
     /// <param name="msg"> Message to be logged </param>
     public static void LogError(string msg)
     {
-        if (SaveData.DevMode())
+        if (SaveValues.BasePackage.DevMode)
             Debug.LogError($"[DevMode]: {msg}");
     }
 
@@ -30,7 +30,7 @@ internal static class DevLog
     /// <param name="msg"> Message to be logged </param>
     public static void LogWarning(string msg)
     {
-        if (SaveData.DevMode())
+        if (SaveValues.BasePackage.DevMode)
             Debug.LogWarning($"[DevMode]: {msg}");
     }
 

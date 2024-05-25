@@ -36,7 +36,7 @@ internal static class PackageManagerUtility
     /// <returns> Hash of the targeted <see cref="CachedVariation" /> </returns>
     public static string GetVariationHash(CachedVariation variation, bool invert = false)
     {
-        var devMode = invert ? !SaveData.DevMode() : SaveData.DevMode();
+        var devMode = invert ? !SaveValues.BasePackage.DevMode : SaveValues.BasePackage.DevMode;
 
         return devMode ? variation.devBranch : $"v{variation.version}{variation.tag}";
     }
@@ -95,7 +95,7 @@ internal static class PackageManagerUtility
 
     private static string GetPackageHash(CachedPackage package)
     {
-        return SaveData.DevMode() ? "development" : $"v{package.Version}";
+        return SaveValues.BasePackage.DevMode ? "development" : $"v{package.Version}";
     }
 
     #endregion
