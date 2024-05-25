@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
+using MegaPint.Editor.Scripts.GUI.Utility;
 using MegaPint.Editor.Scripts.Settings;
 using UnityEditor;
 
@@ -17,7 +18,12 @@ public static partial class SaveValues
         public static int EditorTheme
         {
             get => ValueProperty.Get("EditorTheme", ref s_editorTheme, _GeneralSettings);
-            set => ValueProperty.Set("EditorTheme", value, ref s_editorTheme, _GeneralSettings);
+            set
+            {
+                ValueProperty.Set("EditorTheme", value, ref s_editorTheme, _GeneralSettings);
+                
+                GUIUtility.ForceRepaint();
+            }
         }
 
         public static bool IsDarkTheme => EditorTheme == 1 || (EditorTheme == 0 && EditorGUIUtility.isProSkin);
@@ -142,8 +148,8 @@ public static partial class SaveValues
     {
         get
         {
-            if (Settings.Settings.Exists())
-                return s_generalSettings ??= Settings.Settings.instance.GetSetting("General");
+            if (Settings.MegaPintSettings.Exists())
+                return s_generalSettings ??= Settings.MegaPintSettings.instance.GetSetting("General");
 
             return null;
         }

@@ -19,7 +19,7 @@ internal class SettingsTab
         s_itemPath ??= Path.Combine(
             Constants.BasePackage.Resources.UserInterface.WindowsPath,
             "Base Window",
-            "Package item");
+            "Info item");
 
     private readonly VisualElement _content;
 
