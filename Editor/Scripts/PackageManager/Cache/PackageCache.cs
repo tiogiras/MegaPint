@@ -8,7 +8,9 @@ using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
 
-[assembly: InternalsVisibleTo("tiogiras.megapint.Editor.Tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.editor.tests.utility")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.alphabutton.editor.tests")]
 
 namespace MegaPint.Editor.Scripts.PackageManager.Cache
 {

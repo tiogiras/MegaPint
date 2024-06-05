@@ -8,7 +8,7 @@ namespace MegaPint.Editor.Scripts
 {
 
 /// <summary> Partial class storing saveData values (BasePackage) </summary>
-public static partial class SaveValues
+internal static partial class SaveValues
 {
     public static class BasePackage
     {
@@ -148,8 +148,8 @@ public static partial class SaveValues
     {
         get
         {
-            if (Settings.MegaPintSettings.Exists())
-                return s_generalSettings ??= Settings.MegaPintSettings.instance.GetSetting("General");
+            if (MegaPintSettings.Exists())
+                return s_generalSettings ??= MegaPintSettings.instance.GetSetting("General");
 
             return null;
         }

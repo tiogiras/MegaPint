@@ -5,7 +5,7 @@ namespace MegaPint.Editor.Scripts
 {
 
 /// <summary> Partial lookup table for constants containing BasePackage values  </summary>
-internal static class Constants
+internal static partial class Constants
 {
     public static class BasePackage
     {

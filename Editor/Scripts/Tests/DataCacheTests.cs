@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
+using MegaPint.Editor.Scripts.Tests.Utility;
 using NUnit.Framework;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace MegaPint.Editor.Scripts.Tests
 {
 
 /// <summary> Unit tests regarding the <see cref="DataCache" /> </summary>
-internal class DataCacheTests : MonoBehaviour
+internal class DataCacheTests
 {
     #region Tests
 
