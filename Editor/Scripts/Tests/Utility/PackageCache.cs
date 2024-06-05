@@ -1,11 +1,6 @@
 ﻿#if UNITY_EDITOR
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
-using MegaPint.Editor.Scripts.PackageManager.Packages;
-using NUnit.Framework;
 using UnityEngine;
 
 namespace MegaPint.Editor.Scripts.Tests.Utility
@@ -15,7 +10,11 @@ namespace MegaPint.Editor.Scripts.Tests.Utility
 internal static partial class TestsUtility
 {
     private static bool s_initialized;
-    
+
+    #region Public Methods
+
+    /// <summary> Check if the <see cref="PackageCache" /> was initialized </summary>
+    /// <returns> Initialization status of the <see cref="PackageCache" /> </returns>
     public static async Task <bool> CheckCacheInitialization()
     {
         var currentTime = 0f;
@@ -34,12 +33,19 @@ internal static partial class TestsUtility
 
         return s_initialized;
     }
-    
+
+    #endregion
+
+    #region Private Methods
+
+    /// <summary> Callback when <see cref="PackageCache" /> was refreshed </summary>
     private static void CacheRefreshed()
     {
         PackageCache.onCacheRefreshed -= CacheRefreshed;
         s_initialized = true;
     }
+
+    #endregion
 }
 
 }
