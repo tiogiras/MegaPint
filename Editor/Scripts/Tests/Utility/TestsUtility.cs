@@ -191,6 +191,11 @@ internal static partial class TestsUtility
         Debug.LogWarning($"\t- Excess files found!\n\t\t{string.Join("\n\t\t", files)}");
     }
 
+    public static void ValidateResource<T>(ref bool isValid, string path) where T : Object
+    {
+        Validate(ref isValid, Resources.Load <T>(path) == null, $"Missing resource at path: {path} [Type: {typeof(T)}]");
+    }
+
     #endregion
 }
 
