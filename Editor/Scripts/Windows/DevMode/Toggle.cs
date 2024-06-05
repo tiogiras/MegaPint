@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System.IO;
 using MegaPint.Editor.Scripts.PackageManager;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -32,9 +31,7 @@ public class Toggle : EditorWindowBase
 
     protected override string BasePath()
     {
-        return Path.Join(
-            Constants.BasePackage.Resources.UserInterface.Windows.DevelopmentModePath,
-            "Toggle");
+        return Constants.BasePackage.UserInterface.DevModeToggle;
     }
 
     protected override void CreateGUI()

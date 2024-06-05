@@ -15,7 +15,7 @@ internal static class SettingsTabDisplay
     private static int s_editorThemeIndex = -1;
 
     private static string _BasePath =>
-        Path.Combine(Constants.BasePackage.Resources.UserInterfacePath, "Settings Content", "xxx");
+        Path.Combine(Constants.BasePackage.UserInterface.SettingsContent, "xxx");
 
     #region Public Methods
 

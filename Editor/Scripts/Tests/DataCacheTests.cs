@@ -20,6 +20,7 @@ internal class DataCacheTests
 {
     #region Tests
 
+    /// <summary> Validate the base package </summary>
     [Test]
     public void BasePackage()
     {
@@ -40,6 +41,7 @@ internal class DataCacheTests
         Assert.IsTrue(valid);
     }
 
+    /// <summary> Validate the package data </summary>
     [Test] [Order(0)]
     public void PackageData()
     {
@@ -94,6 +96,8 @@ internal class DataCacheTests
         Assert.IsTrue(valid);
     }
 
+    /// <summary> Validate the package data </summary>
+    /// <returns> IEnumerator </returns>
     [UnityTest] [Order(1)]
     public IEnumerator PackageInfo()
     {
@@ -116,6 +120,11 @@ internal class DataCacheTests
 
     #region Private Methods
 
+    /// <summary> Validate package dependencies </summary>
+    /// <param name="dependencies"> Dependencies of the package </param>
+    /// <param name="parent"> Key of the parent package </param>
+    /// <param name="variation"> Targeted variation of the package </param>
+    /// <returns> If the dependencies are valid </returns>
     private static bool ValidateDependencies(List <Dependency> dependencies, PackageKey parent, string variation = "")
     {
         if (dependencies is not {Count: > 0})
@@ -141,6 +150,9 @@ internal class DataCacheTests
         return valid;
     }
 
+    /// <summary> Validate the a package info </summary>
+    /// <param name="packageInfo"> Targeted package info </param>
+    /// <returns> If the packageInfo is valid </returns>
     private static bool ValidatePackageInfo(PackageInfo packageInfo)
     {
         var name = packageInfo.name;
@@ -169,10 +181,12 @@ internal class DataCacheTests
                 ref valid,
                 string.IsNullOrEmpty(packageInfo.version),
                 $"PackageInfo[{name}] missing [version]!"))
+        {
             TestsUtility.Validate(
                 ref valid,
                 !packageInfo.version.Equals(packageData.version),
                 $"PackageInfo[{name}] non-equal [version]!");
+        }
 
         TestsUtility.Validate(
             ref valid,
@@ -210,6 +224,10 @@ internal class DataCacheTests
         return valid;
     }
 
+    /// <summary> Validate variations of a package </summary>
+    /// <param name="variations"> Targeted variations </param>
+    /// <param name="parent"> Key of the parent package </param>
+    /// <returns> If the variations are valid </returns>
     private static bool ValidateVariations(List <Variation> variations, PackageKey parent)
     {
         if (variations is not {Count: > 0})

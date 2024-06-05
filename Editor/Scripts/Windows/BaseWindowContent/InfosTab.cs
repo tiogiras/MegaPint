@@ -16,11 +16,7 @@ internal class InfosTab
 {
     private static string s_itemPath;
 
-    private static string _ItemPath =>
-        s_itemPath ??= Path.Combine(
-            Constants.BasePackage.Resources.UserInterface.WindowsPath,
-            "Base Window",
-            "Info item");
+    private static string _ItemPath => s_itemPath ??= Constants.BasePackage.UserInterface.BaseWindowInfoItem;
 
     private readonly VisualElement _content;
 

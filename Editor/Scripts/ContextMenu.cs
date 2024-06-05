@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using MegaPint.Editor.Scripts.Settings;
 using MegaPint.Editor.Scripts.Windows;
 using UnityEditor;
 
@@ -10,7 +11,6 @@ internal static partial class ContextMenu
 {
     private const string MenuItemMegaPint = "MegaPint";
     private const string MenuItemPackages = MenuItemMegaPint + "/Packages";
-    private const string MenuItemDevMode = MenuItemMegaPint + "/DevMode";
 
     #region Public Methods
 
@@ -30,7 +30,7 @@ internal static partial class ContextMenu
         if (typeof(T) == typeof(FirstSteps))
             return EditorWindow.GetWindow <T>(utility, title).ShowWindow();
 
-        var exists = Settings.MegaPintSettings.Exists();
+        var exists = MegaPintSettings.Exists();
 
         return !exists
             ? EditorWindow.GetWindow <FirstSteps>(utility, title).ShowWindow()

@@ -25,6 +25,7 @@ internal class PackageManagerTests
     [UnityTest] [Order(0)]
     public IEnumerator CacheInitialized()
     {
+        // TODO replace with new utility method
         _initialized = false;
         var currentTime = 0f;
 

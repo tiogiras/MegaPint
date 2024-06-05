@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
@@ -7,7 +6,7 @@ using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 namespace MegaPint.Editor.Scripts.Windows.DevMode
 {
 
-/// <summary> Editor window to access various development mode utiliy </summary>
+/// <summary> Editor window to access various development mode utility </summary>
 internal class Center : EditorWindowBase
 {
     private VisualTreeAsset _baseWindow;
@@ -31,9 +30,7 @@ internal class Center : EditorWindowBase
 
     protected override string BasePath()
     {
-        return Path.Join(
-            Constants.BasePackage.Resources.UserInterface.Windows.DevelopmentModePath,
-            "Center");
+        return Constants.BasePackage.UserInterface.DevModeCenter;
     }
 
     protected override void CreateGUI()

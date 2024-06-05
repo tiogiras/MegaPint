@@ -72,8 +72,7 @@ internal class CodeExample : VisualElement
             button.text = "";
             button.tooltip = "Copy to clipboard";
 
-            button.style.backgroundImage = Resources.Load <Texture2D>(
-                Path.Combine(Constants.BasePackage.Resources.Images.IconsPath, "Copy To Clipboard"));
+            button.style.backgroundImage = Resources.Load <Texture2D>(Constants.BasePackage.Images.CopyToClipboard);
 
             button.style.position = Position.Absolute;
             button.style.right = 5f;

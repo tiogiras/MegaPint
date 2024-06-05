@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -38,7 +37,7 @@ internal class FirstSteps : EditorWindowBase
 
     protected override string BasePath()
     {
-        return Path.Combine(Constants.BasePackage.Resources.UserInterface.WindowsPath, "First Steps");
+        return Constants.BasePackage.UserInterface.FirstSteps;
     }
 
     protected override void CreateGUI()

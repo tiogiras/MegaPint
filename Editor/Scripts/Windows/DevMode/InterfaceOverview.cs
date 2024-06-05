@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
-using System.IO;
 using MegaPint.Editor.Scripts.GUI.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -29,9 +28,7 @@ public class InterfaceOverview : EditorWindowBase
 
     protected override string BasePath()
     {
-        return Path.Join(
-            Constants.BasePackage.Resources.UserInterface.Windows.DevelopmentModePath,
-            "Interface Overview");
+        return Constants.BasePackage.UserInterface.InterfaceOverview;
     }
 
     protected override void CreateGUI()
