@@ -1,7 +1,6 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.GUI;
@@ -23,17 +22,11 @@ internal class PackageManager : EditorWindowBase
 {
     private static Action <PackageKey> s_showWithLink;
 
-    private readonly string _dependencyItemPath = Path.Combine(
-        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath,
-        "Dependency Item");
+    private readonly string _dependencyItemPath = Constants.BasePackage.UserInterface.PackageManagerDependencyItem;
 
-    private readonly string _listItemPath = Path.Combine(
-        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath,
-        "Package Item");
+    private readonly string _listItemPath = Constants.BasePackage.UserInterface.PackageManagerPackageItem;
 
-    private readonly string _variationsListItemPath = Path.Combine(
-        Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath,
-        "Variation Item");
+    private readonly string _variationsListItemPath = Constants.BasePackage.UserInterface.PackageManagerVariationItem;
 
     private VisualTreeAsset _baseWindow;
 
@@ -101,7 +94,7 @@ internal class PackageManager : EditorWindowBase
 
     protected override string BasePath()
     {
-        return Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath;
+        return Constants.BasePackage.UserInterface.PackageManager;
     }
 
     protected override void CreateGUI()

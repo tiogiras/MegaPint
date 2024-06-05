@@ -10,7 +10,11 @@ using UnityEngine;
 
 [assembly: InternalsVisibleTo("tiogiras.megapint.editor.tests")]
 [assembly: InternalsVisibleTo("tiogiras.megapint.alphabutton.editor.tests")]
-
+[assembly: InternalsVisibleTo("tiogiras.megapint.validators.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.playmodestartscene.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.notepad.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.autosave.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.screenshot.editor.tests")]
 namespace MegaPint.Editor.Scripts.Tests.Utility
 {
 

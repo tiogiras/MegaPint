@@ -16,7 +16,7 @@ internal class Gallery : EditorWindowBase
     private static string s_imagesPath;
 
     private static string _ImageFolderPath =>
-        s_imagesPath ??= Path.Combine(Constants.BasePackage.Resources.ImagesPath, "Packages", "xxx");
+        s_imagesPath ??= Path.Combine(Constants.BasePackage.Images.PackageImages, "xxx");
 
     private readonly List <Texture2D> _images = new();
 
@@ -61,7 +61,7 @@ internal class Gallery : EditorWindowBase
 
     protected override string BasePath()
     {
-        return Path.Combine(Constants.BasePackage.Resources.UserInterface.Windows.PackageManagerPath, "Gallery");
+        return Constants.BasePackage.UserInterface.Gallery;
     }
 
     protected override void CreateGUI()

@@ -14,8 +14,7 @@ internal static partial class GUIUtility
     private static VisualElement s_tooltip;
     private static Label s_tooltipLabel;
 
-    private static string _TooltipPath =>
-        s_tooltipPath ??= Path.Combine(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Tooltip");
+    private static string _TooltipPath => s_tooltipPath ??= Constants.BasePackage.UserInterface.Tooltip;
 
     #region Private Methods
 

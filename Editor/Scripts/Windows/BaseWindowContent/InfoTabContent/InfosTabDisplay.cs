@@ -15,7 +15,7 @@ internal static class InfosTabDisplay
     private static string s_basePath;
 
     private static string _BasePath =>
-        s_basePath ??= Path.Combine(Constants.BasePackage.Resources.UserInterfacePath, "Info Content", "xxx");
+        s_basePath ??= Path.Combine(Constants.BasePackage.UserInterface.InfoContent, "xxx");
 
     #region Public Methods
 

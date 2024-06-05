@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 using System;
-using System.IO;
 using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.Windows.BaseWindowContent;
@@ -22,9 +21,7 @@ internal class BaseWindow : EditorWindowBase
     public static Action onRightPaneInitialization;
     public static Action onRightPaneClose;
 
-    private readonly string _contentPath = Path.Combine(
-        Constants.BasePackage.Resources.UserInterface.WindowsPath,
-        "Base Window");
+    private readonly string _contentPath = Constants.BasePackage.UserInterface.BaseWindow;
 
     private VisualTreeAsset _baseWindow;
     private Button _btnDevCenter;

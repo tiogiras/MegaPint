@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using UnityEditor.UIElements;
@@ -16,11 +15,7 @@ internal class PackagesTab
 {
     private static string s_itemPath;
 
-    private static string _ItemPath =>
-        s_itemPath ??= Path.Combine(
-            Constants.BasePackage.Resources.UserInterface.WindowsPath,
-            "Base Window",
-            "Package item");
+    private static string _ItemPath => s_itemPath ??= Constants.BasePackage.UserInterface.BaseWindowPackageItem;
 
     private readonly VisualTreeAsset _itemTemplate;
 

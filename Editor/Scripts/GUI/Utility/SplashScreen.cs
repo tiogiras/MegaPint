@@ -15,8 +15,7 @@ internal static partial class GUIUtility
 {
     private static string s_splashScreenPath;
 
-    private static string _SplashScreenPath =>
-        s_splashScreenPath ??= Path.Combine(Constants.BasePackage.Resources.UserInterface.WindowsPath, "Splash Screen");
+    private static string _SplashScreenPath => s_splashScreenPath ??= Constants.BasePackage.UserInterface.SplashScreen;
 
     #region Public Methods
 
