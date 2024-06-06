@@ -10,7 +10,7 @@ namespace MegaPint.Editor.Scripts
 internal static partial class ContextMenu
 {
     private const string MenuItemMegaPint = "MegaPint";
-    private const string MenuItemPackages = MenuItemMegaPint + "/Packages";
+    public const string MenuItemPackages = MenuItemMegaPint + "/Packages";
 
     #region Public Methods
 
