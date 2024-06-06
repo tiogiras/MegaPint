@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +7,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 [assembly: InternalsVisibleTo("tiogiras.megapint.editor.tests")]
 [assembly: InternalsVisibleTo("tiogiras.megapint.alphabutton.editor.tests")]
@@ -15,6 +18,7 @@ using UnityEngine;
 [assembly: InternalsVisibleTo("tiogiras.megapint.notepad.editor.tests")]
 [assembly: InternalsVisibleTo("tiogiras.megapint.autosave.editor.tests")]
 [assembly: InternalsVisibleTo("tiogiras.megapint.screenshot.editor.tests")]
+
 namespace MegaPint.Editor.Scripts.Tests.Utility
 {
 
@@ -55,6 +59,30 @@ internal static partial class TestsUtility
         Debug.LogWarning($"\t- {log}");
 
         return true;
+    }
+
+    /// <summary> Validate a menuItem called via a link in megaPint </summary>
+    /// <param name="link"> MenuItem link address </param>
+    /// <param name="expectedWindow"> Type of the expected window </param>
+    /// <returns> IEnumerator </returns>
+    public static void ValidateMenuItemLink(string link, Type expectedWindow = null)
+    {
+        EditorApplication.ExecuteMenuItem(link);
+        
+        if (expectedWindow != null)
+            EditorWindow.GetWindow(expectedWindow).Close();
+    }
+
+    /// <summary> Validate if a resource of the given type can be loaded at the given path </summary>
+    /// <param name="isValid"> Reference to the validation bool </param>
+    /// <param name="path"> Path to the resource </param>
+    /// <typeparam name="T"> Type of the expected resource </typeparam>
+    public static void ValidateResource <T>(ref bool isValid, string path) where T : Object
+    {
+        Validate(
+            ref isValid,
+            Resources.Load <T>(path) == null,
+            $"Missing resource at path: {path} [Type: {typeof(T)}]");
     }
 
     #endregion
@@ -189,11 +217,6 @@ internal static partial class TestsUtility
 
         isValid = false;
         Debug.LogWarning($"\t- Excess files found!\n\t\t{string.Join("\n\t\t", files)}");
-    }
-
-    public static void ValidateResource<T>(ref bool isValid, string path) where T : Object
-    {
-        Validate(ref isValid, Resources.Load <T>(path) == null, $"Missing resource at path: {path} [Type: {typeof(T)}]");
     }
 
     #endregion

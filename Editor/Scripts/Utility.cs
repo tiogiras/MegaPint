@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,11 +23,21 @@ internal static class Utility
         return valid;
     }
     
+    /// <summary> Copy and load an asset used in different render pipelines </summary>
+    /// <param name="oldAsset"> Source asset </param>
+    /// <param name="newPath"> New destination </param>
+    /// <typeparam name="T"> Type of the asset </typeparam>
+    /// <returns> New asset </returns>
     public static T CopyAndLoadAsset <T>(T oldAsset, string newPath) where T : Object
     {
         return CopyAndLoadAsset <T>(AssetDatabase.GetAssetPath(oldAsset), newPath);
     }
 
+    /// <summary> Copy and load an asset used in different render pipelines </summary>
+    /// <param name="oldPath"> Source asset </param>
+    /// <param name="newPath"> New destination </param>
+    /// <typeparam name="T"> Type of the asset </typeparam>
+    /// <returns> New asset </returns>
     public static T CopyAndLoadAsset <T>(string oldPath, string newPath) where T : Object
     {
         AssetDatabase.CopyAsset(oldPath, newPath);
@@ -34,6 +45,12 @@ internal static class Utility
         return AssetDatabase.LoadAssetAtPath <T>(newPath);
     }
 
+    public static string CombineMenuItemPath(string arg0, string arg1)
+    {
+        var path = Path.Combine(arg0, arg1);
+        return path.Replace("\\", "/");
+    }
+    
     #endregion
 }
 
