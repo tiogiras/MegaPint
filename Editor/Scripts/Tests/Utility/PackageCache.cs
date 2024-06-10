@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+#if UNITY_INCLUDE_TESTS
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using UnityEngine;
@@ -49,4 +50,5 @@ internal static partial class TestsUtility
 }
 
 }
+#endif
 #endif

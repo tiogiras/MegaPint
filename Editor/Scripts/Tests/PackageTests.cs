@@ -1,7 +1,9 @@
 ﻿#if UNITY_EDITOR
 #if UNITY_INCLUDE_TESTS
+using System.IO;
 using MegaPint.Editor.Scripts.Tests.Utility;
 using NUnit.Framework;
+using UnityEngine.Device;
 using UnityEngine.UIElements;
 
 namespace MegaPint.Editor.Scripts.Tests
@@ -10,28 +12,76 @@ namespace MegaPint.Editor.Scripts.Tests
 /// <summary> Unit tests regarding the general structure and settings of the package </summary>
 internal class PackageTests
 {
-    /*private static bool s_initialized;*/
-
     #region Tests
 
-    /*[UnityTest] [Order(0)]
-    public IEnumerator InitializePackageCache()
-    {
-        Task <bool> task = TestsUtility.CheckCacheInitialization();
-
-        yield return task.AsIEnumeratorReturnNull();
-
-        s_initialized = task.Result;
-        Assert.IsTrue(task.Result);
-    }*/
-
-    [Test] [Order(1)]
+    [Test]
     public void PackageStructure()
     {
-        /*if (!s_initialized)
-            Assert.Fail("FAILED ===> Missing packageCache initialization!");*/
+        var isValid = true;
 
-        // TestsUtility.CheckStructure(PackageKey.AlphaButton); // TODO Change to Base Package Structure
+        var path = Application.dataPath[..^7];
+
+        path = Path.Combine(path, "Packages", "com.tiogiras.megapint");
+
+        TestsUtility.ValidateFiles(
+            ref isValid,
+            path,
+            new[] {"LICENSE", "package.json", "README.md"},
+            new[] {"Editor.meta", "LICENSE.meta", "package.json.meta", "README.md.meta"},
+            out var requiredFiles,
+            out var _);
+
+        if (requiredFiles[0])
+            TestsUtility.CheckLicenseFile(ref isValid, Path.Combine(path, "LICENSE"));
+
+        if (requiredFiles[1])
+            TestsUtility.CheckPackageJson(ref isValid, Path.Combine(path, "package.json"));
+
+        if (requiredFiles[2])
+            TestsUtility.CheckReadMe(ref isValid, Path.Combine(path, "README.md"));
+
+        TestsUtility.ValidateDirectories(
+            ref isValid,
+            path,
+            new[] {"Editor"},
+            new[] {".git"},
+            out var requiredDirectories,
+            out var _);
+
+        if (!requiredDirectories[0])
+            Assert.Fail();
+
+        path = Path.Combine(path, "Editor");
+
+        TestsUtility.ValidateFiles(
+            ref isValid,
+            path,
+            null,
+            new[] {"Additional Namespaces.meta", "Resources.meta", "Scripts.meta"},
+            out var _,
+            out var _);
+
+        TestsUtility.ValidateDirectories(
+            ref isValid,
+            path,
+            new[] {"Additional Namespaces", "Resources", "Scripts"},
+            null,
+            out requiredDirectories,
+            out var _);
+
+        if (requiredDirectories[1])
+        {
+            TestsUtility.ValidateNamingOfFilesInFolderAndSubFolders(
+                ref isValid,
+                Path.Combine(path, "Resources"),
+                "Info Content",
+                "Settings Content");
+        }
+
+        if (requiredDirectories[2])
+            TestsUtility.ValidateNamingOfFilesInFolderAndSubFolders(ref isValid, Path.Combine(path, "Scripts"));
+
+        Assert.IsTrue(isValid);
     }
 
     [Test] [Order(1)]
