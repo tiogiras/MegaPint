@@ -9,7 +9,7 @@ namespace MegaPint.Editor.Scripts
 /// <summary> Partial class used to store MenuItems </summary>
 internal static partial class ContextMenu
 {
-    private const string MenuItemMegaPint = "MegaPint";
+    public const string MenuItemMegaPint = "MegaPint";
     public const string MenuItemPackages = MenuItemMegaPint + "/Packages";
 
     #region Public Methods
@@ -28,19 +28,19 @@ internal static partial class ContextMenu
     public static EditorWindowBase TryOpen <T>(bool utility, string title = "") where T : EditorWindowBase
     {
         if (typeof(T) == typeof(FirstSteps))
-            return EditorWindow.GetWindow <T>(utility, title).ShowWindow();
+            return EditorWindow.GetWindow <T>(true, title).ShowWindow();
 
         var exists = MegaPintSettings.Exists();
 
         return !exists
-            ? EditorWindow.GetWindow <FirstSteps>(utility, title).ShowWindow()
+            ? EditorWindow.GetWindow <FirstSteps>(true, title).ShowWindow()
             : EditorWindow.GetWindow <T>(utility, title).ShowWindow();
     }
 
     #endregion
 
     #region Private Methods
-
+    
     [MenuItem(MenuItemMegaPint + "/PackageManager", false, 11)]
     private static void OpenImporter()
     {

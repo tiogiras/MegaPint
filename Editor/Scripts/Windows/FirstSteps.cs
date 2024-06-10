@@ -27,6 +27,9 @@ internal class FirstSteps : EditorWindowBase
     public override EditorWindowBase ShowWindow()
     {
         titleContent.text = "First Steps";
+        
+        minSize = new Vector2(515, 325);
+        maxSize = new Vector2(515, 325);
 
         return this;
     }

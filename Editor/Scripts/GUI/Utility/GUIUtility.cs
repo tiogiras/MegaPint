@@ -1,9 +1,11 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 [assembly: InternalsVisibleTo("tiogiras.megapint.validators.editor")]
+
 namespace MegaPint.Editor.Scripts.GUI.Utility
 {
 

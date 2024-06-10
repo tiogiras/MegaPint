@@ -61,6 +61,12 @@ internal static partial class TestsUtility
         return true;
     }
 
+    public static void ValidateEditorWindow<T>(bool utility = false) where T : EditorWindow
+    {
+        EditorWindow window = EditorWindow.GetWindow<T>(utility, "Unit Test");
+        window.Close();
+    }
+
     /// <summary> Validate a menuItem called via a link in megaPint </summary>
     /// <param name="link"> MenuItem link address </param>
     /// <param name="expectedWindow"> Type of the expected window </param>
@@ -71,6 +77,18 @@ internal static partial class TestsUtility
         
         if (expectedWindow != null)
             EditorWindow.GetWindow(expectedWindow).Close();
+    }
+
+    /// <summary> Validate a menuItem called via link in megaPint </summary>
+    /// <param name="link"> MenuItem link address </param>
+    /// <param name="utility"> If the expected window is an utility window </param>
+    /// <param name="expectedWindowName"> Name of the expected window </param>
+    public static void ValidateMenuItemLink(string link, bool utility = false, string expectedWindowName = "")
+    {
+        EditorApplication.ExecuteMenuItem(link);
+        
+        if (!string.IsNullOrEmpty(expectedWindowName))
+            EditorWindow.GetWindow(typeof(EditorWindow), utility, expectedWindowName).Close();
     }
 
     /// <summary> Validate if a resource of the given type can be loaded at the given path </summary>

@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using MegaPint.Editor.Scripts.GUI.Utility;
 using MegaPint.Editor.Scripts.PackageManager;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -21,6 +22,11 @@ public class Toggle : EditorWindowBase
     public override EditorWindowBase ShowWindow()
     {
         titleContent.text = "Development Mode";
+
+        minSize = new Vector2(350, 250);
+        maxSize = minSize;
+
+        this.CenterOnMainWin();
 
         return this;
     }

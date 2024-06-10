@@ -33,7 +33,7 @@ internal class PackagesTab
 
     private List <CachedPackage> _displayedPackages;
     private bool _ignoreNextUpdate;
-    private List <VisualElement> _visualElements;
+    private Dictionary <string, VisualElement> _visualElements;
 
     public PackagesTab(VisualElement root)
     {
@@ -133,7 +133,7 @@ internal class PackagesTab
         if (_currentVisualElement != null)
             _currentVisualElement.style.borderLeftWidth = 0;
 
-        var visualElement = _visualElements[_packagesList.selectedIndex].
+        var visualElement = _visualElements[_displayedPackages[_packagesList.selectedIndex].Name].
             Q <Label>("PackageName");
 
         visualElement.style.borderLeftWidth = 2.5f;
@@ -163,8 +163,10 @@ internal class PackagesTab
 
         _packagesList.bindItem = (element, i) =>
         {
-            _visualElements ??= new List <VisualElement>();
-            _visualElements.Add(element);
+            _visualElements ??= new Dictionary <string, VisualElement>();
+
+            var key = _displayedPackages[i].Name;
+            _visualElements[key] = element;
 
             var packageNameLabel = element.Q <Label>("PackageName");
             packageNameLabel.text = _displayedPackages[i].DisplayName;
@@ -173,11 +175,14 @@ internal class PackagesTab
 
         _packagesList.destroyItem = element =>
         {
-            _visualElements ??= new List <VisualElement>();
+            _visualElements ??= new Dictionary <string, VisualElement>();
 
-            if (_visualElements.Contains(element))
-                _visualElements.Remove(element);
-
+            if (_visualElements.ContainsValue(element))
+            {
+                var key = _visualElements.FirstOrDefault(x => x.Value == element).Key;
+                _visualElements.Remove(key);
+            }
+            
             element.Clear();
         };
 

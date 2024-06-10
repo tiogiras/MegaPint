@@ -15,13 +15,17 @@ internal static partial class SaveValues
         private static CacheValue <int> s_editorTheme = new() {defaultValue = 0};
         private static CacheValue <bool> s_devMode = new() {defaultValue = false};
 
+        private static CacheValue <bool> s_applyPSBaseWindow = new() {defaultValue = true};
+        private static CacheValue <bool> s_applyPSDevCenter = new() {defaultValue = true};
+        private static CacheValue <bool> s_applyPSInterfaceOverview = new() {defaultValue = true};
+
         public static int EditorTheme
         {
             get => ValueProperty.Get("EditorTheme", ref s_editorTheme, _GeneralSettings);
             set
             {
                 ValueProperty.Set("EditorTheme", value, ref s_editorTheme, _GeneralSettings);
-                
+
                 GUIUtility.ForceRepaint();
             }
         }
@@ -33,9 +37,28 @@ internal static partial class SaveValues
             get => ValueProperty.Get("DevMode", ref s_devMode, _GeneralSettings);
             set => ValueProperty.Set("DevMode", value, ref s_devMode, _GeneralSettings);
         }
+
+        public static bool ApplyPSBaseWindow
+        {
+            get => ValueProperty.Get("ApplyPS_BaseWindow", ref s_applyPSBaseWindow, _GeneralSettings);
+            set => ValueProperty.Set("ApplyPS_BaseWindow", value, ref s_applyPSBaseWindow, _GeneralSettings);
+        }
+
+        public static bool ApplyPSDevCenter
+        {
+            get => ValueProperty.Get("ApplyPS_DevCenter", ref s_applyPSDevCenter, _GeneralSettings);
+            set => ValueProperty.Set("ApplyPS_DevCenter", value, ref s_applyPSDevCenter, _GeneralSettings);
+        }
+
+        public static bool ApplyPSInterfaceOverview
+        {
+            get => ValueProperty.Get("ApplyPS_InterfaceOverview", ref s_applyPSInterfaceOverview, _GeneralSettings);
+            set =>
+                ValueProperty.Set("ApplyPS_InterfaceOverview", value, ref s_applyPSInterfaceOverview, _GeneralSettings);
+        }
     }
 
-    /// <summary> Utility class to access save values and cache them to reduce accessing the savedata </summary>
+    /// <summary> Utility class to access save values and cache them to reduce accessing the saveData </summary>
     private static class ValueProperty
     {
         #region Public Methods

@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
+using MegaPint.Editor.Scripts.GUI.Utility;
 using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.Windows.BaseWindowContent;
@@ -74,6 +75,14 @@ internal class BaseWindow : EditorWindowBase
     public override EditorWindowBase ShowWindow()
     {
         titleContent.text = "MegaPint";
+        
+        minSize = new Vector2(700, 350);
+
+        if (!SaveValues.BasePackage.ApplyPSBaseWindow)
+            return this;
+
+        this.CenterOnMainWin(900, 450);
+        SaveValues.BasePackage.ApplyPSBaseWindow = false;
 
         return this;
     }
@@ -128,7 +137,7 @@ internal class BaseWindow : EditorWindowBase
 
         PackageCache.onCacheStartRefreshing -= StartCacheRefresh;
 
-        _btnPackages.clicked -= SwitchToPackages;
+        _btnPackages.clicked -= SwitchToPackages; // TODO NULLREFS
         _btnSettings.clicked -= SwitchToSettings;
         _btnInfos.clicked -= SwitchToInfos;
 
