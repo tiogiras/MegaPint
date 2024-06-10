@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MegaPint.Editor.Scripts.GUI.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
+using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
 namespace MegaPint.Editor.Scripts.GUI.Factories
 {
@@ -46,7 +47,11 @@ internal class RootElement : VisualElement
             element.ApplyRootElementTheme(TryInitializeStyleSheetValues);
 
             element.schedule.Execute(
-                () => {ExecuteForAllOfClass("unity-color-field", element, ColorFieldOverwrite);});
+                () =>
+                {
+                    ExecuteForAllOfClass(StyleSheetClasses.Tooltip, element, TooltipOverwrite);
+                    ExecuteForAllOfClass("unity-color-field", element, ColorFieldOverwrite);
+                });
 
             TryInitializeStyleSheetValues(element);
         }
@@ -232,6 +237,29 @@ internal class RootElement : VisualElement
         private static void ScheduleStyleSheetInitialization(InitializationArgs args)
         {
             args.element.schedule.Execute(() => InitializeStyleSheetValues(args));
+        }
+
+        /// <summary> Action called on all elements with the custom tooltip class </summary>
+        /// <param name="element"> Targeted element </param>
+        private static void TooltipOverwrite(VisualElement element)
+        {
+            var tooltip = "";
+
+            element.RegisterCallback <PointerEnterEvent>(
+                _ =>
+                {
+                    tooltip = element.tooltip;
+                    element.tooltip = "";
+
+                    GUIUtility.DisplayTooltip(element, tooltip);
+                });
+
+            element.RegisterCallback <PointerLeaveEvent>(
+                _ =>
+                {
+                    element.tooltip = tooltip;
+                    GUIUtility.HideTooltip(element);
+                });
         }
 
         /// <summary> Try to initialize the <see cref="StyleSheetValues" />> </summary>

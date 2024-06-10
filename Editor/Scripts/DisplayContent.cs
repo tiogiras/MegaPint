@@ -47,7 +47,7 @@ internal static partial class DisplayContent
         Info, Guides, Settings, Help
     }
 
-    private const string DisplayContentBase = "xxx/User Interface/Display Content";
+    private const string DisplayContentBase = "MegaPint/xxx/User Interface/Display Content";
     public static Action <VisualElement> onRightPaneGUI;
     private static Action s_onSelectedPackageChanged;
 

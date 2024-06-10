@@ -19,6 +19,12 @@ public class InterfaceOverview : EditorWindowBase
     {
         titleContent.text = "Interface Overview";
 
+        if (!SaveValues.BasePackage.ApplyPSInterfaceOverview)
+            return this;
+        
+        this.CenterOnMainWin(650, 700);
+        SaveValues.BasePackage.ApplyPSInterfaceOverview = false;
+        
         return this;
     }
 

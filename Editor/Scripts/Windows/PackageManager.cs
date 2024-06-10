@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.GUI;
+using MegaPint.Editor.Scripts.GUI.Utility;
 using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
@@ -85,6 +86,14 @@ internal class PackageManager : EditorWindowBase
     {
         titleContent.text = "Package Manager";
 
+        minSize = new Vector2(700, 350);
+        
+        if (!SaveValues.BasePackage.ApplyPSPackageManager)
+            return this;
+        
+        this.CenterOnMainWin(850, 450);
+        SaveValues.BasePackage.ApplyPSPackageManager = false;
+        
         return this;
     }
 
