@@ -108,6 +108,8 @@ internal static class StyleSheetClasses
     public static string Foldout => $"{ClassBase}foldout";
 
     public static string LinkCursor => "link-cursor";
+
+    public static string Tooltip => $"{ClassBase}tooltip-custom";
 }
 
 }

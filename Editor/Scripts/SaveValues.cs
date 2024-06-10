@@ -18,6 +18,7 @@ internal static partial class SaveValues
         private static CacheValue <bool> s_applyPSBaseWindow = new() {defaultValue = true};
         private static CacheValue <bool> s_applyPSDevCenter = new() {defaultValue = true};
         private static CacheValue <bool> s_applyPSInterfaceOverview = new() {defaultValue = true};
+        private static CacheValue <bool> s_applyPSPackageManager = new() {defaultValue = true};
 
         public static int EditorTheme
         {
@@ -55,6 +56,12 @@ internal static partial class SaveValues
             get => ValueProperty.Get("ApplyPS_InterfaceOverview", ref s_applyPSInterfaceOverview, _GeneralSettings);
             set =>
                 ValueProperty.Set("ApplyPS_InterfaceOverview", value, ref s_applyPSInterfaceOverview, _GeneralSettings);
+        }
+
+        public static bool ApplyPSPackageManager
+        {
+            get => ValueProperty.Get("ApplyPS_PackageManager", ref s_applyPSPackageManager, _GeneralSettings);
+            set => ValueProperty.Set("ApplyPS_PackageManager", value, ref s_applyPSPackageManager, _GeneralSettings);
         }
     }
 

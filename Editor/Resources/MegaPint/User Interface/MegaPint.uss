@@ -100,6 +100,9 @@
 .mp_link {
 }
 
+.mp_tooltip-custom{
+}
+
 .link-cursor {
     cursor: link;
 }
