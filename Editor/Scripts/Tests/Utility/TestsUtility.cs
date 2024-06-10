@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+#if UNITY_INCLUDE_TESTS
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -61,52 +62,6 @@ internal static partial class TestsUtility
         return true;
     }
 
-    public static void ValidateEditorWindow<T>(bool utility = false) where T : EditorWindow
-    {
-        EditorWindow window = EditorWindow.GetWindow<T>(utility, "Unit Test");
-        window.Close();
-    }
-
-    /// <summary> Validate a menuItem called via a link in megaPint </summary>
-    /// <param name="link"> MenuItem link address </param>
-    /// <param name="expectedWindow"> Type of the expected window </param>
-    /// <returns> IEnumerator </returns>
-    public static void ValidateMenuItemLink(string link, Type expectedWindow = null)
-    {
-        EditorApplication.ExecuteMenuItem(link);
-        
-        if (expectedWindow != null)
-            EditorWindow.GetWindow(expectedWindow).Close();
-    }
-
-    /// <summary> Validate a menuItem called via link in megaPint </summary>
-    /// <param name="link"> MenuItem link address </param>
-    /// <param name="utility"> If the expected window is an utility window </param>
-    /// <param name="expectedWindowName"> Name of the expected window </param>
-    public static void ValidateMenuItemLink(string link, bool utility = false, string expectedWindowName = "")
-    {
-        EditorApplication.ExecuteMenuItem(link);
-        
-        if (!string.IsNullOrEmpty(expectedWindowName))
-            EditorWindow.GetWindow(typeof(EditorWindow), utility, expectedWindowName).Close();
-    }
-
-    /// <summary> Validate if a resource of the given type can be loaded at the given path </summary>
-    /// <param name="isValid"> Reference to the validation bool </param>
-    /// <param name="path"> Path to the resource </param>
-    /// <typeparam name="T"> Type of the expected resource </typeparam>
-    public static void ValidateResource <T>(ref bool isValid, string path) where T : Object
-    {
-        Validate(
-            ref isValid,
-            Resources.Load <T>(path) == null,
-            $"Missing resource at path: {path} [Type: {typeof(T)}]");
-    }
-
-    #endregion
-
-    #region Private Methods
-
     /// <summary> Validate directories inside a directory </summary>
     /// <param name="isValid"> Reference to the validation bool </param>
     /// <param name="path"> Path to the targeted directory </param>
@@ -115,7 +70,7 @@ internal static partial class TestsUtility
     /// <param name="requiredDirectories"> Existence of the required directories </param>
     /// <param name="toleratedDirectories"> Existence of the tolerated directories </param>
     /// <param name="tolerateAny"> If true do not fail if any directory is found </param>
-    private static void ValidateDirectories(
+    public static void ValidateDirectories(
         ref bool isValid,
         string path,
         IReadOnlyList <string> required,
@@ -172,6 +127,12 @@ internal static partial class TestsUtility
         Debug.LogWarning($"\t- Excess sub directories found! \n\t\t{string.Join("\n\t\t", directories)}");
     }
 
+    public static void ValidateEditorWindow <T>(bool utility = false) where T : EditorWindow
+    {
+        EditorWindow window = EditorWindow.GetWindow <T>(utility, "Unit Test");
+        window.Close();
+    }
+
     /// <summary> Validate files inside a directory </summary>
     /// <param name="isValid"> Reference to the validation bool </param>
     /// <param name="path"> Path to the targeted directory </param>
@@ -180,7 +141,7 @@ internal static partial class TestsUtility
     /// <param name="requiredFiles"> Existence of the required files </param>
     /// <param name="toleratedFiles"> Existence of the tolerated files </param>
     /// <param name="tolerateAny"> If true do not fail if any file is found </param>
-    private static void ValidateFiles(
+    public static void ValidateFiles(
         ref bool isValid,
         string path,
         IReadOnlyList <string> required,
@@ -237,8 +198,45 @@ internal static partial class TestsUtility
         Debug.LogWarning($"\t- Excess files found!\n\t\t{string.Join("\n\t\t", files)}");
     }
 
+    /// <summary> Validate a menuItem called via a link in megaPint </summary>
+    /// <param name="link"> MenuItem link address </param>
+    /// <param name="expectedWindow"> Type of the expected window </param>
+    /// <returns> IEnumerator </returns>
+    public static void ValidateMenuItemLink(string link, Type expectedWindow = null)
+    {
+        EditorApplication.ExecuteMenuItem(link);
+
+        if (expectedWindow != null)
+            EditorWindow.GetWindow(expectedWindow).Close();
+    }
+
+    /// <summary> Validate a menuItem called via link in megaPint </summary>
+    /// <param name="link"> MenuItem link address </param>
+    /// <param name="utility"> If the expected window is an utility window </param>
+    /// <param name="expectedWindowName"> Name of the expected window </param>
+    public static void ValidateMenuItemLink(string link, bool utility = false, string expectedWindowName = "")
+    {
+        EditorApplication.ExecuteMenuItem(link);
+
+        if (!string.IsNullOrEmpty(expectedWindowName))
+            EditorWindow.GetWindow(typeof(EditorWindow), utility, expectedWindowName).Close();
+    }
+
+    /// <summary> Validate if a resource of the given type can be loaded at the given path </summary>
+    /// <param name="isValid"> Reference to the validation bool </param>
+    /// <param name="path"> Path to the resource </param>
+    /// <typeparam name="T"> Type of the expected resource </typeparam>
+    public static void ValidateResource <T>(ref bool isValid, string path) where T : Object
+    {
+        Validate(
+            ref isValid,
+            Resources.Load <T>(path) == null,
+            $"Missing resource at path: {path} [Type: {typeof(T)}]");
+    }
+
     #endregion
 }
 
 }
+#endif
 #endif

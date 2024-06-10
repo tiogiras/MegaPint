@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+#if UNITY_INCLUDE_TESTS
 using System.IO;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
@@ -93,7 +94,7 @@ internal static partial class TestsUtility
     /// <summary> Validate the license file of the package </summary>
     /// <param name="isValid"> Reference to the validation bool </param>
     /// <param name="path"> Path to the license file </param>
-    private static void CheckLicenseFile(ref bool isValid, string path)
+    public static void CheckLicenseFile(ref bool isValid, string path)
     {
         Validate(
             ref isValid,
@@ -104,7 +105,7 @@ internal static partial class TestsUtility
     /// <summary> Validate the package json of the package </summary>
     /// <param name="isValid"> Reference to the validation bool </param>
     /// <param name="path"> Path to the json file </param>
-    private static void CheckPackageJson(ref bool isValid, string path)
+    public static void CheckPackageJson(ref bool isValid, string path)
     {
         Validate(
             ref isValid,
@@ -117,7 +118,7 @@ internal static partial class TestsUtility
     /// <summary> Validate the readme of the package </summary>
     /// <param name="isValid"> Reference to the validation bool </param>
     /// <param name="path"> Path to the readme file </param>
-    private static void CheckReadMe(ref bool isValid, string path)
+    public static void CheckReadMe(ref bool isValid, string path)
     {
         Validate(
             ref isValid,
@@ -269,4 +270,5 @@ internal static partial class TestsUtility
 }
 
 }
+#endif
 #endif
