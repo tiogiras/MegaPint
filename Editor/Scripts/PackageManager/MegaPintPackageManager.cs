@@ -65,7 +65,8 @@ internal static class MegaPintPackageManager
 
     /// <summary> Remove a package </summary>
     /// <param name="packageName"> Name of the package to be removed </param>
-    public static async Task Remove(string packageName)
+    /// <param name="suppressCacheRefresh"> If true the <see cref="PackageCache"/> will not be refreshed after finishing the task </param>
+    public static async Task Remove(string packageName, bool suppressCacheRefresh = false)
     {
         RemoveRequest request = Client.Remove(packageName);
 
@@ -77,7 +78,9 @@ internal static class MegaPintPackageManager
         else
         {
             onSuccess?.Invoke();
-            PackageCache.Refresh();
+
+            if (!suppressCacheRefresh)
+                PackageCache.Refresh();
         }
     }
 

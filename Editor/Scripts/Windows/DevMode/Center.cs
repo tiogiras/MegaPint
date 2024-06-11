@@ -110,10 +110,8 @@ internal class Center : EditorWindowBase
         PackageCache.Refresh();
 
         while (!PackageCache.WasInitialized)
-        {
             await Task.Delay(100);
-        }
-        
+
         Debug.Log(PackageCache.GetAllMpPackages().Count);
 
         foreach (CachedPackage cachedPackage in PackageCache.GetAllMpPackages())
@@ -121,7 +119,7 @@ internal class Center : EditorWindowBase
             Debug.Log($"Importing: {cachedPackage.DisplayName}");
             await MegaPintPackageManager.AddEmbedded(cachedPackage, true);
         }
-        
+
         PackageCache.Refresh();
     }
 
@@ -143,19 +141,23 @@ internal class Center : EditorWindowBase
         if (Utility.IsProductionProject())
             return;
 
+        PackageCache.Refresh();
+
         PackageCache.GetInstalledMpPackages(out List <CachedPackage> packages, out List <CachedVariation> variations);
 
         if (packages.Count > 0)
         {
             foreach (CachedPackage cachedPackage in packages)
-                await MegaPintPackageManager.Remove(cachedPackage.Name);
+                await MegaPintPackageManager.Remove(cachedPackage.Name, true);
         }
 
         if (variations.Count == 0)
             return;
 
         foreach (CachedVariation cachedVariation in variations)
-            await MegaPintPackageManager.Remove(PackageCache.Get(cachedVariation.key).Name);
+            await MegaPintPackageManager.Remove(PackageCache.Get(cachedVariation.key).Name, true);
+        
+        PackageCache.Refresh();
     }
 
     /// <summary> Call Force Repaint </summary>
