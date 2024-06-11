@@ -6,6 +6,7 @@ using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
@@ -15,6 +16,7 @@ namespace MegaPint.Editor.Scripts.Windows.DevMode
 /// <summary> Editor window to access various development mode utility </summary>
 internal class Center : EditorWindowBase
 {
+    private static bool s_finishedTask;
     private VisualTreeAsset _baseWindow;
     private Button _btnImportAll;
     private Button _btnInterfaceOverview;
@@ -101,6 +103,18 @@ internal class Center : EditorWindowBase
 
     #region Private Methods
 
+    private static void OnFailure(string message)
+    {
+        MegaPintPackageManager.onSuccess -= OnSuccess;
+        MegaPintPackageManager.onFailure -= OnFailure;
+
+        s_finishedTask = true;
+        Debug.LogError(message);
+    }
+
+    // TODO This most likely needs to be a Coroutine that can await the domain reload because after two imports something goes wrong
+    // TODO This most likely also breaks when importing more than one dependency but this is not relevant now because we don't have this case yet
+
     /// <summary> Import all registered megaPint packages </summary>
     private static async void OnImportAll()
     {
@@ -113,44 +127,8 @@ internal class Center : EditorWindowBase
             await Task.Delay(100);
 
         Debug.Log(PackageCache.GetAllMpPackages().Count);
-        
-        foreach (CachedPackage cachedPackage in PackageCache.GetAllMpPackages())
-        {
-            MegaPintPackageManager.onSuccess += OnSuccess;
-            MegaPintPackageManager.onFailure += OnFailure;
-            
-            Debug.Log($"Importing: {cachedPackage.DisplayName}");
-            await MegaPintPackageManager.AddEmbedded(cachedPackage, true);
 
-            while (!s_finishedTask)
-            {
-                Debug.Log("Waiting");
-                await Task.Delay(100);
-            }
-
-            s_finishedTask = false;
-        }
-
-        PackageCache.Refresh();
-    }
-
-    private static bool s_finishedTask;
-
-    private static void OnSuccess()
-    {
-        MegaPintPackageManager.onSuccess -= OnSuccess;
-        MegaPintPackageManager.onFailure -= OnFailure;
-    
-        s_finishedTask = true;
-    }
-    
-    private static void OnFailure(string message)
-    {
-        MegaPintPackageManager.onSuccess -= OnSuccess;
-        MegaPintPackageManager.onFailure -= OnFailure;
-        
-        s_finishedTask = true;
-        Debug.LogError(message);
+        MegaPintPackageManager.InstallAll();
     }
 
     /// <summary> Open InterfaceOverview </summary>
@@ -172,7 +150,7 @@ internal class Center : EditorWindowBase
             return;
 
         PackageCache.Refresh();
-        
+
         while (!PackageCache.WasInitialized)
             await Task.Delay(100);
 
@@ -189,7 +167,7 @@ internal class Center : EditorWindowBase
 
         foreach (CachedVariation cachedVariation in variations)
             await MegaPintPackageManager.Remove(PackageCache.Get(cachedVariation.key).Name, true);
-        
+
         PackageCache.Refresh();
     }
 
@@ -197,6 +175,14 @@ internal class Center : EditorWindowBase
     private static void OnRepaint()
     {
         GUIUtility.ForceRepaint();
+    }
+
+    private static void OnSuccess()
+    {
+        MegaPintPackageManager.onSuccess -= OnSuccess;
+        MegaPintPackageManager.onFailure -= OnFailure;
+
+        s_finishedTask = true;
     }
 
     /// <summary> Open Toggle </summary>

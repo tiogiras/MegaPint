@@ -112,6 +112,19 @@ internal static class MegaPintPackageManager
         PackageCache.Refresh();
     }
 
+    public static async void InstallAll()
+    {
+        List <CachedPackage> packages = PackageCache.GetAllMpPackages();
+
+        if (packages.Count > 0)
+        {
+            foreach (CachedPackage package in packages)
+                await AddEmbedded(package, true);
+        }
+
+        PackageCache.Refresh();
+    }
+
     /// <summary> Update the basePackage to it's newest possible version </summary>
     public static async Task UpdateBasePackage()
     {
