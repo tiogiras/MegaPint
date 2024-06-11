@@ -1,13 +1,12 @@
 ﻿#if UNITY_EDITOR
 #if UNITY_INCLUDE_TESTS
 using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.Tests.Utility;
 using NUnit.Framework;
-using UnityEngine;
 using UnityEngine.TestTools;
 
 namespace MegaPint.Editor.Scripts.Tests.PackageImport
@@ -17,6 +16,8 @@ namespace MegaPint.Editor.Scripts.Tests.PackageImport
 internal class AlphaButton
 {
     private static bool s_initialized;
+
+    private static PackageKey[] s_dependencies;
 
     #region Tests
 
@@ -28,16 +29,9 @@ internal class AlphaButton
 
         var isValid = true;
 
-        Debug.Log(PackageCache.Get(PackageKey.AlphaButton).DisplayName);
-        Debug.Log(PackageCache.Get(PackageKey.AlphaButton).Dependencies);
+        s_dependencies = PackageCache.Get(PackageKey.AlphaButton).Dependencies.Select(package => package.key).ToArray();
         
-        foreach (Dependency dependency in PackageCache.Get(PackageKey.AlphaButton).Dependencies)
-        {
-            TestsUtility.Validate(
-                ref isValid,
-                PackageCache.Get(dependency.key).CanBeRemoved(out List <PackageKey> _),
-                $"Could remove {dependency.name} but it should not be removable due to dependencies!");
-        }
+        TestsUtility.ValidatePackageDependencies(ref isValid, PackageKey.AlphaButton);
 
         Assert.IsTrue(isValid);
     }
@@ -87,13 +81,13 @@ internal class AlphaButton
 
         var isValid = true;
 
-        foreach (Dependency dependency in PackageCache.Get(PackageKey.AlphaButton).Dependencies)
+        foreach (PackageKey dependency in s_dependencies)
         {
-            Task <bool> task = TestsUtility.RemovePackage(dependency.key);
+            Task <bool> task = TestsUtility.RemovePackage(dependency);
 
             yield return task.AsIEnumeratorReturnNull();
 
-            TestsUtility.Validate(ref isValid, !task.Result, $"Failed to remove {dependency.name}!");
+            TestsUtility.Validate(ref isValid, !task.Result, $"Failed to remove {dependency}!");
         }
 
         Assert.IsTrue(isValid);

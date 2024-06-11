@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 #if UNITY_INCLUDE_TESTS
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
@@ -26,6 +27,17 @@ internal static partial class TestsUtility
         MegaPintPackageManager.onSuccess -= OnSuccess;
 
         return s_packageManagerResult;
+    }
+
+    public static void ValidatePackageDependencies(ref bool isValid, PackageKey key)
+    {
+        foreach (Dependency dependency in PackageCache.Get(key).Dependencies)
+        {
+            Validate(
+                ref isValid,
+                PackageCache.Get(dependency.key).CanBeRemoved(out List <PackageKey> _),
+                $"Could remove {dependency.name} but it should not be removable due to dependencies!");
+        }
     }
     
     public static async Task <bool> ImportVariation(PackageKey key, int variationIndex)
