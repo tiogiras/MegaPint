@@ -112,6 +112,8 @@ internal static class MegaPintPackageManager
         PackageCache.Refresh();
     }
 
+    // TODO commenting
+    // TODO make it work pls
     public static async void InstallAll()
     {
         List <CachedPackage> packages = PackageCache.GetAllMpPackages();
@@ -166,6 +168,8 @@ internal static class MegaPintPackageManager
 
         await Task.Delay(250);
         await AddEmbedded(gitUrl);
+
+        await Task.Delay(500);
 
         onSuccess?.Invoke();
         

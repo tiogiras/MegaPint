@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.GUI.Utility;
@@ -103,15 +104,6 @@ internal class Center : EditorWindowBase
 
     #region Private Methods
 
-    private static void OnFailure(string message)
-    {
-        MegaPintPackageManager.onSuccess -= OnSuccess;
-        MegaPintPackageManager.onFailure -= OnFailure;
-
-        s_finishedTask = true;
-        Debug.LogError(message);
-    }
-
     // TODO This most likely needs to be a Coroutine that can await the domain reload because after two imports something goes wrong
     // TODO This most likely also breaks when importing more than one dependency but this is not relevant now because we don't have this case yet
 
@@ -175,14 +167,6 @@ internal class Center : EditorWindowBase
     private static void OnRepaint()
     {
         GUIUtility.ForceRepaint();
-    }
-
-    private static void OnSuccess()
-    {
-        MegaPintPackageManager.onSuccess -= OnSuccess;
-        MegaPintPackageManager.onFailure -= OnFailure;
-
-        s_finishedTask = true;
     }
 
     /// <summary> Open Toggle </summary>
