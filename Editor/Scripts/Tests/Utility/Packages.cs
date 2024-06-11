@@ -28,6 +28,19 @@ internal static partial class TestsUtility
         return s_packageManagerResult;
     }
     
+    public static async Task <bool> ImportVariation(PackageKey key, int variationIndex)
+    {
+        s_packageManagerResult = false;
+        
+        MegaPintPackageManager.onSuccess += OnSuccess;
+        
+        await MegaPintPackageManager.AddEmbedded(PackageCache.Get(key).Variations[variationIndex]);
+        
+        MegaPintPackageManager.onSuccess -= OnSuccess;
+
+        return s_packageManagerResult;
+    }
+
     public static async Task <bool> RemovePackage(PackageKey key)
     {
         s_packageManagerResult = false;
