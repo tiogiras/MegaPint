@@ -113,14 +113,44 @@ internal class Center : EditorWindowBase
             await Task.Delay(100);
 
         Debug.Log(PackageCache.GetAllMpPackages().Count);
-
+        
         foreach (CachedPackage cachedPackage in PackageCache.GetAllMpPackages())
         {
+            MegaPintPackageManager.onSuccess += OnSuccess;
+            MegaPintPackageManager.onFailure += OnFailure;
+            
             Debug.Log($"Importing: {cachedPackage.DisplayName}");
             await MegaPintPackageManager.AddEmbedded(cachedPackage, true);
+
+            while (!s_finishedTask)
+            {
+                Debug.Log("Waiting");
+                await Task.Delay(100);
+            }
+
+            s_finishedTask = false;
         }
 
         PackageCache.Refresh();
+    }
+
+    private static bool s_finishedTask;
+
+    private static void OnSuccess()
+    {
+        MegaPintPackageManager.onSuccess -= OnSuccess;
+        MegaPintPackageManager.onFailure -= OnFailure;
+    
+        s_finishedTask = true;
+    }
+    
+    private static void OnFailure(string message)
+    {
+        MegaPintPackageManager.onSuccess -= OnSuccess;
+        MegaPintPackageManager.onFailure -= OnFailure;
+        
+        s_finishedTask = true;
+        Debug.LogError(message);
     }
 
     /// <summary> Open InterfaceOverview </summary>
@@ -142,6 +172,9 @@ internal class Center : EditorWindowBase
             return;
 
         PackageCache.Refresh();
+        
+        while (!PackageCache.WasInitialized)
+            await Task.Delay(100);
 
         PackageCache.GetInstalledMpPackages(out List <CachedPackage> packages, out List <CachedVariation> variations);
 
