@@ -329,7 +329,6 @@ internal class PackageManager : EditorWindowBase
             MegaPintPackageManager.onSuccess += OnRemoveSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
             
-            // TODO Test if this still works
 #pragma warning disable CS4014
             MegaPintPackageManager.Remove(package.Name);
 #pragma warning restore CS4014
@@ -428,9 +427,13 @@ internal class PackageManager : EditorWindowBase
         CachedPackage package = _displayedPackages[_currentIndex];
         _packageName.text = package.DisplayName;
 
+        _installedVersion.style.display = package.IsInstalled || Utility.IsProductionProject()
+            ? DisplayStyle.Flex
+            : DisplayStyle.None;
+
         _newestVersion.tooltip = $"Newest Version: {package.Version}";
-        _installedVersion.tooltip = $"Installed Version: {package.CurrentVersion}";
         _lastUpdate.tooltip = $"Last Update: {package.LastUpdate}";
+        _installedVersion.tooltip = $"Installed Version: {package.CurrentVersion}";
         _unityVersion.tooltip = $"Unity Version: {package.UnityVersion}";
         _megaPintVersion.tooltip = $"MegaPint Version: {package.ReqMpVersion}";
 

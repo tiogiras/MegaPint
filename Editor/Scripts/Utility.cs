@@ -11,18 +11,17 @@ internal static class Utility
 {
     #region Public Methods
 
-    /// <summary> Check if the string is a path inside the unity assets folder </summary>
-    /// <param name="source"> String to be checked </param>
-    /// <param name="pathInProject"> If the string is a path inside the project use this path </param>
-    /// <returns> If the string is a path in the project </returns>
-    public static bool IsPathInProject(this string source, out string pathInProject)
+    /// <summary> Combine the given strings like Path.Combine but for menuItem execution </summary>
+    /// <param name="arg0"> First part of the path </param>
+    /// <param name="arg1"> Second part of the path </param>
+    /// <returns> Combined path suitable for menuItems </returns>
+    public static string CombineMenuItemPath(string arg0, string arg1)
     {
-        var valid = source.StartsWith(Application.dataPath);
-        pathInProject = valid ? source[(Application.dataPath.Length - 6)..] : "";
+        var path = Path.Combine(arg0, arg1);
 
-        return valid;
+        return path.Replace("\\", "/");
     }
-    
+
     /// <summary> Copy and load an asset used in different render pipelines </summary>
     /// <param name="oldAsset"> Source asset </param>
     /// <param name="newPath"> New destination </param>
@@ -45,12 +44,25 @@ internal static class Utility
         return AssetDatabase.LoadAssetAtPath <T>(newPath);
     }
 
-    public static string CombineMenuItemPath(string arg0, string arg1)
+    /// <summary> Check if the string is a path inside the unity assets folder </summary>
+    /// <param name="source"> String to be checked </param>
+    /// <param name="pathInProject"> If the string is a path inside the project use this path </param>
+    /// <returns> If the string is a path in the project </returns>
+    public static bool IsPathInProject(this string source, out string pathInProject)
     {
-        var path = Path.Combine(arg0, arg1);
-        return path.Replace("\\", "/");
+        var valid = source.StartsWith(Application.dataPath);
+        pathInProject = valid ? source[(Application.dataPath.Length - 6)..] : "";
+
+        return valid;
     }
-    
+
+    /// <summary> Check if the current project is the unity project the product is created with </summary>
+    /// <returns> If the current project is the production project </returns>
+    public static bool IsProductionProject()
+    {
+        return Application.companyName.Equals("Tiogiras") && Application.productName.Equals("MegaPintProject");
+    }
+
     #endregion
 }
 
