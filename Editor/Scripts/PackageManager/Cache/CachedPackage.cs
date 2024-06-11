@@ -105,15 +105,16 @@ internal class CachedPackage : IComparable <CachedPackage>
                 return;
 
             dependencies = packageData.dependencies;
-            Dependencies = packageData.dependencies;
         }
         else
         {
             CurrentVariation = PackageManagerUtility.VariationToCache(installedVariation, CurrentVersion, Repository);
 
             if (installedVariation.dependencies is {Count: > 0})
-                dependencies = installedVariation.dependencies;
+                dependencies = installedVariation.dependencies;   
         }
+
+        Dependencies = dependencies;
     }
 
     #region Public Methods

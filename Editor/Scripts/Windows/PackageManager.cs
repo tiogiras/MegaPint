@@ -328,7 +328,11 @@ internal class PackageManager : EditorWindowBase
 
             MegaPintPackageManager.onSuccess += OnRemoveSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
+            
+            // TODO Test if this still works
+#pragma warning disable CS4014
             MegaPintPackageManager.Remove(package.Name);
+#pragma warning restore CS4014
         }
         else
         {

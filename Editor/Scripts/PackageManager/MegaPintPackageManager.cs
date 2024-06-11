@@ -63,7 +63,7 @@ internal static class MegaPintPackageManager
 
     /// <summary> Remove a package </summary>
     /// <param name="packageName"> Name of the package to be removed </param>
-    public static async void Remove(string packageName)
+    public static async Task Remove(string packageName)
     {
         RemoveRequest request = Client.Remove(packageName);
 
