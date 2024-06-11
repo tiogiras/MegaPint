@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
+using System.Linq;
 using MegaPint.Editor.Scripts.GUI.Utility;
 using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
@@ -106,8 +107,12 @@ internal class Center : EditorWindowBase
         if (Utility.IsProductionProject())
             return;
 
+        Debug.Log(string.Join(", ", PackageCache.GetAllMpPackages().Select(package => package.Name).ToArray()));
+
         foreach (CachedPackage cachedPackage in PackageCache.GetAllMpPackages())
+        {
             await MegaPintPackageManager.AddEmbedded(cachedPackage);
+        }
     }
 
     /// <summary> Open InterfaceOverview </summary>
