@@ -107,8 +107,15 @@ internal class Center : EditorWindowBase
         if (Utility.IsProductionProject())
             return;
 
-        Debug.Log(string.Join(", ", PackageCache.GetAllMpPackages().Select(package => package.Name).ToArray()));
+        Debug.Log(PackageCache.GetAllMpPackages().Count);
 
+        foreach (CachedPackage cachedPackage in PackageCache.GetAllMpPackages())
+        {
+            Debug.Log(cachedPackage.DisplayName);
+        }
+
+        return;
+        
         foreach (CachedPackage cachedPackage in PackageCache.GetAllMpPackages())
         {
             await MegaPintPackageManager.AddEmbedded(cachedPackage);
