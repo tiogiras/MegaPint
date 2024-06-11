@@ -7,6 +7,7 @@ using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.Tests.Utility;
 using NUnit.Framework;
+using UnityEngine;
 using UnityEngine.TestTools;
 
 namespace MegaPint.Editor.Scripts.Tests.PackageImport
@@ -27,6 +28,9 @@ internal class AlphaButton
 
         var isValid = true;
 
+        Debug.Log(PackageCache.Get(PackageKey.AlphaButton).DisplayName);
+        Debug.Log(PackageCache.Get(PackageKey.AlphaButton).Dependencies);
+        
         foreach (Dependency dependency in PackageCache.Get(PackageKey.AlphaButton).Dependencies)
         {
             TestsUtility.Validate(
