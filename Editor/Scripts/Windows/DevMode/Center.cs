@@ -1,6 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.GUI.Utility;
 using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
@@ -107,6 +107,13 @@ internal class Center : EditorWindowBase
         if (Utility.IsProductionProject())
             return;
 
+        PackageCache.Refresh();
+
+        while (!PackageCache.WasInitialized)
+        {
+            await Task.Delay(100);
+        }
+        
         Debug.Log(PackageCache.GetAllMpPackages().Count);
 
         foreach (CachedPackage cachedPackage in PackageCache.GetAllMpPackages())
