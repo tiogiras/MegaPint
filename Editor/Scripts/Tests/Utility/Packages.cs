@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
+using NUnit.Framework;
+using UnityEngine;
 
 namespace MegaPint.Editor.Scripts.Tests.Utility
 {
@@ -29,6 +31,17 @@ internal static partial class TestsUtility
         return s_packageManagerResult;
     }
 
+    public static void SkipIfProductionProject()
+    {
+        if (IsProductionProject())
+            Assert.Pass("SKIPPED ===> Production project!");
+    }
+    
+    private static bool IsProductionProject()
+    {
+        return Application.companyName.Equals("Tiogiras") && Application.productName.Equals("MegaPintProject");
+    }
+    
     public static void ValidatePackageDependencies(ref bool isValid, PackageKey key)
     {
         foreach (Dependency dependency in PackageCache.Get(key).Dependencies)

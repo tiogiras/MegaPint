@@ -24,13 +24,15 @@ internal class AlphaButton
     [Test] [Order(3)]
     public void CheckDependencies()
     {
+        TestsUtility.SkipIfProductionProject();
+
         if (!s_initialized)
             Assert.Fail("FAILED ===> Missing packageCache initialization!");
 
         var isValid = true;
 
         s_dependencies = PackageCache.Get(PackageKey.AlphaButton).Dependencies.Select(package => package.key).ToArray();
-        
+
         TestsUtility.ValidatePackageDependencies(ref isValid, PackageKey.AlphaButton);
 
         Assert.IsTrue(isValid);
@@ -39,6 +41,8 @@ internal class AlphaButton
     [UnityTest] [Order(1)]
     public IEnumerator ImportPackage()
     {
+        TestsUtility.SkipIfProductionProject();
+
         if (!s_initialized)
             Assert.Fail("FAILED ===> Missing packageCache initialization!");
 
@@ -52,6 +56,8 @@ internal class AlphaButton
     [UnityTest] [Order(2)]
     public IEnumerator ImportVariation()
     {
+        TestsUtility.SkipIfProductionProject();
+
         if (!s_initialized)
             Assert.Fail("FAILED ===> Missing packageCache initialization!");
 
@@ -65,6 +71,8 @@ internal class AlphaButton
     [UnityTest] [Order(0)]
     public IEnumerator InitializePackageCache()
     {
+        TestsUtility.SkipIfProductionProject();
+
         Task <bool> task = TestsUtility.CheckCacheInitialization();
 
         yield return task.AsIEnumeratorReturnNull();
@@ -76,6 +84,8 @@ internal class AlphaButton
     [UnityTest] [Order(5)]
     public IEnumerator RemoveFormerDependencies()
     {
+        TestsUtility.SkipIfProductionProject();
+
         if (!s_initialized)
             Assert.Fail("FAILED ===> Missing packageCache initialization!");
 
@@ -96,6 +106,8 @@ internal class AlphaButton
     [UnityTest] [Order(4)]
     public IEnumerator RemovePackage()
     {
+        TestsUtility.SkipIfProductionProject();
+
         if (!s_initialized)
             Assert.Fail("FAILED ===> Missing packageCache initialization!");
 
