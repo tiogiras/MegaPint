@@ -119,8 +119,10 @@ internal class Center : EditorWindowBase
         foreach (CachedPackage cachedPackage in PackageCache.GetAllMpPackages())
         {
             Debug.Log($"Importing: {cachedPackage.DisplayName}");
-            await MegaPintPackageManager.AddEmbedded(cachedPackage);
+            await MegaPintPackageManager.AddEmbedded(cachedPackage, true);
         }
+        
+        PackageCache.Refresh();
     }
 
     /// <summary> Open InterfaceOverview </summary>
