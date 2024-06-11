@@ -14,6 +14,9 @@ internal class Variation : IComparable <Variation>
     /// <summary> Branch used for development </summary>
     public string devBranch;
 
+    /// <summary> Key to the corresponding basePackage </summary>
+    public PackageKey key;
+
     /// <summary> DisplayName of this variation </summary>
     public string name;
 
