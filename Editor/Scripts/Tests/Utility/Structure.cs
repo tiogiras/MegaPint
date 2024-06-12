@@ -14,6 +14,41 @@ internal static partial class TestsUtility
 {
     #region Public Methods
 
+    /// <summary> Validate the license file of the package </summary>
+    /// <param name="isValid"> Reference to the validation bool </param>
+    /// <param name="path"> Path to the license file </param>
+    public static void CheckLicenseFile(ref bool isValid, string path)
+    {
+        Validate(
+            ref isValid,
+            string.IsNullOrEmpty(File.ReadAllText(path)),
+            "License file is empty!");
+    }
+
+    /// <summary> Validate the package json of the package </summary>
+    /// <param name="isValid"> Reference to the validation bool </param>
+    /// <param name="path"> Path to the json file </param>
+    public static void CheckPackageJson(ref bool isValid, string path)
+    {
+        Validate(
+            ref isValid,
+            string.IsNullOrEmpty(File.ReadAllText(path)),
+            "Package json file is empty!");
+
+        // TODO move the package cache data evaluation for this package to here
+    }
+
+    /// <summary> Validate the readme of the package </summary>
+    /// <param name="isValid"> Reference to the validation bool </param>
+    /// <param name="path"> Path to the readme file </param>
+    public static void CheckReadMe(ref bool isValid, string path)
+    {
+        Validate(
+            ref isValid,
+            string.IsNullOrEmpty(File.ReadAllText(path)),
+            "Readme file is empty!");
+    }
+
     /// <summary> Validate the structure of a package </summary>
     /// <param name="key"> Key to the targeted package </param>
     public static void CheckStructure(PackageKey key)
@@ -89,41 +124,6 @@ internal static partial class TestsUtility
             Debug.Log("\t===> No issues found!");
         else
             isValid = false;
-    }
-
-    /// <summary> Validate the license file of the package </summary>
-    /// <param name="isValid"> Reference to the validation bool </param>
-    /// <param name="path"> Path to the license file </param>
-    public static void CheckLicenseFile(ref bool isValid, string path)
-    {
-        Validate(
-            ref isValid,
-            string.IsNullOrEmpty(File.ReadAllText(path)),
-            "License file is empty!");
-    }
-
-    /// <summary> Validate the package json of the package </summary>
-    /// <param name="isValid"> Reference to the validation bool </param>
-    /// <param name="path"> Path to the json file </param>
-    public static void CheckPackageJson(ref bool isValid, string path)
-    {
-        Validate(
-            ref isValid,
-            string.IsNullOrEmpty(File.ReadAllText(path)),
-            "Package json file is empty!");
-
-        // TODO move the package cache data evaluation for this package to here
-    }
-
-    /// <summary> Validate the readme of the package </summary>
-    /// <param name="isValid"> Reference to the validation bool </param>
-    /// <param name="path"> Path to the readme file </param>
-    public static void CheckReadMe(ref bool isValid, string path)
-    {
-        Validate(
-            ref isValid,
-            string.IsNullOrEmpty(File.ReadAllText(path)),
-            "Readme file is empty!");
     }
 
     /// <summary> Validate the runtime directory of a package </summary>
@@ -253,17 +253,26 @@ internal static partial class TestsUtility
             ref isValid,
             path,
             new[] {"User Interface"},
-            new[] {"Images"},
+            new[] {"Images", "Samples"},
             out required,
             out var tolerated);
 
-        ValidateFiles(ref isValid, path, null, new[] {"User Interface.meta", "Images.meta"}, out var _, out var _);
+        ValidateFiles(
+            ref isValid,
+            path,
+            null,
+            new[] {"User Interface.meta", "Images.meta", "Samples.meta"},
+            out var _,
+            out var _);
 
         if (required[0])
             ValidateNamingOfFilesInFolderAndSubFolders(ref isValid, Path.Combine(path, "User Interface"));
 
         if (tolerated[0])
             ValidateNamingOfFilesInFolderAndSubFolders(ref isValid, Path.Combine(path, "Images"));
+        
+        if (tolerated[1])
+            ValidateNamingOfFilesInFolderAndSubFolders(ref isValid, Path.Combine(path, "Samples"));
     }
 
     #endregion

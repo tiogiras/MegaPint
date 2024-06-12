@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.GUI;
@@ -22,12 +23,6 @@ namespace MegaPint.Editor.Scripts.Windows
 internal class PackageManager : EditorWindowBase
 {
     private static Action <PackageKey> s_showWithLink;
-
-    private readonly string _dependencyItemPath = Constants.BasePackage.UserInterface.PackageManagerDependencyItem;
-
-    private readonly string _listItemPath = Constants.BasePackage.UserInterface.PackageManagerPackageItem;
-
-    private readonly string _variationsListItemPath = Constants.BasePackage.UserInterface.PackageManagerVariationItem;
 
     private VisualTreeAsset _baseWindow;
 
@@ -69,6 +64,11 @@ internal class PackageManager : EditorWindowBase
     private VisualElement _rightPane;
 
     private VisualElement _root;
+
+    private VisualTreeAsset _sampleItem;
+    private ListView _samples;
+
+    private VisualElement _samplesParent;
     private VisualElement _unityVersion;
     private VisualTreeAsset _variationsListItem;
 
@@ -87,13 +87,13 @@ internal class PackageManager : EditorWindowBase
         titleContent.text = "Package Manager";
 
         minSize = new Vector2(700, 350);
-        
+
         if (!SaveValues.BasePackage.ApplyPSPackageManager)
             return this;
-        
+
         this.CenterOnMainWin(850, 450);
         SaveValues.BasePackage.ApplyPSPackageManager = false;
-        
+
         return this;
     }
 
@@ -123,14 +123,21 @@ internal class PackageManager : EditorWindowBase
     protected override bool LoadResources()
     {
         _baseWindow = Resources.Load <VisualTreeAsset>(BasePath());
-        _listItem = Resources.Load <VisualTreeAsset>(_listItemPath);
-        _variationsListItem = Resources.Load <VisualTreeAsset>(_variationsListItemPath);
-        _dependencyItem = Resources.Load <VisualTreeAsset>(_dependencyItemPath);
+        _listItem = Resources.Load <VisualTreeAsset>(Constants.BasePackage.UserInterface.PackageManagerPackageItem);
+
+        _variationsListItem =
+            Resources.Load <VisualTreeAsset>(Constants.BasePackage.UserInterface.PackageManagerVariationItem);
+
+        _dependencyItem =
+            Resources.Load <VisualTreeAsset>(Constants.BasePackage.UserInterface.PackageManagerDependencyItem);
+
+        _sampleItem = Resources.Load <VisualTreeAsset>(Constants.BasePackage.UserInterface.PackageManagerSampleItem);
 
         return _baseWindow != null &&
                _listItem != null &&
                _variationsListItem != null &&
-               _dependencyItem != null;
+               _dependencyItem != null &&
+               _sampleItem != null;
     }
 
     protected override void RegisterCallbacks()
@@ -211,6 +218,9 @@ internal class PackageManager : EditorWindowBase
 
         _packageVariationsParent = _content.Q <VisualElement>("PackageVariationsParent");
         _packageVariations = _content.Q <ListView>("PackageVariations");
+
+        _samplesParent = _content.Q <VisualElement>("SamplesParent");
+        _samples = _content.Q <ListView>("Samples");
 
         _dependencies = _content.Q <Foldout>("Dependencies");
 
@@ -328,7 +338,7 @@ internal class PackageManager : EditorWindowBase
 
             MegaPintPackageManager.onSuccess += OnRemoveSuccess;
             MegaPintPackageManager.onFailure += OnFailure;
-            
+
 #pragma warning disable CS4014
             MegaPintPackageManager.Remove(package.Name);
 #pragma warning restore CS4014
@@ -444,8 +454,7 @@ internal class PackageManager : EditorWindowBase
 
         galleryButton.style.display = hasImages ? DisplayStyle.Flex : DisplayStyle.None;
 
-        GUIUtility.AddClickInteraction(
-            galleryButton,
+        galleryButton.AddClickInteraction(
             () =>
             {
                 var gallery = (Gallery)ContextMenu.TryOpen <Gallery>(true);
@@ -495,6 +504,45 @@ internal class PackageManager : EditorWindowBase
         _btnUpdate.style.display = isImported && PackageCache.NeedsUpdate(package.Key)
             ? DisplayStyle.Flex
             : DisplayStyle.None;
+
+        var hasSamples = package.HasSamples;
+
+        _samplesParent.style.display = hasSamples ? DisplayStyle.Flex : DisplayStyle.None;
+
+        if (hasSamples)
+        {
+            _samples.makeItem = () => GUIUtility.Instantiate(_sampleItem);
+
+            _samples.bindItem = (element, i) =>
+            {
+                SampleData sample = package.Samples[i];
+
+                element.Q <Label>("SampleName").text = sample.displayName;
+
+                element.Q <Button>("BTN_Import").clickable = new Clickable(
+                    () =>
+                    {
+                        var samplePath = Utility.GetPackageSamplePath(package.Key, sample.path);
+
+                        var directory = Path.Combine(Application.dataPath, "MegaPint Samples");
+
+                        var assetFolderPath = Path.Combine(
+                            directory,
+                            $"{package.DisplayName}_{sample.displayName}.unitypackage");
+
+                        if (!Directory.Exists(directory))
+                            Directory.CreateDirectory(directory);
+
+                        File.Copy(samplePath, assetFolderPath, true);
+
+                        AssetDatabase.ImportPackage(assetFolderPath, true);
+                    });
+            };
+
+            _samples.Clear();
+            _samples.itemsSource = package.Samples;
+            _samples.RefreshItems();
+        }
     }
 
     /// <summary> Called on successful update </summary>
