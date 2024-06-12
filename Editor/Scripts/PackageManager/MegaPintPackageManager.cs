@@ -123,7 +123,7 @@ internal static class MegaPintPackageManager
         if (packages.Count > 0)
         {
             var path = Application.dataPath[..^7];
-            path = Path.Combine(path, "Packages", "mainfest.json");
+            path = Path.Combine(path, "Packages", "manifest.json");
 
             var manifestText = File.ReadAllText(path);
             
