@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.PackageManager.Utility;
-using UnityEditor.PackageManager;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace MegaPint.Editor.Scripts.PackageManager.Cache
 {
 
-/// <summary> Stores combined data from <see cref="PackageInfo" /> and <see cref="PackageData" /> </summary>
+/// <summary> Stores combined data from <see cref="UnityEditor.PackageManager.PackageInfo" /> and <see cref="PackageData" /> </summary>
 internal class CachedPackage : IComparable <CachedPackage>
 {
     /// <summary> <see cref="PackageKey" /> of the package </summary>
@@ -17,6 +17,12 @@ internal class CachedPackage : IComparable <CachedPackage>
 
     /// <summary> Name of the package </summary>
     public string Name {get;}
+
+    /// <summary> All samples of the package </summary>
+    public List <SampleData> Samples {get;}
+    
+    /// <summary> If the package has samples to import </summary>
+    public bool HasSamples {get;}
 
     /// <summary> Name of the package used when displayed </summary>
     public string DisplayName {get;}
@@ -65,10 +71,10 @@ internal class CachedPackage : IComparable <CachedPackage>
     private List <PackageKey> _myDependants;
 
     /// <summary>
-    ///     Create a new CachedPackage from the corresponding <see cref="PackageInfo" /> and <see cref="PackageData" />
+    ///     Create a new CachedPackage from the corresponding <see cref="UnityEditor.PackageManager.PackageInfo" /> and <see cref="PackageData" />
     /// </summary>
     /// <param name="packageData"> Corresponding <see cref="PackageData" /> </param>
-    /// <param name="packageInfo"> Corresponding <see cref="PackageInfo" /> </param>
+    /// <param name="packageInfo"> Corresponding <see cref="UnityEditor.PackageManager.PackageInfo" /> </param>
     /// <param name="dependencies"> All dependencies this package has </param>
     public CachedPackage(PackageData packageData, PackageInfo packageInfo, out List <Dependency> dependencies)
     {
@@ -76,6 +82,7 @@ internal class CachedPackage : IComparable <CachedPackage>
         Key = packageData.key;
         Name = packageData.name;
         DisplayName = packageData.displayName;
+        Samples = packageData.samples;
         Description = packageData.description;
         LastUpdate = packageData.lastUpdate;
         ReqMpVersion = packageData.reqMpVersion;
@@ -96,6 +103,7 @@ internal class CachedPackage : IComparable <CachedPackage>
 
         CurrentVersion = packageInfo!.version;
         IsNewestVersion = packageInfo.version == packageData.version;
+        HasSamples = Samples is {Count: > 0};
 
         SetVariations(packageData, packageInfo, out installedVariation);
 

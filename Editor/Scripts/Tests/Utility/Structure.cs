@@ -14,6 +14,41 @@ internal static partial class TestsUtility
 {
     #region Public Methods
 
+    /// <summary> Validate the license file of the package </summary>
+    /// <param name="isValid"> Reference to the validation bool </param>
+    /// <param name="path"> Path to the license file </param>
+    public static void CheckLicenseFile(ref bool isValid, string path)
+    {
+        Validate(
+            ref isValid,
+            string.IsNullOrEmpty(File.ReadAllText(path)),
+            "License file is empty!");
+    }
+
+    /// <summary> Validate the package json of the package </summary>
+    /// <param name="isValid"> Reference to the validation bool </param>
+    /// <param name="path"> Path to the json file </param>
+    public static void CheckPackageJson(ref bool isValid, string path)
+    {
+        Validate(
+            ref isValid,
+            string.IsNullOrEmpty(File.ReadAllText(path)),
+            "Package json file is empty!");
+
+        // TODO move the package cache data evaluation for this package to here
+    }
+
+    /// <summary> Validate the readme of the package </summary>
+    /// <param name="isValid"> Reference to the validation bool </param>
+    /// <param name="path"> Path to the readme file </param>
+    public static void CheckReadMe(ref bool isValid, string path)
+    {
+        Validate(
+            ref isValid,
+            string.IsNullOrEmpty(File.ReadAllText(path)),
+            "Readme file is empty!");
+    }
+
     /// <summary> Validate the structure of a package </summary>
     /// <param name="key"> Key to the targeted package </param>
     public static void CheckStructure(PackageKey key)
@@ -91,41 +126,6 @@ internal static partial class TestsUtility
             isValid = false;
     }
 
-    /// <summary> Validate the license file of the package </summary>
-    /// <param name="isValid"> Reference to the validation bool </param>
-    /// <param name="path"> Path to the license file </param>
-    public static void CheckLicenseFile(ref bool isValid, string path)
-    {
-        Validate(
-            ref isValid,
-            string.IsNullOrEmpty(File.ReadAllText(path)),
-            "License file is empty!");
-    }
-
-    /// <summary> Validate the package json of the package </summary>
-    /// <param name="isValid"> Reference to the validation bool </param>
-    /// <param name="path"> Path to the json file </param>
-    public static void CheckPackageJson(ref bool isValid, string path)
-    {
-        Validate(
-            ref isValid,
-            string.IsNullOrEmpty(File.ReadAllText(path)),
-            "Package json file is empty!");
-
-        // TODO move the package cache data evaluation for this package to here
-    }
-
-    /// <summary> Validate the readme of the package </summary>
-    /// <param name="isValid"> Reference to the validation bool </param>
-    /// <param name="path"> Path to the readme file </param>
-    public static void CheckReadMe(ref bool isValid, string path)
-    {
-        Validate(
-            ref isValid,
-            string.IsNullOrEmpty(File.ReadAllText(path)),
-            "Readme file is empty!");
-    }
-
     /// <summary> Validate the runtime directory of a package </summary>
     /// <param name="isValid"> Reference to the validation bool </param>
     /// <param name="path"> Path to the package directory </param>
@@ -175,7 +175,7 @@ internal static partial class TestsUtility
             ref localIsValid,
             path,
             new[] {"Editor"},
-            new[] {"Runtime", ".git"},
+            new[] {"Runtime", "Samples", ".git"},
             out var required,
             out var tolerated);
 
@@ -204,7 +204,10 @@ internal static partial class TestsUtility
             ref localIsValid,
             path,
             new[] {"LICENSE", "package.json", "README.md"},
-            new[] {"LICENSE.meta", "package.json.meta", "README.md.meta", "Editor.meta", "Runtime.meta"},
+            new[]
+            {
+                "LICENSE.meta", "package.json.meta", "README.md.meta", "Editor.meta", "Runtime.meta", "Samples.meta"
+            },
             out var required,
             out var _);
 

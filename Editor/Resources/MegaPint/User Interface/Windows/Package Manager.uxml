@@ -32,9 +32,18 @@
                                 <MegaPint.Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Info Text ..." name="InfoText" style="white-space: normal; -unity-text-align: middle-left; font-size: 12.5px; margin-left: 10px; flex-grow: 1; flex-shrink: 1;" />
                             </ui:VisualElement>
                             <MegaPint.Editor.Scripts.GUI.Factories.Structure.Separator />
-                            <MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary name="PackageVariationsParent" style="margin-top: 10px; margin-right: 20px; margin-bottom: 10px; margin-left: 20px;">
-                                <ui:ListView name="PackageVariations" virtualization-method="DynamicHeight" selection-type="None" focusable="false" class="mp_border-color--separator" style="border-top-width: 1px; border-right-width: 1px; border-bottom-width: 0; border-left-width: 1px;" />
-                            </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                            <ui:VisualElement name="SamplesParent" style="flex-grow: 1; margin-top: 10px; margin-right: 20px; margin-bottom: 10px; margin-left: 20px;">
+                                <MegaPint.Editor.Scripts.GUI.Factories.Headings.HeadingSecondary tabindex="-1" text="Samples" style="-unity-font-style: bold; margin-bottom: 5px;" />
+                                <ui:VisualElement class="mp_background-color--secondary" style="flex-grow: 1;">
+                                    <ui:ListView name="Samples" virtualization-method="DynamicHeight" selection-type="None" focusable="false" class="mp_border-color--separator" style="border-top-width: 1px; border-right-width: 1px; border-bottom-width: 0; border-left-width: 1px;" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:VisualElement name="PackageVariationsParent" style="flex-grow: 1; margin-top: 10px; margin-right: 20px; margin-bottom: 10px; margin-left: 20px;">
+                                <MegaPint.Editor.Scripts.GUI.Factories.Headings.HeadingSecondary tabindex="-1" text="Additional Content" style="-unity-font-style: bold; margin-bottom: 5px;" />
+                                <ui:VisualElement class="mp_background-color--secondary" style="flex-grow: 1;">
+                                    <ui:ListView name="PackageVariations" virtualization-method="DynamicHeight" selection-type="None" focusable="false" class="mp_border-color--separator" style="border-top-width: 1px; border-right-width: 1px; border-bottom-width: 0; border-left-width: 1px;" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
                             <ui:Foldout text="Dependencies" name="Dependencies" value="false" class="mp_textColor_normal mp_font" style="-unity-font-style: bold;" />
                         </ui:GroupBox>
                     </ui:ScrollView>

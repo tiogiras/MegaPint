@@ -40,6 +40,9 @@ internal class PackageData
 
     /// <summary> Version attribute of the corresponding package.json </summary>
     public string version;
+
+    /// <summary> Sample unityPackages of the package </summary>
+    public List <SampleData> samples;
 }
 
 }

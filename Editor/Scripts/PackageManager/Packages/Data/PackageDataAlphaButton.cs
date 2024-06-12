@@ -39,6 +39,10 @@ internal static class PackageDataAlphaButton
                         new() {name = "Validators", key = PackageKey.Validators}
                     }
                 }
+            },
+            samples = new List <SampleData>
+            {
+                new() {displayName = "Basics", path = "AlphaButton Samples"}
             }
         };
     }

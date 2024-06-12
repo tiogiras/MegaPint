@@ -1,5 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System.IO;
+using MegaPint.Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
 using UnityEditor;
 using UnityEngine;
 
@@ -42,6 +44,20 @@ internal static class Utility
         AssetDatabase.CopyAsset(oldPath, newPath);
 
         return AssetDatabase.LoadAssetAtPath <T>(newPath);
+    }
+
+    /// <summary> Get the path to the sample of a specified package </summary>
+    /// <param name="key"> Key to the targeted package </param>
+    /// <param name="localSamplePath"> Path to the sample unityPackage inside the sample folder of the package </param>
+    /// <returns> Full path to the sample unityPackage </returns>
+    public static string GetPackageSamplePath(PackageKey key, string localSamplePath)
+    {
+        return Path.Combine(
+            Application.dataPath[..^7],
+            "Packages",
+            PackageCache.Get(key).Name,
+            "Samples",
+            $"{localSamplePath}.unitypackage");
     }
 
     /// <summary> Check if the string is a path inside the unity assets folder </summary>

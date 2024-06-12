@@ -35,6 +35,7 @@ internal static partial class Constants
             public static readonly string PackageManager = Path.Combine(s_windowsPath, "Package Manager");
             public static readonly string PackageManagerPackageItem = Path.Combine(PackageManager, "Package Item");
             public static readonly string PackageManagerVariationItem = Path.Combine(PackageManager, "Variation Item");
+            public static readonly string PackageManagerSampleItem = Path.Combine(PackageManager, "Sample Item");
 
             public static readonly string PackageManagerDependencyItem = Path.Combine(
                 PackageManager,
