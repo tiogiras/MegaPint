@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
@@ -8,6 +9,7 @@ using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
+using UnityEngine;
 
 namespace MegaPint.Editor.Scripts.PackageManager
 {
@@ -114,14 +116,39 @@ internal static class MegaPintPackageManager
 
     // TODO commenting
     // TODO make it work pls
-    public static async void InstallAll()
+    public static void InstallAll()
     {
         List <CachedPackage> packages = PackageCache.GetAllMpPackages();
 
         if (packages.Count > 0)
         {
+            var path = Application.dataPath[..^7];
+            path = Path.Combine(path, "Packages", "mainfest.json");
+
+            var manifestText = File.ReadAllText(path);
+            
+            const string Divider = "\"dependencies\": {";
+            
+            var parts = manifestText.Split(Divider);
+            
+            var part1 = $"{parts[0]}{Divider}";
+            var part2 = parts[1];
+            
             foreach (CachedPackage package in packages)
-                await AddEmbedded(package, true);
+            {
+                var name = $"\"{package.Name}\":";
+                
+                if (part2.Contains(name))
+                    continue;
+
+                var url = $"\"{package.Repository}\"";
+
+                part2 = $"{name}{url},{part2}";
+            }
+            
+            var newManifest = $"{part1}{part2}";
+            
+            File.WriteAllText(path, newManifest);
         }
 
         PackageCache.Refresh();
