@@ -524,7 +524,7 @@ internal class PackageManager : EditorWindowBase
                     {
                         var samplePath = Utility.GetPackageSamplePath(package.Key, sample.path);
 
-                        var assetFolderPath = Path.Combine(Application.dataPath, $"{sample.displayName}.unitypackage");
+                        var assetFolderPath = Path.Combine(Application.dataPath, "MegaPint Samples", $"{package.DisplayName}_{sample.displayName}.unitypackage");
 
                         File.Copy(samplePath, assetFolderPath, true);
 
