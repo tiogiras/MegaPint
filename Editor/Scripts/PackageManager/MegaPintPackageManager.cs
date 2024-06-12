@@ -121,7 +121,7 @@ internal static class MegaPintPackageManager
         if (packages.Count > 0)
         {
             foreach (CachedPackage package in packages)
-                await AddEmbedded(package, true);
+                AddEmbedded(package, true);
         }
 
         PackageCache.Refresh();
@@ -162,11 +162,11 @@ internal static class MegaPintPackageManager
             foreach (CachedPackage cachedPackage in dependencies.Select(dependency => PackageCache.Get(dependency.key)))
             {
                 await AddEmbedded(PackageManagerUtility.GetPackageUrl(cachedPackage), cachedPackage.Dependencies, suppressCacheRefresh);
-                //await Task.Delay(250); // TODO test if dependencies still work
+                await Task.Delay(250);
             }
         }
 
-        //await Task.Delay(250);
+        await Task.Delay(250);
         await AddEmbedded(gitUrl);
 
         onSuccess?.Invoke();
