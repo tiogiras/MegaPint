@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using System.Collections.Generic;
+
+#if UNITY_EDITOR
 namespace MegaPint.Editor.Scripts.PackageManager.Packages.Data
 {
 
@@ -22,7 +24,11 @@ internal static class PackageDataNotePad
             displayName = "NotePad",
             description =
                 "You want to tell your team or remember what a certain MonoBehaviour does?\n\nNotePad allows you to take notes directly on the GameObject. Create simple \"How to's\" or note something todo right where you need it.",
-            repository = "https://github.com/tiogiras/MegaPint-NotePad.git"
+            repository = "https://github.com/tiogiras/MegaPint-NotePad.git",
+            samples = new List <SampleData>
+            {
+                new() {displayName = "Basics", path = "Basics"}
+            }
         };
     }
 
