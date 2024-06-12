@@ -175,7 +175,7 @@ internal static partial class TestsUtility
             ref localIsValid,
             path,
             new[] {"Editor"},
-            new[] {"Runtime", "Samples", ".git"},
+            new[] {"Runtime", ".git"},
             out var required,
             out var tolerated);
 
@@ -204,10 +204,7 @@ internal static partial class TestsUtility
             ref localIsValid,
             path,
             new[] {"LICENSE", "package.json", "README.md"},
-            new[]
-            {
-                "LICENSE.meta", "package.json.meta", "README.md.meta", "Editor.meta", "Runtime.meta", "Samples.meta"
-            },
+            new[] {"LICENSE.meta", "package.json.meta", "README.md.meta", "Editor.meta", "Runtime.meta"},
             out var required,
             out var _);
 
@@ -256,17 +253,26 @@ internal static partial class TestsUtility
             ref isValid,
             path,
             new[] {"User Interface"},
-            new[] {"Images"},
+            new[] {"Images", "Samples"},
             out required,
             out var tolerated);
 
-        ValidateFiles(ref isValid, path, null, new[] {"User Interface.meta", "Images.meta"}, out var _, out var _);
+        ValidateFiles(
+            ref isValid,
+            path,
+            null,
+            new[] {"User Interface.meta", "Images.meta", "Samples.meta"},
+            out var _,
+            out var _);
 
         if (required[0])
             ValidateNamingOfFilesInFolderAndSubFolders(ref isValid, Path.Combine(path, "User Interface"));
 
         if (tolerated[0])
             ValidateNamingOfFilesInFolderAndSubFolders(ref isValid, Path.Combine(path, "Images"));
+        
+        if (tolerated[1])
+            ValidateNamingOfFilesInFolderAndSubFolders(ref isValid, Path.Combine(path, "Samples"));
     }
 
     #endregion

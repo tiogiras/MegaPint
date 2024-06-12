@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.GUI;
@@ -522,7 +523,16 @@ internal class PackageManager : EditorWindowBase
                     () =>
                     {
                         var samplePath = Utility.GetPackageSamplePath(package.Key, sample.path);
-                        AssetDatabase.ImportPackage(samplePath, true);
+
+                        var assetFolderPath = Path.Combine(Application.dataPath, "TempPackage.unitypackage");
+                        
+                        File.Copy(samplePath, assetFolderPath);
+                        
+                        AssetDatabase.ImportPackage(assetFolderPath, true); // TODO Now resource directory but how to import???
+
+                        AssetDatabase.DeleteAsset(assetFolderPath);
+
+                        // TODO copy to assets then import then delete
                     });
             };
             

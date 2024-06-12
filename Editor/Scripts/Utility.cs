@@ -56,6 +56,10 @@ internal static class Utility
             Application.dataPath[..^7],
             "Packages",
             PackageCache.Get(key).Name,
+            "Editor",
+            "Resources",
+            "MegaPint",
+            key.ToString(),
             "Samples",
             $"{localSamplePath}.unitypackage");
     }
