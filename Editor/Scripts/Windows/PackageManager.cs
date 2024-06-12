@@ -464,7 +464,7 @@ internal class PackageManager : EditorWindowBase
         var hasVariation = package.Variations is {Count: > 0};
         var hasDependency = package.Dependencies is {Count: > 0};
 
-        if (hasVariation)
+        if (hasVariation && package.IsInstalled)
         {
             _packageVariationsParent.style.display = DisplayStyle.Flex;
 
