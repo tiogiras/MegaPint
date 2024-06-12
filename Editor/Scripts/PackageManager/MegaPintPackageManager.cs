@@ -121,7 +121,7 @@ internal static class MegaPintPackageManager
         if (packages.Count > 0)
         {
             foreach (CachedPackage package in packages)
-                AddEmbedded(package, true);
+                await AddEmbedded(package, true);
         }
 
         PackageCache.Refresh();
