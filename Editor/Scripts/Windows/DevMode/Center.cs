@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.GUI.Utility;
@@ -7,7 +6,6 @@ using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
 
@@ -104,9 +102,6 @@ internal class Center : EditorWindowBase
 
     #region Private Methods
 
-    // TODO This most likely needs to be a Coroutine that can await the domain reload because after two imports something goes wrong
-    // TODO This most likely also breaks when importing more than one dependency but this is not relevant now because we don't have this case yet
-
     /// <summary> Import all registered megaPint packages </summary>
     private static async void OnImportAll()
     {
@@ -117,8 +112,6 @@ internal class Center : EditorWindowBase
 
         while (!PackageCache.WasInitialized)
             await Task.Delay(100);
-
-        Debug.Log(PackageCache.GetAllMpPackages().Count);
 
         MegaPintPackageManager.InstallAll();
     }
