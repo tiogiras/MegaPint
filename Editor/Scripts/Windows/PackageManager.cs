@@ -66,11 +66,11 @@ internal class PackageManager : EditorWindowBase
     private VisualElement _root;
 
     private VisualTreeAsset _sampleItem;
-    private VisualElement _unityVersion;
-    private VisualTreeAsset _variationsListItem;
+    private ListView _samples;
 
     private VisualElement _samplesParent;
-    private ListView _samples;
+    private VisualElement _unityVersion;
+    private VisualTreeAsset _variationsListItem;
 
     #region Public Methods
 
@@ -524,24 +524,18 @@ internal class PackageManager : EditorWindowBase
                     {
                         var samplePath = Utility.GetPackageSamplePath(package.Key, sample.path);
 
-                        var assetFolderPath = Path.Combine(Application.dataPath, "TempPackage.unitypackage");
-                        
-                        File.Copy(samplePath, assetFolderPath);
-                        
-                        AssetDatabase.ImportPackage(assetFolderPath, true); // TODO Now resource directory but how to import???
+                        var assetFolderPath = Path.Combine(Application.dataPath, $"{sample.displayName}.unitypackage");
 
-                        AssetDatabase.DeleteAsset(assetFolderPath);
+                        File.Copy(samplePath, assetFolderPath, true);
 
-                        // TODO copy to assets then import then delete
+                        AssetDatabase.ImportPackage(assetFolderPath, true);
                     });
             };
-            
+
             _samples.Clear();
             _samples.itemsSource = package.Samples;
             _samples.RefreshItems();
         }
-
-        // TODO ADD SAMPLE LOGIC
     }
 
     /// <summary> Called on successful update </summary>
