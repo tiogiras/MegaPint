@@ -17,6 +17,9 @@ internal class CachedVariation
     /// <summary> If the variation is up to date </summary>
     public bool isNewestVersion;
 
+    /// <summary> Key to the corresponding basePackage </summary>
+    public PackageKey key;
+
     /// <summary> Name of the variation </summary>
     public string name;
 

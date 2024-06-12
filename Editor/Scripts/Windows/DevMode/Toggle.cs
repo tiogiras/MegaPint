@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using MegaPint.Editor.Scripts.GUI.Utility;
 using MegaPint.Editor.Scripts.PackageManager;
+using MegaPint.Editor.Scripts.PackageManager.Cache;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
@@ -102,6 +103,13 @@ public class Toggle : EditorWindowBase
 
         UpdateButtonStyles();
 
+        if (Utility.IsProductionProject())
+        {
+            PackageCache.Refresh();
+
+            return;
+        }
+
         MegaPintPackageManager.UpdateAll();
     }
 
@@ -112,6 +120,13 @@ public class Toggle : EditorWindowBase
         SaveValues.BasePackage.DevMode = _devModeValue;
 
         UpdateButtonStyles();
+
+        if (Utility.IsProductionProject())
+        {
+            PackageCache.Refresh();
+
+            return;
+        }
 
         MegaPintPackageManager.UpdateAll();
     }

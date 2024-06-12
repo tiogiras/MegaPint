@@ -184,6 +184,8 @@ internal static class PackageCache
 
     private static async void Initialize()
     {
+        WasInitialized = false;
+        
         onCacheStartRefreshing?.Invoke();
 
         SetProgressTo(0);

@@ -78,6 +78,7 @@ internal static class PackageManagerUtility
     {
         return new CachedVariation
         {
+            key = variation.key,
             devBranch = variation.devBranch,
             isNewestVersion = variation.version.Equals(currentVersion),
             name = variation.name,

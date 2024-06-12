@@ -29,6 +29,7 @@ internal static class PackageDataAlphaButton
             {
                 new()
                 {
+                    key = PackageKey.AlphaButton,
                     name = "MegaPint Validators Integration",
                     version = "1.0.0",
                     tag = "a",

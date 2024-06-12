@@ -11,11 +11,17 @@
         </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
         <MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary style="flex-grow: 1; padding-top: 10px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; flex-shrink: 0;">
             <ui:VisualElement style="flex-direction: row-reverse;">
-                <ui:Button text="Force Repaint" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Repaint" />
+                <ui:Button text="Force Repaint" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Repaint" tooltip="Force a repaint on all MegaPint editor windows" />
+                <ui:Button text="Reload Domain" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_ReloadDomain" tooltip="Force the unity domain to reload all scripts" />
             </ui:VisualElement>
-            <ui:Button text="Toggle" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Toggle" />
-            <ui:Button text="Interface Overview" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_InterfaceOverview" />
-            <ui:Button text="Reload Domain" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_ReloadDomain" />
+            <MegaPint.Editor.Scripts.GUI.Factories.Headings.HeadingSecondary tabindex="-1" text="Windows" style="margin-top: 10px;" />
+            <ui:Button text="Toggle" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_Toggle" tooltip="Open the devMode toggle" />
+            <ui:Button text="Interface Overview" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_InterfaceOverview" tooltip="Open the interface overview" />
+            <MegaPint.Editor.Scripts.GUI.Factories.Headings.HeadingSecondary tabindex="-1" text="Packages" style="margin-top: 10px;" />
+            <ui:VisualElement style="flex-direction: row-reverse; justify-content: space-between;">
+                <ui:Button text="Remove All" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_RemoveAll" tooltip="Remove all imported MegaPint packages" style="flex-grow: 1;" />
+                <ui:Button text="Import All" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BTN_ImportAll" tooltip="Import all MegaPint packages" style="flex-grow: 1;" />
+            </ui:VisualElement>
         </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
     </MegaPint.Editor.Scripts.GUI.Factories.RootElement>
 </ui:UXML>
