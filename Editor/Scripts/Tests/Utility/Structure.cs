@@ -4,6 +4,7 @@ using System.IO;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using NUnit.Framework;
+using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 
 namespace MegaPint.Editor.Scripts.Tests.Utility
@@ -28,14 +29,75 @@ internal static partial class TestsUtility
     /// <summary> Validate the package json of the package </summary>
     /// <param name="isValid"> Reference to the validation bool </param>
     /// <param name="path"> Path to the json file </param>
-    public static void CheckPackageJson(ref bool isValid, string path)
+    /// <param name="key"> Key to the corresponding packageData of the <see cref="DataCache" /> </param>
+    public static void CheckPackageJson(ref bool isValid, string path, PackageKey key)
     {
-        Validate(
-            ref isValid,
-            string.IsNullOrEmpty(File.ReadAllText(path)),
-            "Package json file is empty!");
+        var jsonText = File.ReadAllText(path);
 
-        // TODO move the package cache data evaluation for this package to here
+        if (Validate(ref isValid, string.IsNullOrEmpty(jsonText), "Package json file is empty!"))
+            return;
+
+        if (key == PackageKey.Undefined)
+            return;
+
+        PackageData package = DataCache.PackageData(key);
+
+        dynamic asmdef = JsonConvert.DeserializeObject(jsonText);
+
+        var name = (string)asmdef!["name"];
+        var displayName = (string)asmdef!["displayName"];
+        var author = (string)asmdef!["author"];
+        var version = (string)asmdef!["version"];
+        var category = (string)asmdef!["category"];
+        var description = (string)asmdef!["description"];
+        var repository = asmdef!["repository"];
+
+        if (!Validate(ref isValid, string.IsNullOrEmpty(name), "Name is missing in the package json!"))
+        {
+            Validate(
+                ref isValid,
+                !package.name.Equals(name),
+                $"Name in the package json does not match the name of the packageData! Should be {package.name}!");
+        }
+
+        if (!Validate(ref isValid, string.IsNullOrEmpty(displayName), "Display name is missing in the package json!"))
+        {
+            var wantedDisplayName = $"MegaPint - {package.displayName}";
+
+            Validate(
+                ref isValid,
+                !displayName!.Equals(wantedDisplayName),
+                $"Display name in the package json does not match the display name of the packageData! Should be {wantedDisplayName}!");
+        }
+
+        if (!Validate(ref isValid, string.IsNullOrEmpty(version), "Version is missing in the package json!"))
+        {
+            Validate(
+                ref isValid,
+                !package.version.Equals(version),
+                $"Version in the package json does not match the version of the packageData! Should be {package.version}!");
+        }
+
+        if (!Validate(ref isValid, string.IsNullOrEmpty(description), "Description is missing in the package json!"))
+        {
+            Validate(
+                ref isValid,
+                !package.description.Equals(description),
+                $"Description in the package json does not match the description of the packageData! Should be {package.description}!");
+        }
+
+        Validate(ref isValid, !author.Equals("Tiogiras"), "Author is not Tiogiras!");
+        Validate(ref isValid, !category.Equals("Tools"), "Category is not Tools!");
+
+        if (!Validate(ref isValid, repository == null, "Repository is missing in the package json!"))
+        {
+            var url = (string)repository!["url"];
+
+            Validate(
+                ref isValid,
+                !package.repository.Equals(url),
+                $"Repository in the package json does not match the repository of the packageData! Should be {package.repository}!");
+        }
     }
 
     /// <summary> Validate the readme of the package </summary>
@@ -61,7 +123,7 @@ internal static partial class TestsUtility
 
         var isValid = true;
 
-        CheckTopLevelFiles(ref isValid, path);
+        CheckTopLevelFiles(ref isValid, path, key);
         CheckTopLevelDirectories(ref isValid, path, key);
 
         Assert.IsTrue(isValid);
@@ -194,7 +256,8 @@ internal static partial class TestsUtility
     /// <summary> Validate the toplevel files of a package's directory </summary>
     /// <param name="isValid"> Reference to the validation bool </param>
     /// <param name="path"> Path of the package directory </param>
-    private static void CheckTopLevelFiles(ref bool isValid, string path)
+    /// <param name="key"> Key to the package of the package.json </param>
+    private static void CheckTopLevelFiles(ref bool isValid, string path, PackageKey key)
     {
         Debug.Log("\nChecking toplevel files...");
 
@@ -212,7 +275,7 @@ internal static partial class TestsUtility
             CheckLicenseFile(ref localIsValid, Path.Combine(path, "LICENSE"));
 
         if (required[1])
-            CheckPackageJson(ref localIsValid, Path.Combine(path, "package.json"));
+            CheckPackageJson(ref localIsValid, Path.Combine(path, "package.json"), key);
 
         if (required[2])
             CheckReadMe(ref localIsValid, Path.Combine(path, "README.md"));
@@ -270,7 +333,7 @@ internal static partial class TestsUtility
 
         if (tolerated[0])
             ValidateNamingOfFilesInFolderAndSubFolders(ref isValid, Path.Combine(path, "Images"));
-        
+
         if (tolerated[1])
             ValidateNamingOfFilesInFolderAndSubFolders(ref isValid, Path.Combine(path, "Samples"));
     }

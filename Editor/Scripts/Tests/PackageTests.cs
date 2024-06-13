@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 #if UNITY_INCLUDE_TESTS
 using System.IO;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.Tests.Utility;
 using NUnit.Framework;
 using UnityEngine.Device;
@@ -35,7 +36,7 @@ internal class PackageTests
             TestsUtility.CheckLicenseFile(ref isValid, Path.Combine(path, "LICENSE"));
 
         if (requiredFiles[1])
-            TestsUtility.CheckPackageJson(ref isValid, Path.Combine(path, "package.json"));
+            TestsUtility.CheckPackageJson(ref isValid, Path.Combine(path, "package.json"), PackageKey.Undefined);
 
         if (requiredFiles[2])
             TestsUtility.CheckReadMe(ref isValid, Path.Combine(path, "README.md"));
