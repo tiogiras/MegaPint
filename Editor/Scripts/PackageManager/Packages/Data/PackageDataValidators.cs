@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿using System.Collections.Generic;
+
+#if UNITY_EDITOR
 namespace MegaPint.Editor.Scripts.PackageManager.Packages.Data
 {
 
@@ -22,7 +24,8 @@ internal static class PackageDataValidators
             displayName = "Validators",
             description =
                 "You don't want to recheck all settings for all items or GameObjects?\n\nWith the Validators package you can create custom validators that display the status of your GameObject. See all issues in a scene or your complete project in one window.\n\nWhile you can select from a predefined collection of requirements to create your validations you can also create your own requirements to completely customize the validators to your needs.",
-            repository = "https://github.com/tiogiras/MegaPint-Validators.git"
+            repository = "https://github.com/tiogiras/MegaPint-Validators.git",
+            samples = new List <SampleData> {new() {displayName = "Basics", path = "Basics"}}
         };
     }
 
