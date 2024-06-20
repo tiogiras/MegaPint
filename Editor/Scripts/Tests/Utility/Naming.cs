@@ -76,7 +76,7 @@ internal static partial class TestsUtility
         {
             var c = wanted[i];
 
-            if (c.Equals(' ') || c.Equals('('))
+            if (c.Equals(' ') || c.Equals('(') || c.Equals('['))
             {
                 wasDigit = false;
 
@@ -120,7 +120,7 @@ internal static partial class TestsUtility
 
             if (wasSpace)
             {
-                if (c.Equals('('))
+                if (c.Equals('(') || c.Equals('['))
                     output = output.Remove(i + 1, 1);
                 else
                     wasSpace = false;

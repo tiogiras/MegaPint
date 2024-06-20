@@ -101,6 +101,9 @@ internal static partial class GUIUtility
     /// <param name="value"> Value of the flex growth </param>
     public static VisualElement SetParentFlexGrowRecursive(this VisualElement startElement, int iterations, bool value)
     {
+        if (startElement == null)
+            return null;
+        
         VisualElement element = startElement.parent;
 
         for (var i = 0; i < iterations; i++)
