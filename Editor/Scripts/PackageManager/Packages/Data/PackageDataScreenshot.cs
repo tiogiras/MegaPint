@@ -1,4 +1,6 @@
 ﻿#if UNITY_EDITOR
+using System.Collections.Generic;
+
 namespace MegaPint.Editor.Scripts.PackageManager.Packages.Data
 {
 
@@ -22,7 +24,13 @@ internal static class PackageDataScreenshot
             displayName = "Screenshot",
             description =
                 "Want to take screenshots during development? \n\nThis package allows you to render your in game camera's as well as editor windows. Setup different camera angles and capture different screenshots at runtime from all angles with one button press.",
-            repository = "https://github.com/tiogiras/MegaPint-Screenshot.git"
+            repository = "https://github.com/tiogiras/MegaPint-Screenshot.git",
+            samples = new List <SampleData>
+            {
+                new() {displayName = "Basics", path = "Basics"},
+                new() {displayName = "Basics (URP)", path = "Basics (URP)"},
+                new() {displayName = "Basics (HDRP)", path = "Basics (HDRP)"}
+            }
         };
     }
 
