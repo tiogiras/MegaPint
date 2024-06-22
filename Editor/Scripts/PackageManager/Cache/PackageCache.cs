@@ -16,6 +16,7 @@ using UnityEditor.PackageManager;
 [assembly: InternalsVisibleTo("tiogiras.megapint.notepad.editor.tests")]
 [assembly: InternalsVisibleTo("tiogiras.megapint.autosave.editor.tests")]
 [assembly: InternalsVisibleTo("tiogiras.megapint.screenshot.editor.tests")]
+
 namespace MegaPint.Editor.Scripts.PackageManager.Cache
 {
 
@@ -28,9 +29,9 @@ internal static class PackageCache
     public static Action <float> onCacheProgressChanged;
     public static Action <string> onCacheProcessChanged;
 
-    private static float s_currentProgress;
-
     public static Action onCacheStartRefreshing;
+
+    private static float s_currentProgress;
 
     private static readonly Dictionary <PackageKey, CachedPackage> s_cache = new();
 
@@ -97,6 +98,15 @@ internal static class PackageCache
         }
     }
 
+    /// <summary> Check if any MegaPint package is installed </summary>
+    /// <returns> True when at least one package or variation is installed </returns>
+    public static bool HasPackagesInstalled()
+    {
+        GetInstalledMpPackages(out List <CachedPackage> packages, out List <CachedVariation> variations);
+
+        return packages.Count > 0 || variations.Count > 0;
+    }
+
     /// <summary> Installation state of the targeted package </summary>
     /// <param name="key"> Key to the targeted package </param>
     /// <returns> If the package is currently installed </returns>
@@ -146,11 +156,6 @@ internal static class PackageCache
         Initialize();
     }
 
-    private static void SetProcess(string process)
-    {
-        onCacheProcessChanged?.Invoke(process);
-    }
-
     #endregion
 
     #region Private Methods
@@ -185,7 +190,7 @@ internal static class PackageCache
     private static async void Initialize()
     {
         WasInitialized = false;
-        
+
         onCacheStartRefreshing?.Invoke();
 
         SetProgressTo(0);
@@ -253,6 +258,11 @@ internal static class PackageCache
         WasInitialized = true;
 
         onCacheRefreshed?.Invoke();
+    }
+
+    private static void SetProcess(string process)
+    {
+        onCacheProcessChanged?.Invoke(process);
     }
 
     private static void SetProgressTo(float progress)
