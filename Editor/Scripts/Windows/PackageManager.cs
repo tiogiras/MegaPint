@@ -542,6 +542,9 @@ internal class PackageManager : EditorWindowBase
 
             _samples.bindItem = (element, i) =>
             {
+                if (i >= package.Samples.Count)
+                    return;
+                
                 SampleData sample = package.Samples[i];
 
                 element.Q <Label>("SampleName").text = sample.displayName;
