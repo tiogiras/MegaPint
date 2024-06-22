@@ -140,6 +140,12 @@ internal class BaseWindow : EditorWindowBase
 
         PackageCache.onCacheStartRefreshing -= StartCacheRefresh;
 
+        if (_btnPackages == null)
+        {
+            _callbacksRegistered = false;
+            return;
+        }
+
         _btnPackages.clicked -= SwitchToPackages; // TODO NULLREFS
         _btnSettings.clicked -= SwitchToSettings;
         _btnInfos.clicked -= SwitchToInfos;

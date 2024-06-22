@@ -156,6 +156,12 @@ internal class PackageManager : EditorWindowBase
         if (!_callbacksRegistered)
             return;
 
+        if (s_showWithLink == null)
+        {
+            _callbacksRegistered = false;
+            return;
+        }
+        
         s_showWithLink -= OnShowLink;
 
         PackageCache.onCacheStartRefreshing -= StartCacheRefresh;
@@ -199,6 +205,8 @@ internal class PackageManager : EditorWindowBase
 
     private void CreateGUIContent(VisualElement root)
     {
+        root.Clear();
+        
         VisualElement content = GUIUtility.Instantiate(_baseWindow, root);
 
         _list = content.Q <ListView>("MainList");
