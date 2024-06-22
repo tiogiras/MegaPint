@@ -288,14 +288,6 @@ internal class PackageManager : EditorWindowBase
                 version.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
             }
         };
-
-        Debug.Log(package.DisplayName);     // TODO remove
-        Debug.Log(package.IsNewestVersion); // TODO remove
-        
-        if(package.IsNewestVersion)
-            _installedVersion.RemoveFromClassList(StyleSheetClasses.Image.Tint.Orange);
-        else 
-            _installedVersion.AddToClassList(StyleSheetClasses.Image.Tint.Orange);
     }
 
     /// <summary> Called on failure </summary>
@@ -460,6 +452,11 @@ internal class PackageManager : EditorWindowBase
         _installedVersion.tooltip = $"Installed Version: {package.CurrentVersion}";
         _unityVersion.tooltip = $"Unity Version: {package.UnityVersion}";
         _megaPintVersion.tooltip = $"MegaPint Version: {package.ReqMpVersion}";
+        
+        if(package.IsNewestVersion)
+            _installedVersion.RemoveFromClassList(StyleSheetClasses.Image.Tint.Orange);
+        else 
+            _installedVersion.AddToClassList(StyleSheetClasses.Image.Tint.Orange);
 
         _infoText.text = package.Description;
 

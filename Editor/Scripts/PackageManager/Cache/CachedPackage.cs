@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.PackageManager.Utility;
-using UnityEngine;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace MegaPint.Editor.Scripts.PackageManager.Cache
@@ -103,9 +102,6 @@ internal class CachedPackage : IComparable <CachedPackage>
             return;
 
         CurrentVersion = packageInfo!.version;
-
-        Debug.Log($"Setting newest version: {packageInfo.version} | {packageData.version}"); // TODO remove
-        
         IsNewestVersion = packageInfo.version == packageData.version;
         HasSamples = Samples is {Count: > 0};
 
