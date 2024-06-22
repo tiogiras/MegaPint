@@ -31,7 +31,7 @@ internal static class PackageDataAlphaButton
                 {
                     key = PackageKey.AlphaButton,
                     name = "MegaPint Validators Integration",
-                    version = "1.0.0",
+                    version = "1.0.2",
                     tag = "a",
                     devBranch = "validatorsIntegration/development",
                     dependencies = new List <Dependency>
