@@ -146,7 +146,7 @@ internal class BaseWindow : EditorWindowBase
             return;
         }
 
-        _btnPackages.clicked -= SwitchToPackages; // TODO NULLREFS
+        _btnPackages.clicked -= SwitchToPackages;
         _btnSettings.clicked -= SwitchToSettings;
         _btnInfos.clicked -= SwitchToInfos;
 
