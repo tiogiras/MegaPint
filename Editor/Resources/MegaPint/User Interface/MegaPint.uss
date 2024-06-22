@@ -1,0 +1,108 @@
+.mp {
+    -unity-font: resource('Roboto Mono');
+    -unity-font-definition: initial;
+    
+    --foldout-toggle-image: resource("MegaPint/Images/Icons/Foldout Toggle");
+    --foldout-toggle-checked-image: resource("MegaPint/Images/Icons/Foldout Toggle Checked");
+    --checkmark-image: resource("MegaPint/Images/Icons/Checkmark");
+}
+
+.mp_theme--dark {
+    --link-color: rgb(209, 0, 114);
+    --info-color: rgb(178, 178, 178);
+    --identity-color: rgb(209, 0, 114);
+    --identity-interacted-color: rgb(168, 0, 84);
+    --text-primary-color: rgb(244, 244, 244);
+    --text-secondary-color: rgb(160, 160, 160);
+    --text-red-color: rgb(175, 30, 30);
+    --text-orange-color: rgb(175, 107, 30);
+    --text-green-color: rgb(26, 154, 26);
+    --code-basic-color: rgb(70, 112, 198);
+    --code-class-color: rgb(148, 121, 182);
+    --code-method-color: rgb(214, 200, 158);
+    --code-comment-color: rgb(110, 166, 81);
+    --code-string-color: rgb(173, 119, 65);
+    --background-primary-color: rgb(25, 25, 25);
+    --background-secondary-color: rgb(38, 38, 38);
+    --background-tertiary-color: rgb(48, 48, 48);
+    --background-quaternary-color: rgb(58, 58, 58);
+    --separator-color: rgb(70, 70, 70);
+    --cursor-color: rgb(255, 255, 255);
+    --button-color: rgb(89, 89, 89);
+    --button-image-tint: rgb(255, 255, 255);
+    --button-active-text-color: var(--text-primary-color);
+    --button-border-color-top: rgb(48, 48, 48);
+    --button-border-color-bottom: rgb(36, 36, 36);
+    --button-border-color-left: rgb(48, 48, 48);
+    --button-border-color-right: rgb(48, 48, 48);
+    --searchField-border-color-top: rgb(13, 13, 13);
+    --searchField-border-color-bottom: rgb(23, 23, 23);
+    --searchField-border-color-left: rgb(23, 23, 23);
+    --searchField-border-color-right: rgb(23, 23, 23);
+    --inputField-background-color: rgb(43, 43, 43);
+    --inputField-hover-color: rgb(160, 160, 160);
+    --foldout-toggle-color: rgb(89, 89, 89);
+    --splash-screen-image: resource("MegaPint/Images/Logo (Dark Theme)");
+    --list-selection-color: rgb(88, 88, 88);
+    --list-hover-color: rgb(68, 68, 68);
+    --text-selection-color: rgba(255, 255, 255, 0.5);
+}
+
+.mp_theme--light {
+    --link-color: rgb(209, 0, 114);
+    --info-color: rgb(102, 102, 102);
+    --identity-color: rgb(209, 0, 114);
+    --identity-interacted-color: rgb(190, 0, 95);
+    --text-primary-color: rgb(23, 23, 23);
+    --text-secondary-color: rgb(87, 87, 87);
+    --text-red-color: rgb(175, 30, 30);
+    --text-orange-color: rgb(175, 107, 30);
+    --text-green-color: rgb(23, 131, 23);
+    --code-basic-color: rgb(217, 101, 18);
+    --code-class-color: rgb(39, 126, 201);
+    --code-method-color: rgb(227, 146, 11);
+    --code-comment-color: rgb(89, 89, 89);
+    --code-string-color: rgb(102, 126, 4);
+    --background-primary-color: rgb(160, 160, 160);
+    --background-secondary-color: rgb(176, 176, 176);
+    --background-tertiary-color: rgb(210, 210, 210);
+    --background-quaternary-color: rgb(225, 225, 225);
+    --separator-color: rgb(89, 89, 89);
+    --cursor-color: rgb(0, 0, 0);
+    --button-color: rgb(220, 220, 220);
+    --button-image-tint: rgb(84, 84, 84);
+    --button-active-text-color: rgb(244, 244, 244);
+    --button-border-color-top: rgb(120, 120, 120);
+    --button-border-color-bottom: rgb(90, 90, 90);
+    --button-border-color-left: rgb(120, 120, 120);
+    --button-border-color-right: rgb(120, 120, 120);
+    --searchField-border-color-top: rgb(120, 120, 120);
+    --searchField-border-color-bottom: rgb(150, 150, 150);
+    --searchField-border-color-left: rgb(150, 150, 150);
+    --searchField-border-color-right: rgb(150, 150, 150);
+    --inputField-background-color: rgb(244, 244, 244);
+    --inputField-hover-color: rgb(10, 10, 10);
+    --foldout-toggle-color: rgb(94, 94, 94);
+    --splash-screen-image: resource("MegaPint/Images/Logo (Light Theme)");
+    --list-selection-color: rgb(140, 140, 140);
+    --list-hover-color: rgb(150, 150, 150);
+    --text-selection-color: rgba(145, 145, 145, 0.5);
+}
+
+.mp_splashScreen {
+    background-image: var(--splash-screen-image);
+}
+
+.mp_effect-hover-image-tint--identity:hover {
+    -unity-background-image-tint-color: var(--identity-color);
+}
+
+.mp_link {
+}
+
+.mp_tooltip-custom{
+}
+
+.link-cursor {
+    cursor: link;
+}

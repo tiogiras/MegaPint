@@ -1,11 +1,11 @@
 ﻿#if UNITY_EDITOR
 using System.Linq;
 using System.Text;
-using Editor.Scripts.PackageManager.Cache;
-using Editor.Scripts.PackageManager.Packages;
+using MegaPint.Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
 using UnityEngine.UIElements;
 
-namespace Editor.Scripts.PackageManager.Utility
+namespace MegaPint.Editor.Scripts.PackageManager.Utility
 {
 
 /// <summary> Utility class for the internal MegaPint packageManager </summary>
@@ -35,7 +35,7 @@ internal static class PackageManagerUtility
     /// <returns> Hash of the targeted <see cref="CachedVariation" /> </returns>
     public static string GetVariationHash(CachedVariation variation, bool invert = false)
     {
-        var devMode = invert ? !SaveData.DevMode() : SaveData.DevMode();
+        var devMode = invert ? !SaveValues.BasePackage.DevMode : SaveValues.BasePackage.DevMode;
 
         return devMode ? variation.devBranch : $"v{variation.version}{variation.tag}";
     }
@@ -78,6 +78,7 @@ internal static class PackageManagerUtility
     {
         return new CachedVariation
         {
+            key = variation.key,
             devBranch = variation.devBranch,
             isNewestVersion = variation.version.Equals(currentVersion),
             name = variation.name,
@@ -94,7 +95,7 @@ internal static class PackageManagerUtility
 
     private static string GetPackageHash(CachedPackage package)
     {
-        return SaveData.DevMode() ? "development" : $"v{package.Version}";
+        return SaveValues.BasePackage.DevMode ? "development" : $"v{package.Version}";
     }
 
     #endregion

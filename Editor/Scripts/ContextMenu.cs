@@ -1,44 +1,50 @@
 ﻿#if UNITY_EDITOR
-using Editor.Scripts.Settings;
-using Editor.Scripts.Windows;
+using MegaPint.Editor.Scripts.Settings;
+using MegaPint.Editor.Scripts.Windows;
 using UnityEditor;
 
-namespace Editor.Scripts
+namespace MegaPint.Editor.Scripts
 {
 
+/// <summary> Partial class used to store MenuItems </summary>
 internal static partial class ContextMenu
 {
-    private const string MenuItemMegaPint = "MegaPint";
-    private const string MenuItemPackages = MenuItemMegaPint + "/Packages";
+    public const string MenuItemMegaPint = "MegaPint";
+    public const string MenuItemPackages = MenuItemMegaPint + "/Packages";
 
     #region Public Methods
 
-    public static MegaPintEditorWindowBase TryOpen <T>(bool utility, string title = "") where T : MegaPintEditorWindowBase
+    [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
+    public static void Open()
     {
-        if (typeof(T) == typeof(MegaPintFirstSteps))
-            return EditorWindow.GetWindow <T>(utility, title).ShowWindow();
+        TryOpen <BaseWindow>(false);
+    }
+
+    /// <summary> Try opening an editor window derived from the <see cref="EditorWindowBase" /> </summary>
+    /// <param name="utility"> If the window should be an utility window </param>
+    /// <param name="title"> Title of the window </param>
+    /// <typeparam name="T"> Type of the wanted window </typeparam>
+    /// <returns> Editor window of the selected parameters </returns>
+    public static EditorWindowBase TryOpen <T>(bool utility, string title = "") where T : EditorWindowBase
+    {
+        if (typeof(T) == typeof(FirstSteps))
+            return EditorWindow.GetWindow <T>(true, title).ShowWindow();
 
         var exists = MegaPintSettings.Exists();
 
         return !exists
-            ? EditorWindow.GetWindow <MegaPintFirstSteps>(utility, title).ShowWindow()
+            ? EditorWindow.GetWindow <FirstSteps>(true, title).ShowWindow()
             : EditorWindow.GetWindow <T>(utility, title).ShowWindow();
     }
 
     #endregion
 
     #region Private Methods
-
-    [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
-    public static void Open()
-    {
-        TryOpen <MegaPintBaseWindow>(false);
-    }
-
+    
     [MenuItem(MenuItemMegaPint + "/PackageManager", false, 11)]
     private static void OpenImporter()
     {
-        MegaPintBaseWindow.OnOpenPackageManager();
+        BaseWindow.OnOpenPackageManager();
     }
 
     #endregion

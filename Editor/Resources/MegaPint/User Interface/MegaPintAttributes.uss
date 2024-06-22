@@ -1,0 +1,123 @@
+.mp_text-color--link {
+    color: var(--link-color);
+}
+
+.mp_text-color--info {
+    color: var(--info-color);
+}
+
+.mp_text-color--primary {
+    color: var(--text-primary-color);
+}
+
+.mp_text-color--secondary {
+    color: var(--text-secondary-color);
+}
+
+.mp_text-color--identity {
+    color: var(--identity-color);
+}
+
+.mp_text-color--red {
+    color: var(--text-red-color);
+}
+
+.mp_text-color--orange {
+    color: var(--text-orange-color);
+}
+
+.mp_text-color--green {
+    color: var(--text-green-color);
+}
+
+.mp_text-color--buttonActive {
+    color: var(--button-active-text-color);
+}
+
+.mp_code-color--basic {
+    color: var(--code-basic-color);
+}
+
+.mp_code-color--class {
+    color: var(--code-class-color);
+}
+
+
+.mp_code-color--method {
+    color: var(--code-method-color);
+}
+
+.mp_code-color--comment {
+    color: var(--code-comment-color);
+}
+
+.mp_code-color--string {
+    color: var(--code-string-color);
+}
+
+.mp_background-color--primary {
+    background-color: var(--background-primary-color);
+}
+
+.mp_background-color--secondary {
+    background-color: var(--background-secondary-color);
+}
+
+.mp_background-color--tertiary {
+    background-color: var(--background-tertiary-color);
+}
+
+.mp_background-color--quaternary {
+    background-color: var(--background-quaternary-color);
+}
+
+.mp_background-color--identity {
+    background-color: var(--identity-color);
+}
+
+.mp_background-color--separator {
+    background-color: var(--separator-color);
+}
+
+.mp_border-color--identity {
+    border-color: var(--identity-color);
+}
+
+.mp_border-color--black {
+    border-color: rgb(0, 0, 0);
+}
+
+.mp_border-color--primary {
+    border-color: var(--background-primary-color);
+}
+
+.mp_border-color--secondary {
+    border-color: var(--background-secondary-color);
+}
+
+.mp_border-color--tertiary {
+    border-color: var(--background-tertiary-color);
+}
+
+.mp_border-color--separator {
+    border-color: var(--separator-color);
+}
+
+.mp_image-tint--identity {
+    -unity-background-image-tint-color: var(--identity-color);
+}
+
+.mp_image-tint--text-secondary {
+    -unity-background-image-tint-color: var(--text-secondary-color);
+}
+
+.mp_image-tint--button-image {
+    -unity-background-image-tint-color: var(--button-image-tint);
+}
+
+.mp_image-tint--orange {
+    -unity-background-image-tint-color: var(--text-orange-color);
+}
+
+
+

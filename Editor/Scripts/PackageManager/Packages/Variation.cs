@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Editor.Scripts.PackageManager.Packages
+namespace MegaPint.Editor.Scripts.PackageManager.Packages
 {
 
 /// <summary> Stores data about a megaPint package variation that is set before distribution </summary>
@@ -13,6 +13,9 @@ internal class Variation : IComparable <Variation>
 
     /// <summary> Branch used for development </summary>
     public string devBranch;
+
+    /// <summary> Key to the corresponding basePackage </summary>
+    public PackageKey key;
 
     /// <summary> DisplayName of this variation </summary>
     public string name;

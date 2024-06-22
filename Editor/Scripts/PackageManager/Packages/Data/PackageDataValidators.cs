@@ -1,5 +1,7 @@
 ﻿#if UNITY_EDITOR
-namespace Editor.Scripts.PackageManager.Packages.Data
+using System.Collections.Generic;
+
+namespace MegaPint.Editor.Scripts.PackageManager.Packages.Data
 {
 
 /// <summary> Data for the Validators package </summary>
@@ -14,15 +16,16 @@ internal static class PackageDataValidators
         return new PackageData
         {
             key = PackageKey.Validators,
-            reqMpVersion = "1.1.1 or higher",
-            version = "1.0.2",
+            reqMpVersion = "1.2.2 or higher",
+            version = "1.0.3",
             unityVersion = "2022.3.15f1",
-            lastUpdate = "28.02.2024",
+            lastUpdate = "22.06.2024",
             name = "com.tiogiras.megapint-validators",
             displayName = "Validators",
             description =
-                "This package adds an option to use and create own validations for MonoBehaviours. The results of the validations are easily readable in one window and can be automatically fixed.",
-            repository = "https://github.com/tiogiras/MegaPint-Validators.git"
+                "You don't want to recheck all settings for all items or GameObjects?\n\nWith the Validators package you can create custom validators that display the status of your GameObject. See all issues in a scene or your complete project in one window.\n\nWhile you can select from a predefined collection of requirements to create your validations you can also create your own requirements to completely customize the validators to your needs.",
+            repository = "https://github.com/tiogiras/MegaPint-Validators.git",
+            samples = new List <SampleData> {new() {displayName = "Basics", path = "Basics"}}
         };
     }
 

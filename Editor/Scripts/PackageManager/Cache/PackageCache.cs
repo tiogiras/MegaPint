@@ -3,13 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Editor.Scripts.DevModeUtil;
-using Editor.Scripts.PackageManager.Packages;
-using Editor.Scripts.PackageManager.Utility;
+using MegaPint.Editor.Scripts.DevMode;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
+using MegaPint.Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
 
-[assembly: InternalsVisibleTo("tiogiras.megapint.Editor.Tests")]
-namespace Editor.Scripts.PackageManager.Cache
+[assembly: InternalsVisibleTo("tiogiras.megapint.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.editor.tests.utility")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.alphabutton.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.validators.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.playmodestartscene.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.notepad.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.autosave.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.screenshot.editor.tests")]
+
+namespace MegaPint.Editor.Scripts.PackageManager.Cache
 {
 
 /// <summary> Sores all information about the installed and non installed MegaPint packages </summary>
@@ -17,6 +25,13 @@ internal static class PackageCache
 {
     /// <summary> Called when the cache was refreshed </summary>
     public static Action onCacheRefreshed;
+
+    public static Action <float> onCacheProgressChanged;
+    public static Action <string> onCacheProcessChanged;
+
+    public static Action onCacheStartRefreshing;
+
+    private static float s_currentProgress;
 
     private static readonly Dictionary <PackageKey, CachedPackage> s_cache = new();
 
@@ -26,13 +41,15 @@ internal static class PackageCache
     /// <summary> Newest Version of the MegaPint basePackage </summary>
     public static string NewestBasePackageVersion {get; private set;}
 
+    public static bool WasInitialized {get; private set;}
+
     #region Public Methods
 
     /// <summary> If the package can be removed or if packages are dependant on it </summary>
     /// <param name="key"> Key to the targeted package </param>
     /// <param name="dependencies"> Dependencies that point to the package </param>
     /// <returns> True when no dependencies point to the package </returns>
-    public static bool CanBeRemoved(PackageKey key, out List <Dependency> dependencies)
+    public static bool CanBeRemoved(PackageKey key, out List <PackageKey> dependencies)
     {
         return s_cache[key].CanBeRemoved(out dependencies);
     }
@@ -79,6 +96,15 @@ internal static class PackageCache
 
             variations.Add(cachedPackage.CurrentVariation);
         }
+    }
+
+    /// <summary> Check if any MegaPint package is installed </summary>
+    /// <returns> True when at least one package or variation is installed </returns>
+    public static bool HasPackagesInstalled()
+    {
+        GetInstalledMpPackages(out List <CachedPackage> packages, out List <CachedVariation> variations);
+
+        return packages.Count > 0 || variations.Count > 0;
     }
 
     /// <summary> Installation state of the targeted package </summary>
@@ -155,43 +181,94 @@ internal static class PackageCache
         }
     }
 
+    private static void IncreaseProgressBy(float delta)
+    {
+        s_currentProgress += delta;
+        onCacheProgressChanged?.Invoke(s_currentProgress);
+    }
+
     private static async void Initialize()
     {
-        IEnumerable <PackageData> mpPackages = DataCache.AllPackages;
-        List <PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages(); // TODO lucidchart Class Reference
+        WasInitialized = false;
 
+        onCacheStartRefreshing?.Invoke();
+
+        SetProgressTo(0);
+
+        SetProcess("Reading Data Cache");
+        PackageData[] mpPackages = DataCache.AllPackages;
+        IncreaseProgressBy(.15f);
+
+        SetProcess("Reading Unity's PackageInfo");
+        List <PackageInfo> installedPackages = await MegaPintPackageManager.GetInstalledPackages();
+        IncreaseProgressBy(.3f);
+
+        SetProcess("Collecting Packages");
         GetInstalledPackageNames(installedPackages, out List <string> installedPackagesNames);
+        IncreaseProgressBy(.05f);
 
         s_cache.Clear();
 
-        Dictionary <PackageKey, List <Dependency>> allDependencies = new();
+        Dictionary <PackageKey, List <PackageKey>> allDependencies = new();
+
+        var step = .3f / mpPackages.Length;
 
         foreach (PackageData packageData in mpPackages)
         {
+            SetProcess($"Creating Cache: {packageData.displayName}");
+
             var package = new CachedPackage(
                 packageData,
-                installedPackagesNames.Contains(packageData.name) ? installedPackages[installedPackagesNames.IndexOf(packageData.name)] : null,
+                installedPackagesNames.Contains(packageData.name)
+                    ? installedPackages[installedPackagesNames.IndexOf(packageData.name)]
+                    : null,
                 out List <Dependency> dependencies);
 
             if (dependencies is {Count: > 0})
             {
                 foreach (Dependency dependency in dependencies)
                 {
-                    allDependencies.TryAdd(dependency.key, new List <Dependency>());
-                    allDependencies[dependency.key].Add(dependency);
+                    allDependencies.TryAdd(dependency.key, new List <PackageKey>());
+                    allDependencies[dependency.key].Add(package.Key);
                 }
             }
 
             s_cache.Add(package.Key, package);
+
+            IncreaseProgressBy(step);
         }
 
-        foreach (KeyValuePair <PackageKey, List <Dependency>> valuePair in allDependencies)
+        SetProgressTo(.8f);
+
+        step = .2f / allDependencies.Count;
+
+        foreach (KeyValuePair <PackageKey, List <PackageKey>> valuePair in allDependencies)
         {
+            SetProcess($"Registering Dependencies: {valuePair.Key}");
+
             CachedPackage cachedPackage = s_cache[valuePair.Key];
             cachedPackage.RegisterDependencies(valuePair.Value);
+
+            IncreaseProgressBy(step);
         }
 
+        SetProcess("Finalizing Cache");
+        SetProgressTo(1f);
+
+        WasInitialized = true;
+
         onCacheRefreshed?.Invoke();
+    }
+
+    private static void SetProcess(string process)
+    {
+        onCacheProcessChanged?.Invoke(process);
+    }
+
+    private static void SetProgressTo(float progress)
+    {
+        s_currentProgress = progress;
+        onCacheProgressChanged?.Invoke(s_currentProgress);
     }
 
     #endregion

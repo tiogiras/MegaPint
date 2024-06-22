@@ -1,15 +1,17 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Editor.Scripts.PackageManager.Cache;
-using Editor.Scripts.PackageManager.Packages;
-using Editor.Scripts.PackageManager.Utility;
+using MegaPint.Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
+using MegaPint.Editor.Scripts.PackageManager.Utility;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
+using UnityEngine;
 
-namespace Editor.Scripts.PackageManager
+namespace MegaPint.Editor.Scripts.PackageManager
 {
 
 internal static class MegaPintPackageManager
@@ -30,16 +32,24 @@ internal static class MegaPintPackageManager
 
     /// <summary> Add and Embed a package </summary>
     /// <param name="package"> <see cref="CachedPackage" /> to be added </param>
-    public static async Task AddEmbedded(CachedPackage package)
+    /// <param name="suppressCacheRefresh">
+    ///     If true the <see cref="PackageCache" /> will not be refreshed after finishing the
+    ///     task
+    /// </param>
+    public static async Task AddEmbedded(CachedPackage package, bool suppressCacheRefresh = false)
     {
-        await AddEmbedded(PackageManagerUtility.GetPackageUrl(package), package.Dependencies);
+        await AddEmbedded(PackageManagerUtility.GetPackageUrl(package), package.Dependencies, suppressCacheRefresh);
     }
 
     /// <summary> Add and Embed a variation </summary>
     /// <param name="variation"> <see cref="CachedVariation" /> to be added </param>
-    public static async Task AddEmbedded(CachedVariation variation)
+    /// <param name="suppressCacheRefresh">
+    ///     If true the <see cref="PackageCache" /> will not be refreshed after finishing the
+    ///     task
+    /// </param>
+    public static async Task AddEmbedded(CachedVariation variation, bool suppressCacheRefresh = false)
     {
-        await AddEmbedded(PackageManagerUtility.GetPackageUrl(variation), variation.dependencies);
+        await AddEmbedded(PackageManagerUtility.GetPackageUrl(variation), variation.dependencies, suppressCacheRefresh);
     }
 
     /// <summary> Get all installed packages </summary>
@@ -61,9 +71,57 @@ internal static class MegaPintPackageManager
         return request.Result.Where(packageInfo => packageInfo.name.ToLower().Contains("megapint")).ToList();
     }
 
+    /// <summary>
+    ///     Import all registered MegaPint packages, the import is handled not via the normal PackageManager due to
+    ///     restrictions in the unity engine that makes it impossible to import multiple packages without reloading the scripts
+    ///     in between and therefore canceling the import. It is handled via adding the packages to the manifest and unity will
+    ///     detect the changes automatically
+    /// </summary>
+    public static void InstallAll()
+    {
+        List <CachedPackage> packages = PackageCache.GetAllMpPackages();
+
+        if (packages.Count > 0)
+        {
+            var path = Application.dataPath[..^7];
+            path = Path.Combine(path, "Packages", "manifest.json");
+
+            var manifestText = File.ReadAllText(path);
+
+            const string Divider = "\"dependencies\": {";
+
+            var parts = manifestText.Split(Divider);
+
+            var part1 = $"{parts[0]}{Divider}";
+            var part2 = parts[1];
+
+            foreach (CachedPackage package in packages)
+            {
+                var name = $"\"{package.Name}\":";
+
+                if (part2.Contains(name))
+                    continue;
+
+                var url = $"\"{PackageManagerUtility.GetPackageUrl(package)}\"";
+
+                part2 = $"{name}{url},{part2}";
+            }
+
+            var newManifest = $"{part1}{part2}";
+
+            File.WriteAllText(path, newManifest);
+        }
+
+        PackageCache.Refresh();
+    }
+
     /// <summary> Remove a package </summary>
     /// <param name="packageName"> Name of the package to be removed </param>
-    public static async void Remove(string packageName)
+    /// <param name="suppressCacheRefresh">
+    ///     If true the <see cref="PackageCache" /> will not be refreshed after finishing the
+    ///     task
+    /// </param>
+    public static async Task Remove(string packageName, bool suppressCacheRefresh = false)
     {
         RemoveRequest request = Client.Remove(packageName);
 
@@ -75,7 +133,9 @@ internal static class MegaPintPackageManager
         else
         {
             onSuccess?.Invoke();
-            PackageCache.Refresh();
+
+            if (!suppressCacheRefresh)
+                PackageCache.Refresh();
         }
     }
 
@@ -98,7 +158,7 @@ internal static class MegaPintPackageManager
                 await AddEmbedded(variation);
         }
 
-        var url = SaveData.DevMode()
+        var url = SaveValues.BasePackage.DevMode
             ? $"{PackageCache.BasePackage.repository.url}#{DataCache.BasePackageDevBranch}"
             : $"{PackageCache.BasePackage.repository.url}#v{version}";
 
@@ -110,7 +170,7 @@ internal static class MegaPintPackageManager
     /// <summary> Update the basePackage to it's newest possible version </summary>
     public static async Task UpdateBasePackage()
     {
-        var url = SaveData.DevMode()
+        var url = SaveValues.BasePackage.DevMode
             ? $"{PackageCache.BasePackage.repository.url}#{DataCache.BasePackageDevBranch}"
             : $"{PackageCache.BasePackage.repository.url}#v{PackageCache.NewestBasePackageVersion}";
 
@@ -135,13 +195,17 @@ internal static class MegaPintPackageManager
         return request.Status == StatusCode.Success;
     }
 
-    private static async Task AddEmbedded(string gitUrl, List <Dependency> dependencies)
+    private static async Task AddEmbedded(string gitUrl, List <Dependency> dependencies, bool suppressCacheRefresh)
     {
         if (dependencies is {Count: > 0})
         {
             foreach (CachedPackage cachedPackage in dependencies.Select(dependency => PackageCache.Get(dependency.key)))
             {
-                await AddEmbedded(PackageManagerUtility.GetPackageUrl(cachedPackage), cachedPackage.Dependencies);
+                await AddEmbedded(
+                    PackageManagerUtility.GetPackageUrl(cachedPackage),
+                    cachedPackage.Dependencies,
+                    suppressCacheRefresh);
+
                 await Task.Delay(250);
             }
         }
@@ -150,7 +214,9 @@ internal static class MegaPintPackageManager
         await AddEmbedded(gitUrl);
 
         onSuccess?.Invoke();
-        PackageCache.Refresh();
+
+        if (!suppressCacheRefresh)
+            PackageCache.Refresh();
     }
 
     private static async Task AddEmbedded(string packageUrl)

@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System;
 
-namespace Editor.Scripts.PackageManager.Packages
+namespace MegaPint.Editor.Scripts.PackageManager.Packages
 {
 
 /// <summary> Stores data about a MegaPint package dependency that is set before distribution </summary>

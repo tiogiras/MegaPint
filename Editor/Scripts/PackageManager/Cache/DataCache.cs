@@ -1,10 +1,10 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
-using Editor.Scripts.PackageManager.Packages;
-using Editor.Scripts.PackageManager.Packages.Data;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
+using MegaPint.Editor.Scripts.PackageManager.Packages.Data;
 
-namespace Editor.Scripts.PackageManager.Cache
+namespace MegaPint.Editor.Scripts.PackageManager.Cache
 {
 
 /// <summary> Stores references to all defined <see cref="Editor.Scripts.PackageManager.Packages.PackageData" /> </summary>
@@ -27,7 +27,7 @@ internal static class DataCache
     public static string BasePackageName => "com.tiogiras.megapint";
 
     /// <summary> Get all defined megaPint packages </summary>
-    public static IEnumerable <PackageData> AllPackages => s_data.Values.ToList();
+    public static PackageData[] AllPackages => s_data.Values.ToArray();
 
     #region Public Methods
 

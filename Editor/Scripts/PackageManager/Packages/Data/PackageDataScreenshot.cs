@@ -1,5 +1,7 @@
 ﻿#if UNITY_EDITOR
-namespace Editor.Scripts.PackageManager.Packages.Data
+using System.Collections.Generic;
+
+namespace MegaPint.Editor.Scripts.PackageManager.Packages.Data
 {
 
 /// <summary> Data for the Screenshot package </summary>
@@ -14,14 +16,21 @@ internal static class PackageDataScreenshot
         return new PackageData
         {
             key = PackageKey.Screenshot,
-            reqMpVersion = "1.2.0 or higher",
-            version = "1.0.0",
+            reqMpVersion = "1.2.2 or higher",
+            version = "1.0.1",
             unityVersion = "2022.3.15f1",
-            lastUpdate = "01.04.2024",
+            lastUpdate = "22.06.2024",
             name = "com.tiogiras.megapint-screenshot",
             displayName = "Screenshot",
-            description = "This package adds a function to render and save camera views and editor windows.",
-            repository = "https://github.com/tiogiras/MegaPint-Screenshot.git"
+            description =
+                "Want to take screenshots during development? \n\nThis package allows you to render your in game camera's as well as editor windows. Setup different camera angles and capture different screenshots at runtime from all angles with one button press.",
+            repository = "https://github.com/tiogiras/MegaPint-Screenshot.git",
+            samples = new List <SampleData>
+            {
+                new() {displayName = "Basics", path = "Basics"},
+                new() {displayName = "Basics (URP)", path = "Basics (URP)"},
+                new() {displayName = "Basics (HDRP)", path = "Basics (HDRP)"}
+            }
         };
     }
 
