@@ -288,6 +288,9 @@ internal class PackageManager : EditorWindowBase
                 version.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
             }
         };
+
+        Debug.Log(package.DisplayName);     // TODO remove
+        Debug.Log(package.IsNewestVersion); // TODO remove
         
         if(package.IsNewestVersion)
             _installedVersion.RemoveFromClassList(StyleSheetClasses.Image.Tint.Orange);
