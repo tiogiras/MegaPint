@@ -102,7 +102,7 @@ internal static class MegaPintPackageManager
                 if (part2.Contains(name))
                     continue;
 
-                var url = $"\"{package.Repository}\"";
+                var url = $"\"{PackageManagerUtility.GetPackageUrl(package)}\"";
 
                 part2 = $"{name}{url},{part2}";
             }
