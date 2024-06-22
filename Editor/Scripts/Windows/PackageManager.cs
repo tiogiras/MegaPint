@@ -180,25 +180,6 @@ internal class PackageManager : EditorWindowBase
 
     #region Private Methods
 
-    /// <summary> Update the coloring of the installed version based on if the installed is the newest version </summary>
-    /// <param name="installedVersionElement"> Targeted visual element </param>
-    /// <param name="package"> Targeted package </param>
-    private static void UpdateVersionColor(VisualElement installedVersionElement, CachedPackage package)
-    {
-        UpdateVersionColor(installedVersionElement, !package.IsNewestVersion);
-    }
-
-    /// <summary> Update the coloring of the installed version based on if the installed is the newest version </summary>
-    /// <param name="installedVersionElement"> Targeted visual element </param>
-    /// <param name="needsUpdate"> Targeted package </param>
-    private static void UpdateVersionColor(VisualElement installedVersionElement, bool needsUpdate)
-    {
-        if (!needsUpdate)
-            installedVersionElement.RemoveFromClassList(StyleSheetClasses.Image.Tint.Orange);
-        else
-            installedVersionElement.AddToClassList(StyleSheetClasses.Image.Tint.Orange);
-    }
-
     /// <summary> Handle button subscriptions </summary>
     /// <param name="status"> Status of the buttons </param>
     private void ButtonSubscriptions(bool status)
@@ -307,8 +288,11 @@ internal class PackageManager : EditorWindowBase
                 version.RemoveFromClassList(StyleSheetClasses.Text.Color.ButtonActive);
             }
         };
-
-        UpdateVersionColor(_installedVersion, package);
+        
+        if(package.IsNewestVersion)
+            _installedVersion.RemoveFromClassList(StyleSheetClasses.Image.Tint.Orange);
+        else 
+            _installedVersion.AddToClassList(StyleSheetClasses.Image.Tint.Orange);
     }
 
     /// <summary> Called on failure </summary>
@@ -689,7 +673,10 @@ internal class PackageManager : EditorWindowBase
 
             version.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
 
-            UpdateVersionColor(version, needsUpdate);
+            if (!needsUpdate)
+                version.RemoveFromClassList(StyleSheetClasses.Text.Color.Orange);
+            else
+                version.AddToClassList(StyleSheetClasses.Text.Color.Orange);
 
             btnImport.style.display = isVariation ? DisplayStyle.None : DisplayStyle.Flex;
             btnRemove.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
