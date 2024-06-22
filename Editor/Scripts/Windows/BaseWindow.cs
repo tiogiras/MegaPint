@@ -37,7 +37,11 @@ internal class BaseWindow : EditorWindowBase
 
     private int _currentDevModeClickCount;
     private float _currentDevModeTimer;
+
+    private bool _hasPackages;
     private InfosTab _infos;
+
+    private Label _noPackagesInstalled;
 
     private PackagesTab _packages;
 
@@ -45,7 +49,6 @@ internal class BaseWindow : EditorWindowBase
     private SettingsTab _settings;
 
     private VisualElement _updateBasePackage;
-
     private Label _versionNumber;
 
     #region Unity Event Functions
@@ -75,7 +78,7 @@ internal class BaseWindow : EditorWindowBase
     public override EditorWindowBase ShowWindow()
     {
         titleContent.text = "MegaPint";
-        
+
         minSize = new Vector2(700, 350);
 
         if (!SaveValues.BasePackage.ApplyPSBaseWindow)
@@ -189,6 +192,8 @@ internal class BaseWindow : EditorWindowBase
 
         _updateBasePackage = root.Q <VisualElement>("UpdateBasePackage");
         _btnUpdate = _updateBasePackage.Q <Button>("BTN_Update");
+
+        _noPackagesInstalled = root.Q <Label>("NoPackagesInstalled");
     }
 
     private void CreateGUIContent(VisualElement root)
@@ -209,6 +214,15 @@ internal class BaseWindow : EditorWindowBase
         _packages = new PackagesTab(content);
         _settings = new SettingsTab(content);
         _infos = new InfosTab(content);
+
+        _noPackagesInstalled.parent.ActivateLinks(
+            link =>
+            {
+                if (link.linkID.Equals("PackageManager"))
+                    OnOpenPackageManager();
+            });
+
+        _hasPackages = PackageCache.HasPackagesInstalled();
 
         SwitchToPackages();
 
@@ -252,6 +266,8 @@ internal class BaseWindow : EditorWindowBase
         _packages.Hide();
         _settings.Hide();
         _infos.Show();
+
+        _noPackagesInstalled.style.display = DisplayStyle.None;
     }
 
     /// <summary> Switch to the packages tab </summary>
@@ -260,6 +276,8 @@ internal class BaseWindow : EditorWindowBase
         _packages.Show();
         _settings.Hide();
         _infos.Hide();
+
+        _noPackagesInstalled.style.display = _hasPackages ? DisplayStyle.None : DisplayStyle.Flex;
     }
 
     /// <summary> Switch to the settings tab </summary>
@@ -268,6 +286,8 @@ internal class BaseWindow : EditorWindowBase
         _packages.Hide();
         _settings.Show();
         _infos.Hide();
+
+        _noPackagesInstalled.style.display = DisplayStyle.None;
     }
 
     #endregion
