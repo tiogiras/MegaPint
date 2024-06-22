@@ -14,10 +14,10 @@ internal static class PackageDataAutoSave
         return new PackageData
         {
             key = PackageKey.AutoSave,
-            reqMpVersion = "1.1.1 or higher",
-            version = "1.0.2",
+            reqMpVersion = "1.2.2 or higher",
+            version = "1.0.3",
             unityVersion = "2022.3.15f1",
-            lastUpdate = "26.02.2024",
+            lastUpdate = "22.06.2024",
             name = "com.tiogiras.megapint-autosave",
             displayName = "Scene-AutoSave",
             description =
