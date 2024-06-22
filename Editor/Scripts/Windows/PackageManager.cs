@@ -159,9 +159,10 @@ internal class PackageManager : EditorWindowBase
         if (s_showWithLink == null)
         {
             _callbacksRegistered = false;
+
             return;
         }
-        
+
         s_showWithLink -= OnShowLink;
 
         PackageCache.onCacheStartRefreshing -= StartCacheRefresh;
@@ -178,6 +179,25 @@ internal class PackageManager : EditorWindowBase
     #endregion
 
     #region Private Methods
+
+    /// <summary> Update the coloring of the installed version based on if the installed is the newest version </summary>
+    /// <param name="installedVersionElement"> Targeted visual element </param>
+    /// <param name="package"> Targeted package </param>
+    private static void UpdateVersionColor(VisualElement installedVersionElement, CachedPackage package)
+    {
+        UpdateVersionColor(installedVersionElement, !package.IsNewestVersion);
+    }
+
+    /// <summary> Update the coloring of the installed version based on if the installed is the newest version </summary>
+    /// <param name="installedVersionElement"> Targeted visual element </param>
+    /// <param name="needsUpdate"> Targeted package </param>
+    private static void UpdateVersionColor(VisualElement installedVersionElement, bool needsUpdate)
+    {
+        if (!needsUpdate)
+            installedVersionElement.RemoveFromClassList(StyleSheetClasses.Image.Tint.Orange);
+        else
+            installedVersionElement.AddToClassList(StyleSheetClasses.Image.Tint.Orange);
+    }
 
     /// <summary> Handle button subscriptions </summary>
     /// <param name="status"> Status of the buttons </param>
@@ -206,7 +226,7 @@ internal class PackageManager : EditorWindowBase
     private void CreateGUIContent(VisualElement root)
     {
         root.Clear();
-        
+
         VisualElement content = GUIUtility.Instantiate(_baseWindow, root);
 
         _list = content.Q <ListView>("MainList");
@@ -288,8 +308,7 @@ internal class PackageManager : EditorWindowBase
             }
         };
 
-        // TODO Apply Color change via uss classes
-        /*version.style.color = !package.IsNewestVersion ? _wrongVersionColor : _normalColor;*/
+        UpdateVersionColor(_installedVersion, package);
     }
 
     /// <summary> Called on failure </summary>
@@ -667,8 +686,7 @@ internal class PackageManager : EditorWindowBase
 
             version.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;
 
-            // TODO Apply Color change to version via uss classes
-            /*version.style.color = needsUpdate ? _wrongVersionColor : _normalColor;*/
+            UpdateVersionColor(version, needsUpdate);
 
             btnImport.style.display = isVariation ? DisplayStyle.None : DisplayStyle.Flex;
             btnRemove.style.display = isVariation ? DisplayStyle.Flex : DisplayStyle.None;

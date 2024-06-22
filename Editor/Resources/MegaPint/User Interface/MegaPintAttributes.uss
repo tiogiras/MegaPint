@@ -115,5 +115,9 @@
     -unity-background-image-tint-color: var(--button-image-tint);
 }
 
+.mp_image-tint--orange {
+    -unity-background-image-tint-color: var(--text-orange-color);
+}
+
 
 

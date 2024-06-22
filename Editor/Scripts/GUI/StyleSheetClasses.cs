@@ -60,6 +60,7 @@ internal static class StyleSheetClasses
             public static readonly string Identity = $"{s_tint}--identity";
             public static readonly string TextSecondary = $"{s_tint}--text-secondary";
             public static readonly string ButtonImage = $"{s_tint}--button-image";
+            public static readonly string Orange = $"{s_tint}--orange";
         }
 
         private static readonly string s_image = $"{ClassBase}image";
