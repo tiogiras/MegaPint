@@ -86,7 +86,7 @@ internal class PackagesTab
         _tabContent.style.display = DisplayStyle.Flex;
         _tabs.style.display = DisplayStyle.None;
 
-        _packagesList.style.display = DisplayStyle.Flex;
+        _packagesList.style.display = _displayedPackages.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
         _active = true;
     }
 
