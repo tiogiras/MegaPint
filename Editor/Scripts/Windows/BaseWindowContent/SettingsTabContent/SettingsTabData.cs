@@ -23,7 +23,7 @@ internal static class SettingsTabData
 
     public enum SettingsKey
     {
-        Theme
+        Theme, Feedback, Testing
     }
 
     public static readonly List <Setting> Settings = new()
@@ -36,6 +36,18 @@ internal static class SettingsTabData
             {
                 new() {settingsKey = SettingsKey.Theme, settingsName = "Theme", intendLevel = 1}
             }
+        },
+        new Setting
+        {
+            settingsKey = SettingsKey.Feedback,
+            settingsName = "Feedback",
+            intendLevel = 0
+        },
+        new Setting
+        {
+            settingsKey = SettingsKey.Testing,
+            settingsName = "Testing",
+            intendLevel = 0
         }
     };
 }

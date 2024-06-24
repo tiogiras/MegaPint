@@ -44,6 +44,16 @@ internal static class SettingsTabDisplay
 
                 break;
 
+            case SettingsTabData.SettingsKey.Feedback:
+                FeedbackLogic(root);
+                
+                break;
+                
+            case SettingsTabData.SettingsKey.Testing:
+                TestingLogic(root);
+                
+                break;
+            
             default:
                 return;
         }
@@ -74,6 +84,61 @@ internal static class SettingsTabDisplay
                 s_editorThemeIndex = dropdown.index;
                 SaveValues.BasePackage.EditorTheme = dropdown.index;
             });
+    }
+    
+    /// <summary> Logic of the feedback setting </summary>
+    /// <param name="root"> Setting as <see cref="VisualElement" /> </param>
+    private static void FeedbackLogic(VisualElement root)
+    {
+        var sendFeedbackField = root.Q <Toggle>("SendFeedback");
+        
+        sendFeedbackField.SetValueWithoutNotify(SaveValues.BasePackage.SendFeedback);
+
+        sendFeedbackField.RegisterValueChangedCallback(evt =>
+        {
+            SaveValues.BasePackage.SendFeedback = evt.newValue;
+        });
+    }
+
+    /// <summary> Logic of the testing setting </summary>
+    /// <param name="root"> Setting as <see cref="VisualElement" /> </param>
+    private static void TestingLogic(VisualElement root)
+    {
+        var tokenField = root.Q <TextField>("Token");
+        var btnSave = root.Q <Button>("BTN_Save");
+        var invalid = root.Q <VisualElement>("Invalid");
+        var valid = root.Q <VisualElement>("Valid");
+
+        btnSave.style.display = DisplayStyle.None;
+        
+        btnSave.clickable = new Clickable(() =>
+        {
+            SaveValues.BasePackage.TesterToken = tokenField.value;
+            btnSave.style.display = DisplayStyle.None;
+            
+            UpdateTestingDisplay(tokenField, invalid, valid);
+        });
+
+        tokenField.RegisterValueChangedCallback(evt =>
+        {
+            btnSave.style.display = DisplayStyle.Flex;
+        });
+        
+        UpdateTestingDisplay(tokenField, invalid, valid);
+    }
+
+    /// <summary> Update the visuals of the testing setting </summary>
+    /// <param name="tokenField"> TextField of the token </param>
+    /// <param name="invalid"> Invalid visualElement </param>
+    /// <param name="valid"> Valid visualElement </param>
+    private static void UpdateTestingDisplay(TextField tokenField, VisualElement invalid, VisualElement valid)
+    {
+        tokenField.SetValueWithoutNotify(SaveValues.BasePackage.TesterToken);
+ 
+        var validToken = Utility.ValidateTesterToken();
+
+        invalid.style.display = validToken ? DisplayStyle.None : DisplayStyle.Flex;
+        valid.style.display = validToken ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     #endregion

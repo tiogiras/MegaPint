@@ -15,6 +15,7 @@ internal static class DataCache
         {PackageKey.AutoSave, PackageDataAutoSave.Get()},
         {PackageKey.Validators, PackageDataValidators.Get()},
         {PackageKey.AlphaButton, PackageDataAlphaButton.Get()},
+        {PackageKey.BATesting, PackageDataBATesting.Get()},
         {PackageKey.PlayModeStartScene, PackageDataPlayModeStartScene.Get()},
         {PackageKey.Screenshot, PackageDataScreenshot.Get()},
         {PackageKey.NotePad, PackageDataNotePad.Get()}

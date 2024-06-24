@@ -83,6 +83,18 @@ internal static class Utility
         return Application.companyName.Equals("Tiogiras") && Application.productName.Equals("MegaPintProject");
     }
 
+    /// <summary> Validate the saved tester token </summary>
+    /// <returns> If the token is valid </returns>
+    public static bool ValidateTesterToken()
+    {
+        var token = SaveValues.BasePackage.TesterToken;
+
+        if (string.IsNullOrEmpty(token))
+            return false;
+
+        return token.Equals("Hello World!");  // TODO change to online query
+    }
+    
     #endregion
 }
 
