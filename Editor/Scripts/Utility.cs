@@ -92,7 +92,7 @@ internal static class Utility
         if (string.IsNullOrEmpty(token))
             return false;
 
-        return token.Equals("Hello World!");  // TODO change to online query
+        return token.Equals("Hello World!");  // TODO change to online query and cache this value so the check must only be done once per domain reload
     }
     
     #endregion

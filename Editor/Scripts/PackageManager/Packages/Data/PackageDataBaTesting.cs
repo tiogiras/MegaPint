@@ -5,7 +5,7 @@ namespace MegaPint.Editor.Scripts.PackageManager.Packages.Data
 {
 
 /// <summary> Data for the AlphaButton package </summary>
-internal static class PackageDataBATesting
+internal static class PackageDataBaTesting
 {
     #region Public Methods
 
@@ -22,7 +22,7 @@ internal static class PackageDataBATesting
             lastUpdate = "24.06.2024",
             name = "com.tiogiras.megapint-batesting",
             displayName = "BA Testing",
-            description = "",
+            description = "This package is required to perform the guided part of the ba testing tasks.",
             repository = "https://github.com/tiogiras/MegaPint-BATesting.git",
             dependencies = new List <Dependency>
             {

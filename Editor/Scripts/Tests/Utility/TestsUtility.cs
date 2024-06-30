@@ -19,6 +19,7 @@ using Object = UnityEngine.Object;
 [assembly: InternalsVisibleTo("tiogiras.megapint.notepad.editor.tests")]
 [assembly: InternalsVisibleTo("tiogiras.megapint.autosave.editor.tests")]
 [assembly: InternalsVisibleTo("tiogiras.megapint.screenshot.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.batesting.editor.tests")]
 
 namespace MegaPint.Editor.Scripts.Tests.Utility
 {
