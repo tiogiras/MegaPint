@@ -26,6 +26,8 @@
     --background-secondary-color: rgb(38, 38, 38);
     --background-tertiary-color: rgb(48, 48, 48);
     --background-quaternary-color: rgb(58, 58, 58);
+    --background-red-color: rgba(175, 30, 30, 0.5);
+    --background-green-color: rgba(26, 154, 26, 0.5);
     --separator-color: rgb(70, 70, 70);
     --cursor-color: rgb(255, 255, 255);
     --button-color: rgb(89, 89, 89);
@@ -67,6 +69,8 @@
     --background-secondary-color: rgb(176, 176, 176);
     --background-tertiary-color: rgb(210, 210, 210);
     --background-quaternary-color: rgb(225, 225, 225);
+    --background-red-color: rgba(175, 30, 30, 0.5);
+    --background-green-color: rgba(26, 154, 26, 0.5);
     --separator-color: rgb(89, 89, 89);
     --cursor-color: rgb(0, 0, 0);
     --button-color: rgb(220, 220, 220);
