@@ -42,7 +42,6 @@
     color: var(--code-class-color);
 }
 
-
 .mp_code-color--method {
     color: var(--code-method-color);
 }
@@ -69,6 +68,9 @@
 
 .mp_background-color--quaternary {
     background-color: var(--background-quaternary-color);
+    margin-top: 10px;
+    margin-right: 25px;
+    margin-left: 25px;
 }
 
 .mp_background-color--identity {
@@ -77,6 +79,14 @@
 
 .mp_background-color--separator {
     background-color: var(--separator-color);
+}
+
+.mp_background-color--red {
+    background-color: var(--background-red-color);
+}
+
+.mp_background-color--green {
+    background-color: var(--background-green-color);
 }
 
 .mp_border-color--identity {
@@ -118,6 +128,3 @@
 .mp_image-tint--orange {
     -unity-background-image-tint-color: var(--text-orange-color);
 }
-
-
-
