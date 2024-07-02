@@ -1,7 +1,9 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -112,6 +114,21 @@ internal class PackagesTab
             return;
 
         SetDisplayedPackages();
+    }
+
+    // TODO commenting
+    public void ShowByLink(string package)
+    {
+        _searchField.value = "";
+        SetDisplayedPackages();
+
+        var key = Enum.Parse <PackageKey>(package);
+        
+        foreach (CachedPackage item in _displayedPackages.Where(item => item.Key == key))
+        {
+            _packagesList.SetSelection(_displayedPackages.IndexOf(item));
+            break;
+        }
     }
 
     /// <summary> ListView Callback </summary>
