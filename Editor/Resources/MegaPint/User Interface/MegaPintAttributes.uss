@@ -68,9 +68,6 @@
 
 .mp_background-color--quaternary {
     background-color: var(--background-quaternary-color);
-    margin-top: 10px;
-    margin-right: 25px;
-    margin-left: 25px;
 }
 
 .mp_background-color--identity {

@@ -1,0 +1,16 @@
+{
+    "name": "tiogiras.megapint.batesting.runtime",
+    "rootNamespace": "MegaPint",
+    "references": [
+        "GUID:955c79b3eb6fe0a47bd23099384b6e17"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
