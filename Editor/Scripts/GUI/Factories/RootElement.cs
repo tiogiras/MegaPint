@@ -243,11 +243,14 @@ internal class RootElement : VisualElement
         /// <param name="element"> Targeted element </param>
         private static void TooltipOverwrite(VisualElement element)
         {
-            var tooltip = "";
+            var tooltip = element.tooltip;
 
             element.RegisterCallback <PointerEnterEvent>(
                 _ =>
                 {
+                    if (string.IsNullOrEmpty(element.tooltip))
+                        return;
+
                     tooltip = element.tooltip;
                     element.tooltip = "";
 
