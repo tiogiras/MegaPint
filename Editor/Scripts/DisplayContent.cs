@@ -42,7 +42,7 @@ internal static partial class DisplayContent
         public CachedPackage package;
     }
 
-    private enum Tab
+    public enum Tab
     {
         Info, Guides, Settings, Help
     }
@@ -108,11 +108,14 @@ internal static partial class DisplayContent
 
         SetTabContentLocations(refs.package.Key, settings);
         RegisterTabCallbacks(refs, settings, actions);
-
-        SwitchTab(refs.tabContent, Tab.Info, refs.package, actions);
+        
+        SwitchTab(refs.tabContent, startTab, refs.package, actions); // TODO starting tab that resets itself after being used
+        startTab = Tab.Info;
 
         return null;
     }
+
+    public static Tab startTab = Tab.Info;
 
     /// <summary> Register callbacks for the tab buttons </summary>
     /// <param name="refs"> References needed to display the right pane </param>

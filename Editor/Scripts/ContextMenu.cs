@@ -15,8 +15,15 @@ internal static partial class ContextMenu
     #region Public Methods
 
     [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
-    public static void Open()
+    public static void OpenBaseWindow()
     {
+        BaseWindow.openingLink = "";
+        TryOpen <BaseWindow>(false);
+    }
+
+    public static void OpenBaseWindowPerLink(string link)
+    {
+        BaseWindow.openingLink = link;
         TryOpen <BaseWindow>(false);
     }
 

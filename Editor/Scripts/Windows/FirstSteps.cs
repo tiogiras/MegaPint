@@ -117,7 +117,7 @@ internal class FirstSteps : EditorWindowBase
                 : "Could not connect asset due to an unknown issue.",
             "OK");
 
-        ContextMenu.Open();
+        ContextMenu.OpenBaseWindow();
 
         Close();
     }

@@ -51,6 +51,9 @@ internal class BaseWindow : EditorWindowBase
     private VisualElement _updateBasePackage;
     private Label _versionNumber;
 
+    public static string openingLink;
+    private bool _guiContentCreated;
+
     #region Unity Event Functions
 
     private void OnGUI()
@@ -80,6 +83,9 @@ internal class BaseWindow : EditorWindowBase
         titleContent.text = "MegaPint";
 
         minSize = new Vector2(700, 350);
+
+        if (_guiContentCreated && !string.IsNullOrEmpty(openingLink))
+            OpenWithLink();
 
         if (!SaveValues.BasePackage.ApplyPSBaseWindow)
             return this;
@@ -204,6 +210,8 @@ internal class BaseWindow : EditorWindowBase
 
     private void CreateGUIContent(VisualElement root)
     {
+        _guiContentCreated = true;
+        
         root.Clear();
 
         VisualElement content = GUIUtility.Instantiate(_baseWindow, root);
@@ -242,6 +250,50 @@ internal class BaseWindow : EditorWindowBase
         _updateBasePackage.style.display = DisplayStyle.Flex;
     }
 
+    // TODO commenting
+    private void OpenWithLink()
+    {
+        var parts = openingLink.Split("/");
+
+        switch (parts[0])
+        {
+            case "Packages":
+                SwitchToPackages();
+
+                DisplayContent.startTab = parts[2] switch
+                {
+                    "Info" => DisplayContent.Tab.Info,
+                    "Settings" => DisplayContent.Tab.Settings,
+                    "Guides" => DisplayContent.Tab.Guides,
+                    "Help" => DisplayContent.Tab.Help,
+                    var _ => DisplayContent.Tab.Info
+                };
+
+                rootVisualElement.schedule.Execute(
+                    () =>
+                    {
+                        _packages.ShowByLink(parts[1]);
+                    });
+                break;
+            
+            case "Info":
+                SwitchToInfos();
+                
+                // TODO
+                
+                break;
+            
+            case "Settings":
+                SwitchToSettings();
+                
+                // TODO
+                
+                break;
+        }
+
+        openingLink = "";
+    }
+
     /// <summary> Try to open the development center </summary>
     private void OnDevMode()
     {
@@ -260,6 +312,8 @@ internal class BaseWindow : EditorWindowBase
     /// <summary> Prepare for refreshing the <see cref="PackageCache" /> </summary>
     private void StartCacheRefresh()
     {
+        _guiContentCreated = false;
+        
         _packages?.ResetVariables();
         _settings?.ResetVariables();
         _infos?.ResetVariables();
@@ -274,6 +328,8 @@ internal class BaseWindow : EditorWindowBase
         _infos.Show();
 
         _noPackagesInstalled.style.display = DisplayStyle.None;
+        
+        GUIUtility.ToggleActiveButtonInGroup(2, _btnPackages, _btnSettings, _btnInfos);
     }
 
     /// <summary> Switch to the packages tab </summary>
@@ -284,6 +340,8 @@ internal class BaseWindow : EditorWindowBase
         _infos.Hide();
 
         _noPackagesInstalled.style.display = _hasPackages ? DisplayStyle.None : DisplayStyle.Flex;
+        
+        GUIUtility.ToggleActiveButtonInGroup(0, _btnPackages, _btnSettings, _btnInfos);
     }
 
     /// <summary> Switch to the settings tab </summary>
@@ -294,6 +352,8 @@ internal class BaseWindow : EditorWindowBase
         _infos.Hide();
 
         _noPackagesInstalled.style.display = DisplayStyle.None;
+        
+        GUIUtility.ToggleActiveButtonInGroup(1, _btnPackages, _btnSettings, _btnInfos);
     }
 
     #endregion
