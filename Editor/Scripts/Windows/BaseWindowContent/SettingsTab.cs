@@ -112,6 +112,8 @@ internal class SettingsTab
             result.Add(settings);
         else
         {
+            result.Add(settings);
+            
             foreach (SettingsTabData.Setting subSetting in settings.subSettings)
                 result.AddRange(GetAll(subSetting));
         }
@@ -190,6 +192,9 @@ internal class SettingsTab
         }
         else
         {
+            if (_list.selectedIndex >= _visualElements.Count)
+                return;
+            
             _currentVisualElement = _visualElements[_list.selectedIndex];
             _currentVisualElement.Q <Label>("Name").style.borderLeftWidth = 2.5f;
 
@@ -291,6 +296,45 @@ internal class SettingsTab
     }
 
     #endregion
+    
+    // TODO commenting
+    public void ShowByLink(string[] linkParts)
+    {
+        _searchField.value = "";
+        SetDisplayed("");
+
+        _content.schedule.Execute(
+            () =>
+            {
+                OpenByLink(linkParts);
+            });
+    }
+
+    private void OpenByLink(string[] linkParts)
+    {
+        var linkPart = linkParts[0];
+        
+        SettingsTabData.Setting targetSetting = _allSettings.FirstOrDefault(setting => setting.settingsName.Equals(linkPart));
+
+        if (targetSetting == null)
+        {
+            Debug.LogError($"Could not find Setting: {linkPart}");
+            return;
+        }
+
+        var targetIndex = _displayedSettings.IndexOf(targetSetting);
+
+        _list.selectedIndex = targetIndex;
+        
+        if (linkParts.Length == 1)
+            return;
+        
+        _content.schedule.Execute(
+            () =>
+            {
+                OpenByLink(linkParts[1..]);
+            });
+    }
 }
 
 }

@@ -80,8 +80,8 @@ internal class Center : EditorWindowBase
 
     protected override void RegisterCallbacks()
     {
-        _btnToggle.clicked += OnToggle;
-        _btnInterfaceOverview.clicked += OnInterfaceOverview;
+        _btnToggle.clicked += ContextMenu.BasePackage.OpenDevModeToggle;
+        _btnInterfaceOverview.clicked += ContextMenu.BasePackage.OpenInterfaceOverview;
         _btnRepaint.clicked += OnRepaint;
         _btnReloadDomain.clicked += OnReloadDomain;
         _btnImportAll.clicked += OnImportAll;
@@ -90,8 +90,8 @@ internal class Center : EditorWindowBase
 
     protected override void UnRegisterCallbacks()
     {
-        _btnToggle.clicked -= OnToggle;
-        _btnInterfaceOverview.clicked -= OnInterfaceOverview;
+        _btnToggle.clicked -= ContextMenu.BasePackage.OpenDevModeToggle;
+        _btnInterfaceOverview.clicked -= ContextMenu.BasePackage.OpenInterfaceOverview;
         _btnRepaint.clicked -= OnRepaint;
         _btnReloadDomain.clicked -= OnReloadDomain;
         _btnImportAll.clicked -= OnImportAll;
@@ -114,12 +114,6 @@ internal class Center : EditorWindowBase
             await Task.Delay(100);
 
         MegaPintPackageManager.InstallAll();
-    }
-
-    /// <summary> Open InterfaceOverview </summary>
-    private static void OnInterfaceOverview()
-    {
-        ContextMenu.TryOpen <InterfaceOverview>(false);
     }
 
     /// <summary> Force reload the domain </summary>
@@ -160,12 +154,6 @@ internal class Center : EditorWindowBase
     private static void OnRepaint()
     {
         GUIUtility.ForceRepaint();
-    }
-
-    /// <summary> Open Toggle </summary>
-    private static void OnToggle()
-    {
-        ContextMenu.TryOpen <Toggle>(true);
     }
 
     #endregion

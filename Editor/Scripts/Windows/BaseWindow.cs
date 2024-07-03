@@ -4,12 +4,10 @@ using MegaPint.Editor.Scripts.GUI.Utility;
 using MegaPint.Editor.Scripts.PackageManager;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.Windows.BaseWindowContent;
-using MegaPint.Editor.Scripts.Windows.DevMode;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
-using Toggle = MegaPint.Editor.Scripts.Windows.DevMode.Toggle;
 
 namespace MegaPint.Editor.Scripts.Windows
 {
@@ -21,6 +19,8 @@ internal class BaseWindow : EditorWindowBase
 
     public static Action onRightPaneInitialization;
     public static Action onRightPaneClose;
+
+    public static string openingLink;
 
     private readonly string _contentPath = Constants.BasePackage.UserInterface.BaseWindow;
 
@@ -37,6 +37,8 @@ internal class BaseWindow : EditorWindowBase
 
     private int _currentDevModeClickCount;
     private float _currentDevModeTimer;
+    private bool _executeLinkOnGUICreation;
+    private bool _guiContentCreated;
 
     private bool _hasPackages;
     private InfosTab _infos;
@@ -50,9 +52,6 @@ internal class BaseWindow : EditorWindowBase
 
     private VisualElement _updateBasePackage;
     private Label _versionNumber;
-
-    public static string openingLink;
-    private bool _guiContentCreated;
 
     #region Unity Event Functions
 
@@ -73,19 +72,19 @@ internal class BaseWindow : EditorWindowBase
 
     #region Public Methods
 
-    public static void OnOpenPackageManager()
-    {
-        ContextMenu.TryOpen <PackageManager>(false, "Package Manager");
-    }
-
     public override EditorWindowBase ShowWindow()
     {
         titleContent.text = "MegaPint";
 
         minSize = new Vector2(700, 350);
 
-        if (_guiContentCreated && !string.IsNullOrEmpty(openingLink))
-            OpenWithLink();
+        if (!string.IsNullOrEmpty(openingLink))
+        {
+            if (_guiContentCreated)
+                OpenWithLink();
+            else 
+                _executeLinkOnGUICreation = true;
+        }
 
         if (!SaveValues.BasePackage.ApplyPSBaseWindow)
             return this;
@@ -133,7 +132,7 @@ internal class BaseWindow : EditorWindowBase
         _btnInfos.clicked += SwitchToInfos;
 
         _btnDevMode.clicked += OnDevMode;
-        _btnDevCenter.clicked += OnDevCenter;
+        _btnDevCenter.clicked += ContextMenu.BasePackage.OpenDevCenter;
         _btnUpdate.clicked += UpdateBasePackage;
 
         _callbacksRegistered = true;
@@ -149,6 +148,7 @@ internal class BaseWindow : EditorWindowBase
         if (_btnPackages == null)
         {
             _callbacksRegistered = false;
+
             return;
         }
 
@@ -159,7 +159,7 @@ internal class BaseWindow : EditorWindowBase
         onRightPaneClose?.Invoke();
 
         _btnDevMode.clicked -= OnDevMode;
-        _btnDevCenter.clicked -= OnDevCenter;
+        _btnDevCenter.clicked -= ContextMenu.BasePackage.OpenDevCenter;
         _btnUpdate.clicked -= UpdateBasePackage;
 
         _callbacksRegistered = false;
@@ -168,12 +168,6 @@ internal class BaseWindow : EditorWindowBase
     #endregion
 
     #region Private Methods
-
-    /// <summary> Open the development center </summary>
-    private static void OnDevCenter()
-    {
-        ContextMenu.TryOpen <Center>(false);
-    }
 
     /// <summary> Update the BasePackage </summary>
     private static void UpdateBasePackage()
@@ -211,7 +205,7 @@ internal class BaseWindow : EditorWindowBase
     private void CreateGUIContent(VisualElement root)
     {
         _guiContentCreated = true;
-        
+
         root.Clear();
 
         VisualElement content = GUIUtility.Instantiate(_baseWindow, root);
@@ -233,12 +227,20 @@ internal class BaseWindow : EditorWindowBase
             link =>
             {
                 if (link.linkID.Equals("PackageManager"))
-                    OnOpenPackageManager();
+                    ContextMenu.BasePackage.OpenPackageManager();
             });
 
         _hasPackages = PackageCache.HasPackagesInstalled();
 
-        SwitchToPackages();
+        if (_executeLinkOnGUICreation)
+        {
+            if (!string.IsNullOrEmpty(openingLink))
+                OpenWithLink();
+
+            _executeLinkOnGUICreation = false;
+        }
+        else
+            SwitchToPackages();
 
         if (!PackageCache.NeedsBasePackageUpdate())
         {
@@ -248,50 +250,6 @@ internal class BaseWindow : EditorWindowBase
         }
 
         _updateBasePackage.style.display = DisplayStyle.Flex;
-    }
-
-    // TODO commenting
-    private void OpenWithLink()
-    {
-        var parts = openingLink.Split("/");
-
-        switch (parts[0])
-        {
-            case "Packages":
-                SwitchToPackages();
-
-                DisplayContent.startTab = parts[2] switch
-                {
-                    "Info" => DisplayContent.Tab.Info,
-                    "Settings" => DisplayContent.Tab.Settings,
-                    "Guides" => DisplayContent.Tab.Guides,
-                    "Help" => DisplayContent.Tab.Help,
-                    var _ => DisplayContent.Tab.Info
-                };
-
-                rootVisualElement.schedule.Execute(
-                    () =>
-                    {
-                        _packages.ShowByLink(parts[1]);
-                    });
-                break;
-            
-            case "Info":
-                SwitchToInfos();
-                
-                // TODO
-                
-                break;
-            
-            case "Settings":
-                SwitchToSettings();
-                
-                // TODO
-                
-                break;
-        }
-
-        openingLink = "";
     }
 
     /// <summary> Try to open the development center </summary>
@@ -306,14 +264,58 @@ internal class BaseWindow : EditorWindowBase
             return;
 
         _currentDevModeClickCount = 0;
-        ContextMenu.TryOpen <Toggle>(true);
+        ContextMenu.BasePackage.OpenDevModeToggle();
+    }
+
+    // TODO commenting
+    private void OpenWithLink()
+    {
+        var parts = openingLink.Split("/");
+
+        switch (parts[0])
+        {
+            case "Packages":
+                SwitchToPackages();
+
+                DisplayContent.startTab = parts[2] switch
+                                          {
+                                              "Info" => DisplayContent.Tab.Info,
+                                              "Settings" => DisplayContent.Tab.Settings,
+                                              "Guides" => DisplayContent.Tab.Guides,
+                                              "Help" => DisplayContent.Tab.Help,
+                                              var _ => DisplayContent.Tab.Info
+                                          };
+
+                rootVisualElement.schedule.Execute(
+                    () => {_packages.ShowByLink(parts[1]);});
+
+                break;
+
+            case "Info":
+                SwitchToInfos();
+
+                rootVisualElement.schedule.Execute(
+                    () => {_infos.ShowByLink(parts[1..]);});
+
+                break;
+
+            case "Settings":
+                SwitchToSettings();
+
+                rootVisualElement.schedule.Execute(
+                    () => {_settings.ShowByLink(parts[1..]);});
+
+                break;
+        }
+
+        openingLink = "";
     }
 
     /// <summary> Prepare for refreshing the <see cref="PackageCache" /> </summary>
     private void StartCacheRefresh()
     {
         _guiContentCreated = false;
-        
+
         _packages?.ResetVariables();
         _settings?.ResetVariables();
         _infos?.ResetVariables();
@@ -328,7 +330,7 @@ internal class BaseWindow : EditorWindowBase
         _infos.Show();
 
         _noPackagesInstalled.style.display = DisplayStyle.None;
-        
+
         GUIUtility.ToggleActiveButtonInGroup(2, _btnPackages, _btnSettings, _btnInfos);
     }
 
@@ -340,7 +342,7 @@ internal class BaseWindow : EditorWindowBase
         _infos.Hide();
 
         _noPackagesInstalled.style.display = _hasPackages ? DisplayStyle.None : DisplayStyle.Flex;
-        
+
         GUIUtility.ToggleActiveButtonInGroup(0, _btnPackages, _btnSettings, _btnInfos);
     }
 
@@ -352,7 +354,7 @@ internal class BaseWindow : EditorWindowBase
         _infos.Hide();
 
         _noPackagesInstalled.style.display = DisplayStyle.None;
-        
+
         GUIUtility.ToggleActiveButtonInGroup(1, _btnPackages, _btnSettings, _btnInfos);
     }
 

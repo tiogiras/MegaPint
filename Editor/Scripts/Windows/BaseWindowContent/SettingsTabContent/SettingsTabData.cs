@@ -8,7 +8,7 @@ namespace MegaPint.Editor.Scripts.Windows.BaseWindowContent.SettingsTabContent
 /// <summary> Stores data for the settings tab in the baseWindow </summary>
 internal static class SettingsTabData
 {
-    public struct Setting : IComparable <Setting>
+    public class Setting : IComparable <Setting>
     {
         public SettingsKey settingsKey;
         public string settingsName;

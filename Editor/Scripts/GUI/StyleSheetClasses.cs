@@ -17,6 +17,7 @@ internal static class StyleSheetClasses
             public static readonly string Identity = $"{s_color}--identity";
             public static readonly string Separator = $"{s_color}--separator";
             public static readonly string Red = $"{s_color}--red";
+            public static readonly string Orange = $"{s_color}--orange";
             public static readonly string Green = $"{s_color}--green";
         }
 
