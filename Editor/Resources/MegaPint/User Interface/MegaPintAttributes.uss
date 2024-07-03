@@ -82,6 +82,10 @@
     background-color: var(--background-red-color);
 }
 
+.mp_background-color--orange {
+    background-color: var(--background-orange-color);
+}
+
 .mp_background-color--green {
     background-color: var(--background-green-color);
 }

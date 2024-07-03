@@ -114,6 +114,8 @@ internal class InfosTab
             result.Add(infos);
         else
         {
+            result.Add(infos);
+        
             foreach (InfosTabData.Info subInfo in infos.subInfos)
                 result.AddRange(GetAll(subInfo));
         }
@@ -192,6 +194,9 @@ internal class InfosTab
         }
         else
         {
+            if (_list.selectedIndex >= _visualElements.Count)
+                return;
+            
             _currentVisualElement = _visualElements[_list.selectedIndex];
             _currentVisualElement.Q <Label>("Name").style.borderLeftWidth = 2.5f;
 
@@ -293,6 +298,45 @@ internal class InfosTab
     }
 
     #endregion
+
+    // TODO commenting
+    public void ShowByLink(string[] linkParts)
+    {
+        _searchField.value = "";
+        SetDisplayed("");
+
+        _content.schedule.Execute(
+            () =>
+            {
+                OpenByLink(linkParts);
+            });
+    }
+    
+    private void OpenByLink(string[] linkParts)
+    {
+        var linkPart = linkParts[0];
+        
+        InfosTabData.Info targetInfo = _allInfos.FirstOrDefault(info => info.infoName.Equals(linkPart));
+
+        if (targetInfo == null)
+        {
+            Debug.LogError($"Could not find Info: {linkPart}");
+            return;
+        }
+
+        var targetIndex = _displayedInfos.IndexOf(targetInfo);
+
+        _list.selectedIndex = targetIndex;
+        
+        if (linkParts.Length == 1)
+            return;
+        
+        _content.schedule.Execute(
+            () =>
+            {
+                OpenByLink(linkParts[1..]);
+            });
+    }
 }
 
 }

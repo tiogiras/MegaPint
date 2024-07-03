@@ -8,7 +8,7 @@ namespace MegaPint.Editor.Scripts.Windows.BaseWindowContent.InfoTabContent
 /// <summary> Stores data for the info tab in the baseWindow </summary>
 internal static class InfosTabData
 {
-    public struct Info : IComparable <Info>
+    public class Info : IComparable <Info>
     {
         public InfoKey infoKey;
         public string infoName;

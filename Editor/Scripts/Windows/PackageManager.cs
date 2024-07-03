@@ -78,7 +78,7 @@ internal class PackageManager : EditorWindowBase
     /// <param name="key"> Package to be shown on open </param>
     public static void OpenPerLink(PackageKey key)
     {
-        BaseWindow.OnOpenPackageManager();
+        ContextMenu.BasePackage.OpenPackageManager();
         s_showWithLink?.Invoke(key);
     }
 
@@ -468,7 +468,7 @@ internal class PackageManager : EditorWindowBase
         galleryButton.AddClickInteraction(
             () =>
             {
-                var gallery = (Gallery)ContextMenu.TryOpen <Gallery>(true);
+                var gallery = (Gallery)ContextMenu.TryOpen <Gallery>(true, new ContextMenu.MenuItemSignature());
                 gallery.Initialize(package);
             });
 
