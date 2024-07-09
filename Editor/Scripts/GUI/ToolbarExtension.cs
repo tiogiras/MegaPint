@@ -79,7 +79,7 @@ internal static class ToolbarExtension
             return;
 
         s_rightZoneActions.Sort();
-            
+        
         foreach (GUIAction action in s_rightZoneActions)
         {
             action.action?.Invoke(rightZone);
