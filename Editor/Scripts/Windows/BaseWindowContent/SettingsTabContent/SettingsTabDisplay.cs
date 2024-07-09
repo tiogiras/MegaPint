@@ -115,14 +115,19 @@ internal static class SettingsTabDisplay
         {
             SaveValues.BasePackage.TesterToken = tokenField.value;
             btnSave.style.display = DisplayStyle.None;
-            
-            UpdateTestingDisplay(tokenField, invalid, valid);
+
+#pragma warning disable CS4014
+            Utility.ValidateTesterToken();
+#pragma warning restore CS4014
         });
 
         tokenField.RegisterValueChangedCallback(evt =>
         {
             btnSave.style.display = DisplayStyle.Flex;
         });
+        
+        Utility.onTesterTokenValidated += () =>             
+            UpdateTestingDisplay(tokenField, invalid, valid);
         
         UpdateTestingDisplay(tokenField, invalid, valid);
     }
@@ -131,11 +136,11 @@ internal static class SettingsTabDisplay
     /// <param name="tokenField"> TextField of the token </param>
     /// <param name="invalid"> Invalid visualElement </param>
     /// <param name="valid"> Valid visualElement </param>
-    private static void UpdateTestingDisplay(TextField tokenField, VisualElement invalid, VisualElement valid)
+    private static async void UpdateTestingDisplay(TextField tokenField, VisualElement invalid, VisualElement valid)
     {
         tokenField.SetValueWithoutNotify(SaveValues.BasePackage.TesterToken);
  
-        var validToken = Utility.ValidateTesterToken();
+        var validToken = await Utility.IsValidTesterToken();
 
         invalid.style.display = validToken ? DisplayStyle.None : DisplayStyle.Flex;
         valid.style.display = validToken ? DisplayStyle.Flex : DisplayStyle.None;
