@@ -1,9 +1,13 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.IO;
+using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
+using Object = UnityEngine.Object;
 
 namespace MegaPint.Editor.Scripts
 {
@@ -11,6 +15,17 @@ namespace MegaPint.Editor.Scripts
 /// <summary> Class containing general utility functions </summary>
 internal static class Utility
 {
+    [Serializable]
+    private class Result
+    {
+        public bool success;
+        public string message;
+    }
+
+    public static Action onTesterTokenValidated;
+    
+    private const string ValidateTokenURL = "https://www.dershayan.de/check_value.php";
+
     #region Public Methods
 
     /// <summary> Combine the given strings like Path.Combine but for menuItem execution </summary>
@@ -83,18 +98,73 @@ internal static class Utility
         return Application.companyName.Equals("Tiogiras") && Application.productName.Equals("MegaPintProject");
     }
 
+    private static bool s_validTesterToken;
+    private static bool s_tokenValidated;
+    
+    public static async Task <bool> IsValidTesterToken()
+    {
+        if (s_tokenValidated)
+            return s_validTesterToken;
+        
+        return await ValidateTesterToken();
+    }
+
     /// <summary> Validate the saved tester token </summary>
     /// <returns> If the token is valid </returns>
-    public static bool ValidateTesterToken()
+    public static async Task <bool> ValidateTesterToken()
     {
         var token = SaveValues.BasePackage.TesterToken;
 
         if (string.IsNullOrEmpty(token))
             return false;
 
-        return token.Equals("Hello World!");  // TODO change to online query and cache this value so the check must only be done once per domain reload
+        UnityWebRequest request =
+            UnityWebRequest.Get(
+                $"{ValidateTokenURL}?value={UnityWebRequest.EscapeURL(SaveValues.BasePackage.TesterToken)}");
+
+        request.SendWebRequest();
+
+        while (!request.isDone)
+            await Task.Delay(100);
+
+        var returnValue = false;
+
+        switch (request.result)
+        {
+            case UnityWebRequest.Result.InProgress:
+                break;
+
+            case UnityWebRequest.Result.Success:
+                var response = request.downloadHandler.text;
+                var result = JsonUtility.FromJson <Result>(response);
+
+                returnValue = result.success;
+                
+                break;
+
+            case UnityWebRequest.Result.ConnectionError:
+                Debug.LogError(
+                    "MegaPint could not connect to the internet to validate the tester token. Please check your connection and try again.");
+
+                break;
+
+            case UnityWebRequest.Result.ProtocolError or UnityWebRequest.Result.DataProcessingError:
+                Debug.LogError(
+                    $"MegaPint could not validate the tester token. Please try again later.\n{request.error}");
+
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        s_tokenValidated = true;
+        s_validTesterToken = returnValue;
+        onTesterTokenValidated?.Invoke();
+        
+        return returnValue;
     }
-    
+
     #endregion
 }
 
