@@ -89,8 +89,6 @@ internal static class ToolbarExtension
     public static ToolbarToggle CreateToolbarToggle(string name, Action<bool> action)
     {
         var toggle = new ToolbarToggle {text = name};
-
-        toggle.Q(className: "unity-toggle__input").style.display = DisplayStyle.None;
         
         toggle.RegisterValueChangedCallback(evt => action?.Invoke(evt.newValue));
 

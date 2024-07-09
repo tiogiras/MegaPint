@@ -14,8 +14,7 @@ internal static class SettingsTabDisplay
 
     private static int s_editorThemeIndex = -1;
 
-    private static string _BasePath =>
-        Path.Combine(Constants.BasePackage.UserInterface.SettingsContent, "xxx");
+    private static string _BasePath => Path.Combine(Constants.BasePackage.UserInterface.SettingsContent, "xxx");
 
     #region Public Methods
 
@@ -46,17 +45,33 @@ internal static class SettingsTabDisplay
 
             case SettingsTabData.SettingsKey.Feedback:
                 FeedbackLogic(root);
-                
+
                 break;
-                
+
             case SettingsTabData.SettingsKey.Testing:
                 TestingLogic(root);
-                
+
                 break;
-            
+
+            case SettingsTabData.SettingsKey.Toolbar:
+                ToolbarLogic(root);
+
+                break;
+
             default:
                 return;
         }
+    }
+
+    /// <summary> Logic of the feedback setting </summary>
+    /// <param name="root"> Setting as <see cref="VisualElement" /> </param>
+    private static void FeedbackLogic(VisualElement root)
+    {
+        var sendFeedbackField = root.Q <Toggle>("SendFeedback");
+
+        sendFeedbackField.SetValueWithoutNotify(SaveValues.BasePackage.SendFeedback);
+
+        sendFeedbackField.RegisterValueChangedCallback(evt => {SaveValues.BasePackage.SendFeedback = evt.newValue;});
     }
 
     /// <summary> Load the uxml file of the selected setting </summary>
@@ -65,6 +80,36 @@ internal static class SettingsTabDisplay
     private static VisualTreeAsset Load(SettingsTabData.SettingsKey key)
     {
         return Resources.Load <VisualTreeAsset>(_BasePath.Replace("xxx", key.ToString()));
+    }
+
+    /// <summary> Logic of the testing setting </summary>
+    /// <param name="root"> Setting as <see cref="VisualElement" /> </param>
+    private static void TestingLogic(VisualElement root)
+    {
+        var tokenField = root.Q <TextField>("Token");
+        var btnSave = root.Q <Button>("BTN_Save");
+        var invalid = root.Q <VisualElement>("Invalid");
+        var valid = root.Q <VisualElement>("Valid");
+
+        btnSave.style.display = DisplayStyle.None;
+
+        btnSave.clickable = new Clickable(
+            () =>
+            {
+                SaveValues.BasePackage.TesterToken = tokenField.value;
+                btnSave.style.display = DisplayStyle.None;
+
+#pragma warning disable CS4014
+                Utility.ValidateTesterToken();
+#pragma warning restore CS4014
+            });
+
+        tokenField.RegisterValueChangedCallback(evt => {btnSave.style.display = DisplayStyle.Flex;});
+
+        Utility.onTesterTokenValidated += () =>
+            UpdateTestingDisplay(tokenField, invalid, valid);
+
+        UpdateTestingDisplay(tokenField, invalid, valid);
     }
 
     /// <summary> Logic of the theme setting </summary>
@@ -85,51 +130,17 @@ internal static class SettingsTabDisplay
                 SaveValues.BasePackage.EditorTheme = dropdown.index;
             });
     }
-    
-    /// <summary> Logic of the feedback setting </summary>
+
+    /// <summary> Logic of the toolbar setting </summary>
     /// <param name="root"> Setting as <see cref="VisualElement" /> </param>
-    private static void FeedbackLogic(VisualElement root)
+    private static void ToolbarLogic(VisualElement root)
     {
-        var sendFeedbackField = root.Q <Toggle>("SendFeedback");
-        
-        sendFeedbackField.SetValueWithoutNotify(SaveValues.BasePackage.SendFeedback);
+        var useIcons = root.Q <Toggle>("UseIcons");
 
-        sendFeedbackField.RegisterValueChangedCallback(evt =>
-        {
-            SaveValues.BasePackage.SendFeedback = evt.newValue;
-        });
-    }
+        useIcons.SetValueWithoutNotify(SaveValues.BasePackage.UseToolbarIcons);
 
-    /// <summary> Logic of the testing setting </summary>
-    /// <param name="root"> Setting as <see cref="VisualElement" /> </param>
-    private static void TestingLogic(VisualElement root)
-    {
-        var tokenField = root.Q <TextField>("Token");
-        var btnSave = root.Q <Button>("BTN_Save");
-        var invalid = root.Q <VisualElement>("Invalid");
-        var valid = root.Q <VisualElement>("Valid");
-
-        btnSave.style.display = DisplayStyle.None;
-        
-        btnSave.clickable = new Clickable(() =>
-        {
-            SaveValues.BasePackage.TesterToken = tokenField.value;
-            btnSave.style.display = DisplayStyle.None;
-
-#pragma warning disable CS4014
-            Utility.ValidateTesterToken();
-#pragma warning restore CS4014
-        });
-
-        tokenField.RegisterValueChangedCallback(evt =>
-        {
-            btnSave.style.display = DisplayStyle.Flex;
-        });
-        
-        Utility.onTesterTokenValidated += () =>             
-            UpdateTestingDisplay(tokenField, invalid, valid);
-        
-        UpdateTestingDisplay(tokenField, invalid, valid);
+        useIcons.RegisterValueChangedCallback(
+            evt => {SaveValues.BasePackage.UseToolbarIcons = evt.newValue;});
     }
 
     /// <summary> Update the visuals of the testing setting </summary>
@@ -139,7 +150,7 @@ internal static class SettingsTabDisplay
     private static async void UpdateTestingDisplay(TextField tokenField, VisualElement invalid, VisualElement valid)
     {
         tokenField.SetValueWithoutNotify(SaveValues.BasePackage.TesterToken);
- 
+
         var validToken = await Utility.IsValidTesterToken();
 
         invalid.style.display = validToken ? DisplayStyle.None : DisplayStyle.Flex;

@@ -51,10 +51,12 @@ internal static class InfoLinkData
         {
             "fixAction",
             "FixActions are methods added to the occured issue. They should contain an automatic fix for the issue."
+        },        
+        {
+            "unityToolbar",
+            "The toolbar of unity can be found on top of the editor window under the menuItems, it contains the play button, pause button, and more."
         },
         {"test", "This is a test tooltip for development purposes."}
-
-        // {"",""},
     };
 
     #region Public Methods
