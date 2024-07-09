@@ -18,13 +18,12 @@ internal static class Utility
     [Serializable]
     private class Result
     {
-        public bool success;
-        public string message;
+        public bool exists;
     }
 
     public static Action onTesterTokenValidated;
     
-    private const string ValidateTokenURL = "https://www.dershayan.de/check_value.php";
+    private const string ValidateTokenURL = "https://tiogiras.games/checkToken.php";
 
     #region Public Methods
 
@@ -117,10 +116,10 @@ internal static class Utility
 
         if (string.IsNullOrEmpty(token))
             return false;
-
+        
         UnityWebRequest request =
             UnityWebRequest.Get(
-                $"{ValidateTokenURL}?value={UnityWebRequest.EscapeURL(SaveValues.BasePackage.TesterToken)}");
+                $"{ValidateTokenURL}?token={UnityWebRequest.EscapeURL(SaveValues.BasePackage.TesterToken)}");
 
         request.SendWebRequest();
 
@@ -138,7 +137,7 @@ internal static class Utility
                 var response = request.downloadHandler.text;
                 var result = JsonUtility.FromJson <Result>(response);
 
-                returnValue = result.success;
+                returnValue = result.exists;
                 
                 break;
 
