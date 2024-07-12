@@ -1,6 +1,9 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.IO;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
@@ -165,6 +168,25 @@ internal static class Utility
     }
 
     #endregion
+    
+    // TODO commenting
+    public static T Clone<T>(this T input)
+    {
+        Type type = input.GetType();
+        
+        FieldInfo[] fields = type.GetFields(
+            BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+        
+        var clonedObj = (T)Activator.CreateInstance(type);
+
+        foreach (FieldInfo field in fields)
+        {
+            var value = field.GetValue(input);
+            field.SetValue(clonedObj, value);
+        }
+        
+        return clonedObj;
+    }
 }
 
 }
