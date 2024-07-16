@@ -18,6 +18,7 @@ internal class InfosTab
 
     private static string _ItemPath => s_itemPath ??= Constants.BasePackage.UserInterface.BaseWindowInfoItem;
 
+    private readonly VisualElement _rightPane;
     private readonly VisualElement _content;
 
     private readonly VisualTreeAsset _itemTemplate;
@@ -43,9 +44,9 @@ internal class InfosTab
         _list = root.Q <ListView>("InfosList");
         _searchField = root.Q <ToolbarSearchField>("SearchField");
 
-        var rightPane = root.Q <VisualElement>("RightPane");
+        _rightPane = root.Q <VisualElement>("RightPane");
 
-        _content = rightPane.Q <VisualElement>("InfosContent");
+        _content = _rightPane.Q <VisualElement>("InfosContent");
 
         RegisterCallbacks();
 
@@ -57,6 +58,8 @@ internal class InfosTab
     /// <summary> Hide the tab </summary>
     public void Hide()
     {
+        _content.style.display = DisplayStyle.None;
+
         Clear();
 
         _list.style.display = DisplayStyle.None;
@@ -73,6 +76,9 @@ internal class InfosTab
     /// <summary> Show the tab </summary>
     public void Show()
     {
+        _content.style.display = DisplayStyle.Flex;
+        _rightPane.style.display = DisplayStyle.Flex;
+        
         _searchField.value = "";
         SetDisplayed("");
 
@@ -302,6 +308,9 @@ internal class InfosTab
     // TODO commenting
     public void ShowByLink(string[] linkParts)
     {
+        _content.style.display = DisplayStyle.Flex;
+        _rightPane.style.display = DisplayStyle.Flex;
+        
         _searchField.value = "";
         SetDisplayed("");
 

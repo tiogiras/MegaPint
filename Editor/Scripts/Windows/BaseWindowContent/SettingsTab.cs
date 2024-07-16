@@ -16,6 +16,7 @@ internal class SettingsTab
 
     private static string _ItemPath => s_itemPath ??= Constants.BasePackage.UserInterface.BaseWindowInfoItem;
 
+    private readonly VisualElement _rightPane;
     private readonly VisualElement _content;
 
     private readonly VisualTreeAsset _itemTemplate;
@@ -41,9 +42,9 @@ internal class SettingsTab
         _list = root.Q <ListView>("SettingsList");
         _searchField = root.Q <ToolbarSearchField>("SearchField");
 
-        var rightPane = root.Q <VisualElement>("RightPane");
+        _rightPane = root.Q <VisualElement>("RightPane");
 
-        _content = rightPane.Q <VisualElement>("SettingsContent");
+        _content = _rightPane.Q <VisualElement>("SettingsContent");
 
         RegisterCallbacks();
 
@@ -55,6 +56,8 @@ internal class SettingsTab
     /// <summary> Hide the tab </summary>
     public void Hide()
     {
+        _content.style.display = DisplayStyle.None;
+        
         Clear();
 
         _list.style.display = DisplayStyle.None;
@@ -71,6 +74,9 @@ internal class SettingsTab
     /// <summary> Show the tab </summary>
     public void Show()
     {
+        _content.style.display = DisplayStyle.Flex;
+        _rightPane.style.display = DisplayStyle.Flex;
+        
         _searchField.value = "";
         SetDisplayed("");
 
@@ -300,6 +306,9 @@ internal class SettingsTab
     // TODO commenting
     public void ShowByLink(string[] linkParts)
     {
+        _content.style.display = DisplayStyle.Flex;
+        _rightPane.style.display = DisplayStyle.Flex;
+        
         _searchField.value = "";
         SetDisplayed("");
 
@@ -321,7 +330,7 @@ internal class SettingsTab
             Debug.LogError($"Could not find Setting: {linkPart}");
             return;
         }
-
+        
         var targetIndex = _displayedSettings.IndexOf(targetSetting);
 
         _list.selectedIndex = targetIndex;
