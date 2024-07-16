@@ -26,7 +26,8 @@ internal class PackagesTab
     private readonly ListView _packagesList;
 
     private readonly ToolbarSearchField _searchField;
-    private readonly VisualElement _tabContent;
+    private readonly VisualElement _content;
+    private readonly VisualElement _apiTabContent;
     private readonly VisualElement _tabs;
 
     private bool _active;
@@ -44,11 +45,10 @@ internal class PackagesTab
         _packagesList = root.Q <ListView>("PackagesList");
         _searchField = root.Q <ToolbarSearchField>("SearchField");
 
-        var rightPane = root.Q <VisualElement>("RightPane");
-
-        _packageName = rightPane.Q <Label>("PackageName");
-        _tabContent = rightPane.Q <VisualElement>("TabContent");
-        _tabs = rightPane.Q <VisualElement>("Tabs");
+        _packageName = root.Q <Label>("PackageName");
+        _content = root.Q <VisualElement>("TabContent");
+        _apiTabContent = root.Q <VisualElement>("APITabContent");
+        _tabs = root.Q <VisualElement>("Tabs");
 
         RegisterCallbacks();
 
@@ -63,7 +63,8 @@ internal class PackagesTab
         Clear();
 
         _packageName.style.display = DisplayStyle.None;
-        _tabContent.style.display = DisplayStyle.None;
+        _content.style.display = DisplayStyle.None;
+        _apiTabContent.style.display = DisplayStyle.None;
         _tabs.style.display = DisplayStyle.None;
 
         _packagesList.style.display = DisplayStyle.None;
@@ -85,7 +86,8 @@ internal class PackagesTab
         SetDisplayedPackages();
 
         _packageName.style.display = DisplayStyle.None;
-        _tabContent.style.display = DisplayStyle.Flex;
+        _content.style.display = DisplayStyle.Flex;
+        _content.parent.style.display = DisplayStyle.Flex;
         _tabs.style.display = DisplayStyle.None;
 
         _packagesList.style.display = _displayedPackages.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
@@ -103,7 +105,8 @@ internal class PackagesTab
             return;
 
         BaseWindow.onRightPaneClose?.Invoke();
-        _tabContent.Clear();
+        _content.Clear();
+        _apiTabContent.Clear();
     }
 
     /// <summary> SearchField Callback </summary>
@@ -119,6 +122,9 @@ internal class PackagesTab
     // TODO commenting
     public void ShowByLink(string package)
     {
+        _content.style.display = DisplayStyle.Flex;
+        _content.parent.style.display = DisplayStyle.Flex;
+        
         _searchField.value = "";
         SetDisplayedPackages();
 
@@ -164,7 +170,7 @@ internal class PackagesTab
         DisplayContent.DisplayRightPane(
             new DisplayContent.DisplayContentReferences
             {
-                package = currentPackage, tabContent = _tabContent, tabs = _tabs
+                package = currentPackage, tabContent = _content, apiTabContent = _apiTabContent,tabs = _tabs
             });
 
         _ignoreNextUpdate = true;

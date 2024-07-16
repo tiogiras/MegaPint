@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using UnityEngine;
 
 namespace MegaPint.Editor.Scripts.GUI.Utility
 {
@@ -20,6 +21,21 @@ internal static partial class GUIUtility
 
         text = text.Replace(startTag, $"<color={color}>");
         text = text.Replace(endTag, "</color>");
+
+        return text;
+    }
+    
+    /// <summary> Color any text like the CodeExample colors it's text </summary>
+    /// <param name="text"> Target text </param>
+    /// <returns> Colored text </returns>
+    public static string ColorTextLikeCode(this string text)
+    {
+        text = text.ColorByTag("c", $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeClassColor)}");
+        text = text.ColorByTag("m", $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeMethodColor)}");
+        text = text.ColorByTag("b", $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeBasicColor)}");
+        text = text.ColorByTag("cc", $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeCommentColor)}");
+        text = text.ColorByTag("s", $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeStringColor)}");
+        text = text.ColorByTag("i", $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.LinkColor)}");
 
         return text;
     }
