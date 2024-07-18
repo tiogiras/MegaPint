@@ -50,38 +50,6 @@ internal static partial class ContextMenu
 
         #region Public Methods
 
-        // TODO remove
-        [MenuItem(MenuItemMegaPint + "/Test", false, 0)]
-        public static void Test()
-        {
-            TestLogic();
-        }
-
-        private static async void TestLogic()
-        {
-            string url = "https://tiogiras.games/submitLog.php";
-            WWWForm form = new WWWForm();
-            form.AddField("token", SaveValues.BasePackage.TesterToken);
-            form.AddField("log", "Toaster");
-
-            UnityWebRequest www = UnityWebRequest.Post(url, form);
-            var task = www.SendWebRequest();
-
-            while (!task.isDone)
-            {
-                await Task.Delay(100);
-            }
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log(www.downloadHandler.text);
-            }
-        }
-        
         [MenuItem(MenuItemMegaPint + "/Open", false, 0)]
         public static void OpenBaseWindow()
         {

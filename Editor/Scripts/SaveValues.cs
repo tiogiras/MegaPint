@@ -15,7 +15,6 @@ internal static partial class SaveValues
         private static CacheValue <int> s_editorTheme = new() {defaultValue = 0};
         private static CacheValue <string> s_testerToken = new() {defaultValue = ""};
         private static CacheValue <bool> s_devMode = new() {defaultValue = false};
-        private static CacheValue <bool> s_sendFeedback = new() {defaultValue = false};
         private static CacheValue <bool> s_useToolbarIcons = new() {defaultValue = true};
 
         private static CacheValue <bool> s_applyPSBaseWindow = new() {defaultValue = true};
@@ -38,12 +37,6 @@ internal static partial class SaveValues
         {
             get => ValueProperty.Get("TesterToken", ref s_testerToken, _GeneralSettings);
             set => ValueProperty.Set("TesterToken", value, ref s_testerToken, _GeneralSettings);
-        }
-        
-        public static bool SendFeedback
-        {
-            get => ValueProperty.Get("SendFeedback", ref s_sendFeedback, _GeneralSettings);
-            set => ValueProperty.Set("SendFeedback", value, ref s_sendFeedback, _GeneralSettings);
         }
 
         public static bool IsDarkTheme => EditorTheme == 1 || (EditorTheme == 0 && EditorGUIUtility.isProSkin);
