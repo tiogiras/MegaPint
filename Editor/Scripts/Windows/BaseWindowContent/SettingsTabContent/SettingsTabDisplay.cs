@@ -43,11 +43,6 @@ internal static class SettingsTabDisplay
 
                 break;
 
-            case SettingsTabData.SettingsKey.Feedback:
-                FeedbackLogic(root);
-
-                break;
-
             case SettingsTabData.SettingsKey.Testing:
                 TestingLogic(root);
 
@@ -61,17 +56,6 @@ internal static class SettingsTabDisplay
             default:
                 return;
         }
-    }
-
-    /// <summary> Logic of the feedback setting </summary>
-    /// <param name="root"> Setting as <see cref="VisualElement" /> </param>
-    private static void FeedbackLogic(VisualElement root)
-    {
-        var sendFeedbackField = root.Q <Toggle>("SendFeedback");
-
-        sendFeedbackField.SetValueWithoutNotify(SaveValues.BasePackage.SendFeedback);
-
-        sendFeedbackField.RegisterValueChangedCallback(evt => {SaveValues.BasePackage.SendFeedback = evt.newValue;});
     }
 
     /// <summary> Load the uxml file of the selected setting </summary>
