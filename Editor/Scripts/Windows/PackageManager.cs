@@ -22,6 +22,17 @@ namespace MegaPint.Editor.Scripts.Windows
 /// <summary> Editor window to display and handle everything related to the internal package manager </summary>
 internal class PackageManager : EditorWindowBase
 {
+    public static Action onOpen;
+    public static Action onClose;
+
+    public static Action<string> onImport;
+    public static Action<string, string> onImportVariation;
+    public static Action<string, string> onImportSample;
+    public static Action<string> onRemove;
+    public static Action<string> onUpdate;
+    
+    public static Action<string> onItemSelected;
+    
     private static Action <PackageKey> s_showWithLink;
 
     private VisualTreeAsset _baseWindow;
@@ -88,6 +99,8 @@ internal class PackageManager : EditorWindowBase
 
         minSize = new Vector2(700, 350);
 
+        onOpen?.Invoke();
+        
         if (!SaveValues.BasePackage.ApplyPSPackageManager)
             return this;
 
@@ -153,9 +166,11 @@ internal class PackageManager : EditorWindowBase
 
     protected override void UnRegisterCallbacks()
     {
+        onClose?.Invoke();
+        
         if (!_callbacksRegistered)
             return;
-
+        
         if (s_showWithLink == null)
         {
             _callbacksRegistered = false;
@@ -300,6 +315,8 @@ internal class PackageManager : EditorWindowBase
     /// <summary> Import the displayed package </summary>
     private void OnImport()
     {
+        onImport?.Invoke(_displayedPackages[_list.selectedIndex].DisplayName);
+        
         ButtonSubscriptions(false);
 
         MegaPintPackageManager.onSuccess += OnImportSuccess;
@@ -324,6 +341,8 @@ internal class PackageManager : EditorWindowBase
     /// <param name="variation"> Targeted variation </param>
     private void OnImportVariation(CachedVariation variation)
     {
+        onImportVariation?.Invoke(_displayedPackages[_list.selectedIndex].DisplayName, variation.name);
+        
         ButtonSubscriptions(false);
 
         MegaPintPackageManager.onSuccess += OnImportSuccess;
@@ -336,6 +355,8 @@ internal class PackageManager : EditorWindowBase
     /// <summary> Remove the displayed package </summary>
     private void OnRemove()
     {
+        onRemove?.Invoke(_displayedPackages[_list.selectedIndex].DisplayName);
+        
         CachedPackage package = _displayedPackages[_list.selectedIndex];
 
         if (package.CanBeRemoved(out List <PackageKey> dependants))
@@ -416,6 +437,8 @@ internal class PackageManager : EditorWindowBase
     /// <summary> Update the displayed package </summary>
     private void OnUpdate()
     {
+        onUpdate?.Invoke(_displayedPackages[_list.selectedIndex].DisplayName);
+        
         ButtonSubscriptions(false);
 
         MegaPintPackageManager.onSuccess += OnUpdateSuccess;
@@ -442,6 +465,8 @@ internal class PackageManager : EditorWindowBase
 
         CachedPackage package = _displayedPackages[_currentIndex];
         _packageName.text = package.DisplayName;
+        
+        onItemSelected?.Invoke(package.DisplayName);
 
         _installedVersion.style.display = package.IsInstalled || Utility.IsProductionProject()
             ? DisplayStyle.Flex
@@ -549,6 +574,8 @@ internal class PackageManager : EditorWindowBase
 
                         File.Copy(samplePath, assetFolderPath, true);
 
+                        onImportSample?.Invoke(package.DisplayName, sample.displayName);
+                        
                         AssetDatabase.ImportPackage(assetFolderPath, true);
                     });
             };

@@ -7,6 +7,7 @@ using System.Reflection;
 using MegaPint.Editor.Scripts.GUI;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
+using MegaPint.Editor.Scripts.Windows;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GUIUtility = MegaPint.Editor.Scripts.GUI.Utility.GUIUtility;
@@ -191,6 +192,8 @@ internal static partial class DisplayContent
         TabActions tabActions)
     {
         List <Tab> keys = s_tabs.Keys.ToList();
+
+        BaseWindow.onPackageItemTabSelected?.Invoke(newTab.ToString());
 
         for (var i = 0; i < s_tabs.Keys.Count; i++)
         {
