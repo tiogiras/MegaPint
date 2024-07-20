@@ -153,6 +153,8 @@ internal class PackagesTab
         if (_packagesList.selectedItem == null)
             return;
 
+        BaseWindow.onPackageItemSelected?.Invoke(_displayedPackages[_packagesList.selectedIndex].DisplayName);
+        
         if (_currentVisualElement != null)
             _currentVisualElement.style.borderLeftWidth = 0;
 

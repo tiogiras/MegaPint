@@ -172,7 +172,9 @@ internal class InfosTab
             return;
 
         var castedItem = (InfosTabData.Info)_list.selectedItem;
-
+        
+        BaseWindow.onInfoItemSelected?.Invoke(castedItem.infoName);
+        
         if (_currentVisualElement != null)
         {
             _currentVisualElement.Q <Label>("Name").style.borderLeftWidth = 0;

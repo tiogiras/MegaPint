@@ -22,13 +22,18 @@ internal static partial class SaveValues
         private static CacheValue <bool> s_applyPSInterfaceOverview = new() {defaultValue = true};
         private static CacheValue <bool> s_applyPSPackageManager = new() {defaultValue = true};
 
+        public static Action <int> onEditorThemeChanged;
+        public static Action <bool> onUseIconsChanged;
+        public static Action <string> onTesterTokenChanged;
+
         public static int EditorTheme
         {
             get => ValueProperty.Get("EditorTheme", ref s_editorTheme, _GeneralSettings);
             set
             {
                 ValueProperty.Set("EditorTheme", value, ref s_editorTheme, _GeneralSettings);
-
+                onEditorThemeChanged?.Invoke(value);
+                
                 GUIUtility.ForceRepaint();
             }
         }
@@ -36,7 +41,11 @@ internal static partial class SaveValues
         public static string TesterToken
         {
             get => ValueProperty.Get("TesterToken", ref s_testerToken, _GeneralSettings);
-            set => ValueProperty.Set("TesterToken", value, ref s_testerToken, _GeneralSettings);
+            set
+            {
+                ValueProperty.Set("TesterToken", value, ref s_testerToken, _GeneralSettings);
+                onTesterTokenChanged?.Invoke(value);
+            }
         }
 
         public static bool IsDarkTheme => EditorTheme == 1 || (EditorTheme == 0 && EditorGUIUtility.isProSkin);
@@ -75,7 +84,11 @@ internal static partial class SaveValues
         public static bool UseToolbarIcons
         {
             get => ValueProperty.Get("UseToolbarIcons", ref s_useToolbarIcons, _GeneralSettings);
-            set => ValueProperty.Set("UseToolbarIcons", value, ref s_useToolbarIcons, _GeneralSettings);
+            set
+            {
+                ValueProperty.Set("UseToolbarIcons", value, ref s_useToolbarIcons, _GeneralSettings);
+                onUseIconsChanged?.Invoke(value);
+            }
         }
     }
 

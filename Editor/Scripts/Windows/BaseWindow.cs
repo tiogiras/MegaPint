@@ -14,6 +14,16 @@ namespace MegaPint.Editor.Scripts.Windows
 
 internal class BaseWindow : EditorWindowBase
 {
+    public static Action onOpen;
+    public static Action onClose;
+    public static Action<string> onOpenWithLink;
+    public static Action<string> onSwitchTab;
+
+    public static Action <string> onPackageItemSelected;
+    public static Action <string> onPackageItemTabSelected;
+    public static Action <string> onInfoItemSelected;
+    public static Action <string> onSettingItemSelected;
+    
     private const float MaxDevModeTimer = 50;
     private const int MaxDevModeClickCount = 10;
 
@@ -85,6 +95,8 @@ internal class BaseWindow : EditorWindowBase
             else 
                 _executeLinkOnGUICreation = true;
         }
+        
+        onOpen?.Invoke();
 
         if (!SaveValues.BasePackage.ApplyPSBaseWindow)
             return this;
@@ -140,6 +152,8 @@ internal class BaseWindow : EditorWindowBase
 
     protected override void UnRegisterCallbacks()
     {
+        onClose?.Invoke();
+        
         if (!_callbacksRegistered)
             return;
 
@@ -270,6 +284,8 @@ internal class BaseWindow : EditorWindowBase
     // TODO commenting
     private void OpenWithLink()
     {
+        onOpenWithLink?.Invoke(openingLink);
+        
         var parts = openingLink.Split("/");
 
         switch (parts[0])
@@ -325,6 +341,8 @@ internal class BaseWindow : EditorWindowBase
     /// <summary> Switch to the info tab </summary>
     private void SwitchToInfos()
     {
+        onSwitchTab?.Invoke("Infos");
+        
         _packages.Hide();
         _settings.Hide();
         _infos.Show();
@@ -337,6 +355,8 @@ internal class BaseWindow : EditorWindowBase
     /// <summary> Switch to the packages tab </summary>
     private void SwitchToPackages()
     {
+        onSwitchTab?.Invoke("Packages");
+        
         _packages.Show();
         _settings.Hide();
         _infos.Hide();
@@ -349,6 +369,8 @@ internal class BaseWindow : EditorWindowBase
     /// <summary> Switch to the settings tab </summary>
     private void SwitchToSettings()
     {
+        onSwitchTab?.Invoke("Settings");
+        
         _packages.Hide();
         _settings.Show();
         _infos.Hide();

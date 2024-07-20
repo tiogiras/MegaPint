@@ -170,7 +170,9 @@ internal class SettingsTab
             return;
 
         var castedItem = (SettingsTabData.Setting)_list.selectedItem;
-
+        
+        BaseWindow.onSettingItemSelected?.Invoke(castedItem.settingsName);
+        
         if (_currentVisualElement != null)
         {
             _currentVisualElement.Q <Label>("Name").style.borderLeftWidth = 0;

@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using System;
 using MegaPint.Editor.Scripts.DevMode;
 using UnityEditor;
 
@@ -14,7 +13,6 @@ public abstract class EditorWindowBase : EditorWindow
     protected virtual void OnDestroy()
     {
         UnRegisterCallbacks();
-        onClose?.Invoke(this);
     }
 
     #endregion
@@ -42,7 +40,6 @@ public abstract class EditorWindowBase : EditorWindow
         }
 
         LoadSettings();
-        onCreate?.Invoke(this);
     }
 
     /// <summary> Load all needed uxml and resource references </summary>
@@ -62,13 +59,6 @@ public abstract class EditorWindowBase : EditorWindow
     
     /// <summary> Unregister all callbacks </summary>
     protected abstract void UnRegisterCallbacks();
-
-    #endregion
-
-    #region Public
-
-    public Action <EditorWindowBase> onCreate;
-    public Action <EditorWindowBase> onClose;
 
     #endregion
 }
