@@ -72,10 +72,13 @@ internal static class SettingsTabDisplay
     {
         var tokenField = root.Q <TextField>("Token");
         var btnSave = root.Q <Button>("BTN_Save");
+        var btnSaveLogCount = root.Q <Button>("BTN_SaveLogCount");
         var invalid = root.Q <VisualElement>("Invalid");
         var valid = root.Q <VisualElement>("Valid");
+        var logCount = root.Q <IntegerField>("LogCount");
 
         btnSave.style.display = DisplayStyle.None;
+        btnSaveLogCount.style.display = DisplayStyle.None;
 
         btnSave.clickable = new Clickable(
             () =>
@@ -88,7 +91,35 @@ internal static class SettingsTabDisplay
 #pragma warning restore CS4014
             });
 
-        tokenField.RegisterValueChangedCallback(evt => {btnSave.style.display = DisplayStyle.Flex;});
+        btnSaveLogCount.clickable = new Clickable(
+            () =>
+            {
+                SaveValues.BaTesting.LogSaveInterval = logCount.value;
+                btnSaveLogCount.style.display = DisplayStyle.None;
+            });
+
+        tokenField.RegisterValueChangedCallback(_ => {btnSave.style.display = DisplayStyle.Flex;});
+        
+        logCount.RegisterValueChangedCallback(
+            evt =>
+            {
+                switch (evt.newValue)
+                {
+                    case < 1:
+                        logCount.SetValueWithoutNotify(1);
+
+                        break;
+
+                    case > 99:
+                        logCount.SetValueWithoutNotify(99);
+
+                        break;
+                }
+
+                btnSaveLogCount.style.display = DisplayStyle.Flex;
+            });
+        
+        logCount.SetValueWithoutNotify(SaveValues.BaTesting.LogSaveInterval);
 
         Utility.onTesterTokenValidated += () =>
             UpdateTestingDisplay(tokenField, invalid, valid);
