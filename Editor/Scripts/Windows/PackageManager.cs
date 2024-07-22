@@ -520,10 +520,17 @@ internal class PackageManager : EditorWindowBase
                 VisualElement item = GUIUtility.Instantiate(_dependencyItem);
                 item.Q <Label>("PackageName").text = dependency.name;
 
+                var isUnityDependency = dependency.key == PackageKey.Undefined;
                 var imported = PackageCache.IsInstalled(dependency.key);
 
-                item.Q <Label>("Missing").style.display = imported ? DisplayStyle.None : DisplayStyle.Flex;
-                item.Q <Label>("Imported").style.display = imported ? DisplayStyle.Flex : DisplayStyle.None;
+                item.Q <Label>("Missing").style.display =
+                    !imported && !isUnityDependency ? DisplayStyle.Flex : DisplayStyle.None;
+
+                item.Q <Label>("Imported").style.display =
+                    imported && !isUnityDependency ? DisplayStyle.Flex : DisplayStyle.None;
+
+                item.Q <Label>("RequiredByUnity").style.display =
+                    isUnityDependency ? DisplayStyle.Flex : DisplayStyle.None;
 
                 _dependencies.Add(item);
             }

@@ -26,6 +26,7 @@ internal static class PackageDataBaTesting
             repository = "https://github.com/tiogiras/MegaPint-BATesting.git",
             dependencies = new List <Dependency>
             {
+                new() {name = "InputSystem 1.7.0", key = PackageKey.Undefined},
                 new() {name = "AutoSave", key = PackageKey.AutoSave},
                 new() {name = "PlayMode StartScene", key = PackageKey.PlayModeStartScene},
                 new() {name = "Screenshot", key = PackageKey.Screenshot},
