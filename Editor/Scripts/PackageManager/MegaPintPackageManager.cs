@@ -71,47 +71,51 @@ internal static class MegaPintPackageManager
         return request.Result.Where(packageInfo => packageInfo.name.ToLower().Contains("megapint")).ToList();
     }
 
-    /// <summary>
-    ///     Import all registered MegaPint packages, the import is handled not via the normal PackageManager due to
-    ///     restrictions in the unity engine that makes it impossible to import multiple packages without reloading the scripts
-    ///     in between and therefore canceling the import. It is handled via adding the packages to the manifest and unity will
-    ///     detect the changes automatically
-    /// </summary>
+    /// <summary> Install all packages </summary>
     public static void InstallAll()
     {
-        List <CachedPackage> packages = PackageCache.GetAllMpPackages();
+        ImportBulk(PackageCache.GetAllMpPackages());
+    }
 
-        if (packages.Count > 0)
+    /// <summary>
+    ///     due to restrictions in the unity engine that makes it impossible to import multiple packages without reloading the scripts
+    ///     in between and therefore canceling the import. Importing multiple packages is handled via adding the packages to the manifest and unity will
+    ///     detect the changes automatically
+    /// </summary>
+    /// <param name="packages"> Packages to add </param>
+    private static void ImportBulk(List <CachedPackage> packages)
+    {
+        if (packages is not {Count: > 0})
+            return;
+        
+        var path = Application.dataPath[..^7];
+        path = Path.Combine(path, "Packages", "manifest.json");
+
+        var manifestText = File.ReadAllText(path);
+
+        const string Divider = "\"dependencies\": {";
+
+        var parts = manifestText.Split(Divider);
+
+        var part1 = $"{parts[0]}{Divider}";
+        var part2 = parts[1];
+
+        foreach (CachedPackage package in packages)
         {
-            var path = Application.dataPath[..^7];
-            path = Path.Combine(path, "Packages", "manifest.json");
+            var name = $"\"{package.Name}\":";
 
-            var manifestText = File.ReadAllText(path);
+            if (part2.Contains(name))
+                continue;
 
-            const string Divider = "\"dependencies\": {";
+            var url = $"\"{PackageManagerUtility.GetPackageUrl(package)}\"";
 
-            var parts = manifestText.Split(Divider);
-
-            var part1 = $"{parts[0]}{Divider}";
-            var part2 = parts[1];
-
-            foreach (CachedPackage package in packages)
-            {
-                var name = $"\"{package.Name}\":";
-
-                if (part2.Contains(name))
-                    continue;
-
-                var url = $"\"{PackageManagerUtility.GetPackageUrl(package)}\"";
-
-                part2 = $"{name}{url},{part2}";
-            }
-
-            var newManifest = $"{part1}{part2}";
-
-            File.WriteAllText(path, newManifest);
+            part2 = $"{name}{url},{part2}";
         }
 
+        var newManifest = $"{part1}{part2}";
+
+        File.WriteAllText(path, newManifest);
+        
         PackageCache.Refresh();
     }
 
@@ -197,18 +201,21 @@ internal static class MegaPintPackageManager
 
     private static async Task AddEmbedded(string gitUrl, List <Dependency> dependencies, bool suppressCacheRefresh)
     {
-        if (dependencies is {Count: > 0})
+        if (dependencies != null)
         {
-            foreach (CachedPackage cachedPackage in dependencies.Select(dependency => PackageCache.Get(dependency.key)))
+            if (dependencies.Count >= 3)
+                ImportBulk(PackageCache.GetRange(dependencies.Select(dependency => dependency.key)));
+            else
             {
-                Debug.Log($"Importing dependency {cachedPackage.DisplayName}"); // TODO remove
-                
-                await AddEmbedded(
-                    PackageManagerUtility.GetPackageUrl(cachedPackage),
-                    cachedPackage.Dependencies,
-                    suppressCacheRefresh);
+                foreach (CachedPackage cachedPackage in dependencies.Select(dependency => PackageCache.Get(dependency.key)))
+                {
+                    await AddEmbedded(
+                        PackageManagerUtility.GetPackageUrl(cachedPackage),
+                        cachedPackage.Dependencies,
+                        suppressCacheRefresh);
 
-                await Task.Delay(250);
+                    await Task.Delay(250);
+                }
             }
         }
 

@@ -101,6 +101,14 @@ internal static class PackageCache
         }
     }
 
+    /// <summary> Get a range of packages </summary>
+    /// <param name="keys"> Keys to the targeted packages </param>
+    /// <returns> All found packages </returns>
+    public static List <CachedPackage> GetRange(IEnumerable <PackageKey> keys)
+    {
+        return keys.Select(Get).ToList();
+    }
+
     /// <summary> Check if any MegaPint package is installed </summary>
     /// <returns> True when at least one package or variation is installed </returns>
     public static bool HasPackagesInstalled()
