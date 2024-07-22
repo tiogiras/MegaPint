@@ -624,7 +624,7 @@ internal class PackageManager : EditorWindowBase
     {
         List <CachedPackage> allPackages = PackageCache.GetAllMpPackages();
         
-        if (Utility.IsValidTesterToken())
+        if (Utility.IsValidTesterToken().Result || PackageCache.IsInstalled(PackageKey.BATesting))
             return allPackages;
 
         return allPackages.Where(package => package.Key != PackageKey.BATesting).ToList();
