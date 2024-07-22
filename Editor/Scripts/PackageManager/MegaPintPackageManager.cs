@@ -210,6 +210,8 @@ internal static class MegaPintPackageManager
             if (dependencies.Count >= 3)
             {
                 ImportBulk(PackageCache.GetRange(dependencies.Select(dependency => dependency.key)));
+                Debug.Log("Imported in bulk"); // TODO remove
+                
                 requestingDomainReload = true;
             }
             else
@@ -225,10 +227,16 @@ internal static class MegaPintPackageManager
                 }
             }
         }
-
+        
+        Debug.Log("Delaying..."); // TODO remove
+        
         await Task.Delay(250);
+        
+        Debug.Log("Adding..."); // TODO remove
         await AddEmbedded(gitUrl);
 
+        Debug.Log("Added... Reloading"); // TODO remove
+        
         onSuccess?.Invoke();
 
         if (!suppressCacheRefresh)
