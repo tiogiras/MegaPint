@@ -72,12 +72,12 @@ internal static partial class GUIUtility
             currentProgress = Mathf.Clamp01(currentProgress);
 
             progressBar.style.width = Length.Percent(currentProgress * 100);
-
+            
             await Task.Delay(refreshRate);
         }
-
+        
         splashScreen.RemoveFromHierarchy();
-
+        
         method?.Invoke();
     }
 

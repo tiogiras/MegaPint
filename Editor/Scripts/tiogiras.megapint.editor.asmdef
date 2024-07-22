@@ -27,6 +27,11 @@
             "name": "com.unity.render-pipelines.high-definition",
             "expression": "0.0",
             "define": "USING_HDRP"
+        },
+        {
+            "name": "com.tiogiras.megapint-batesting",
+            "expression": "0.0",
+            "define": "USING_BATESTING"
         }
     ],
     "noEngineReferences": false

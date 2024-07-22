@@ -70,8 +70,14 @@ internal class MegaPintSettings : ScriptableObject
     {
         await Task.Delay(10);
 
-        if (Exists())
-            onLoaded?.Invoke();
+        if (!Exists())
+            return;
+        
+        onLoaded?.Invoke();
+        
+#pragma warning disable CS4014
+        Utility.ValidateTesterToken();
+#pragma warning restore CS4014
     }
 
     private void AddSetting(SettingsBase setting)
