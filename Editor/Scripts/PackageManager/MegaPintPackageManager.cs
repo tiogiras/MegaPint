@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.PackageManager.Utility;
+using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace MegaPint.Editor.Scripts.PackageManager
 {
@@ -53,7 +55,7 @@ internal static class MegaPintPackageManager
     }
 
     /// <summary> Get all installed packages </summary>
-    /// <returns> All <see cref="PackageInfo" /> that are currently installed </returns>
+    /// <returns> All <see cref="UnityEditor.PackageManager.PackageInfo" /> that are currently installed </returns>
     public static async Task <List <PackageInfo>> GetInstalledPackages()
     {
         ListRequest request = Client.List();
@@ -75,6 +77,8 @@ internal static class MegaPintPackageManager
     public static void InstallAll()
     {
         ImportBulk(PackageCache.GetAllMpPackages());
+        
+        PackageCache.Refresh();
     }
 
     /// <summary>
@@ -115,8 +119,6 @@ internal static class MegaPintPackageManager
         var newManifest = $"{part1}{part2}";
 
         File.WriteAllText(path, newManifest);
-        
-        PackageCache.Refresh();
     }
 
     /// <summary> Remove a package </summary>
@@ -201,10 +203,15 @@ internal static class MegaPintPackageManager
 
     private static async Task AddEmbedded(string gitUrl, List <Dependency> dependencies, bool suppressCacheRefresh)
     {
+        var requestingDomainReload = false;
+        
         if (dependencies != null)
         {
             if (dependencies.Count >= 3)
+            {
                 ImportBulk(PackageCache.GetRange(dependencies.Select(dependency => dependency.key)));
+                requestingDomainReload = true;
+            }
             else
             {
                 foreach (CachedPackage cachedPackage in dependencies.Select(dependency => PackageCache.Get(dependency.key)))
@@ -226,6 +233,9 @@ internal static class MegaPintPackageManager
 
         if (!suppressCacheRefresh)
             PackageCache.Refresh();
+        
+        if (requestingDomainReload)
+            EditorUtility.RequestScriptReload();
     }
 
     private static async Task AddEmbedded(string packageUrl)
