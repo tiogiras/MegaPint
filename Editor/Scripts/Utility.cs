@@ -103,12 +103,17 @@ internal static class Utility
     private static bool s_validTesterToken;
     private static bool s_tokenValidated;
     
-    public static async Task <bool> IsValidTesterToken()
+    public static async Task <bool> IsValidTesterTokenTask()
     {
         if (s_tokenValidated)
             return s_validTesterToken;
         
         return await ValidateTesterToken();
+    }
+
+    public static bool IsValidTesterToken()
+    {
+        return s_validTesterToken;
     }
 
     /// <summary> Validate the saved tester token </summary>

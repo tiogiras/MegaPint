@@ -172,7 +172,7 @@ internal static class SettingsTabDisplay
     {
         tokenField.SetValueWithoutNotify(SaveValues.BasePackage.TesterToken);
 
-        var validToken = await Utility.IsValidTesterToken();
+        var validToken = await Utility.IsValidTesterTokenTask();
 
         invalid.style.display = validToken ? DisplayStyle.None : DisplayStyle.Flex;
         valid.style.display = validToken ? DisplayStyle.Flex : DisplayStyle.None;

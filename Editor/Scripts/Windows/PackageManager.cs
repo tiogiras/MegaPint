@@ -618,6 +618,18 @@ internal class PackageManager : EditorWindowBase
         _list.selectedIndex = index;
     }
 
+    /// <summary> Get all MegaPint packages based on if the ba testing package should be displayed </summary>
+    /// <returns> All valid MegaPint packages </returns>
+    private List <CachedPackage> GetAllMpPackages()
+    {
+        List <CachedPackage> allPackages = PackageCache.GetAllMpPackages();
+        
+        if (Utility.IsValidTesterToken())
+            return allPackages;
+
+        return allPackages.Where(package => package.Key != PackageKey.BATesting).ToList();
+    }
+
     /// <summary> Set the displayed packages via the searchString </summary>
     /// <param name="searchString"> String to filter the packages with </param>
     private void SetDisplayedPackages(string searchString)
@@ -625,10 +637,10 @@ internal class PackageManager : EditorWindowBase
         _list.style.display = DisplayStyle.Flex;
 
         _displayedPackages = searchString.Equals("")
-            ? PackageCache.GetAllMpPackages()
-            : PackageCache.GetAllMpPackages().
-                           Where(package => package.DisplayName.ToLower().Contains(searchString.ToLower())).
-                           ToList();
+            ? GetAllMpPackages()
+            : GetAllMpPackages().
+              Where(package => package.DisplayName.ToLower().Contains(searchString.ToLower())).
+              ToList();
 
         _displayedPackages.Sort();
 

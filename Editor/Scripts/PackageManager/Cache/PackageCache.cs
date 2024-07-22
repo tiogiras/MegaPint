@@ -77,10 +77,7 @@ internal static class PackageCache
     /// <returns> All packages not regarding installation state </returns>
     public static List <CachedPackage> GetAllMpPackages()
     {
-        if (Scripts.Utility.IsValidTesterToken().Result)
-            return s_cache.Values.ToList();
-        
-        return s_cache.Values.Where(cachedPackage => cachedPackage.Key != PackageKey.BATesting).ToList();
+        return s_cache.Values.ToList();
     }
 
     /// <summary> Get all <see cref="CachedPackage" /> and <see cref="CachedVariation" /> that are currently installed </summary>
