@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.PackageManager.Utility;
+using UnityEngine;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace MegaPint.Editor.Scripts.PackageManager.Cache
@@ -109,10 +110,10 @@ internal class CachedPackage : IComparable <CachedPackage>
 
         if (installedVariation == null)
         {
-            if (packageData.dependencies is not {Count: > 0})
-                return;
-
-            dependencies = packageData.dependencies;
+            Debug.Log("Added default dependencies"); // TODO remove
+            
+            if (packageData.dependencies is {Count: > 0})
+                dependencies = packageData.dependencies;
         }
         else
         {
