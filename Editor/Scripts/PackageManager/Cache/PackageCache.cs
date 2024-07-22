@@ -18,6 +18,7 @@ using UnityEditor.PackageManager;
 [assembly: InternalsVisibleTo("tiogiras.megapint.screenshot.editor.tests")]
 [assembly: InternalsVisibleTo("tiogiras.megapint.batesting.editor.tests")]
 [assembly: InternalsVisibleTo("tiogiras.megapint.batesting.runtime")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.batesting.editor")]
 
 namespace MegaPint.Editor.Scripts.PackageManager.Cache
 {
