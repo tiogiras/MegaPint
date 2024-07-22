@@ -21,10 +21,6 @@ internal static partial class GUIUtility
     public static void CenterOnMainWin(this EditorWindow window, int width = -1, int height = -1)
     {
         Rect main = GetEditorMainWindowPos();
-        
-        if (main == default)
-            return;
-
         Rect pos = window.position;
 
         if (width > -1)
@@ -100,7 +96,7 @@ internal static partial class GUIUtility
             return pos;
         }
 
-        return default;
+        throw new NotSupportedException("Can't find internal main window. Maybe something has changed inside Unity");
     }
 
     #endregion
