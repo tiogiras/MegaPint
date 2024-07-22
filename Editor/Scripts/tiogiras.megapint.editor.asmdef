@@ -27,26 +27,6 @@
             "name": "com.unity.render-pipelines.high-definition",
             "expression": "0.0",
             "define": "USING_HDRP"
-        },
-        {
-            "name": "com.tiogiras.megapint-playmodestartscene",
-            "expression": "0.0",
-            "define": "USING_PLAYMODESTARTSCENE"
-        },
-        {
-            "name": "com.tiogiras.megapint-autosave",
-            "expression": "0.0",
-            "define": "USING_AUTOSAVE"
-        },
-        {
-            "name": "com.tiogiras.megapint-screenshot",
-            "expression": "0.0",
-            "define": "USING_SCREENSHOT"
-        },
-        {
-            "name": "com.tiogiras.megapint-validators",
-            "expression": "0.0",
-            "define": "USING_VALIDATORS"
         }
     ],
     "noEngineReferences": false
