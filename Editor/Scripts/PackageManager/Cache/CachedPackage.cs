@@ -96,22 +96,14 @@ internal class CachedPackage : IComparable <CachedPackage>
         IsInstalled = packageInfo != null;
 
         dependencies = null;
+        
+        if (packageData.dependencies is {Count: > 0})
+            dependencies = packageData.dependencies;
 
         SetVariations(packageData, packageInfo, out Variation installedVariation);
 
-        if (!IsInstalled)
-            return;
-
-        CurrentVersion = packageInfo!.version;
-        IsNewestVersion = packageInfo.version == packageData.version;
-        HasSamples = Samples is {Count: > 0};
-
-        SetVariations(packageData, packageInfo, out installedVariation);
-
         if (installedVariation == null)
         {
-            Debug.Log("Added default dependencies"); // TODO remove
-            
             if (packageData.dependencies is {Count: > 0})
                 dependencies = packageData.dependencies;
         }
@@ -124,6 +116,13 @@ internal class CachedPackage : IComparable <CachedPackage>
         }
 
         Dependencies = dependencies;
+        
+        if (!IsInstalled)
+            return;
+
+        CurrentVersion = packageInfo!.version;
+        IsNewestVersion = packageInfo.version == packageData.version;
+        HasSamples = Samples is {Count: > 0};
     }
 
     #region Public Methods
