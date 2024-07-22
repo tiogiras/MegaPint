@@ -101,6 +101,14 @@ internal static class PackageCache
         }
     }
 
+    /// <summary> Get a range of packages </summary>
+    /// <param name="keys"> Keys to the targeted packages </param>
+    /// <returns> All found packages </returns>
+    public static List <CachedPackage> GetRange(IEnumerable <PackageKey> keys)
+    {
+        return keys.Select(Get).ToList();
+    }
+
     /// <summary> Check if any MegaPint package is installed </summary>
     /// <returns> True when at least one package or variation is installed </returns>
     public static bool HasPackagesInstalled()
@@ -115,7 +123,7 @@ internal static class PackageCache
     /// <returns> If the package is currently installed </returns>
     public static bool IsInstalled(PackageKey key)
     {
-        return s_cache[key].IsInstalled;
+        return key != PackageKey.Undefined && s_cache[key].IsInstalled;
     }
 
     /// <summary> Check if the current variation of a package is the given variation </summary>
@@ -229,7 +237,7 @@ internal static class PackageCache
 
             if (dependencies is {Count: > 0})
             {
-                foreach (Dependency dependency in dependencies)
+                foreach (Dependency dependency in dependencies.Where(dependency => dependency.key != PackageKey.Undefined))
                 {
                     allDependencies.TryAdd(dependency.key, new List <PackageKey>());
                     allDependencies[dependency.key].Add(package.Key);

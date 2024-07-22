@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.PackageManager.Utility;
+using UnityEngine;
 using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace MegaPint.Editor.Scripts.PackageManager.Cache
@@ -95,24 +96,16 @@ internal class CachedPackage : IComparable <CachedPackage>
         IsInstalled = packageInfo != null;
 
         dependencies = null;
+        
+        if (packageData.dependencies is {Count: > 0})
+            dependencies = packageData.dependencies;
 
         SetVariations(packageData, packageInfo, out Variation installedVariation);
 
-        if (!IsInstalled)
-            return;
-
-        CurrentVersion = packageInfo!.version;
-        IsNewestVersion = packageInfo.version == packageData.version;
-        HasSamples = Samples is {Count: > 0};
-
-        SetVariations(packageData, packageInfo, out installedVariation);
-
         if (installedVariation == null)
         {
-            if (packageData.dependencies is not {Count: > 0})
-                return;
-
-            dependencies = packageData.dependencies;
+            if (packageData.dependencies is {Count: > 0})
+                dependencies = packageData.dependencies;
         }
         else
         {
@@ -123,6 +116,13 @@ internal class CachedPackage : IComparable <CachedPackage>
         }
 
         Dependencies = dependencies;
+        
+        if (!IsInstalled)
+            return;
+
+        CurrentVersion = packageInfo!.version;
+        IsNewestVersion = packageInfo.version == packageData.version;
+        HasSamples = Samples is {Count: > 0};
     }
 
     #region Public Methods
@@ -145,9 +145,14 @@ internal class CachedPackage : IComparable <CachedPackage>
     /// <returns> True when no dependencies point to this package </returns>
     public bool CanBeRemoved(out List <PackageKey> dependencies)
     {
-        dependencies = _myDependants;
-
-        return _myDependants is not {Count: > 0};
+        dependencies = null;
+        
+        if (_myDependants is not {Count: > 0})
+            return true;
+        
+        dependencies = _myDependants.Where(PackageCache.IsInstalled).ToList();
+        
+        return dependencies is not {Count: > 0};
     }
 
     /// <summary> Register dependencies that point to this package </summary>
