@@ -20,11 +20,9 @@ internal class MegaPintSettings : ScriptableObject
 
     static MegaPintSettings()
     {
+        Debug.Log("Initializing MegaPintSettings..."); // TODO remove
+        
         Initialize();
-
-#pragma warning disable CS4014
-        Utility.ValidateTesterToken();
-#pragma warning restore CS4014
     }
 
     #region Public Methods
@@ -74,8 +72,14 @@ internal class MegaPintSettings : ScriptableObject
     {
         await Task.Delay(10);
 
-        if (Exists())
-            onLoaded?.Invoke();
+        if (!Exists())
+            return;
+        
+        onLoaded?.Invoke();
+        
+#pragma warning disable CS4014
+        Utility.ValidateTesterToken();
+#pragma warning restore CS4014
     }
 
     private void AddSetting(SettingsBase setting)
