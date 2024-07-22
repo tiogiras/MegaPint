@@ -511,6 +511,8 @@ internal class PackageManager : EditorWindowBase
         else
             _packageVariationsParent.style.display = DisplayStyle.None;
 
+        Debug.Log($"{package.DisplayName} | {hasDependency} | {package.Dependencies.Count}"); // TODO remove
+        
         if (hasDependency)
         {
             _dependencies.Clear();

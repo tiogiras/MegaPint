@@ -201,6 +201,8 @@ internal static class MegaPintPackageManager
         {
             foreach (CachedPackage cachedPackage in dependencies.Select(dependency => PackageCache.Get(dependency.key)))
             {
+                Debug.Log($"Importing dependency {cachedPackage.DisplayName}"); // TODO remove
+                
                 await AddEmbedded(
                     PackageManagerUtility.GetPackageUrl(cachedPackage),
                     cachedPackage.Dependencies,
