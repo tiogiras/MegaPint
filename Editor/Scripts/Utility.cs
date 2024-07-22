@@ -122,8 +122,6 @@ internal static class Utility
     {
         var token = SaveValues.BasePackage.TesterToken;
 
-        Debug.Log(token); // TODO remove
-
         if (string.IsNullOrEmpty(token))
             return false;
         

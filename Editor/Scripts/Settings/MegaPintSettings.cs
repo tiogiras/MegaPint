@@ -20,8 +20,6 @@ internal class MegaPintSettings : ScriptableObject
 
     static MegaPintSettings()
     {
-        Debug.Log("Initializing MegaPintSettings..."); // TODO remove
-        
         Initialize();
     }
 
