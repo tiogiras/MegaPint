@@ -145,9 +145,9 @@ internal class CachedPackage : IComparable <CachedPackage>
     /// <returns> True when no dependencies point to this package </returns>
     public bool CanBeRemoved(out List <PackageKey> dependencies)
     {
-        dependencies = _myDependants;
-
-        return _myDependants is not {Count: > 0};
+        dependencies = _myDependants.Where(PackageCache.IsInstalled).ToList();
+        
+        return dependencies is not {Count: > 0};
     }
 
     /// <summary> Register dependencies that point to this package </summary>
