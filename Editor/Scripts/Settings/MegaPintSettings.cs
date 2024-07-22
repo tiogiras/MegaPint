@@ -21,6 +21,10 @@ internal class MegaPintSettings : ScriptableObject
     static MegaPintSettings()
     {
         Initialize();
+
+#pragma warning disable CS4014
+        Utility.ValidateTesterToken();
+#pragma warning restore CS4014
     }
 
     #region Public Methods
