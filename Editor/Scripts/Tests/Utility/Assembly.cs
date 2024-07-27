@@ -48,6 +48,10 @@ internal static partial class TestsUtility
     private static string GetAssemblyName(PackageKey key, string specialization, bool definitionFile = false)
     {
         var packageName = key == PackageKey.Undefined ? "" : $".{PackageCache.Get(key).DisplayName.ToLower()}";
+
+        if (packageName.Contains(" "))
+            packageName = packageName.Replace(" ", "");
+        
         var spec = string.IsNullOrEmpty(specialization) ? "" : $".{specialization}";
         var extension = definitionFile ? "asmdef" : "asmref";
 
