@@ -18,12 +18,12 @@ internal class FirstSteps : EditorWindowBase
         {
             if (PlayerPrefs.HasKey("MegaPint_Initialized"))
                 return;
-            
+
             PlayerPrefs.SetInt("MegaPint_Initialized", 1);
             ContextMenu.BasePackage.OpenBaseWindow();
         }
     }
-    
+
     #region Private
 
     /// <summary> Loaded uxml references </summary>
@@ -46,7 +46,7 @@ internal class FirstSteps : EditorWindowBase
 
         minSize = new Vector2(515, 375);
         maxSize = new Vector2(515, 375);
-        
+
         this.CenterOnMainWin();
 
         return this;
@@ -149,6 +149,7 @@ internal class FirstSteps : EditorWindowBase
         Close();
     }
 
+    /// <summary> Button Callback </summary>
     private void OnNext()
     {
         _tab0.style.display = DisplayStyle.None;

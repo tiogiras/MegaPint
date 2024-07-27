@@ -171,6 +171,9 @@ internal static class PackageCache
 
     #region Private Methods
 
+    /// <summary> Get the names of all installed packages </summary>
+    /// <param name="packages"> All packages </param>
+    /// <param name="packageNames"> Found names </param>
     private static void GetInstalledPackageNames(List <PackageInfo> packages, out List <string> packageNames)
     {
         packageNames = new List <string>();
@@ -192,12 +195,15 @@ internal static class PackageCache
         }
     }
 
+    /// <summary> Increase the loading progress </summary>
+    /// <param name="delta"> Amount to increase </param>
     private static void IncreaseProgressBy(float delta)
     {
         s_currentProgress += delta;
         onCacheProgressChanged?.Invoke(s_currentProgress);
     }
 
+    /// <summary> Initialize the Cache </summary>
     private static async void Initialize()
     {
         WasInitialized = false;
@@ -237,7 +243,8 @@ internal static class PackageCache
 
             if (dependencies is {Count: > 0})
             {
-                foreach (Dependency dependency in dependencies.Where(dependency => dependency.key != PackageKey.Undefined))
+                foreach (Dependency dependency in dependencies.Where(
+                             dependency => dependency.key != PackageKey.Undefined))
                 {
                     allDependencies.TryAdd(dependency.key, new List <PackageKey>());
                     allDependencies[dependency.key].Add(package.Key);
@@ -271,11 +278,15 @@ internal static class PackageCache
         onCacheRefreshed?.Invoke();
     }
 
+    /// <summary> Set the process of the progress bar </summary>
+    /// <param name="process"> Target progress </param>
     private static void SetProcess(string process)
     {
         onCacheProcessChanged?.Invoke(process);
     }
 
+    /// <summary> Set the progress to a certain amount </summary>
+    /// <param name="progress"> Target amount </param>
     private static void SetProgressTo(float progress)
     {
         s_currentProgress = progress;

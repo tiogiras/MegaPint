@@ -2,8 +2,6 @@
 using System;
 using System.IO;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
@@ -24,11 +22,36 @@ internal static class Utility
         public bool exists;
     }
 
-    public static Action onTesterTokenValidated;
-    
     private const string ValidateTokenURL = "https://tiogiras.games/checkToken.php";
 
+    public static Action onTesterTokenValidated;
+
+    private static bool s_validTesterToken;
+    private static bool s_tokenValidated;
+
     #region Public Methods
+
+    /// <summary> Clone a serializable object </summary>
+    /// <param name="input"> Source object to clone </param>
+    /// <typeparam name="T"> Serializable Object </typeparam>
+    /// <returns> Cloned object </returns>
+    public static T Clone <T>(this T input)
+    {
+        Type type = input.GetType();
+
+        FieldInfo[] fields = type.GetFields(
+            BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+        var clonedObj = (T)Activator.CreateInstance(type);
+
+        foreach (FieldInfo field in fields)
+        {
+            var value = field.GetValue(input);
+            field.SetValue(clonedObj, value);
+        }
+
+        return clonedObj;
+    }
 
     /// <summary> Combine the given strings like Path.Combine but for menuItem execution </summary>
     /// <param name="arg0"> First part of the path </param>
@@ -100,14 +123,11 @@ internal static class Utility
         return Application.companyName.Equals("Tiogiras") && Application.productName.Equals("MegaPintProject");
     }
 
-    private static bool s_validTesterToken;
-    private static bool s_tokenValidated;
-    
     public static async Task <bool> IsValidTesterToken()
     {
         if (s_tokenValidated)
             return s_validTesterToken;
-        
+
         return await ValidateTesterToken();
     }
 
@@ -119,7 +139,7 @@ internal static class Utility
 
         if (string.IsNullOrEmpty(token))
             return false;
-        
+
         UnityWebRequest request =
             UnityWebRequest.Get(
                 $"{ValidateTokenURL}?token={UnityWebRequest.EscapeURL(SaveValues.BasePackage.TesterToken)}");
@@ -141,7 +161,7 @@ internal static class Utility
                 var result = JsonUtility.FromJson <Result>(response);
 
                 returnValue = result.exists;
-                
+
                 break;
 
             case UnityWebRequest.Result.ConnectionError:
@@ -163,30 +183,11 @@ internal static class Utility
         s_tokenValidated = true;
         s_validTesterToken = returnValue;
         onTesterTokenValidated?.Invoke();
-        
+
         return returnValue;
     }
 
     #endregion
-    
-    // TODO commenting
-    public static T Clone<T>(this T input)
-    {
-        Type type = input.GetType();
-        
-        FieldInfo[] fields = type.GetFields(
-            BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-        
-        var clonedObj = (T)Activator.CreateInstance(type);
-
-        foreach (FieldInfo field in fields)
-        {
-            var value = field.GetValue(input);
-            field.SetValue(clonedObj, value);
-        }
-        
-        return clonedObj;
-    }
 }
 
 }

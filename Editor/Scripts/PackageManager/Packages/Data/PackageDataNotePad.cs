@@ -25,10 +25,7 @@ internal static class PackageDataNotePad
             description =
                 "You want to tell your team or remember what a certain MonoBehaviour does?\n\nNotePad allows you to take notes directly on the GameObject. Create simple \"How to's\" or note something todo right where you need it.",
             repository = "https://github.com/tiogiras/MegaPint-NotePad.git",
-            samples = new List <SampleData>
-            {
-                new() {displayName = "Basics", path = "Basics"}
-            }
+            samples = new List <SampleData> {new() {displayName = "Basics", path = "Basics"}}
         };
     }
 

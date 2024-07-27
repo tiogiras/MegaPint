@@ -21,21 +21,21 @@ internal static partial class DisplayContent
     /// <summary> Contains which tab is currently open </summary>
     public class TabSettings
     {
+        public bool api;
         public bool guides;
         public bool help;
         public bool info;
         public bool settings;
-        public bool api;
     }
 
     /// <summary> Contains the actions for when a tab is opened </summary>
     private class TabActions
     {
+        public Action <VisualElement> api;
         public Action <VisualElement> guides;
         public Action <VisualElement> help;
         public Action <VisualElement> info;
         public Action <VisualElement> settings;
-        public Action <VisualElement> api;
     }
 
     public struct DisplayContentReferences
@@ -53,6 +53,8 @@ internal static partial class DisplayContent
 
     private const string DisplayContentBase = "MegaPint/xxx/User Interface/Display Content";
     public static Action <VisualElement> onRightPaneGUI;
+
+    public static Tab startTab = Tab.Info;
     private static Action s_onSelectedPackageChanged;
 
     private static readonly Dictionary <Tab, Button> s_tabs = new();
@@ -90,7 +92,7 @@ internal static partial class DisplayContent
     /// <param name="settings"> Tab settings </param>
     /// <param name="actions"> Tab actions </param>
     /// <returns> Instantiated content </returns>
-    private static VisualElement InitializeDisplayContent(
+    private static void InitializeDisplayContent(
         DisplayContentReferences refs,
         TabSettings settings = null,
         TabActions actions = null)
@@ -107,19 +109,21 @@ internal static partial class DisplayContent
             VisualElement content = GUIUtility.Instantiate(template, refs.tabContent);
             content.Q <Label>("PackageInfo").text = refs.package.Description;
 
-            return content;
+            return;
         }
 
         SetTabContentLocations(refs.package.Key, settings);
         RegisterTabCallbacks(refs, settings, actions);
-        
-        SwitchTab(refs.tabContent, refs.apiTabContent, startTab, refs.package, actions); // TODO starting tab that resets itself after being used
+
+        SwitchTab(
+            refs.tabContent,
+            refs.apiTabContent,
+            startTab,
+            refs.package,
+            actions); // TODO starting tab that resets itself after being used
+
         startTab = Tab.Info;
-
-        return null;
     }
-
-    public static Tab startTab = Tab.Info;
 
     /// <summary> Register callbacks for the tab buttons </summary>
     /// <param name="refs"> References needed to display the right pane </param>
@@ -130,11 +134,50 @@ internal static partial class DisplayContent
         UnregisterAllTabCallbacks();
         s_tabs.Clear();
 
-        TryToEnableTabButton(refs.tabs, refs.tabContent, refs.apiTabContent, Tab.Info, settings.info, refs.package, tabActions);
-        TryToEnableTabButton(refs.tabs, refs.tabContent, refs.apiTabContent, Tab.Guides, settings.guides, refs.package, tabActions);
-        TryToEnableTabButton(refs.tabs, refs.tabContent, refs.apiTabContent, Tab.Settings, settings.settings, refs.package, tabActions);
-        TryToEnableTabButton(refs.tabs, refs.tabContent, refs.apiTabContent, Tab.Help, settings.help, refs.package, tabActions);
-        TryToEnableTabButton(refs.tabs, refs.tabContent, refs.apiTabContent, Tab.API, settings.api, refs.package, tabActions);
+        TryToEnableTabButton(
+            refs.tabs,
+            refs.tabContent,
+            refs.apiTabContent,
+            Tab.Info,
+            settings.info,
+            refs.package,
+            tabActions);
+
+        TryToEnableTabButton(
+            refs.tabs,
+            refs.tabContent,
+            refs.apiTabContent,
+            Tab.Guides,
+            settings.guides,
+            refs.package,
+            tabActions);
+
+        TryToEnableTabButton(
+            refs.tabs,
+            refs.tabContent,
+            refs.apiTabContent,
+            Tab.Settings,
+            settings.settings,
+            refs.package,
+            tabActions);
+
+        TryToEnableTabButton(
+            refs.tabs,
+            refs.tabContent,
+            refs.apiTabContent,
+            Tab.Help,
+            settings.help,
+            refs.package,
+            tabActions);
+
+        TryToEnableTabButton(
+            refs.tabs,
+            refs.tabContent,
+            refs.apiTabContent,
+            Tab.API,
+            settings.api,
+            refs.package,
+            tabActions);
     }
 
     /// <summary> Set the locations of the different tab uxml files </summary>
@@ -170,7 +213,7 @@ internal static partial class DisplayContent
             s_tabsContentLocations.Add(Path.Combine(location, "Help"));
             s_tabsContainer.Add(null);
         }
-        
+
         if (settings.api)
         {
             s_tabsContentLocations.Add(Path.Combine(location, "API"));
@@ -180,10 +223,12 @@ internal static partial class DisplayContent
 
     /// <summary> Switch the active tab </summary>
     /// <param name="tabContentParent"> Parent of the element containing the tab content </param>
+    /// <param name="apiTabContent"> Parent of the element containing the api tab content </param>
     /// <param name="newTab"> New tab to open </param>
     /// <param name="package"> Targeted package </param>
     /// <param name="tabActions"> Tab executed on opening the tabs </param>
     /// <exception cref="ArgumentOutOfRangeException"> Tab not found </exception>
+    // ReSharper disable once CognitiveComplexity
     private static void SwitchTab(
         VisualElement tabContentParent,
         VisualElement apiTabContent,
@@ -203,17 +248,20 @@ internal static partial class DisplayContent
             if (tab == newTab)
             {
                 var isAPITab = keys[i] == Tab.API;
-                
+
                 if (contentInstantiated)
                     s_tabsContainer[i].style.display = DisplayStyle.Flex;
                 else
                 {
                     var template = Resources.Load <VisualTreeAsset>(s_tabsContentLocations[i]);
-                    VisualElement content = GUIUtility.Instantiate(template, isAPITab ? apiTabContent : tabContentParent);
+
+                    VisualElement content = GUIUtility.Instantiate(
+                        template,
+                        isAPITab ? apiTabContent : tabContentParent);
 
                     if (isAPITab)
                         content.style.flexGrow = 1;
-                    
+
                     s_tabsContainer[i] = content;
                 }
 
@@ -222,7 +270,7 @@ internal static partial class DisplayContent
 
                 apiTabContent.style.display = isAPITab ? DisplayStyle.Flex : DisplayStyle.None;
                 tabContentParent.parent.style.display = isAPITab ? DisplayStyle.None : DisplayStyle.Flex;
-                
+
                 continue;
             }
 
@@ -255,7 +303,7 @@ internal static partial class DisplayContent
                 tabActions.help?.Invoke(tabContentParent);
 
                 break;
-            
+
             case Tab.API:
                 tabActions.api?.Invoke(apiTabContent);
 
@@ -269,6 +317,7 @@ internal static partial class DisplayContent
     /// <summary> Enable the tab button </summary>
     /// <param name="parent"> Parent of the button </param>
     /// <param name="tabContent"> Parent of the content containing the tabs </param>
+    /// <param name="apiTabContent"> Parent of the content containing the api tab </param>
     /// <param name="tab"> Targeted tab </param>
     /// <param name="enabled"> If the tab should be enabled </param>
     /// <param name="package"> Targeted package </param>

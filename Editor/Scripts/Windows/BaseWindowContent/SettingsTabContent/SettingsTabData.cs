@@ -10,15 +10,19 @@ internal static class SettingsTabData
 {
     public class Setting : IComparable <Setting>
     {
+        public int intendLevel;
         public SettingsKey settingsKey;
         public string settingsName;
-        public int intendLevel;
         public List <Setting> subSettings;
+
+        #region Public Methods
 
         public int CompareTo(Setting other)
         {
             return string.Compare(settingsName, other.settingsName, StringComparison.Ordinal);
         }
+
+        #endregion
     }
 
     public enum SettingsKey
@@ -38,12 +42,7 @@ internal static class SettingsTabData
                 new() {settingsKey = SettingsKey.Toolbar, settingsName = "Toolbar", intendLevel = 1}
             }
         },
-        new Setting
-        {
-            settingsKey = SettingsKey.Testing,
-            settingsName = "Testing",
-            intendLevel = 0
-        }
+        new Setting {settingsKey = SettingsKey.Testing, settingsName = "Testing", intendLevel = 0}
     };
 }
 

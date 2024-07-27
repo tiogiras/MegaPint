@@ -1,7 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using UnityEngine;
@@ -72,12 +71,12 @@ internal static partial class GUIUtility
             currentProgress = Mathf.Clamp01(currentProgress);
 
             progressBar.style.width = Length.Percent(currentProgress * 100);
-            
+
             await Task.Delay(refreshRate);
         }
-        
+
         splashScreen.RemoveFromHierarchy();
-        
+
         method?.Invoke();
     }
 

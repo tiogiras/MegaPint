@@ -40,10 +40,7 @@ internal static class PackageDataAlphaButton
                     }
                 }
             },
-            samples = new List <SampleData>
-            {
-                new() {displayName = "Basics", path = "Basics"}
-            }
+            samples = new List <SampleData> {new() {displayName = "Basics", path = "Basics"}}
         };
     }
 

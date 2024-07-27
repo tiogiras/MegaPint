@@ -103,7 +103,7 @@ internal static partial class GUIUtility
     {
         if (startElement == null)
             return null;
-        
+
         VisualElement element = startElement.parent;
 
         for (var i = 0; i < iterations; i++)

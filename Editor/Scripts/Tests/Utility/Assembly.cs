@@ -51,7 +51,7 @@ internal static partial class TestsUtility
 
         if (packageName.Contains(" "))
             packageName = packageName.Replace(" ", "");
-        
+
         var spec = string.IsNullOrEmpty(specialization) ? "" : $".{specialization}";
         var extension = definitionFile ? "asmdef" : "asmref";
 
@@ -113,7 +113,7 @@ internal static partial class TestsUtility
             validation,
             $"The assembly reference file is not pointing to the correct assembly definition file: Pointing to [{pointer}] expected [{assemblyNameWithoutExtension}]");
     }
-    
+
     /// <summary> Validate an assembly </summary>
     /// <param name="isValid"> Reference to the validation bool </param>
     /// <param name="path"> Path to the assembly </param>

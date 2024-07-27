@@ -15,10 +15,14 @@ internal static class InfosTabData
         public int intendLevel;
         public List <Info> subInfos;
 
+        #region Public Methods
+
         public int CompareTo(Info other)
         {
             return string.Compare(infoName, other.infoName, StringComparison.Ordinal);
         }
+
+        #endregion
     }
 
     public enum InfoKey

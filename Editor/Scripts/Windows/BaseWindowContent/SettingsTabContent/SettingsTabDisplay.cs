@@ -79,7 +79,7 @@ internal static class SettingsTabDisplay
 
         btnSave.style.display = DisplayStyle.None;
         btnSaveLogCount.style.display = DisplayStyle.None;
-        
+
         btnSave.clickable = new Clickable(
             () =>
             {
@@ -90,7 +90,7 @@ internal static class SettingsTabDisplay
                 Utility.ValidateTesterToken();
 #pragma warning restore CS4014
             });
-        
+
         tokenField.RegisterValueChangedCallback(_ => {btnSave.style.display = DisplayStyle.Flex;});
 
 #if USING_BATESTING
@@ -100,7 +100,7 @@ internal static class SettingsTabDisplay
                 SaveValues.BaTesting.LogSaveInterval = logCount.value;
                 btnSaveLogCount.style.display = DisplayStyle.None;
             });
-        
+
         logCount.RegisterValueChangedCallback(
             evt =>
             {
@@ -119,7 +119,7 @@ internal static class SettingsTabDisplay
 
                 btnSaveLogCount.style.display = DisplayStyle.Flex;
             });
-        
+
         logCount.SetValueWithoutNotify(SaveValues.BaTesting.LogSaveInterval);
 
         logCount.style.display = DisplayStyle.Flex;
