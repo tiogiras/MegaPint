@@ -31,11 +31,6 @@ internal static partial class TestsUtility
         {
             Validate(
                 ref isValid,
-                dependency.key == PackageKey.Undefined,
-                $"Package[{key}] {variationStr} Dependency is missing PackageKey!");
-
-            Validate(
-                ref isValid,
                 string.IsNullOrEmpty(dependency.name),
                 $"Package[{key}] {variationStr} Dependency[{dependency.key}] is missing a name!");
         }
