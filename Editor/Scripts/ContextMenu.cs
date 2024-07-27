@@ -1,14 +1,10 @@
 ﻿#if UNITY_EDITOR
 using System;
-using System.IO;
-using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.Settings;
 using MegaPint.Editor.Scripts.Windows;
 using MegaPint.Editor.Scripts.Windows.DevMode;
 using UnityEditor;
-using UnityEngine;
-using UnityEngine.Networking;
 
 namespace MegaPint.Editor.Scripts
 {

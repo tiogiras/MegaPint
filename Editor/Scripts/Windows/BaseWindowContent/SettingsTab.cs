@@ -16,12 +16,13 @@ internal class SettingsTab
 
     private static string _ItemPath => s_itemPath ??= Constants.BasePackage.UserInterface.BaseWindowInfoItem;
 
-    private readonly VisualElement _rightPane;
     private readonly VisualElement _content;
 
     private readonly VisualTreeAsset _itemTemplate;
 
     private readonly ListView _list;
+
+    private readonly VisualElement _rightPane;
 
     private readonly ToolbarSearchField _searchField;
 
@@ -57,7 +58,7 @@ internal class SettingsTab
     public void Hide()
     {
         _content.style.display = DisplayStyle.None;
-        
+
         Clear();
 
         _list.style.display = DisplayStyle.None;
@@ -76,7 +77,7 @@ internal class SettingsTab
     {
         _content.style.display = DisplayStyle.Flex;
         _rightPane.style.display = DisplayStyle.Flex;
-        
+
         _searchField.value = "";
         SetDisplayed("");
 
@@ -101,6 +102,20 @@ internal class SettingsTab
             _allSettings.AddRange(GetAll(setting));
     }
 
+    /// <summary> Open the settings tab with a link </summary>
+    /// <param name="linkParts"> Parts of the link </param>
+    public void ShowByLink(string[] linkParts)
+    {
+        _content.style.display = DisplayStyle.Flex;
+        _rightPane.style.display = DisplayStyle.Flex;
+
+        _searchField.value = "";
+        SetDisplayed("");
+
+        _content.schedule.Execute(
+            () => {OpenByLink(linkParts);});
+    }
+
     #endregion
 
     #region Private Methods
@@ -119,7 +134,7 @@ internal class SettingsTab
         else
         {
             result.Add(settings);
-            
+
             foreach (SettingsTabData.Setting subSetting in settings.subSettings)
                 result.AddRange(GetAll(subSetting));
         }
@@ -164,15 +179,16 @@ internal class SettingsTab
 
     /// <summary> ListView Callback </summary>
     /// <param name="_"> Callback event </param>
+    // ReSharper disable once CognitiveComplexity
     private void OnUpdateRightPane(IEnumerable <int> _)
     {
         if (_list.selectedItem == null)
             return;
 
         var castedItem = (SettingsTabData.Setting)_list.selectedItem;
-        
+
         BaseWindow.onSettingItemSelected?.Invoke(castedItem.settingsName);
-        
+
         if (_currentVisualElement != null)
         {
             _currentVisualElement.Q <Label>("Name").style.borderLeftWidth = 0;
@@ -202,7 +218,7 @@ internal class SettingsTab
         {
             if (_list.selectedIndex >= _visualElements.Count)
                 return;
-            
+
             _currentVisualElement = _visualElements[_list.selectedIndex];
             _currentVisualElement.Q <Label>("Name").style.borderLeftWidth = 2.5f;
 
@@ -210,6 +226,33 @@ internal class SettingsTab
         }
 
         _list.ClearSelection();
+    }
+
+    /// <summary> Open the settings tab with a link </summary>
+    /// <param name="linkParts"> Parts of the link </param>
+    private void OpenByLink(string[] linkParts)
+    {
+        var linkPart = linkParts[0];
+
+        SettingsTabData.Setting targetSetting =
+            _allSettings.FirstOrDefault(setting => setting.settingsName.Equals(linkPart));
+
+        if (targetSetting == null)
+        {
+            Debug.LogError($"Could not find Setting: {linkPart}");
+
+            return;
+        }
+
+        var targetIndex = _displayedSettings.IndexOf(targetSetting);
+
+        _list.selectedIndex = targetIndex;
+
+        if (linkParts.Length == 1)
+            return;
+
+        _content.schedule.Execute(
+            () => {OpenByLink(linkParts[1..]);});
     }
 
     /// <summary> Register all callbacks </summary>
@@ -304,48 +347,6 @@ internal class SettingsTab
     }
 
     #endregion
-    
-    // TODO commenting
-    public void ShowByLink(string[] linkParts)
-    {
-        _content.style.display = DisplayStyle.Flex;
-        _rightPane.style.display = DisplayStyle.Flex;
-        
-        _searchField.value = "";
-        SetDisplayed("");
-
-        _content.schedule.Execute(
-            () =>
-            {
-                OpenByLink(linkParts);
-            });
-    }
-
-    private void OpenByLink(string[] linkParts)
-    {
-        var linkPart = linkParts[0];
-        
-        SettingsTabData.Setting targetSetting = _allSettings.FirstOrDefault(setting => setting.settingsName.Equals(linkPart));
-
-        if (targetSetting == null)
-        {
-            Debug.LogError($"Could not find Setting: {linkPart}");
-            return;
-        }
-        
-        var targetIndex = _displayedSettings.IndexOf(targetSetting);
-
-        _list.selectedIndex = targetIndex;
-        
-        if (linkParts.Length == 1)
-            return;
-        
-        _content.schedule.Execute(
-            () =>
-            {
-                OpenByLink(linkParts[1..]);
-            });
-    }
 }
 
 }

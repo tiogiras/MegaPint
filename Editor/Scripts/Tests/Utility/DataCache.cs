@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+#if UNITY_INCLUDE_TESTS
+using System.Collections.Generic;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 
-#if UNITY_EDITOR
-#if UNITY_INCLUDE_TESTS
 namespace MegaPint.Editor.Scripts.Tests.Utility
 {
 

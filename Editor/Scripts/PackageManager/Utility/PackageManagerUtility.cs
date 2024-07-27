@@ -93,6 +93,9 @@ internal static class PackageManagerUtility
 
     #region Private Methods
 
+    /// <summary> Get the hash of the package </summary>
+    /// <param name="package"> Target package </param>
+    /// <returns> Found hash </returns>
     private static string GetPackageHash(CachedPackage package)
     {
         return SaveValues.BasePackage.DevMode ? "development" : $"v{package.Version}";

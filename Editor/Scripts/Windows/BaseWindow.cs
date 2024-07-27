@@ -14,18 +14,17 @@ namespace MegaPint.Editor.Scripts.Windows
 
 internal class BaseWindow : EditorWindowBase
 {
+    private const float MaxDevModeTimer = 50;
+    private const int MaxDevModeClickCount = 10;
     public static Action onOpen;
     public static Action onClose;
-    public static Action<string> onOpenWithLink;
-    public static Action<string> onSwitchTab;
+    public static Action <string> onOpenWithLink;
+    public static Action <string> onSwitchTab;
 
     public static Action <string> onPackageItemSelected;
     public static Action <string> onPackageItemTabSelected;
     public static Action <string> onInfoItemSelected;
     public static Action <string> onSettingItemSelected;
-    
-    private const float MaxDevModeTimer = 50;
-    private const int MaxDevModeClickCount = 10;
 
     public static Action onRightPaneInitialization;
     public static Action onRightPaneClose;
@@ -92,10 +91,10 @@ internal class BaseWindow : EditorWindowBase
         {
             if (_guiContentCreated)
                 OpenWithLink();
-            else 
+            else
                 _executeLinkOnGUICreation = true;
         }
-        
+
         onOpen?.Invoke();
 
         if (!SaveValues.BasePackage.ApplyPSBaseWindow)
@@ -153,7 +152,7 @@ internal class BaseWindow : EditorWindowBase
     protected override void UnRegisterCallbacks()
     {
         onClose?.Invoke();
-        
+
         if (!_callbacksRegistered)
             return;
 
@@ -216,6 +215,8 @@ internal class BaseWindow : EditorWindowBase
         _noPackagesInstalled = root.Q <Label>("NoPackagesInstalled");
     }
 
+    /// <summary> Create the gui content to the root object </summary>
+    /// <param name="root"> Target root object </param>
     private void CreateGUIContent(VisualElement root)
     {
         _guiContentCreated = true;
@@ -281,11 +282,11 @@ internal class BaseWindow : EditorWindowBase
         ContextMenu.BasePackage.OpenDevModeToggle();
     }
 
-    // TODO commenting
+    /// <summary> Open the baseWindow with a link </summary>
     private void OpenWithLink()
     {
         onOpenWithLink?.Invoke(openingLink);
-        
+
         var parts = openingLink.Split("/");
 
         switch (parts[0])
@@ -342,7 +343,7 @@ internal class BaseWindow : EditorWindowBase
     private void SwitchToInfos()
     {
         onSwitchTab?.Invoke("Infos");
-        
+
         _packages.Hide();
         _settings.Hide();
         _infos.Show();
@@ -356,7 +357,7 @@ internal class BaseWindow : EditorWindowBase
     private void SwitchToPackages()
     {
         onSwitchTab?.Invoke("Packages");
-        
+
         _packages.Show();
         _settings.Hide();
         _infos.Hide();
@@ -370,7 +371,7 @@ internal class BaseWindow : EditorWindowBase
     private void SwitchToSettings()
     {
         onSwitchTab?.Invoke("Settings");
-        
+
         _packages.Hide();
         _settings.Show();
         _infos.Hide();

@@ -324,7 +324,15 @@ internal static partial class TestsUtility
             ref isValid,
             path,
             null,
-            new[] {"User Interface.meta", "Images.meta", "Samples.meta", "Tests.meta", "Assets.meta", "Scriptable Objects.meta"},
+            new[]
+            {
+                "User Interface.meta",
+                "Images.meta",
+                "Samples.meta",
+                "Tests.meta",
+                "Assets.meta",
+                "Scriptable Objects.meta"
+            },
             out var _,
             out var _);
 
@@ -336,7 +344,7 @@ internal static partial class TestsUtility
 
         if (tolerated[1])
             ValidateNamingOfFilesInFolderAndSubFolders(ref isValid, Path.Combine(path, "Samples"));
-            
+
         if (tolerated[2])
             ValidateNamingOfFilesInFolderAndSubFolders(ref isValid, Path.Combine(path, "Tests"));
     }

@@ -1,12 +1,13 @@
 #if UNITY_EDITOR
 using MegaPint.Editor.Scripts.DevMode;
+using MegaPint.Editor.Scripts.Settings;
 using UnityEditor;
 
 namespace MegaPint.Editor.Scripts.Windows
 {
 
 /// <summary> Abstract base class for editor windows </summary>
-public abstract class EditorWindowBase : EditorWindow
+internal abstract class EditorWindowBase : EditorWindow
 {
     #region Unity Event Functions
 
@@ -20,7 +21,7 @@ public abstract class EditorWindowBase : EditorWindow
     #region Public Methods
 
     /// <summary> Display the editor window </summary>
-    /// <returns> This editor window as <see cref="EditorWindowBase"/> </returns>
+    /// <returns> This editor window as <see cref="EditorWindowBase" /> </returns>
     public abstract EditorWindowBase ShowWindow();
 
     #endregion
@@ -30,13 +31,14 @@ public abstract class EditorWindowBase : EditorWindow
     /// <summary> Path to the base uxml file </summary>
     /// <returns> Path to the selected uxml file </returns>
     protected abstract string BasePath();
-    
+
     protected virtual void CreateGUI()
     {
         if (!LoadResources())
         {
             DevLog.LogError($"Could not load resources for window: {GetType().Name}");
-            return;   
+
+            return;
         }
 
         LoadSettings();
@@ -50,13 +52,12 @@ public abstract class EditorWindowBase : EditorWindow
     /// <returns> If all needed settings can be loaded </returns>
     protected virtual bool LoadSettings()
     {
-        return Settings.MegaPintSettings.Exists();
+        return MegaPintSettings.Exists();
     }
 
     /// <summary> Register all callbacks </summary>
     protected abstract void RegisterCallbacks();
 
-    
     /// <summary> Unregister all callbacks </summary>
     protected abstract void UnRegisterCallbacks();
 

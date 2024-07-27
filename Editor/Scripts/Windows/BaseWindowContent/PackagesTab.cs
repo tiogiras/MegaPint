@@ -19,6 +19,9 @@ internal class PackagesTab
 
     private static string _ItemPath => s_itemPath ??= Constants.BasePackage.UserInterface.BaseWindowPackageItem;
 
+    private readonly VisualElement _apiTabContent;
+    private readonly VisualElement _content;
+
     private readonly VisualTreeAsset _itemTemplate;
 
     private readonly Label _packageName;
@@ -26,8 +29,6 @@ internal class PackagesTab
     private readonly ListView _packagesList;
 
     private readonly ToolbarSearchField _searchField;
-    private readonly VisualElement _content;
-    private readonly VisualElement _apiTabContent;
     private readonly VisualElement _tabs;
 
     private bool _active;
@@ -94,6 +95,26 @@ internal class PackagesTab
         _active = true;
     }
 
+    /// <summary> Open the packages tab with a link </summary>
+    /// <param name="package"> Package to show </param>
+    public void ShowByLink(string package)
+    {
+        _content.style.display = DisplayStyle.Flex;
+        _content.parent.style.display = DisplayStyle.Flex;
+
+        _searchField.value = "";
+        SetDisplayedPackages();
+
+        var key = Enum.Parse <PackageKey>(package);
+
+        foreach (CachedPackage item in _displayedPackages.Where(item => item.Key == key))
+        {
+            _packagesList.SetSelection(_displayedPackages.IndexOf(item));
+
+            break;
+        }
+    }
+
     #endregion
 
     #region Private Methods
@@ -119,24 +140,6 @@ internal class PackagesTab
         SetDisplayedPackages();
     }
 
-    // TODO commenting
-    public void ShowByLink(string package)
-    {
-        _content.style.display = DisplayStyle.Flex;
-        _content.parent.style.display = DisplayStyle.Flex;
-        
-        _searchField.value = "";
-        SetDisplayedPackages();
-
-        var key = Enum.Parse <PackageKey>(package);
-        
-        foreach (CachedPackage item in _displayedPackages.Where(item => item.Key == key))
-        {
-            _packagesList.SetSelection(_displayedPackages.IndexOf(item));
-            break;
-        }
-    }
-
     /// <summary> ListView Callback </summary>
     /// <param name="_"> Callback event </param>
     private void OnUpdateRightPane(IEnumerable <int> _)
@@ -154,7 +157,7 @@ internal class PackagesTab
             return;
 
         BaseWindow.onPackageItemSelected?.Invoke(_displayedPackages[_packagesList.selectedIndex].DisplayName);
-        
+
         if (_currentVisualElement != null)
             _currentVisualElement.style.borderLeftWidth = 0;
 
@@ -172,7 +175,7 @@ internal class PackagesTab
         DisplayContent.DisplayRightPane(
             new DisplayContent.DisplayContentReferences
             {
-                package = currentPackage, tabContent = _content, apiTabContent = _apiTabContent,tabs = _tabs
+                package = currentPackage, tabContent = _content, apiTabContent = _apiTabContent, tabs = _tabs
             });
 
         _ignoreNextUpdate = true;
@@ -207,7 +210,7 @@ internal class PackagesTab
                 var key = _visualElements.FirstOrDefault(x => x.Value == element).Key;
                 _visualElements.Remove(key);
             }
-            
+
             element.Clear();
         };
 

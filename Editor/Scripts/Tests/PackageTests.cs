@@ -105,7 +105,7 @@ internal class PackageTests
         TestsUtility.ValidateResource <VisualTreeAsset>(
             ref isValid,
             Constants.BasePackage.UserInterface.PackageManagerVariationItem);
-        
+
         TestsUtility.ValidateResource <VisualTreeAsset>(
             ref isValid,
             Constants.BasePackage.UserInterface.PackageManagerSampleItem);

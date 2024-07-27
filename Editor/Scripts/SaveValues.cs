@@ -12,6 +12,9 @@ internal static partial class SaveValues
 {
     public static class BasePackage
     {
+        public static Action <int> onEditorThemeChanged;
+        public static Action <bool> onUseIconsChanged;
+        public static Action <string> onTesterTokenChanged;
         private static CacheValue <int> s_editorTheme = new() {defaultValue = 0};
         private static CacheValue <string> s_testerToken = new() {defaultValue = ""};
         private static CacheValue <bool> s_devMode = new() {defaultValue = false};
@@ -22,10 +25,6 @@ internal static partial class SaveValues
         private static CacheValue <bool> s_applyPSInterfaceOverview = new() {defaultValue = true};
         private static CacheValue <bool> s_applyPSPackageManager = new() {defaultValue = true};
 
-        public static Action <int> onEditorThemeChanged;
-        public static Action <bool> onUseIconsChanged;
-        public static Action <string> onTesterTokenChanged;
-
         public static int EditorTheme
         {
             get => ValueProperty.Get("EditorTheme", ref s_editorTheme, _GeneralSettings);
@@ -33,11 +32,11 @@ internal static partial class SaveValues
             {
                 ValueProperty.Set("EditorTheme", value, ref s_editorTheme, _GeneralSettings);
                 onEditorThemeChanged?.Invoke(value);
-                
+
                 GUIUtility.ForceRepaint();
             }
         }
-        
+
         public static string TesterToken
         {
             get => ValueProperty.Get("TesterToken", ref s_testerToken, _GeneralSettings);
@@ -80,7 +79,7 @@ internal static partial class SaveValues
             get => ValueProperty.Get("ApplyPS_PackageManager", ref s_applyPSPackageManager, _GeneralSettings);
             set => ValueProperty.Set("ApplyPS_PackageManager", value, ref s_applyPSPackageManager, _GeneralSettings);
         }
-        
+
         public static bool UseToolbarIcons
         {
             get => ValueProperty.Get("UseToolbarIcons", ref s_useToolbarIcons, _GeneralSettings);

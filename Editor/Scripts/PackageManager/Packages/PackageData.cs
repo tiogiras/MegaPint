@@ -32,6 +32,9 @@ internal class PackageData
     /// <summary> Required megaPint basePackage version </summary>
     public string reqMpVersion;
 
+    /// <summary> Sample unityPackages of the package </summary>
+    public List <SampleData> samples;
+
     /// <summary> UnityVersion attribute of the corresponding package.json </summary>
     public string unityVersion;
 
@@ -40,9 +43,6 @@ internal class PackageData
 
     /// <summary> Version attribute of the corresponding package.json </summary>
     public string version;
-
-    /// <summary> Sample unityPackages of the package </summary>
-    public List <SampleData> samples;
 }
 
 }
