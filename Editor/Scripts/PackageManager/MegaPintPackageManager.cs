@@ -181,7 +181,9 @@ internal static class MegaPintPackageManager
             {
                 Debug.Log("Dependencies are more than 3, importing in bulk..."); // TODO remove
                 
-                ImportBulk(PackageCache.GetRange(dependencies.Select(dependency => dependency.key)));
+                IEnumerable <PackageKey> deps = dependencies.Select(dependency => dependency.key).Where(key => key != PackageKey.Undefined);
+
+                ImportBulk(PackageCache.GetRange(deps));
 
                 Debug.Log("Finished bulk import"); // TODO remove
                 requestingDomainReload = true;
