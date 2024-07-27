@@ -120,7 +120,7 @@ internal static partial class DisplayContent
             refs.apiTabContent,
             startTab,
             refs.package,
-            actions); // TODO starting tab that resets itself after being used
+            actions);
 
         startTab = Tab.Info;
     }
