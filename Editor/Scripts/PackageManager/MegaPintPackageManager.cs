@@ -179,7 +179,13 @@ internal static class MegaPintPackageManager
         {
             if (dependencies.Count >= 3)
             {
-                ImportBulk(PackageCache.GetRange(dependencies.Select(dependency => dependency.key)));
+                Debug.Log("Dependencies are more than 3, importing in bulk..."); // TODO remove
+                
+                IEnumerable <PackageKey> deps = dependencies.Select(dependency => dependency.key).Where(key => key != PackageKey.Undefined);
+
+                ImportBulk(PackageCache.GetRange(deps));
+
+                Debug.Log("Finished bulk import"); // TODO remove
                 requestingDomainReload = true;
             }
             else
@@ -197,7 +203,10 @@ internal static class MegaPintPackageManager
             }
         }
 
+        Debug.Log("Delaying..."); // TODO remove
         await Task.Delay(250);
+
+        Debug.Log("Importing..."); // TODO remove
         await AddEmbedded(gitUrl);
 
         onSuccess?.Invoke();
@@ -249,11 +258,15 @@ internal static class MegaPintPackageManager
     /// <param name="packages"> Packages to add </param>
     private static void ImportBulk(List <CachedPackage> packages)
     {
+        Debug.Log(packages.Count); // TODO remove
+        
         if (packages is not {Count: > 0})
             return;
 
         var path = Application.dataPath[..^7];
         path = Path.Combine(path, "Packages", "manifest.json");
+        
+        Debug.Log($"Path: {path}"); // TODO remove
 
         var manifestText = File.ReadAllText(path);
 
@@ -266,6 +279,8 @@ internal static class MegaPintPackageManager
 
         foreach (CachedPackage package in packages)
         {
+            Debug.Log($"Adding {package.DisplayName}"); // TODO remove
+            
             var name = $"\"{package.Name}\":";
 
             if (part2.Contains(name))
@@ -277,8 +292,11 @@ internal static class MegaPintPackageManager
         }
 
         var newManifest = $"{part1}{part2}";
-
+        
+        Debug.Log("Writing new Manifest..."); // TODO remove
         File.WriteAllText(path, newManifest);
+        
+        Debug.Log("Finished writing the manifest"); // TODO remove
     }
 
     #endregion

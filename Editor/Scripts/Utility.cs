@@ -138,7 +138,13 @@ internal static class Utility
         var token = SaveValues.BasePackage.TesterToken;
 
         if (string.IsNullOrEmpty(token))
+        {
+            s_tokenValidated = true;
+            s_validTesterToken = false;
+            onTesterTokenValidated?.Invoke();
+            
             return false;
+        }
 
         UnityWebRequest request =
             UnityWebRequest.Get(
