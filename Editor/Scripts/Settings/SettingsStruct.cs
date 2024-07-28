@@ -75,7 +75,7 @@ internal class SettingsStruct
         boolValues ??= new SerializableDictionary <string, bool>();
         boolValues.RemoveEntry(key);
 
-        MegaPintSettings.Save();
+        MegaPintMainSettings.Save();
     }
 
     public void RemoveFloatEntry(string key)
@@ -83,7 +83,7 @@ internal class SettingsStruct
         floatValues ??= new SerializableDictionary <string, float>();
         floatValues.RemoveEntry(key);
 
-        MegaPintSettings.Save();
+        MegaPintMainSettings.Save();
     }
 
     public void RemoveIntEntry(string key)
@@ -91,7 +91,7 @@ internal class SettingsStruct
         intValues ??= new SerializableDictionary <string, int>();
         intValues.RemoveEntry(key);
 
-        MegaPintSettings.Save();
+        MegaPintMainSettings.Save();
     }
 
     public void RemoveStringEntry(string key)
@@ -99,7 +99,7 @@ internal class SettingsStruct
         stringValues ??= new SerializableDictionary <string, string>();
         stringValues.RemoveEntry(key);
 
-        MegaPintSettings.Save();
+        MegaPintMainSettings.Save();
     }
 
     public void SetValue(string key, string value)
@@ -107,7 +107,7 @@ internal class SettingsStruct
         stringValues ??= new SerializableDictionary <string, string>();
         stringValues.SetValue(key, value);
 
-        MegaPintSettings.Save();
+        MegaPintMainSettings.Save();
     }
 
     public void SetValue(string key, float value)
@@ -115,7 +115,7 @@ internal class SettingsStruct
         floatValues ??= new SerializableDictionary <string, float>();
         floatValues.SetValue(key, value);
 
-        MegaPintSettings.Save();
+        MegaPintMainSettings.Save();
     }
 
     public void SetValue(string key, bool value)
@@ -123,7 +123,7 @@ internal class SettingsStruct
         boolValues ??= new SerializableDictionary <string, bool>();
         boolValues.SetValue(key, value);
 
-        MegaPintSettings.Save();
+        MegaPintMainSettings.Save();
     }
 
     public void SetValue(string key, int value)
@@ -131,7 +131,7 @@ internal class SettingsStruct
         intValues ??= new SerializableDictionary <string, int>();
         intValues.SetValue(key, value);
 
-        MegaPintSettings.Save();
+        MegaPintMainSettings.Save();
     }
 
     #endregion

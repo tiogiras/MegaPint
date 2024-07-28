@@ -113,7 +113,7 @@ internal static partial class ContextMenu
         if (typeof(T) == typeof(FirstSteps))
             return EditorWindow.GetWindow <T>(true, title).ShowWindow();
 
-        if (!MegaPintSettings.Exists())
+        if (!MegaPintMainSettings.Exists())
             return EditorWindow.GetWindow <FirstSteps>(true, title).ShowWindow();
 
         onMenuItemInvoked?.Invoke(menuItemSignature);
