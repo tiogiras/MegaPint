@@ -76,7 +76,7 @@ internal static class MegaPintPackageManager
     /// <summary> Install all packages </summary>
     public static void InstallAll()
     {
-        ImportBulk(PackageCache.GetAllMpPackages());
+        ImportBulk(PackageCache.GetAllMpPackages().Where(package => package.Key != PackageKey.BATesting).ToList());
 
         PackageCache.Refresh();
     }
