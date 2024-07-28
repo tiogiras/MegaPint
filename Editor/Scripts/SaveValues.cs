@@ -204,8 +204,8 @@ internal static partial class SaveValues
     {
         get
         {
-            if (MegaPintSettings.Exists())
-                return s_generalSettings ??= MegaPintSettings.instance.GetSetting("General");
+            if (MegaPintMainSettings.Exists())
+                return s_generalSettings ??= MegaPintMainSettings.instance.GetSetting("General");
 
             return null;
         }

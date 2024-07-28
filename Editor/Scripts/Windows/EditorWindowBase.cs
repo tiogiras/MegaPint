@@ -52,7 +52,7 @@ internal abstract class EditorWindowBase : EditorWindow
     /// <returns> If all needed settings can be loaded </returns>
     protected virtual bool LoadSettings()
     {
-        return MegaPintSettings.Exists();
+        return MegaPintMainSettings.Exists();
     }
 
     /// <summary> Register all callbacks </summary>
