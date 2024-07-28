@@ -32,7 +32,7 @@ internal class MegaPintMainSettings : ScriptableObject
         if (instance != null)
             return true;
 
-        var search = AssetDatabase.FindAssets("t:MegaPintSettings", new[] {"Assets"});
+        var search = AssetDatabase.FindAssets($"t:{nameof(MegaPintMainSettings)}", new[] {"Assets"});
 
         if (search.Length == 0)
             return false;
