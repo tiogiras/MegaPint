@@ -105,6 +105,9 @@ internal class FirstSteps : EditorWindowBase
 
     protected override void UnRegisterCallbacks()
     {
+        if (_btnNext == null)
+            return;
+        
         _btnNext.clicked -= OnNext;
         _btnCreateAsset.clicked -= OnBtnCreateSettingsAsset;
     }
