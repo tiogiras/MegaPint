@@ -10,9 +10,10 @@ using Object = UnityEngine.Object;
 namespace MegaPint.Editor.Scripts.GUI.Utility
 {
 
+/// <summary> Partial utility class containing editor window gui utility functions </summary>
 internal static partial class GUIUtility
 {
-    #region Private Methods
+    #region Public Methods
 
     /// <summary> Center the window on the main window </summary>
     /// <param name="window"> Targeted window </param>
@@ -21,6 +22,10 @@ internal static partial class GUIUtility
     public static void CenterOnMainWin(this EditorWindow window, int width = -1, int height = -1)
     {
         Rect main = GetEditorMainWindowPos();
+
+        if (main == default)
+            return;
+
         Rect pos = window.position;
 
         if (width > -1)
@@ -28,15 +33,19 @@ internal static partial class GUIUtility
 
         if (height > -1)
             pos.height = height;
-        
+
         var w = (main.width - pos.width) * 0.5f;
         var h = (main.height - pos.height) * 0.5f;
-        
+
         pos.x = main.x + w;
         pos.y = main.y + h;
-        
+
         window.position = pos;
     }
+
+    #endregion
+
+    #region Private Methods
 
     /// <summary> Get all derived types </summary>
     /// <param name="aAppDomain"> Targeted AppDomain </param>
@@ -96,7 +105,7 @@ internal static partial class GUIUtility
             return pos;
         }
 
-        throw new NotSupportedException("Can't find internal main window. Maybe something has changed inside Unity");
+        return default;
     }
 
     #endregion

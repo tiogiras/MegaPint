@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.PackageManager.Utility;
-using PackageInfo = UnityEditor.PackageManager.PackageInfo;
+using UnityEditor.PackageManager;
 
 namespace MegaPint.Editor.Scripts.PackageManager.Cache
 {
 
-/// <summary> Stores combined data from <see cref="UnityEditor.PackageManager.PackageInfo" /> and <see cref="PackageData" /> </summary>
+/// <summary>
+///     Stores combined data from <see cref="UnityEditor.PackageManager.PackageInfo" /> and
+///     <see cref="PackageData" />
+/// </summary>
 internal class CachedPackage : IComparable <CachedPackage>
 {
     /// <summary> <see cref="PackageKey" /> of the package </summary>
@@ -20,7 +23,7 @@ internal class CachedPackage : IComparable <CachedPackage>
 
     /// <summary> All samples of the package </summary>
     public List <SampleData> Samples {get;}
-    
+
     /// <summary> If the package has samples to import </summary>
     public bool HasSamples {get;}
 
@@ -71,7 +74,8 @@ internal class CachedPackage : IComparable <CachedPackage>
     private List <PackageKey> _myDependants;
 
     /// <summary>
-    ///     Create a new CachedPackage from the corresponding <see cref="UnityEditor.PackageManager.PackageInfo" /> and <see cref="PackageData" />
+    ///     Create a new CachedPackage from the corresponding <see cref="UnityEditor.PackageManager.PackageInfo" /> and
+    ///     <see cref="PackageData" />
     /// </summary>
     /// <param name="packageData"> Corresponding <see cref="PackageData" /> </param>
     /// <param name="packageInfo"> Corresponding <see cref="UnityEditor.PackageManager.PackageInfo" /> </param>
@@ -96,7 +100,25 @@ internal class CachedPackage : IComparable <CachedPackage>
 
         dependencies = null;
 
+        if (packageData.dependencies is {Count: > 0})
+            dependencies = packageData.dependencies;
+
         SetVariations(packageData, packageInfo, out Variation installedVariation);
+
+        if (installedVariation == null)
+        {
+            if (packageData.dependencies is {Count: > 0})
+                dependencies = packageData.dependencies;
+        }
+        else
+        {
+            CurrentVariation = PackageManagerUtility.VariationToCache(installedVariation, CurrentVersion, Repository);
+
+            if (installedVariation.dependencies is {Count: > 0})
+                dependencies = installedVariation.dependencies;
+        }
+
+        Dependencies = dependencies;
 
         if (!IsInstalled)
             return;
@@ -104,25 +126,6 @@ internal class CachedPackage : IComparable <CachedPackage>
         CurrentVersion = packageInfo!.version;
         IsNewestVersion = packageInfo.version == packageData.version;
         HasSamples = Samples is {Count: > 0};
-
-        SetVariations(packageData, packageInfo, out installedVariation);
-
-        if (installedVariation == null)
-        {
-            if (packageData.dependencies is not {Count: > 0})
-                return;
-
-            dependencies = packageData.dependencies;
-        }
-        else
-        {
-            CurrentVariation = PackageManagerUtility.VariationToCache(installedVariation, CurrentVersion, Repository);
-
-            if (installedVariation.dependencies is {Count: > 0})
-                dependencies = installedVariation.dependencies;   
-        }
-
-        Dependencies = dependencies;
     }
 
     #region Public Methods
@@ -145,9 +148,14 @@ internal class CachedPackage : IComparable <CachedPackage>
     /// <returns> True when no dependencies point to this package </returns>
     public bool CanBeRemoved(out List <PackageKey> dependencies)
     {
-        dependencies = _myDependants;
+        dependencies = null;
 
-        return _myDependants is not {Count: > 0};
+        if (_myDependants is not {Count: > 0})
+            return true;
+
+        dependencies = _myDependants.Where(PackageCache.IsInstalled).ToList();
+
+        return dependencies is not {Count: > 0};
     }
 
     /// <summary> Register dependencies that point to this package </summary>
@@ -161,6 +169,10 @@ internal class CachedPackage : IComparable <CachedPackage>
 
     #region Private Methods
 
+    /// <summary> Set the variations of a package </summary>
+    /// <param name="packageData"> Targeted packageData </param>
+    /// <param name="packageInfo"> Targeted packageInfo </param>
+    /// <param name="installedVariation"> Currently installed variation </param>
     private void SetVariations(
         PackageData packageData,
         PackageInfo packageInfo,

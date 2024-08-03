@@ -1,4 +1,6 @@
 ﻿#if UNITY_EDITOR
+using MegaPint.Editor.Scripts.GUI.Utility;
+using MegaPint.Editor.Scripts.Settings;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,6 +11,19 @@ namespace MegaPint.Editor.Scripts.Windows
 /// <summary> Editor window to display the first steps in megapint </summary>
 internal class FirstSteps : EditorWindowBase
 {
+    [InitializeOnLoad]
+    private static class Initializer
+    {
+        static Initializer()
+        {
+            if (PlayerPrefs.HasKey("MegaPint_Initialized"))
+                return;
+
+            PlayerPrefs.SetInt("MegaPint_Initialized", 1);
+            ContextMenu.BasePackage.OpenBaseWindow();
+        }
+    }
+
     #region Private
 
     /// <summary> Loaded uxml references </summary>
@@ -16,20 +31,23 @@ internal class FirstSteps : EditorWindowBase
 
     #endregion
 
-    #region Visual References
+    private Button _btnCreateAsset;
 
-    private Button _createAsset;
+    private Button _btnNext;
 
-    #endregion
+    private VisualElement _tab0;
+    private VisualElement _tab1;
 
     #region Public Methods
 
     public override EditorWindowBase ShowWindow()
     {
         titleContent.text = "First Steps";
-        
-        minSize = new Vector2(515, 325);
-        maxSize = new Vector2(515, 325);
+
+        minSize = new Vector2(515, 375);
+        maxSize = new Vector2(515, 375);
+
+        this.CenterOnMainWin();
 
         return this;
     }
@@ -56,9 +74,16 @@ internal class FirstSteps : EditorWindowBase
 
         #region References
 
-        _createAsset = content.Q <Button>("BTN_Create");
+        _tab0 = content.Q <VisualElement>("Tab0");
+        _tab1 = content.Q <VisualElement>("Tab1");
+
+        _btnNext = content.Q <Button>("BTN_Next");
+        _btnCreateAsset = content.Q <Button>("BTN_Create");
 
         #endregion
+
+        _tab0.style.display = DisplayStyle.Flex;
+        _tab1.style.display = DisplayStyle.None;
 
         RegisterCallbacks();
 
@@ -74,12 +99,17 @@ internal class FirstSteps : EditorWindowBase
 
     protected override void RegisterCallbacks()
     {
-        _createAsset.clicked += OnCreateSettingsAsset;
+        _btnNext.clicked += OnNext;
+        _btnCreateAsset.clicked += OnBtnCreateSettingsAsset;
     }
 
     protected override void UnRegisterCallbacks()
     {
-        _createAsset.clicked -= OnCreateSettingsAsset;
+        if (_btnNext == null)
+            return;
+        
+        _btnNext.clicked -= OnNext;
+        _btnCreateAsset.clicked -= OnBtnCreateSettingsAsset;
     }
 
     #endregion
@@ -87,7 +117,7 @@ internal class FirstSteps : EditorWindowBase
     #region Private Methods
 
     /// <summary> Create a settings asset for megapint in the project </summary>
-    private void OnCreateSettingsAsset()
+    private void OnBtnCreateSettingsAsset()
     {
         var path = EditorUtility.SaveFilePanel(
             "MegaPint Settings",
@@ -107,19 +137,26 @@ internal class FirstSteps : EditorWindowBase
 
         path = path.Replace(Application.dataPath, "Assets");
 
-        Settings.MegaPintSettings.instance = CreateInstance <Settings.MegaPintSettings>();
-        AssetDatabase.CreateAsset(Settings.MegaPintSettings.instance, path);
+        MegaPintMainSettings.instance = CreateInstance <MegaPintMainSettings>();
+        AssetDatabase.CreateAsset(MegaPintMainSettings.instance, path);
 
         EditorUtility.DisplayDialog(
             "MegaPint settings asset",
-            Settings.MegaPintSettings.instance != null
+            MegaPintMainSettings.instance != null
                 ? $"Successfully created a new MegaPint settings asset at {path}."
                 : "Could not connect asset due to an unknown issue.",
             "OK");
 
-        ContextMenu.Open();
+        ContextMenu.BasePackage.OpenBaseWindow();
 
         Close();
+    }
+
+    /// <summary> Button Callback </summary>
+    private void OnNext()
+    {
+        _tab0.style.display = DisplayStyle.None;
+        _tab1.style.display = DisplayStyle.Flex;
     }
 
     #endregion

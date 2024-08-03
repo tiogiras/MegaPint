@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using MegaPint.Editor.Scripts.Windows.BaseWindowContent.InfoTabContent;
 using UnityEditor.UIElements;
@@ -24,6 +23,8 @@ internal class InfosTab
 
     private readonly ListView _list;
 
+    private readonly VisualElement _rightPane;
+
     private readonly ToolbarSearchField _searchField;
 
     private bool _active;
@@ -43,9 +44,9 @@ internal class InfosTab
         _list = root.Q <ListView>("InfosList");
         _searchField = root.Q <ToolbarSearchField>("SearchField");
 
-        var rightPane = root.Q <VisualElement>("RightPane");
+        _rightPane = root.Q <VisualElement>("RightPane");
 
-        _content = rightPane.Q <VisualElement>("InfosContent");
+        _content = _rightPane.Q <VisualElement>("InfosContent");
 
         RegisterCallbacks();
 
@@ -57,6 +58,8 @@ internal class InfosTab
     /// <summary> Hide the tab </summary>
     public void Hide()
     {
+        _content.style.display = DisplayStyle.None;
+
         Clear();
 
         _list.style.display = DisplayStyle.None;
@@ -73,6 +76,9 @@ internal class InfosTab
     /// <summary> Show the tab </summary>
     public void Show()
     {
+        _content.style.display = DisplayStyle.Flex;
+        _rightPane.style.display = DisplayStyle.Flex;
+
         _searchField.value = "";
         SetDisplayed("");
 
@@ -97,6 +103,20 @@ internal class InfosTab
             _allInfos.AddRange(GetAll(info));
     }
 
+    /// <summary> Open the info tab with a link </summary>
+    /// <param name="linkParts"> Parts of the link </param>
+    public void ShowByLink(string[] linkParts)
+    {
+        _content.style.display = DisplayStyle.Flex;
+        _rightPane.style.display = DisplayStyle.Flex;
+
+        _searchField.value = "";
+        SetDisplayed("");
+
+        _content.schedule.Execute(
+            () => {OpenByLink(linkParts);});
+    }
+
     #endregion
 
     #region Private Methods
@@ -114,6 +134,8 @@ internal class InfosTab
             result.Add(infos);
         else
         {
+            result.Add(infos);
+
             foreach (InfosTabData.Info subInfo in infos.subInfos)
                 result.AddRange(GetAll(subInfo));
         }
@@ -158,12 +180,16 @@ internal class InfosTab
 
     /// <summary> ListView Callback </summary>
     /// <param name="_"> Callback event </param>
+
+    // ReSharper disable once CognitiveComplexity
     private void OnUpdateRightPane(IEnumerable <int> _)
     {
         if (_list.selectedItem == null)
             return;
 
         var castedItem = (InfosTabData.Info)_list.selectedItem;
+
+        BaseWindow.onInfoItemSelected?.Invoke(castedItem.infoName);
 
         if (_currentVisualElement != null)
         {
@@ -192,6 +218,9 @@ internal class InfosTab
         }
         else
         {
+            if (_list.selectedIndex >= _visualElements.Count)
+                return;
+
             _currentVisualElement = _visualElements[_list.selectedIndex];
             _currentVisualElement.Q <Label>("Name").style.borderLeftWidth = 2.5f;
 
@@ -199,6 +228,32 @@ internal class InfosTab
         }
 
         _list.ClearSelection();
+    }
+
+    /// <summary> Open the info tab with a link </summary>
+    /// <param name="linkParts"> Parts of the link </param>
+    private void OpenByLink(string[] linkParts)
+    {
+        var linkPart = linkParts[0];
+
+        InfosTabData.Info targetInfo = _allInfos.FirstOrDefault(info => info.infoName.Equals(linkPart));
+
+        if (targetInfo == null)
+        {
+            Debug.LogError($"Could not find Info: {linkPart}");
+
+            return;
+        }
+
+        var targetIndex = _displayedInfos.IndexOf(targetInfo);
+
+        _list.selectedIndex = targetIndex;
+
+        if (linkParts.Length == 1)
+            return;
+
+        _content.schedule.Execute(
+            () => {OpenByLink(linkParts[1..]);});
     }
 
     /// <summary> Register all callbacks </summary>

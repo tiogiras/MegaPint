@@ -1,7 +1,9 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,6 +19,9 @@ internal class PackagesTab
 
     private static string _ItemPath => s_itemPath ??= Constants.BasePackage.UserInterface.BaseWindowPackageItem;
 
+    private readonly VisualElement _apiTabContent;
+    private readonly VisualElement _content;
+
     private readonly VisualTreeAsset _itemTemplate;
 
     private readonly Label _packageName;
@@ -24,7 +29,6 @@ internal class PackagesTab
     private readonly ListView _packagesList;
 
     private readonly ToolbarSearchField _searchField;
-    private readonly VisualElement _tabContent;
     private readonly VisualElement _tabs;
 
     private bool _active;
@@ -42,11 +46,10 @@ internal class PackagesTab
         _packagesList = root.Q <ListView>("PackagesList");
         _searchField = root.Q <ToolbarSearchField>("SearchField");
 
-        var rightPane = root.Q <VisualElement>("RightPane");
-
-        _packageName = rightPane.Q <Label>("PackageName");
-        _tabContent = rightPane.Q <VisualElement>("TabContent");
-        _tabs = rightPane.Q <VisualElement>("Tabs");
+        _packageName = root.Q <Label>("PackageName");
+        _content = root.Q <VisualElement>("TabContent");
+        _apiTabContent = root.Q <VisualElement>("APITabContent");
+        _tabs = root.Q <VisualElement>("Tabs");
 
         RegisterCallbacks();
 
@@ -61,7 +64,8 @@ internal class PackagesTab
         Clear();
 
         _packageName.style.display = DisplayStyle.None;
-        _tabContent.style.display = DisplayStyle.None;
+        _content.style.display = DisplayStyle.None;
+        _apiTabContent.style.display = DisplayStyle.None;
         _tabs.style.display = DisplayStyle.None;
 
         _packagesList.style.display = DisplayStyle.None;
@@ -83,11 +87,32 @@ internal class PackagesTab
         SetDisplayedPackages();
 
         _packageName.style.display = DisplayStyle.None;
-        _tabContent.style.display = DisplayStyle.Flex;
+        _content.style.display = DisplayStyle.Flex;
+        _content.parent.style.display = DisplayStyle.Flex;
         _tabs.style.display = DisplayStyle.None;
 
         _packagesList.style.display = _displayedPackages.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
         _active = true;
+    }
+
+    /// <summary> Open the packages tab with a link </summary>
+    /// <param name="package"> Package to show </param>
+    public void ShowByLink(string package)
+    {
+        _content.style.display = DisplayStyle.Flex;
+        _content.parent.style.display = DisplayStyle.Flex;
+
+        _searchField.value = "";
+        SetDisplayedPackages();
+
+        var key = Enum.Parse <PackageKey>(package);
+
+        foreach (CachedPackage item in _displayedPackages.Where(item => item.Key == key))
+        {
+            _packagesList.SetSelection(_displayedPackages.IndexOf(item));
+
+            break;
+        }
     }
 
     #endregion
@@ -101,7 +126,8 @@ internal class PackagesTab
             return;
 
         BaseWindow.onRightPaneClose?.Invoke();
-        _tabContent.Clear();
+        _content.Clear();
+        _apiTabContent.Clear();
     }
 
     /// <summary> SearchField Callback </summary>
@@ -130,6 +156,8 @@ internal class PackagesTab
         if (_packagesList.selectedItem == null)
             return;
 
+        BaseWindow.onPackageItemSelected?.Invoke(_displayedPackages[_packagesList.selectedIndex].DisplayName);
+
         if (_currentVisualElement != null)
             _currentVisualElement.style.borderLeftWidth = 0;
 
@@ -147,7 +175,7 @@ internal class PackagesTab
         DisplayContent.DisplayRightPane(
             new DisplayContent.DisplayContentReferences
             {
-                package = currentPackage, tabContent = _tabContent, tabs = _tabs
+                package = currentPackage, tabContent = _content, apiTabContent = _apiTabContent, tabs = _tabs
             });
 
         _ignoreNextUpdate = true;
@@ -182,7 +210,7 @@ internal class PackagesTab
                 var key = _visualElements.FirstOrDefault(x => x.Value == element).Key;
                 _visualElements.Remove(key);
             }
-            
+
             element.Clear();
         };
 

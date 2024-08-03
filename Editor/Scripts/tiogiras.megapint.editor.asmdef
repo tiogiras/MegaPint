@@ -7,7 +7,9 @@
         "GUID:0e40976153628db4fbfccfcc6ab8f1bf",
         "GUID:8fb2808ce2fab7240955081b2f299435",
         "GUID:1e8946af7cfd66044950d25c19bdd467",
-        "GUID:da050352681ee8f4b837d0cdab682872"
+        "GUID:da050352681ee8f4b837d0cdab682872",
+        "GUID:b048c4431fac05e4891c2770ac488caa",
+        "GUID:3a4a6be2217dce048a7b54675eeac4be"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -26,6 +28,11 @@
             "name": "com.unity.render-pipelines.high-definition",
             "expression": "0.0",
             "define": "USING_HDRP"
+        },
+        {
+            "name": "com.tiogiras.megapint-batesting",
+            "expression": "0.0",
+            "define": "USING_BATESTING"
         }
     ],
     "noEngineReferences": false

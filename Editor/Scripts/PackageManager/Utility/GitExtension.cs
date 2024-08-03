@@ -23,6 +23,9 @@ internal static class GitExtension
 
     #region Private Methods
 
+    /// <summary> Get all tags of the repository </summary>
+    /// <param name="repository"> Targeted Repository </param>
+    /// <returns> Found tags </returns>
     private static string[] GitTags(string repository)
     {
         List <string> tags = new();
@@ -40,6 +43,10 @@ internal static class GitExtension
         return tags.ToArray();
     }
 
+    /// <summary> Run git as a process </summary>
+    /// <param name="arguments"> Argument for the process </param>
+    /// <returns> Process output </returns>
+    /// <exception cref="Exception"> Cannot run git </exception>
     private static string RunGit(string arguments)
     {
         using var process = new Process();

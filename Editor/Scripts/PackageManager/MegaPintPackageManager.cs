@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.PackageManager.Utility;
+using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace MegaPint.Editor.Scripts.PackageManager
 {
@@ -53,7 +55,7 @@ internal static class MegaPintPackageManager
     }
 
     /// <summary> Get all installed packages </summary>
-    /// <returns> All <see cref="PackageInfo" /> that are currently installed </returns>
+    /// <returns> All <see cref="UnityEditor.PackageManager.PackageInfo" /> that are currently installed </returns>
     public static async Task <List <PackageInfo>> GetInstalledPackages()
     {
         ListRequest request = Client.List();
@@ -71,46 +73,10 @@ internal static class MegaPintPackageManager
         return request.Result.Where(packageInfo => packageInfo.name.ToLower().Contains("megapint")).ToList();
     }
 
-    /// <summary>
-    ///     Import all registered MegaPint packages, the import is handled not via the normal PackageManager due to
-    ///     restrictions in the unity engine that makes it impossible to import multiple packages without reloading the scripts
-    ///     in between and therefore canceling the import. It is handled via adding the packages to the manifest and unity will
-    ///     detect the changes automatically
-    /// </summary>
+    /// <summary> Install all packages </summary>
     public static void InstallAll()
     {
-        List <CachedPackage> packages = PackageCache.GetAllMpPackages();
-
-        if (packages.Count > 0)
-        {
-            var path = Application.dataPath[..^7];
-            path = Path.Combine(path, "Packages", "manifest.json");
-
-            var manifestText = File.ReadAllText(path);
-
-            const string Divider = "\"dependencies\": {";
-
-            var parts = manifestText.Split(Divider);
-
-            var part1 = $"{parts[0]}{Divider}";
-            var part2 = parts[1];
-
-            foreach (CachedPackage package in packages)
-            {
-                var name = $"\"{package.Name}\":";
-
-                if (part2.Contains(name))
-                    continue;
-
-                var url = $"\"{PackageManagerUtility.GetPackageUrl(package)}\"";
-
-                part2 = $"{name}{url},{part2}";
-            }
-
-            var newManifest = $"{part1}{part2}";
-
-            File.WriteAllText(path, newManifest);
-        }
+        ImportBulk(PackageCache.GetAllMpPackages().Where(package => package.Key != PackageKey.BATesting).ToList());
 
         PackageCache.Refresh();
     }
@@ -182,6 +148,9 @@ internal static class MegaPintPackageManager
 
     #region Private Methods
 
+    /// <summary> Add a package </summary>
+    /// <param name="packageUrl"> Url of the package </param>
+    /// <returns> If the package could be added </returns>
     private static async Task <bool> Add(string packageUrl)
     {
         AddRequest request = Client.Add(packageUrl);
@@ -195,18 +164,39 @@ internal static class MegaPintPackageManager
         return request.Status == StatusCode.Success;
     }
 
-    private static async Task AddEmbedded(string gitUrl, List <Dependency> dependencies, bool suppressCacheRefresh)
+    /// <summary> Add and embed a package </summary>
+    /// <param name="gitUrl"> Url of the package </param>
+    /// <param name="dependencies"> Dependencies of the package </param>
+    /// <param name="suppressCacheRefresh"> If true PackageCache will not be refreshed </param>
+    private static async Task AddEmbedded(
+        string gitUrl,
+        IReadOnlyCollection <Dependency> dependencies,
+        bool suppressCacheRefresh)
     {
-        if (dependencies is {Count: > 0})
-        {
-            foreach (CachedPackage cachedPackage in dependencies.Select(dependency => PackageCache.Get(dependency.key)))
-            {
-                await AddEmbedded(
-                    PackageManagerUtility.GetPackageUrl(cachedPackage),
-                    cachedPackage.Dependencies,
-                    suppressCacheRefresh);
+        var requestingDomainReload = false;
 
-                await Task.Delay(250);
+        if (dependencies != null)
+        {
+            if (dependencies.Count >= 3)
+            {
+                IEnumerable <PackageKey> deps = dependencies.Select(dependency => dependency.key).Where(key => key != PackageKey.Undefined);
+
+                ImportBulk(PackageCache.GetRange(deps));
+
+                requestingDomainReload = true;
+            }
+            else
+            {
+                foreach (CachedPackage cachedPackage in dependencies.Select(
+                             dependency => PackageCache.Get(dependency.key)))
+                {
+                    await AddEmbedded(
+                        PackageManagerUtility.GetPackageUrl(cachedPackage),
+                        cachedPackage.Dependencies,
+                        suppressCacheRefresh);
+
+                    await Task.Delay(250);
+                }
             }
         }
 
@@ -217,8 +207,13 @@ internal static class MegaPintPackageManager
 
         if (!suppressCacheRefresh)
             PackageCache.Refresh();
+
+        if (requestingDomainReload)
+            EditorUtility.RequestScriptReload();
     }
 
+    /// <summary> Add and embed a package </summary>
+    /// <param name="packageUrl"> Url of the package </param>
     private static async Task AddEmbedded(string packageUrl)
     {
         if (!await Add(packageUrl))
@@ -234,6 +229,8 @@ internal static class MegaPintPackageManager
         }
     }
 
+    /// <summary> Embed a package </summary>
+    /// <param name="packageName"> Url of the package </param>
     private static async Task Embed(string packageName)
     {
         EmbedRequest request = Client.Embed(packageName);
@@ -243,6 +240,48 @@ internal static class MegaPintPackageManager
 
         if (request.Status >= StatusCode.Failure)
             onFailure?.Invoke(request.Error.message);
+    }
+
+    /// <summary>
+    ///     due to restrictions in the unity engine that makes it impossible to import multiple packages without reloading the
+    ///     scripts
+    ///     in between and therefore canceling the import. Importing multiple packages is handled via adding the packages to
+    ///     the manifest and unity will
+    ///     detect the changes automatically
+    /// </summary>
+    /// <param name="packages"> Packages to add </param>
+    private static void ImportBulk(List <CachedPackage> packages)
+    {
+        if (packages is not {Count: > 0})
+            return;
+
+        var path = Application.dataPath[..^7];
+        path = Path.Combine(path, "Packages", "manifest.json");
+
+        var manifestText = File.ReadAllText(path);
+
+        const string Divider = "\"dependencies\": {";
+
+        var parts = manifestText.Split(Divider);
+
+        var part1 = $"{parts[0]}{Divider}";
+        var part2 = parts[1];
+
+        foreach (CachedPackage package in packages)
+        {
+            var name = $"\"{package.Name}\":";
+
+            if (part2.Contains(name))
+                continue;
+
+            var url = $"\"{PackageManagerUtility.GetPackageUrl(package)}\"";
+
+            part2 = $"{name}{url},{part2}";
+        }
+
+        var newManifest = $"{part1}{part2}";
+
+        File.WriteAllText(path, newManifest);
     }
 
     #endregion

@@ -22,6 +22,17 @@ namespace MegaPint.Editor.Scripts.Windows
 /// <summary> Editor window to display and handle everything related to the internal package manager </summary>
 internal class PackageManager : EditorWindowBase
 {
+    public static Action onOpen;
+    public static Action onClose;
+
+    public static Action <string> onImport;
+    public static Action <string, string> onImportVariation;
+    public static Action <string, string> onImportSample;
+    public static Action <string> onRemove;
+    public static Action <string> onUpdate;
+
+    public static Action <string> onItemSelected;
+
     private static Action <PackageKey> s_showWithLink;
 
     private VisualTreeAsset _baseWindow;
@@ -78,7 +89,7 @@ internal class PackageManager : EditorWindowBase
     /// <param name="key"> Package to be shown on open </param>
     public static void OpenPerLink(PackageKey key)
     {
-        BaseWindow.OnOpenPackageManager();
+        ContextMenu.BasePackage.OpenPackageManager();
         s_showWithLink?.Invoke(key);
     }
 
@@ -87,6 +98,8 @@ internal class PackageManager : EditorWindowBase
         titleContent.text = "Package Manager";
 
         minSize = new Vector2(700, 350);
+
+        onOpen?.Invoke();
 
         if (!SaveValues.BasePackage.ApplyPSPackageManager)
             return this;
@@ -153,6 +166,8 @@ internal class PackageManager : EditorWindowBase
 
     protected override void UnRegisterCallbacks()
     {
+        onClose?.Invoke();
+
         if (!_callbacksRegistered)
             return;
 
@@ -204,6 +219,8 @@ internal class PackageManager : EditorWindowBase
         _callbacksRegistered = true;
     }
 
+    /// <summary> Create the gui content on the root object </summary>
+    /// <param name="root"> Target root object </param>
     private void CreateGUIContent(VisualElement root)
     {
         root.Clear();
@@ -258,6 +275,18 @@ internal class PackageManager : EditorWindowBase
         OnUpdateRightPane();
     }
 
+    /// <summary> Get all MegaPint packages based on if the ba testing package should be displayed </summary>
+    /// <returns> All valid MegaPint packages </returns>
+    private List <CachedPackage> GetAllMpPackages()
+    {
+        List <CachedPackage> allPackages = PackageCache.GetAllMpPackages();
+
+        if (Utility.IsValidTesterToken().Result || PackageCache.IsInstalled(PackageKey.BATesting))
+            return allPackages;
+
+        return allPackages.Where(package => package.Key != PackageKey.BATesting).ToList();
+    }
+
     /// <summary> Make list view item </summary>
     /// <param name="element"> List view item </param>
     /// <param name="index"> Index of the list view item </param>
@@ -300,6 +329,8 @@ internal class PackageManager : EditorWindowBase
     /// <summary> Import the displayed package </summary>
     private void OnImport()
     {
+        onImport?.Invoke(_displayedPackages[_list.selectedIndex].DisplayName);
+
         ButtonSubscriptions(false);
 
         MegaPintPackageManager.onSuccess += OnImportSuccess;
@@ -324,6 +355,8 @@ internal class PackageManager : EditorWindowBase
     /// <param name="variation"> Targeted variation </param>
     private void OnImportVariation(CachedVariation variation)
     {
+        onImportVariation?.Invoke(_displayedPackages[_list.selectedIndex].DisplayName, variation.name);
+
         ButtonSubscriptions(false);
 
         MegaPintPackageManager.onSuccess += OnImportSuccess;
@@ -336,6 +369,8 @@ internal class PackageManager : EditorWindowBase
     /// <summary> Remove the displayed package </summary>
     private void OnRemove()
     {
+        onRemove?.Invoke(_displayedPackages[_list.selectedIndex].DisplayName);
+
         CachedPackage package = _displayedPackages[_list.selectedIndex];
 
         if (package.CanBeRemoved(out List <PackageKey> dependants))
@@ -416,6 +451,8 @@ internal class PackageManager : EditorWindowBase
     /// <summary> Update the displayed package </summary>
     private void OnUpdate()
     {
+        onUpdate?.Invoke(_displayedPackages[_list.selectedIndex].DisplayName);
+
         ButtonSubscriptions(false);
 
         MegaPintPackageManager.onSuccess += OnUpdateSuccess;
@@ -427,6 +464,8 @@ internal class PackageManager : EditorWindowBase
 
     /// <summary> ListView callback </summary>
     /// <param name="_"> Callback event </param>
+
+    // ReSharper disable once CognitiveComplexity
     private void OnUpdateRightPane(IEnumerable <int> _ = null)
     {
         _currentIndex = _list.selectedIndex;
@@ -443,6 +482,8 @@ internal class PackageManager : EditorWindowBase
         CachedPackage package = _displayedPackages[_currentIndex];
         _packageName.text = package.DisplayName;
 
+        onItemSelected?.Invoke(package.DisplayName);
+
         _installedVersion.style.display = package.IsInstalled || Utility.IsProductionProject()
             ? DisplayStyle.Flex
             : DisplayStyle.None;
@@ -452,10 +493,10 @@ internal class PackageManager : EditorWindowBase
         _installedVersion.tooltip = $"Installed Version: {package.CurrentVersion}";
         _unityVersion.tooltip = $"Unity Version: {package.UnityVersion}";
         _megaPintVersion.tooltip = $"MegaPint Version: {package.ReqMpVersion}";
-        
-        if(package.IsNewestVersion)
+
+        if (package.IsNewestVersion)
             _installedVersion.RemoveFromClassList(StyleSheetClasses.Image.Tint.Orange);
-        else 
+        else
             _installedVersion.AddToClassList(StyleSheetClasses.Image.Tint.Orange);
 
         _infoText.text = package.Description;
@@ -468,7 +509,7 @@ internal class PackageManager : EditorWindowBase
         galleryButton.AddClickInteraction(
             () =>
             {
-                var gallery = (Gallery)ContextMenu.TryOpen <Gallery>(true);
+                var gallery = (Gallery)ContextMenu.TryOpen <Gallery>(true, new ContextMenu.MenuItemSignature());
                 gallery.Initialize(package);
             });
 
@@ -495,10 +536,17 @@ internal class PackageManager : EditorWindowBase
                 VisualElement item = GUIUtility.Instantiate(_dependencyItem);
                 item.Q <Label>("PackageName").text = dependency.name;
 
+                var isUnityDependency = dependency.key == PackageKey.Undefined;
                 var imported = PackageCache.IsInstalled(dependency.key);
 
-                item.Q <Label>("Missing").style.display = imported ? DisplayStyle.None : DisplayStyle.Flex;
-                item.Q <Label>("Imported").style.display = imported ? DisplayStyle.Flex : DisplayStyle.None;
+                item.Q <Label>("Missing").style.display =
+                    !imported && !isUnityDependency ? DisplayStyle.Flex : DisplayStyle.None;
+
+                item.Q <Label>("Imported").style.display =
+                    imported && !isUnityDependency ? DisplayStyle.Flex : DisplayStyle.None;
+
+                item.Q <Label>("RequiredByUnity").style.display =
+                    isUnityDependency ? DisplayStyle.Flex : DisplayStyle.None;
 
                 _dependencies.Add(item);
             }
@@ -520,43 +568,45 @@ internal class PackageManager : EditorWindowBase
 
         _samplesParent.style.display = hasSamples ? DisplayStyle.Flex : DisplayStyle.None;
 
-        if (hasSamples)
+        if (!hasSamples)
+            return;
+
+        _samples.makeItem = () => GUIUtility.Instantiate(_sampleItem);
+
+        _samples.bindItem = (element, i) =>
         {
-            _samples.makeItem = () => GUIUtility.Instantiate(_sampleItem);
+            if (i >= package.Samples.Count)
+                return;
 
-            _samples.bindItem = (element, i) =>
-            {
-                if (i >= package.Samples.Count)
-                    return;
-                
-                SampleData sample = package.Samples[i];
+            SampleData sample = package.Samples[i];
 
-                element.Q <Label>("SampleName").text = sample.displayName;
+            element.Q <Label>("SampleName").text = sample.displayName;
 
-                element.Q <Button>("BTN_Import").clickable = new Clickable(
-                    () =>
-                    {
-                        var samplePath = Utility.GetPackageSamplePath(package.Key, sample.path);
+            element.Q <Button>("BTN_Import").clickable = new Clickable(
+                () =>
+                {
+                    var samplePath = Utility.GetPackageSamplePath(package.Key, sample.path);
 
-                        var directory = Path.Combine(Application.dataPath, "MegaPint Samples");
+                    var directory = Path.Combine(Application.dataPath, "MegaPint Samples");
 
-                        var assetFolderPath = Path.Combine(
-                            directory,
-                            $"{package.DisplayName}_{sample.displayName}.unitypackage");
+                    var assetFolderPath = Path.Combine(
+                        directory,
+                        $"{package.DisplayName}_{sample.displayName}.unitypackage");
 
-                        if (!Directory.Exists(directory))
-                            Directory.CreateDirectory(directory);
+                    if (!Directory.Exists(directory))
+                        Directory.CreateDirectory(directory);
 
-                        File.Copy(samplePath, assetFolderPath, true);
+                    File.Copy(samplePath, assetFolderPath, true);
 
-                        AssetDatabase.ImportPackage(assetFolderPath, true);
-                    });
-            };
+                    onImportSample?.Invoke(package.DisplayName, sample.displayName);
 
-            _samples.Clear();
-            _samples.itemsSource = package.Samples;
-            _samples.RefreshItems();
-        }
+                    AssetDatabase.ImportPackage(assetFolderPath, true);
+                });
+        };
+
+        _samples.Clear();
+        _samples.itemsSource = package.Samples;
+        _samples.RefreshItems();
     }
 
     /// <summary> Called on successful update </summary>
@@ -598,10 +648,10 @@ internal class PackageManager : EditorWindowBase
         _list.style.display = DisplayStyle.Flex;
 
         _displayedPackages = searchString.Equals("")
-            ? PackageCache.GetAllMpPackages()
-            : PackageCache.GetAllMpPackages().
-                           Where(package => package.DisplayName.ToLower().Contains(searchString.ToLower())).
-                           ToList();
+            ? GetAllMpPackages()
+            : GetAllMpPackages().
+              Where(package => package.DisplayName.ToLower().Contains(searchString.ToLower())).
+              ToList();
 
         _displayedPackages.Sort();
 
@@ -641,11 +691,15 @@ internal class PackageManager : EditorWindowBase
                 VisualElement item = GUIUtility.Instantiate(_dependencyItem);
                 item.Q <Label>("PackageName").text = dependency.name;
 
+                var isUnityDependency = dependency.key == PackageKey.Undefined;
                 var imported = PackageCache.IsInstalled(dependency.key);
 
                 item.Q <Label>("Missing").style.display = imported ? DisplayStyle.None : DisplayStyle.Flex;
                 item.Q <Label>("Imported").style.display = imported ? DisplayStyle.Flex : DisplayStyle.None;
 
+                item.Q <Label>("RequiredByUnity").style.display =
+                    isUnityDependency ? DisplayStyle.Flex : DisplayStyle.None;
+                
                 dependencies.Add(item);
             }
 

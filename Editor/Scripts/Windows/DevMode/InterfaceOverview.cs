@@ -9,7 +9,7 @@ namespace MegaPint.Editor.Scripts.Windows.DevMode
 {
 
 /// <summary> Editor window to display various combinations of interface elements </summary>
-public class InterfaceOverview : EditorWindowBase
+internal class InterfaceOverview : EditorWindowBase
 {
     private VisualTreeAsset _baseWindow;
 
@@ -21,10 +21,10 @@ public class InterfaceOverview : EditorWindowBase
 
         if (!SaveValues.BasePackage.ApplyPSInterfaceOverview)
             return this;
-        
+
         this.CenterOnMainWin(650, 700);
         SaveValues.BasePackage.ApplyPSInterfaceOverview = false;
-        
+
         return this;
     }
 

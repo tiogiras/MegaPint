@@ -10,7 +10,7 @@ namespace MegaPint.Editor.Scripts.Windows.DevMode
 {
 
 /// <summary> Editor window to toggle on/off the development mode </summary>
-public class Toggle : EditorWindowBase
+internal class Toggle : EditorWindowBase
 {
     private VisualTreeAsset _baseWindow;
     private Button _btnOff;

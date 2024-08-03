@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 using System;
-using System.IO;
 using System.Text;
 using MegaPint.Editor.Scripts.GUI.Utility;
 using UnityEditor;
@@ -47,7 +46,7 @@ internal class CodeExample : VisualElement
 
             element.AddToClassList(StyleSheetClasses.Background.Color.Secondary);
             element.AddToClassList(StyleSheetClasses.Border.Color.Black);
-            
+
             element.SetPadding(5f);
             element.SetBorderWidth(1f);
             element.SetBorderRadius(3f);

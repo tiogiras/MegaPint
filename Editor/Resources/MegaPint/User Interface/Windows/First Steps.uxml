@@ -10,9 +10,17 @@
             <MegaPint.Editor.Scripts.GUI.Factories.Headings.HeadingPrimary tabindex="-1" text="First Steps" style="white-space: normal; -unity-text-align: upper-center; font-size: 16px;" />
         </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
         <MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary style="flex-grow: 1;">
-            <MegaPint.Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="In order to use MegaPint you need to create &#10;a settings asset inside of your project.&#10;&#10;This file is used to store any settings related to MegaPint.&#10;&#10;&#10;To speed up loading time choose a top-level directory &#10;for your settings asset.&#10; &#10;(like Assets/Settings/MegaPintSettings.asset)" style="margin-top: 20px; margin-right: 50px; margin-bottom: 20px; margin-left: 50px; white-space: normal; -unity-text-align: upper-center;" />
-            <ui:VisualElement style="flex-direction: row; align-items: center; justify-content: center;">
-                <ui:Button text="Create" parse-escape-sequences="true" display-tooltip-when-elided="true" tooltip="Create a settings asset." name="BTN_Create" />
+            <ui:VisualElement name="Tab0" style="flex-grow: 1; display: none;">
+                <MegaPint.Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="Thank you for using MegaPint.&#10;&#10;Most of MegaPint&apos;s functionality is accessed via MenuItems. MenuItems are found in the header of the unity window.&#10;&#10;After you finished this setup you should check out the BaseWindow (MegaPint/Open) there you will find all information about all your imported packages, settings and general information.&#10;&#10;If you have not imported any packages yet check out the internal PackageManager (MegaPint/PackageManager) and browse for any package you like. After importing have a look at the BaseWindow again." style="margin-top: 20px; margin-right: 50px; margin-bottom: 20px; margin-left: 50px; white-space: normal; -unity-text-align: upper-center;" />
+                <ui:VisualElement style="flex-direction: row; align-items: center; justify-content: center;">
+                    <ui:Button text="Continue" parse-escape-sequences="true" display-tooltip-when-elided="true" tooltip="Continue the setup." name="BTN_Next" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="Tab1" style="flex-grow: 1; display: flex;">
+                <MegaPint.Editor.Scripts.GUI.Factories.TextElements.Text tabindex="-1" text="In order to use MegaPint you need to create &#10;a settings asset inside of your project. This file is used to store any settings related to MegaPint.&#10;&#10;&#10;To speed up loading time choose a top-level directory &#10;for your settings asset.&#10; &#10;(like Assets/Settings/MegaPintSettings.asset)&#10;&#10;After successfully creating your settings asset MegaPint will open the BaseWindow." style="margin-top: 20px; margin-right: 50px; margin-bottom: 20px; margin-left: 50px; white-space: normal; -unity-text-align: upper-center;" />
+                <ui:VisualElement style="flex-direction: row; align-items: center; justify-content: center;">
+                    <ui:Button text="Create" parse-escape-sequences="true" display-tooltip-when-elided="true" tooltip="Create a settings asset." name="BTN_Create" />
+                </ui:VisualElement>
             </ui:VisualElement>
         </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
     </MegaPint.Editor.Scripts.GUI.Factories.RootElement>

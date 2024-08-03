@@ -1,0 +1,40 @@
+{
+    "name": "tiogiras.megapint.batesting.editor",
+    "rootNamespace": "MegaPint",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:955c79b3eb6fe0a47bd23099384b6e17",
+        "GUID:0e40976153628db4fbfccfcc6ab8f1bf",
+        "GUID:b048c4431fac05e4891c2770ac488caa"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.tiogiras.megapint-playmodestartscene",
+            "expression": "0.0",
+            "define": "USING_PLAYMODESTARTSCENE"
+        },
+        {
+            "name": "com.tiogiras.megapint-autosave",
+            "expression": "0.0",
+            "define": "USING_AUTOSAVE"
+        },
+        {
+            "name": "com.tiogiras.megapint-screenshot",
+            "expression": "0.0",
+            "define": "USING_SCREENSHOT"
+        },
+        {
+            "name": "com.tiogiras.megapint-validators",
+            "expression": "0.0",
+            "define": "USING_VALIDATORS"
+        }
+    ],
+    "noEngineReferences": false
+}

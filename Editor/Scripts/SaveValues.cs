@@ -12,8 +12,13 @@ internal static partial class SaveValues
 {
     public static class BasePackage
     {
+        public static Action <int> onEditorThemeChanged;
+        public static Action <bool> onUseIconsChanged;
+        public static Action <string> onTesterTokenChanged;
         private static CacheValue <int> s_editorTheme = new() {defaultValue = 0};
+        private static CacheValue <string> s_testerToken = new() {defaultValue = ""};
         private static CacheValue <bool> s_devMode = new() {defaultValue = false};
+        private static CacheValue <bool> s_useToolbarIcons = new() {defaultValue = true};
 
         private static CacheValue <bool> s_applyPSBaseWindow = new() {defaultValue = true};
         private static CacheValue <bool> s_applyPSDevCenter = new() {defaultValue = true};
@@ -26,8 +31,19 @@ internal static partial class SaveValues
             set
             {
                 ValueProperty.Set("EditorTheme", value, ref s_editorTheme, _GeneralSettings);
+                onEditorThemeChanged?.Invoke(value);
 
                 GUIUtility.ForceRepaint();
+            }
+        }
+
+        public static string TesterToken
+        {
+            get => ValueProperty.Get("TesterToken", ref s_testerToken, _GeneralSettings);
+            set
+            {
+                ValueProperty.Set("TesterToken", value, ref s_testerToken, _GeneralSettings);
+                onTesterTokenChanged?.Invoke(value);
             }
         }
 
@@ -62,6 +78,16 @@ internal static partial class SaveValues
         {
             get => ValueProperty.Get("ApplyPS_PackageManager", ref s_applyPSPackageManager, _GeneralSettings);
             set => ValueProperty.Set("ApplyPS_PackageManager", value, ref s_applyPSPackageManager, _GeneralSettings);
+        }
+
+        public static bool UseToolbarIcons
+        {
+            get => ValueProperty.Get("UseToolbarIcons", ref s_useToolbarIcons, _GeneralSettings);
+            set
+            {
+                ValueProperty.Set("UseToolbarIcons", value, ref s_useToolbarIcons, _GeneralSettings);
+                onUseIconsChanged?.Invoke(value);
+            }
         }
     }
 
@@ -178,8 +204,8 @@ internal static partial class SaveValues
     {
         get
         {
-            if (MegaPintSettings.Exists())
-                return s_generalSettings ??= MegaPintSettings.instance.GetSetting("General");
+            if (MegaPintMainSettings.Exists())
+                return s_generalSettings ??= MegaPintMainSettings.instance.GetSetting("General");
 
             return null;
         }

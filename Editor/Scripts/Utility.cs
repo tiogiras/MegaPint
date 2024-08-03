@@ -1,9 +1,14 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
+using Object = UnityEngine.Object;
 
 namespace MegaPint.Editor.Scripts
 {
@@ -11,7 +16,42 @@ namespace MegaPint.Editor.Scripts
 /// <summary> Class containing general utility functions </summary>
 internal static class Utility
 {
+    [Serializable]
+    private class Result
+    {
+        public bool exists;
+    }
+
+    private const string ValidateTokenURL = "https://tiogiras.games/checkToken.php";
+
+    public static Action onTesterTokenValidated;
+
+    private static bool s_validTesterToken;
+    private static bool s_tokenValidated;
+
     #region Public Methods
+
+    /// <summary> Clone a serializable object </summary>
+    /// <param name="input"> Source object to clone </param>
+    /// <typeparam name="T"> Serializable Object </typeparam>
+    /// <returns> Cloned object </returns>
+    public static T Clone <T>(this T input)
+    {
+        Type type = input.GetType();
+
+        FieldInfo[] fields = type.GetFields(
+            BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+        var clonedObj = (T)Activator.CreateInstance(type);
+
+        foreach (FieldInfo field in fields)
+        {
+            var value = field.GetValue(input);
+            field.SetValue(clonedObj, value);
+        }
+
+        return clonedObj;
+    }
 
     /// <summary> Combine the given strings like Path.Combine but for menuItem execution </summary>
     /// <param name="arg0"> First part of the path </param>
@@ -81,6 +121,76 @@ internal static class Utility
     public static bool IsProductionProject()
     {
         return Application.companyName.Equals("Tiogiras") && Application.productName.Equals("MegaPintProject");
+    }
+
+    public static async Task <bool> IsValidTesterToken()
+    {
+        if (s_tokenValidated)
+            return s_validTesterToken;
+
+        return await ValidateTesterToken();
+    }
+
+    /// <summary> Validate the saved tester token </summary>
+    /// <returns> If the token is valid </returns>
+    public static async Task <bool> ValidateTesterToken()
+    {
+        var token = SaveValues.BasePackage.TesterToken;
+
+        if (string.IsNullOrEmpty(token))
+        {
+            s_tokenValidated = true;
+            s_validTesterToken = false;
+            onTesterTokenValidated?.Invoke();
+            
+            return false;
+        }
+
+        UnityWebRequest request =
+            UnityWebRequest.Get(
+                $"{ValidateTokenURL}?token={UnityWebRequest.EscapeURL(SaveValues.BasePackage.TesterToken)}");
+
+        request.SendWebRequest();
+
+        while (!request.isDone)
+            await Task.Delay(100);
+
+        var returnValue = false;
+
+        switch (request.result)
+        {
+            case UnityWebRequest.Result.InProgress:
+                break;
+
+            case UnityWebRequest.Result.Success:
+                var response = request.downloadHandler.text;
+                var result = JsonUtility.FromJson <Result>(response);
+
+                returnValue = result.exists;
+
+                break;
+
+            case UnityWebRequest.Result.ConnectionError:
+                Debug.LogError(
+                    "MegaPint could not connect to the internet to validate the tester token. Please check your connection and try again.");
+
+                break;
+
+            case UnityWebRequest.Result.ProtocolError or UnityWebRequest.Result.DataProcessingError:
+                Debug.LogError(
+                    $"MegaPint could not validate the tester token. Please try again later.\n{request.error}");
+
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        s_tokenValidated = true;
+        s_validTesterToken = returnValue;
+        onTesterTokenValidated?.Invoke();
+
+        return returnValue;
     }
 
     #endregion

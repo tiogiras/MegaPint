@@ -13,7 +13,7 @@ internal static partial class GUIUtility
 {
     private static bool s_linkCooldown;
 
-    #region Private Methods
+    #region Public Methods
 
     /// <summary> Activate all links in any text with the "mp_link" class </summary>
     /// <param name="root"> Root element to start the search in </param>
@@ -41,6 +41,10 @@ internal static partial class GUIUtility
                 HandleLink(link, linkCallback);
             });
     }
+
+    #endregion
+
+    #region Private Methods
 
     /// <summary> Color all links in a string by adding color tags </summary>
     /// <param name="linkColor"> Color applied to links (html color) </param>

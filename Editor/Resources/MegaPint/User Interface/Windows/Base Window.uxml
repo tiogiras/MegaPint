@@ -42,20 +42,22 @@
                 <ui:ListView focusable="true" name="SettingsList" virtualization-method="FixedHeight" show-alternating-row-backgrounds="None" fixed-item-height="18" style="margin-left: 5px; margin-right: 0; flex-grow: 1;" />
             </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
             <MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary style="min-width: 40%; flex-shrink: 0; flex-grow: 1;">
-                <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="RightPane" style="flex-grow: 1; height: 100%; width: 100%;">
-                    <MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px;">
-                        <MegaPint.Editor.Scripts.GUI.Factories.Headings.HeadingSecondary tabindex="-1" text="..." name="PackageName" style="-unity-text-align: upper-center; font-size: 16px; white-space: normal; padding-top: 5px; padding-bottom: 5px;" />
-                        <ui:VisualElement name="Tabs" style="flex-grow: 1; flex-direction: row; overflow: hidden;">
-                            <ui:Button text="Info" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TabInfo" tooltip="Show general information about this package." style="top: 3px; margin-right: 1px; margin-left: 10px;" />
-                            <ui:Button text="Guides" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TabGuides" tooltip="Show guides for this package." style="top: 3px; margin-right: 1px; margin-left: 1px;" />
-                            <ui:Button text="Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TabSettings" tooltip="Show any settings for this package." style="top: 3px; margin-right: 1px; margin-left: 1px;" />
-                            <ui:Button text="Help" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TabHelp" tooltip="Find helpfull tips for this package." style="top: 3px; margin-right: 1px; margin-left: 1px;" />
-                        </ui:VisualElement>
-                    </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
-                    <ui:GroupBox name="TabContent" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1;" />
-                    <ui:VisualElement name="InfosContent" style="flex-grow: 1;" />
-                    <ui:VisualElement name="SettingsContent" style="flex-grow: 1;" />
+                <MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary class="mp_border-color--primary" style="border-bottom-width: 1px; flex-shrink: 0;">
+                    <MegaPint.Editor.Scripts.GUI.Factories.Headings.HeadingSecondary tabindex="-1" text="..." name="PackageName" style="-unity-text-align: upper-center; font-size: 16px; white-space: normal; padding-top: 5px; padding-bottom: 5px;" />
+                    <ui:VisualElement name="Tabs" style="flex-grow: 1; flex-direction: row; overflow: hidden;">
+                        <ui:Button text="Info" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TabInfo" tooltip="Show general information about this package." style="top: 3px; margin-right: 1px; margin-left: 10px;" />
+                        <ui:Button text="Guides" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TabGuides" tooltip="Show guides for this package." style="top: 3px; margin-right: 1px; margin-left: 1px;" />
+                        <ui:Button text="Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TabSettings" tooltip="Show any settings for this package." style="top: 3px; margin-right: 1px; margin-left: 1px;" />
+                        <ui:Button text="Help" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TabHelp" tooltip="Find helpfull tips for this package." style="top: 3px; margin-right: 1px; margin-left: 1px;" />
+                        <ui:Button text="API" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TabAPI" tooltip="Find helpfull tips for this package." style="top: 3px; margin-right: 1px; margin-left: 1px;" />
+                    </ui:VisualElement>
+                </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundSecondary>
+                <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="RightPane" style="flex-grow: 1;">
+                    <ui:GroupBox name="TabContent" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-grow: 1; display: none;" />
+                    <ui:VisualElement name="InfosContent" style="flex-grow: 1; display: none;" />
+                    <ui:VisualElement name="SettingsContent" style="flex-grow: 1; display: none;" />
                 </ui:ScrollView>
+                <ui:VisualElement name="APITabContent" style="flex-grow: 1;" />
             </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
         </ui:TwoPaneSplitView>
     </MegaPint.Editor.Scripts.GUI.Factories.RootElement>

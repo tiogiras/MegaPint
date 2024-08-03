@@ -42,7 +42,6 @@
     color: var(--code-class-color);
 }
 
-
 .mp_code-color--method {
     color: var(--code-method-color);
 }
@@ -77,6 +76,18 @@
 
 .mp_background-color--separator {
     background-color: var(--separator-color);
+}
+
+.mp_background-color--red {
+    background-color: var(--background-red-color);
+}
+
+.mp_background-color--orange {
+    background-color: var(--background-orange-color);
+}
+
+.mp_background-color--green {
+    background-color: var(--background-green-color);
 }
 
 .mp_border-color--identity {
@@ -118,6 +129,3 @@
 .mp_image-tint--orange {
     -unity-background-image-tint-color: var(--text-orange-color);
 }
-
-
-

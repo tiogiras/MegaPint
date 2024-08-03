@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using UnityEngine;
 
 namespace MegaPint.Editor.Scripts.GUI.Utility
 {
@@ -6,7 +7,7 @@ namespace MegaPint.Editor.Scripts.GUI.Utility
 /// <summary> Partial utility class containing text specific utility functions </summary>
 internal static partial class GUIUtility
 {
-    #region Private Methods
+    #region Public Methods
 
     /// <summary> Color the text by tags </summary>
     /// <param name="text"> The text to be colored </param>

@@ -16,6 +16,9 @@ using UnityEditor.PackageManager;
 [assembly: InternalsVisibleTo("tiogiras.megapint.notepad.editor.tests")]
 [assembly: InternalsVisibleTo("tiogiras.megapint.autosave.editor.tests")]
 [assembly: InternalsVisibleTo("tiogiras.megapint.screenshot.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.batesting.editor.tests")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.batesting.runtime")]
+[assembly: InternalsVisibleTo("tiogiras.megapint.batesting.editor")]
 
 namespace MegaPint.Editor.Scripts.PackageManager.Cache
 {
@@ -98,6 +101,14 @@ internal static class PackageCache
         }
     }
 
+    /// <summary> Get a range of packages </summary>
+    /// <param name="keys"> Keys to the targeted packages </param>
+    /// <returns> All found packages </returns>
+    public static List <CachedPackage> GetRange(IEnumerable <PackageKey> keys)
+    {
+        return keys.Select(Get).ToList();
+    }
+
     /// <summary> Check if any MegaPint package is installed </summary>
     /// <returns> True when at least one package or variation is installed </returns>
     public static bool HasPackagesInstalled()
@@ -112,7 +123,7 @@ internal static class PackageCache
     /// <returns> If the package is currently installed </returns>
     public static bool IsInstalled(PackageKey key)
     {
-        return s_cache[key].IsInstalled;
+        return key != PackageKey.Undefined && s_cache[key].IsInstalled;
     }
 
     /// <summary> Check if the current variation of a package is the given variation </summary>
@@ -160,6 +171,9 @@ internal static class PackageCache
 
     #region Private Methods
 
+    /// <summary> Get the names of all installed packages </summary>
+    /// <param name="packages"> All packages </param>
+    /// <param name="packageNames"> Found names </param>
     private static void GetInstalledPackageNames(List <PackageInfo> packages, out List <string> packageNames)
     {
         packageNames = new List <string>();
@@ -181,12 +195,15 @@ internal static class PackageCache
         }
     }
 
+    /// <summary> Increase the loading progress </summary>
+    /// <param name="delta"> Amount to increase </param>
     private static void IncreaseProgressBy(float delta)
     {
         s_currentProgress += delta;
         onCacheProgressChanged?.Invoke(s_currentProgress);
     }
 
+    /// <summary> Initialize the Cache </summary>
     private static async void Initialize()
     {
         WasInitialized = false;
@@ -226,7 +243,8 @@ internal static class PackageCache
 
             if (dependencies is {Count: > 0})
             {
-                foreach (Dependency dependency in dependencies)
+                foreach (Dependency dependency in dependencies.Where(
+                             dependency => dependency.key != PackageKey.Undefined))
                 {
                     allDependencies.TryAdd(dependency.key, new List <PackageKey>());
                     allDependencies[dependency.key].Add(package.Key);
@@ -260,11 +278,15 @@ internal static class PackageCache
         onCacheRefreshed?.Invoke();
     }
 
+    /// <summary> Set the process of the progress bar </summary>
+    /// <param name="process"> Target progress </param>
     private static void SetProcess(string process)
     {
         onCacheProcessChanged?.Invoke(process);
     }
 
+    /// <summary> Set the progress to a certain amount </summary>
+    /// <param name="progress"> Target amount </param>
     private static void SetProgressTo(float progress)
     {
         s_currentProgress = progress;
