@@ -19,7 +19,7 @@ internal static class PackageDataBaTesting
             reqMpVersion = "1.3.0 or higher",
             version = "1.0.0",
             unityVersion = "2022.3.15f1",
-            lastUpdate = "24.06.2024",
+            lastUpdate = "03.08.2024",
             name = "com.tiogiras.megapint-batesting",
             displayName = "BA Testing",
             description = "This package is required to perform the guided part of the ba testing tasks.",
