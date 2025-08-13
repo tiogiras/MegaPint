@@ -124,10 +124,6 @@
     background-color: var(--identity-color);
 }
 
-.unity-base-field__input .unity-progress-bar__progress{
-    background-color: white;
-}
-
 .unity-popup-field>.unity-base-field__label {
     color: var(--text-primary-color);
 }
