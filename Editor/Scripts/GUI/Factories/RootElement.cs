@@ -50,7 +50,6 @@ internal class RootElement : VisualElement
                 () =>
                 {
                     ExecuteForAllOfClass(StyleSheetClasses.Tooltip, element, TooltipOverwrite);
-                    ExecuteForAllOfClass("unity-color-field", element, ColorFieldOverwrite);
                 });
 
             TryInitializeStyleSheetValues(element);
@@ -59,72 +58,6 @@ internal class RootElement : VisualElement
         #endregion
 
         #region Private Methods
-
-        /// <summary> Action to overwrite the built in onGUIHandler of the color field </summary>
-        /// <param name="currentCheck"> The index of the current check </param>
-        /// <param name="hasEyeUpdate"> If the eyeDropper is active </param>
-        /// <param name="wouldRemove"> If the focus would be removed </param>
-        /// <param name="fieldNameIdentifier"> Identifier for the responding event </param>
-        /// <param name="action"> A reference to the built in action </param>
-
-        // ReSharper disable once CognitiveComplexity
-        private static void ColorFieldOnGUIHandler(
-            ref int currentCheck,
-            ref bool hasEyeUpdate,
-            ref bool wouldRemove,
-            string fieldNameIdentifier,
-            Action action)
-        {
-            if (Event.current.type == EventType.ExecuteCommand && Event.current.commandName == "EyeDropperUpdate")
-                hasEyeUpdate = true;
-
-            if (currentCheck == 3)
-            {
-                if (UnityEngine.GUI.GetNameOfFocusedControl() == fieldNameIdentifier && !hasEyeUpdate)
-                {
-                    if (wouldRemove)
-                    {
-                        UnityEngine.GUI.FocusControl(null);
-
-                        wouldRemove = false;
-                    }
-                    else
-                        wouldRemove = true;
-                }
-
-                hasEyeUpdate = false;
-                currentCheck = 0;
-            }
-            else
-                currentCheck++;
-
-            UnityEngine.GUI.SetNextControlName(fieldNameIdentifier);
-            action?.Invoke();
-        }
-
-        /// <summary> Action called on all built in color fields </summary>
-        /// <param name="element"> ColorField to be overwritten </param>
-        private static void ColorFieldOverwrite(VisualElement element)
-        {
-            var fieldNameIdentifier = $"MegaPintColorField{element.GetHashCode()}";
-            var target = (IMGUIContainer)element.Q(className: "unity-base-field__input");
-
-            var currentCheck = 0;
-            var hasEyeUpdate = false;
-            var wouldRemove = false;
-
-            Action action = target.onGUIHandler;
-
-            target.onGUIHandler = () =>
-            {
-                ColorFieldOnGUIHandler(
-                    ref currentCheck,
-                    ref hasEyeUpdate,
-                    ref wouldRemove,
-                    fieldNameIdentifier,
-                    action);
-            };
-        }
 
         /// <summary> Create a <see cref="VisualElement" /> to store the wanted color </summary>
         /// <param name="root"> The parent the created element is added to </param>
