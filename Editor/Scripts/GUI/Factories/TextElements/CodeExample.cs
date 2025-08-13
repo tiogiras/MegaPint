@@ -61,6 +61,9 @@ internal class CodeExample : VisualElement
 
             var cleanText = CleanText(label.text);
 
+            // Replace any \n that cannot be detected automatically and set it to an actual \n
+            label.text = label.text.Replace("\\n", "\n");
+            
             label.text = ApplySpacing(ColorText(label.text));
 
             var button = new Button(
