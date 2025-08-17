@@ -6,34 +6,25 @@ namespace MegaPint.Editor.Scripts.GUI.Factories.Structure
 {
 
 /// <summary> Uxml factory to create a <see cref="VisualElement" /> that acts as a separator between other elements </summary>
-internal class SeparatorVertical : VisualElement
+[UxmlElement]
+internal partial class SeparatorVertical : VisualElement
 {
-    public new class UxmlFactory : UxmlFactory <SeparatorVertical, UxmlTraits>
+    [UxmlAttribute("Space")]
+    public float Space { get; set; } = 1.5f;
+
+    public SeparatorVertical()
     {
+        RegisterCallback<AttachToPanelEvent>(_ => BuildUI());
     }
-
-    public new class UxmlTraits : VisualElement.UxmlTraits
+    
+    private void BuildUI()
     {
-        private readonly UxmlFloatAttributeDescription _space = new() {name = "Space", defaultValue = 1.5f};
+        style.width = Space;
 
-        #region Public Methods
+        AddToClassList(StyleSheetClasses.Background.Color.Separator);
 
-        public override void Init(
-            VisualElement element,
-            IUxmlAttributes attributes,
-            CreationContext context)
-        {
-            base.Init(element, attributes, context);
-
-            element.style.width = _space.GetValueFromBag(attributes, context);
-
-            element.AddToClassList(StyleSheetClasses.Background.Color.Separator);
-
-            element.SetMargin(4f);
-            element.SetBorderRadius(1f);
-        }
-
-        #endregion
+        this.SetMargin(4f);
+        this.SetBorderRadius(1f);
     }
 }
 

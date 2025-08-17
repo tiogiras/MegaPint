@@ -1,135 +1,82 @@
 #if UNITY_EDITOR
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.UIElements;
 
 namespace MegaPint.Editor.Scripts.GUI.Factories.Structure
 {
-
-/// <summary>
-///     Uxml factory to create a <see cref="VisualElement" /> that displays the background image in a selected aspect
-///     ratio
-/// </summary>
-[Preserve]
-internal class AspectRatioPanel : VisualElement
-{
+    /// <summary>
+    ///     Uxml factory to create a <see cref="VisualElement" /> that displays the background image in a selected aspect
+    ///     ratio
+    /// </summary>
     [Preserve]
-    internal new class UxmlFactory : UxmlFactory <AspectRatioPanel, UxmlTraits>
+    [UxmlElement]
+    internal partial class AspectRatioPanel : VisualElement
     {
-    }
-
-    [Preserve]
-    internal new class UxmlTraits : VisualElement.UxmlTraits
-    {
-        public override IEnumerable <UxmlChildElementDescription> uxmlChildElementsDescription
+        public AspectRatioPanel()
         {
-            get
-            {
-                yield break;
-            }
+            style.position = Position.Relative;
+            style.left = StyleKeyword.Auto;
+            style.top = StyleKeyword.Auto;
+            style.right = StyleKeyword.Auto;
+            style.bottom = StyleKeyword.Auto;
+
+            RegisterCallback<AttachToPanelEvent>(OnAttachToPanelEvent);
         }
 
-        private readonly UxmlIntAttributeDescription _aspectRatioX = new()
-        {
-            name = "aspect-ratio-x", defaultValue = 16, restriction = new UxmlValueBounds {min = "1"}
-        };
+        [UxmlAttribute("aspect-ratio-x")] 
+        public int AspectRatioX { get; set; } = 16;
 
-        private readonly UxmlIntAttributeDescription _aspectRatioY = new()
-        {
-            name = "aspect-ratio-y", defaultValue = 9, restriction = new UxmlValueBounds {min = "1"}
-        };
+        [UxmlAttribute("aspect-ratio-y")] 
+        public int AspectRatioY { get; set; } = 9;
 
-        private readonly UxmlFloatAttributeDescription _scale = new() {name = "scale", defaultValue = 1f};
+        [UxmlAttribute("scale")] 
+        private float Scale { get; set; } = 1f;
 
         #region Public Methods
 
-        public override void Init(
-            VisualElement visualElement,
-            IUxmlAttributes attributes,
-            CreationContext creationContext)
+        public void FitToParent()
         {
-            base.Init(visualElement, attributes, creationContext);
-
-            if (visualElement is not AspectRatioPanel element)
+            if (parent == null)
                 return;
 
-            element.aspectRatioX = Mathf.Max(
-                1,
-                _aspectRatioX.GetValueFromBag(attributes, creationContext));
+            var parentW = parent.resolvedStyle.width;
+            var parentH = parent.resolvedStyle.height;
 
-            element.aspectRatioY = Mathf.Max(
-                1,
-                _aspectRatioY.GetValueFromBag(attributes, creationContext));
+            if (float.IsNaN(parentW) || float.IsNaN(parentH))
+                return;
 
-            element._scale = _scale.GetValueFromBag(attributes, creationContext);
-            element.FitToParent();
+            if (AspectRatioX <= 0.0f || AspectRatioY <= 0.0f)
+            {
+                style.width = parentW;
+                style.height = parentH;
+
+                return;
+            }
+
+            var ratio = Mathf.Min(parentW / AspectRatioX, parentH / AspectRatioY);
+            var targetW = Mathf.Floor(AspectRatioX * ratio);
+            var targetH = Mathf.Floor(AspectRatioY * ratio);
+            style.width = targetW * Scale;
+            style.height = targetH * Scale;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void OnAttachToPanelEvent(AttachToPanelEvent e)
+        {
+            parent?.RegisterCallback<GeometryChangedEvent>(OnGeometryChangedEvent);
+            FitToParent();
+        }
+
+        private void OnGeometryChangedEvent(GeometryChangedEvent e)
+        {
+            FitToParent();
         }
 
         #endregion
     }
-
-    public int aspectRatioX = 16;
-
-    public int aspectRatioY = 9;
-
-    private float _scale = 1;
-
-    public AspectRatioPanel()
-    {
-        style.position = Position.Relative;
-        style.left = StyleKeyword.Auto;
-        style.top = StyleKeyword.Auto;
-        style.right = StyleKeyword.Auto;
-        style.bottom = StyleKeyword.Auto;
-        RegisterCallback <AttachToPanelEvent>(OnAttachToPanelEvent);
-    }
-
-    #region Public Methods
-
-    public void FitToParent()
-    {
-        if (parent == null)
-            return;
-
-        var parentW = parent.resolvedStyle.width;
-        var parentH = parent.resolvedStyle.height;
-
-        if (float.IsNaN(parentW) || float.IsNaN(parentH))
-            return;
-
-        if (aspectRatioX <= 0.0f || aspectRatioY <= 0.0f)
-        {
-            style.width = parentW;
-            style.height = parentH;
-
-            return;
-        }
-
-        var ratio = Mathf.Min(parentW / aspectRatioX, parentH / aspectRatioY);
-        var targetW = Mathf.Floor(aspectRatioX * ratio);
-        var targetH = Mathf.Floor(aspectRatioY * ratio);
-        style.width = targetW * _scale;
-        style.height = targetH * _scale;
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private void OnAttachToPanelEvent(AttachToPanelEvent e)
-    {
-        parent?.RegisterCallback <GeometryChangedEvent>(OnGeometryChangedEvent);
-        FitToParent();
-    }
-
-    private void OnGeometryChangedEvent(GeometryChangedEvent e)
-    {
-        FitToParent();
-    }
-
-    #endregion
-}
-
 }
 #endif

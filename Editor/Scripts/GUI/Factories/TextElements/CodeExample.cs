@@ -8,159 +8,141 @@ using UnityEngine.UIElements;
 
 namespace MegaPint.Editor.Scripts.GUI.Factories.TextElements
 {
-
 /// <summary> Uxml factory to create a <see cref="VisualElement" /> that can hold, color and copy the given code </summary>
-internal class CodeExample : VisualElement
+[UxmlElement]
+internal partial class CodeExample : VisualElement
 {
-    public new class UxmlFactory : UxmlFactory <CodeExample, UxmlTraits>
+    private readonly string _basicColorString;
+    private readonly string _classColorString;
+    private readonly string _commentColorString;
+    private readonly string _methodColorString;
+    private readonly string _stringColorString;
+
+    public CodeExample()
     {
+        _classColorString = $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeClassColor)}";
+        _methodColorString = $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeMethodColor)}";
+        _basicColorString = $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeBasicColor)}";
+        _commentColorString = $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeCommentColor)}";
+        _stringColorString = $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeStringColor)}";
+
+        RegisterCallback <AttachToPanelEvent>(_ => BuildUI());
     }
 
-    public new class UxmlTraits : VisualElement.UxmlTraits
+    [UxmlAttribute("_string-attr")] public string Text {get; set;}
+
+    private void BuildUI()
     {
-        private readonly UxmlStringAttributeDescription _text = new() {name = "_string-attr"};
-        private string _basicColorString;
+        AddToClassList(StyleSheetClasses.Background.Color.Secondary);
+        AddToClassList(StyleSheetClasses.Border.Color.Black);
 
-        private string _classColorString;
-        private string _commentColorString;
-        private string _methodColorString;
-        private string _stringColorString;
+        this.SetPadding(5f);
+        this.SetBorderWidth(1f);
+        this.SetBorderRadius(3f);
 
-        #region Public Methods
+        Clear();
 
-        public override void Init(
-            VisualElement element,
-            IUxmlAttributes attributes,
-            CreationContext context)
-        {
-            base.Init(element, attributes, context);
+        var label = new Label(Text);
+        Add(label);
 
-            _classColorString = $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeClassColor)}";
-            _methodColorString = $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeMethodColor)}";
-            _basicColorString = $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeBasicColor)}";
-            _commentColorString = $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeCommentColor)}";
-            _stringColorString = $"#{ColorUtility.ToHtmlStringRGB(StyleSheetValues.CodeStringColor)}";
+        label.style.whiteSpace = WhiteSpace.Normal;
+        label.AddToClassList(StyleSheetClasses.Text.Color.Primary);
 
-            var codeExample = (CodeExample)element;
-            codeExample._stringAttr = _text.GetValueFromBag(attributes, context);
+        var cleanText = CleanText(label.text);
 
-            element.AddToClassList(StyleSheetClasses.Background.Color.Secondary);
-            element.AddToClassList(StyleSheetClasses.Border.Color.Black);
+        // Replace any \n that cannot be detected automatically and set it to an actual \n
+        label.text = label.text.Replace("\\n", "\n");
 
-            element.SetPadding(5f);
-            element.SetBorderWidth(1f);
-            element.SetBorderRadius(3f);
+        label.text = ApplySpacing(ColorText(label.text));
 
-            element.Clear();
+        var button = new Button(() => {EditorGUIUtility.systemCopyBuffer = cleanText;});
 
-            var label = new Label(codeExample._stringAttr);
-            element.Add(label);
+        Add(button);
 
-            label.style.whiteSpace = WhiteSpace.Normal;
-            label.AddToClassList(StyleSheetClasses.Text.Color.Primary);
+        button.text = "";
+        button.tooltip = "Copy to clipboard";
 
-            var cleanText = CleanText(label.text);
+        button.style.backgroundImage = Resources.Load <Texture2D>(Constants.BasePackage.Images.CopyToClipboard);
 
-            // Replace any \n that cannot be detected automatically and set it to an actual \n
-            label.text = label.text.Replace("\\n", "\n");
-            
-            label.text = ApplySpacing(ColorText(label.text));
+        button.style.position = Position.Absolute;
+        button.style.right = 5f;
+        button.style.bottom = 5f;
+        button.style.width = 20f;
+        button.style.height = 20f;
 
-            var button = new Button(
-                () => {EditorGUIUtility.systemCopyBuffer = cleanText;});
+        button.AddToClassList(StyleSheetClasses.Button);
 
-            element.Add(button);
-
-            button.text = "";
-            button.tooltip = "Copy to clipboard";
-
-            button.style.backgroundImage = Resources.Load <Texture2D>(Constants.BasePackage.Images.CopyToClipboard);
-
-            button.style.position = Position.Absolute;
-            button.style.right = 5f;
-            button.style.bottom = 5f;
-            button.style.width = 20f;
-            button.style.height = 20f;
-
-            button.AddToClassList(StyleSheetClasses.Button);
-
-            button.SetMargin(0f);
-            button.SetPadding(0f);
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        /// <summary> Change the designed spacing characters of the text into real spacing </summary>
-        /// <param name="text"> Text to be changed </param>
-        /// <param name="forClipboard"> If the text should be prepared for the clipboard </param>
-        /// <returns> Text with corrected spacing </returns>
-        private static string ApplySpacing(string text, bool forClipboard = false)
-        {
-            var parts = text.Split("[/");
-
-            var output = new StringBuilder(parts[0]);
-
-            for (var i = 1; i < parts.Length; i++)
-            {
-                var part = parts[i];
-
-                var args = part.Split("/]");
-
-                if (!int.TryParse(args[0], out var indentLevel))
-                    return text;
-
-                var count = indentLevel * (forClipboard ? 2 : 4);
-
-                var space = new StringBuilder(count);
-
-                for (var j = 0; j < count; j++)
-                    space.Append(forClipboard ? "/t" : " ");
-
-                output.Append(space);
-
-                output.Append(args[1]);
-            }
-
-            return output.ToString();
-        }
-
-        /// <summary> Clean the text of all tags </summary>
-        /// <param name="text"> Text that should be cleaned </param>
-        /// <returns> Cleaned text </returns>
-        private static string CleanText(string text)
-        {
-            text = text.RemoveTag("c");
-            text = text.RemoveTag("m");
-            text = text.RemoveTag("b");
-            text = text.RemoveTag("cc");
-            text = text.RemoveTag("s");
-
-            text = text.Replace("\\n", Environment.NewLine);
-
-            return ApplySpacing(text);
-        }
-
-        /// <summary> Color the text based on the tags </summary>
-        /// <param name="text"> Text that should be colored </param>
-        /// <returns> Colored text </returns>
-        private string ColorText(string text)
-        {
-            text = text.ColorByTag("c", _classColorString);
-            text = text.ColorByTag("m", _methodColorString);
-            text = text.ColorByTag("b", _basicColorString);
-            text = text.ColorByTag("cc", _commentColorString);
-            text = text.ColorByTag("s", _stringColorString);
-
-            return text;
-        }
-
-        #endregion
+        button.SetMargin(0f);
+        button.SetPadding(0f);
     }
 
-    private string _stringAttr {get; set;}
+    #region Private Methods
+
+    /// <summary> Change the designed spacing characters of the text into real spacing </summary>
+    /// <param name="text"> Text to be changed </param>
+    /// <param name="forClipboard"> If the text should be prepared for the clipboard </param>
+    /// <returns> Text with corrected spacing </returns>
+    private static string ApplySpacing(string text, bool forClipboard = false)
+    {
+        var parts = text.Split("[/");
+
+        var output = new StringBuilder(parts[0]);
+
+        for (var i = 1; i < parts.Length; i++)
+        {
+            var part = parts[i];
+
+            var args = part.Split("/]");
+
+            if (!int.TryParse(args[0], out var indentLevel))
+                return text;
+
+            var count = indentLevel * (forClipboard ? 2 : 4);
+
+            var space = new StringBuilder(count);
+
+            for (var j = 0; j < count; j++)
+                space.Append(forClipboard ? "/t" : " ");
+
+            output.Append(space);
+
+            output.Append(args[1]);
+        }
+
+        return output.ToString();
+    }
+
+    /// <summary> Clean the text of all tags </summary>
+    /// <param name="text"> Text that should be cleaned </param>
+    /// <returns> Cleaned text </returns>
+    private static string CleanText(string text)
+    {
+        text = text.RemoveTag("c");
+        text = text.RemoveTag("m");
+        text = text.RemoveTag("b");
+        text = text.RemoveTag("cc");
+        text = text.RemoveTag("s");
+
+        text = text.Replace("\\n", Environment.NewLine);
+
+        return ApplySpacing(text);
+    }
+
+    /// <summary> Color the text based on the tags </summary>
+    /// <param name="text"> Text that should be colored </param>
+    /// <returns> Colored text </returns>
+    private string ColorText(string text)
+    {
+        text = text.ColorByTag("c", _classColorString);
+        text = text.ColorByTag("m", _methodColorString);
+        text = text.ColorByTag("b", _basicColorString);
+        text = text.ColorByTag("cc", _commentColorString);
+        text = text.ColorByTag("s", _stringColorString);
+
+        return text;
+    }
+
+    #endregion
 }
-
 }
 #endif

@@ -5,27 +5,12 @@ namespace MegaPint.Editor.Scripts.GUI.Factories.TextElements
 {
 
 /// <summary> Uxml factory to create a <see cref="VisualElement" /> with the settings of a primary text </summary>
-internal class Text : Label
+[UxmlElement]
+internal partial class Text : Label
 {
-    public new class UxmlFactory : UxmlFactory <Text, UxmlTraits>
+    public Text()
     {
-    }
-
-    public new class UxmlTraits : Label.UxmlTraits
-    {
-        #region Public Methods
-
-        public override void Init(
-            VisualElement element,
-            IUxmlAttributes attributes,
-            CreationContext context)
-        {
-            base.Init(element, attributes, context);
-
-            element.AddToClassList(StyleSheetClasses.Text.Color.Primary);
-        }
-
-        #endregion
+        AddToClassList(StyleSheetClasses.Text.Color.Primary);
     }
 }
 

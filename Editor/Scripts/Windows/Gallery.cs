@@ -153,8 +153,8 @@ internal class Gallery : EditorWindowBase
     {
         Texture2D image = _images[_currentImage];
         _image.style.backgroundImage = image;
-        _image.aspectRatioX = image.width;
-        _image.aspectRatioY = image.height;
+        _image.AspectRatioX = image.width;
+        _image.AspectRatioY = image.height;
         _image.FitToParent();
     }
 
