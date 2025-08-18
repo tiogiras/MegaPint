@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using UnityEngine;
 
 namespace MegaPint.Editor.Scripts.GUI.Utility
 {
