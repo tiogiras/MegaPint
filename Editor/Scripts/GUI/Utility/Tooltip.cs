@@ -77,7 +77,7 @@ internal static partial class GUIUtility
         if (contentHeight + mousePos.y > s_tooltip.parent.contentRect.height)
             targetPos -= new Vector2(0, contentHeight + 25);
 
-        s_tooltip.transform.position = targetPos;
+        s_tooltip.style.translate = targetPos;
     }
 
     #endregion

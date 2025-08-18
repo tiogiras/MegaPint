@@ -150,10 +150,7 @@ internal static class Utility
             UnityWebRequest.Get(
                 $"{ValidateTokenURL}?token={UnityWebRequest.EscapeURL(SaveValues.BasePackage.TesterToken)}");
 
-        request.SendWebRequest();
-
-        while (!request.isDone)
-            await Task.Delay(100);
+        await request.SendWebRequest();
 
         var returnValue = false;
 
