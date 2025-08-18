@@ -16,10 +16,10 @@ internal static class PackageDataScreenshot
         return new PackageData
         {
             key = PackageKey.Screenshot,
-            reqMpVersion = "1.3.0 or higher",
-            version = "1.0.2",
-            unityVersion = "2022.3.15f1",
-            lastUpdate = "03.08.2024",
+            reqMpVersion = "1.3.2 or higher",
+            version = "1.0.3",
+            unityVersion = "6000.2.0f1",
+            lastUpdate = "18.08.2025",
             name = "com.tiogiras.megapint-screenshot",
             displayName = "Screenshot",
             description =
