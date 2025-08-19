@@ -124,10 +124,6 @@
     background-color: var(--identity-color);
 }
 
-.unity-base-field__input .unity-progress-bar__progress{
-    background-color: white;
-}
-
 .unity-popup-field>.unity-base-field__label {
     color: var(--text-primary-color);
 }
@@ -302,4 +298,24 @@
 
 .unity-color-field:focus>.unity-base-field__input {
     border-color: var(--identity-color);
+}
+
+.unity-tab-view__content-viewport {
+    background-color: var(--background-secondary-color);
+}
+
+.unity-tab__header {
+    background-color: var(--background-secondary-color);
+}
+
+.unity-tab__header:hover {
+    background-color: var(--background-tertiary-color);
+}
+
+.unity-tab__header-label {
+    color: var(--text-primary-color);
+}
+
+.unity-tab__header:checked .unity-tab__header-underline {
+    background-color: var(--identity-color);
 }
