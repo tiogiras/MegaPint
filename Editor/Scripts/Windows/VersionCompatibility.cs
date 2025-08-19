@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.GUI.Utility;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements;
@@ -64,6 +63,8 @@ internal class VersionCompatibility : EditorWindowBase
     {
         titleContent.text = "Version Compatibility";
 
+        minSize = new Vector2(300, 200);
+        
         if (!SaveValues.BasePackage.ApplyPSVersionCompatibility)
             return this;
 
@@ -219,22 +220,51 @@ internal class VersionCompatibility : EditorWindowBase
             listView.bindItem = (element, i) =>
             {
                 Compatibility comp = version.compatibilities[i];
-                
+
                 element.Q <Label>().text = comp.unity_versions;
                 
-                element.Q <VisualElement>("Unknown").style.display = string.IsNullOrEmpty(comp.value) ? DisplayStyle.Flex : DisplayStyle.None;
+                element.Q <VisualElement>("Unknown").style.display = string.IsNullOrEmpty(comp.value) || (comp.value ?? "").Equals("0") ? DisplayStyle.Flex : DisplayStyle.None;
                 element.Q <VisualElement>("Verified").style.display = (comp.value ?? "").Equals("1") ? DisplayStyle.Flex : DisplayStyle.None;
                 element.Q <VisualElement>("Bugged").style.display = (comp.value ?? "").Equals("2") ? DisplayStyle.Flex : DisplayStyle.None;
-                element.Q <VisualElement>("Unusable").style.display = (comp.value ?? "").Equals("3") ? DisplayStyle.Flex : DisplayStyle.None;
+                element.Q <VisualElement>("Unusable").style.display = (comp.value ?? "").Equals("3") ?  DisplayStyle.Flex : DisplayStyle.None;
             };
 
             List <Compatibility> source = version.compatibilities;
             source.Reverse();
             
+            for (var i = source.Count - 1; i >= 0; i--)
+            {
+                Compatibility comp = version.compatibilities[i];
+                Compatibility previousComp = version.compatibilities[Mathf.Clamp(i + 1, 0, version.compatibilities.Count - 1)];
+
+                if (string.IsNullOrEmpty(comp.value) && (previousComp.value ?? "").Equals("3"))
+                    CombineCompatibilities(ref source, ref comp, ref previousComp);
+                
+                if (string.IsNullOrEmpty(comp.value) && (previousComp.value ?? "").Equals("0"))
+                    CombineCompatibilities(ref source, ref comp, ref previousComp);
+            }
+
             listView.itemsSource = source;
         }
         
         _contentPanel.style.display = DisplayStyle.Flex;
+    }
+
+    private static void CombineCompatibilities(ref List <Compatibility> source, ref Compatibility comp, ref Compatibility previousComp)
+    {
+        var comps = new List <string>();
+
+        if (comp.unity_versions.Contains(" - "))
+            comps.AddRange(comp.unity_versions.Split(" - "));
+
+        if (previousComp.unity_versions.Contains(" - "))
+            comps.AddRange(previousComp.unity_versions.Split(" - "));
+
+        comps = comps.OrderByDescending(c => c).ToList();
+
+        previousComp.unity_versions = $"{comps[^1]} - {comps[0]}";
+
+        source.RemoveAt(source.IndexOf(comp));
     }
     
     private static string GetPrefix(PackageKey package)
@@ -244,7 +274,7 @@ internal class VersionCompatibility : EditorWindowBase
                    PackageKey.Undefined => "",
                    PackageKey.AutoSave => "mp-save",
                    PackageKey.Validators => "mp-val_",
-                   PackageKey.AlphaButton => "mp-ap_",
+                   PackageKey.AlphaButton => "mp-ab_",
                    PackageKey.PlayModeStartScene => "mp-pms_",
                    PackageKey.NotePad => "mp-note_",
                    PackageKey.Screenshot => "mp-scr_",
