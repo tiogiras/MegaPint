@@ -111,8 +111,6 @@ internal class PackageTests
             Constants.BasePackage.UserInterface.PackageManagerSampleItem);
 
         TestsUtility.ValidateResource <VisualTreeAsset>(ref isValid, Constants.BasePackage.UserInterface.Gallery);
-        TestsUtility.ValidateResource <VisualTreeAsset>(ref isValid, Constants.BasePackage.UserInterface.VersionCompatibility);
-        TestsUtility.ValidateResource <VisualTreeAsset>(ref isValid, Constants.BasePackage.UserInterface.CompatibilityItem);
 
         TestsUtility.ValidateResource <VisualTreeAsset>(ref isValid, Constants.BasePackage.UserInterface.SplashScreen);
         TestsUtility.ValidateResource <VisualTreeAsset>(ref isValid, Constants.BasePackage.UserInterface.Tooltip);
@@ -135,7 +133,6 @@ internal class PackageTests
             Constants.BasePackage.UserInterface.InterfaceOverview);
 
         TestsUtility.ValidateResource <VisualTreeAsset>(ref isValid, Constants.BasePackage.UserInterface.FirstSteps);
-        TestsUtility.ValidateResource <VisualTreeAsset>(ref isValid, Constants.BasePackage.UserInterface.Spinner);
 
         Assert.IsTrue(isValid);
     }

@@ -36,12 +36,6 @@ internal class AdditionalWindows
     {
         TestsUtility.ValidateEditorWindow <Gallery>();
     }
-    
-    [Test]
-    public void VersionCompatibility()
-    {
-        TestsUtility.ValidateEditorWindow <VersionCompatibility>();
-    }
 
     [Test]
     public void InterfaceOverview()
