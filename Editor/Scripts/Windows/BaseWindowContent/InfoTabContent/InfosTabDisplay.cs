@@ -1,9 +1,14 @@
 ﻿#if UNITY_EDITOR
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.GUI.Utility;
+using MegaPint.Editor.Scripts.PackageManager.Cache;
+using MegaPint.Editor.Scripts.PackageManager.Packages;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -22,6 +27,9 @@ internal static class InfosTabDisplay
         public string title;
         public string message;
         public string type;
+        public string mpVersion;
+        public string package;
+        public string packageVersion;
     }
     
     private static string s_basePath;
@@ -181,17 +189,28 @@ internal static class InfosTabDisplay
             if (!hasTitle || !hasMessage)
                 return;
 
-            _ = PostReport(btnSend, title, message, success, fail);
+            _ = PostReport(btnSend, title, message, "Suggestion", string.Empty, string.Empty, success, fail);
         });
     }
 
-    private static async Task PostReport(Button button, TextField title, TextField message, VisualElement success, VisualElement error)
+    private static async Task PostReport(
+        Button button, 
+        TextField title, 
+        TextField message, 
+        string type, 
+        string package, 
+        string packageVersion, 
+        VisualElement success, 
+        VisualElement error)
     {
         var json = JsonUtility.ToJson(new ReportData
         {
             title = title.text,
             message = message.text,
-            type = "Suggestion"
+            type = type,
+            mpVersion = PackageCache.BasePackage.version,
+            package = string.IsNullOrEmpty(package) ? "No package specified" : package,
+            packageVersion = string.IsNullOrEmpty(packageVersion) ? "No package version specified" : packageVersion
         });
 
         var request = new UnityWebRequest("https://tiogiras.games/megapint_api/post_report.php", "POST");
@@ -247,7 +266,52 @@ internal static class InfosTabDisplay
     /// <param name="root"> Root element of the tab </param>
     private static void ReportIssueLogic(VisualElement root)
     {
-        //TODO
+        var noTitle = root.Q <Label>("NoTitle");
+        var noMessage = root.Q <Label>("NoMessage");
+
+        noTitle.style.display = DisplayStyle.None;
+        noMessage.style.display = DisplayStyle.None;
+        
+        VisualElement success = root.Q("Success");
+        VisualElement fail = root.Q("Fail");
+        
+        success.style.display = DisplayStyle.None;
+        fail.style.display = DisplayStyle.None;
+
+        var packageDropdown = root.Q <DropdownField>("Package");
+        var packageVersionDropdown = root.Q <DropdownField>("Version");
+
+        List <string> packageChoices = new ();
+
+        foreach (PackageKey value in (PackageKey[])Enum.GetValues(typeof(PackageKey)))
+        {
+            if (value is PackageKey.Undefined or PackageKey.BATesting)
+                continue;
+            
+            packageChoices.Add(PackageCache.Get(value).DisplayName);
+        }
+
+        packageDropdown.choices = packageChoices;
+        packageDropdown.index = 0;
+        
+        var btnSend = root.Q <Button>("BTN_Send");
+
+        btnSend.clickable = new Clickable(() =>
+        {
+            var title = root.Q <TextField>("Title");
+            var message = root.Q <TextField>("Message");
+            
+            var hasTitle = !string.IsNullOrEmpty(title.text);
+            var hasMessage = !string.IsNullOrEmpty(message.text);
+
+            noTitle.style.display = hasTitle ? DisplayStyle.None : DisplayStyle.Flex;
+            noMessage.style.display = hasMessage ? DisplayStyle.None : DisplayStyle.Flex;
+            
+            if (!hasTitle || !hasMessage)
+                return;
+
+            _ = PostReport(btnSend, title, message, "Issue", packageDropdown.value, packageVersionDropdown.value, success, fail);
+        });
     }
     
     /// <summary> Logic of the contact info </summary>
