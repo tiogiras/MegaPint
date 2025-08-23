@@ -72,6 +72,14 @@ internal static class PackageCache
     {
         return s_cache[key];
     }
+    
+    /// <summary> Get a <see cref="PackageKey" /> by the corresponding displayName </summary>
+    /// <param name="displayName"> DisplayName to the targeted package </param>
+    /// <returns> Found <see cref="PackageKey" /> for the given displayName </returns>
+    public static PackageKey Get(string displayName)
+    {
+        return s_cache.FirstOrDefault(kvp => kvp.Value.DisplayName.Equals(displayName)).Key;
+    }
 
     /// <summary> Get all <see cref="CachedPackage" /> </summary>
     /// <returns> All packages not regarding installation state </returns>

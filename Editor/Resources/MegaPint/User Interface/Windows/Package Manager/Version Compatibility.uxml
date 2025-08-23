@@ -8,7 +8,11 @@
         </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundPrimary>
         <MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary style="flex-grow: 1; flex-direction: column; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
             <ui:VisualElement name="Content" style="flex-grow: 1;">
-                <ui:TabView />
+                <ui:TabView style="flex-grow: 1;" />
+                <ui:VisualElement style="padding-right: 20px; padding-bottom: 20px; padding-left: 20px;">
+                    <MegaPint.Editor.Scripts.GUI.Factories.Structure.Separator />
+                    <MegaPint.Editor.Scripts.GUI.Factories.TextElements.TextSecondary text="If you encountered any issue or have a suggestion please report them via the &lt;link=&quot;report&quot;&gt;report&lt;/link&gt; function." class="mp_link" style="white-space: normal;" />
+                </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="Loading" enabled="true" style="flex-grow: 1; align-items: center; justify-content: center; display: none; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;">
                 <MegaPint.Editor.Scripts.GUI.Factories.Spinner _refresh-rate="1" style="width: 30px; height: 30px;" />

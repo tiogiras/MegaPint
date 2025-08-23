@@ -1,0 +1,59 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPint.uss?fileID=7433441132597879392&amp;guid=54dba4b7e58379b46a03a9a47e130e51&amp;type=3#MegaPint" />
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPintAttributes.uss?fileID=7433441132597879392&amp;guid=db4b42bc58d645b8ab6f8c0e914c2a0c&amp;type=3#MegaPintAttributes" />
+    <Style src="project://database/Packages/com.tiogiras.megapint/Editor/Resources/MegaPint/User%20Interface/MegaPintUnityElements.uss?fileID=7433441132597879392&amp;guid=14475de81743442dad8e397f39ea6ace&amp;type=3#MegaPintUnityElements" />
+    <MegaPint.Editor.Scripts.GUI.Factories.RootElement style="flex-grow: 1;">
+        <ui:VisualElement style="flex-grow: 1;">
+            <MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary name="Content" style="flex-grow: 1; display: flex;">
+                <ui:TabView class="unity-tab-view-custom" style="align-items: stretch;">
+                    <ui:Tab label="Report an Issue" name="Issue" style="padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;">
+                        <ui:TextField placeholder-text="What&apos;s the name of the bug?" name="Title" class="mp-text-field__with-padding" />
+                        <ui:VisualElement style="height: 20px;">
+                            <MegaPint.Editor.Scripts.GUI.Factories.TextElements.Text text="* You need to provide a title." name="NoTitle" class="mp_text-color--red" style="-unity-text-align: upper-right; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 12px; display: flex; white-space: normal;" />
+                        </ui:VisualElement>
+                        <ui:TextField placeholder-text="Describe the bug and how to reproduce ..." multiline="true" name="Message" class="mp-text-field__custom-big" />
+                        <ui:VisualElement style="height: 20px; margin-bottom: 10px;">
+                            <MegaPint.Editor.Scripts.GUI.Factories.TextElements.Text text="* You need to provide a description." name="NoMessage" class="mp_text-color--red" style="-unity-text-align: upper-right; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 12px; display: flex; white-space: normal;" />
+                        </ui:VisualElement>
+                        <MegaPint.Editor.Scripts.GUI.Factories.Structure.Separator />
+                        <ui:DropdownField label="Package" tooltip="Select the package you would like to report a bug for." name="Package" style="margin-top: 10px;" />
+                        <ui:DropdownField label="Version" tooltip="Select the version of the package you would like to report a bug for." name="Version" />
+                        <MegaPint.Editor.Scripts.GUI.Factories.TextElements.TextSecondary text="If you can please make sure to select the correct package and version to streamline the debugging process." style="white-space: normal; margin-bottom: 10px; margin-top: 10px;" />
+                        <ui:VisualElement style="flex-direction: row-reverse; margin-bottom: 10px; justify-content: flex-start; align-items: center; height: 30px;">
+                            <ui:Button text="Send" name="BTN_Send" tooltip="Send the report via an anonymous email." style="margin-left: 20px;" />
+                            <ui:VisualElement name="Success" class="mp_image-tint--green" style="background-image: resource(&apos;MegaPint/Images/Icons/Success&apos;); height: 30px; width: 30px;" />
+                            <ui:VisualElement name="Fail" class="mp_image-tint--red" style="background-image: resource(&apos;MegaPint/Images/Icons/Fail&apos;); height: 30px; width: 30px;" />
+                        </ui:VisualElement>
+                        <MegaPint.Editor.Scripts.GUI.Factories.Structure.Separator />
+                        <MegaPint.Editor.Scripts.GUI.Factories.TextElements.TextSecondary text="If you encountered any issue or bug with the Megapint collection, you can send a bug report with the form above." style="white-space: normal; margin-top: 10px;" />
+                    </ui:Tab>
+                    <ui:Tab label="Suggest a Feature" closeable="false" name="Suggestion" style="padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;">
+                        <ui:TextField placeholder-text="What do you want to suggest?" name="Title" class="mp-text-field__with-padding" />
+                        <ui:VisualElement style="height: 20px;">
+                            <MegaPint.Editor.Scripts.GUI.Factories.TextElements.Text text="* You need to provide a title." name="NoTitle" class="mp_text-color--red" style="-unity-text-align: upper-right; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 12px; display: flex; white-space: normal;" />
+                        </ui:VisualElement>
+                        <ui:TextField placeholder-text="Describe your suggestion ..." multiline="true" name="Message" class="mp-text-field__custom-big" />
+                        <ui:VisualElement style="height: 20px;">
+                            <MegaPint.Editor.Scripts.GUI.Factories.TextElements.Text text="* You need to provide a description." name="NoMessage" class="mp_text-color--red" style="-unity-text-align: upper-right; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 12px; display: flex; white-space: normal;" />
+                        </ui:VisualElement>
+                        <ui:VisualElement style="flex-direction: row-reverse; margin-bottom: 10px; justify-content: flex-start; align-items: center; height: 30px;">
+                            <ui:Button text="Send" name="BTN_Send" tooltip="Send the suggestion via an anonymous email." style="margin-left: 20px;" />
+                            <ui:VisualElement name="Success" class="mp_image-tint--green" style="background-image: resource(&apos;MegaPint/Images/Icons/Success&apos;); height: 30px; width: 30px;" />
+                            <ui:VisualElement name="Fail" class="mp_image-tint--red" style="background-image: resource(&apos;MegaPint/Images/Icons/Fail&apos;); height: 30px; width: 30px;" />
+                        </ui:VisualElement>
+                        <MegaPint.Editor.Scripts.GUI.Factories.Structure.Separator />
+                        <MegaPint.Editor.Scripts.GUI.Factories.TextElements.TextSecondary text="If you have any suggestions or ideas for new and awsome additions to the Megapint collection, you can send a suggestion with the form above." style="white-space: normal; margin-top: 10px;" />
+                    </ui:Tab>
+                </ui:TabView>
+            </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+            <MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary name="Loading" style="flex-grow: 1; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 50px; padding-right: 50px; padding-bottom: 50px; padding-left: 50px; display: none;">
+                <MegaPint.Editor.Scripts.GUI.Factories.Spinner _refresh-rate="1" style="width: 30px; height: 30px;" />
+                <MegaPint.Editor.Scripts.GUI.Factories.TextElements.TextSecondary text="Loading data..." style="margin-top: 14px;" />
+            </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+            <MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary name="Error" style="flex-grow: 1; flex-direction: column; align-items: center; justify-content: flex-start; display: none; padding-top: 50px; padding-right: 50px; padding-bottom: 50px; padding-left: 50px;">
+                <MegaPint.Editor.Scripts.GUI.Factories.TextElements.Text text="There seems to be an issue!" style="-unity-text-align: upper-center;" />
+                <MegaPint.Editor.Scripts.GUI.Factories.TextElements.TextSecondary text="Make sure you have a stable internet connection. If the issue persits this is likely due to a server issue. If so please feel free to report via the corresponding &lt;link=&quot;github&quot;&gt;github&lt;/link&gt; page." class="mp_link" style="white-space: normal; -unity-text-align: upper-center; margin-top: 20px;" />
+            </MegaPint.Editor.Scripts.GUI.Factories.Backgrounds.BackgroundTertiary>
+        </ui:VisualElement>
+    </MegaPint.Editor.Scripts.GUI.Factories.RootElement>
+</ui:UXML>
