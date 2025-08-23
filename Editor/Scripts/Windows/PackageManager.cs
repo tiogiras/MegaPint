@@ -40,6 +40,7 @@ internal class PackageManager : EditorWindowBase
     private Button _btnImport;
     private Button _btnRemove;
     private Button _btnUpdate;
+    private Button _btnVersionCompatibility;
 
     private bool _callbacksRegistered;
     private GroupBox _content;
@@ -160,6 +161,8 @@ internal class PackageManager : EditorWindowBase
         _packageSearch.RegisterValueChangedCallback(OnSearchStringChanged);
 
         _list.selectedIndicesChanged += OnUpdateRightPane;
+        
+        _btnVersionCompatibility.clicked += OnOpenVersionCompatibility;
 
         ButtonSubscriptions(true);
     }
@@ -171,6 +174,8 @@ internal class PackageManager : EditorWindowBase
         if (!_callbacksRegistered)
             return;
 
+        _btnVersionCompatibility.clicked -= OnOpenVersionCompatibility;
+        
         if (s_showWithLink == null)
         {
             _callbacksRegistered = false;
@@ -253,6 +258,7 @@ internal class PackageManager : EditorWindowBase
         _btnImport = _rightPane.Q <Button>("BTN_Import");
         _btnRemove = _rightPane.Q <Button>("BTN_Remove");
         _btnUpdate = _rightPane.Q <Button>("BTN_Update");
+        _btnVersionCompatibility = _rightPane.Q <Button>("BTN_VersionCompatibility");
 
         _packageSearch = content.Q <ToolbarSearchField>("PackageSearch");
 
@@ -395,6 +401,15 @@ internal class PackageManager : EditorWindowBase
                 $"Cannot remove the package because [{str}] depends on it!",
                 "Ok");
         }
+    }
+    
+    /// <summary> Open the <see cref="VersionCompatibility"/> winow with the current package </summary>
+    private void OnOpenVersionCompatibility()
+    {
+        GetWindow <VersionCompatibility>()?.Close();
+        
+        var compWindow = (VersionCompatibility)ContextMenu.TryOpen <VersionCompatibility>(true, new ContextMenu.MenuItemSignature());
+        compWindow.Initialize(_displayedPackages[_currentIndex]);
     }
 
     /// <summary> Called on successful remove </summary>

@@ -24,6 +24,7 @@ internal static partial class SaveValues
         private static CacheValue <bool> s_applyPSDevCenter = new() {defaultValue = true};
         private static CacheValue <bool> s_applyPSInterfaceOverview = new() {defaultValue = true};
         private static CacheValue <bool> s_applyPSPackageManager = new() {defaultValue = true};
+        private static CacheValue <bool> s_applyPSVersionCompatibility = new() {defaultValue = true};
 
         public static int EditorTheme
         {
@@ -78,6 +79,12 @@ internal static partial class SaveValues
         {
             get => ValueProperty.Get("ApplyPS_PackageManager", ref s_applyPSPackageManager, _GeneralSettings);
             set => ValueProperty.Set("ApplyPS_PackageManager", value, ref s_applyPSPackageManager, _GeneralSettings);
+        }
+        
+        public static bool ApplyPSVersionCompatibility
+        {
+            get => ValueProperty.Get("ApplyPS_VersionCompatibility", ref s_applyPSVersionCompatibility, _GeneralSettings);
+            set => ValueProperty.Set("ApplyPS_VersionCompatibility", value, ref s_applyPSVersionCompatibility, _GeneralSettings);
         }
 
         public static bool UseToolbarIcons

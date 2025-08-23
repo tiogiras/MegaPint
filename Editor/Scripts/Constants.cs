@@ -41,6 +41,12 @@ internal static partial class Constants
                 PackageManager,
                 "Dependency Item");
 
+            public static readonly string VersionCompatibility = Path.Combine(PackageManager, "Version Compatibility");
+            
+            public static readonly string CompatibilityItem = Path.Combine(
+                VersionCompatibility,
+                "Compatibility Item");
+            
             public static readonly string Gallery = Path.Combine(PackageManager, "Gallery");
             public static readonly string SplashScreen = Path.Combine(s_windowsPath, "Splash Screen");
             public static readonly string Tooltip = Path.Combine(s_windowsPath, "Tooltip");
@@ -56,6 +62,7 @@ internal static partial class Constants
             public static readonly string InterfaceOverview = Path.Combine(s_devMode, "Interface Overview");
 
             public static readonly string FirstSteps = Path.Combine(s_windowsPath, "First Steps");
+            public static readonly string Spinner = Path.Combine(s_windowsPath, "Spinner");
         }
 
         private const string ResourcesPath = "MegaPint";
