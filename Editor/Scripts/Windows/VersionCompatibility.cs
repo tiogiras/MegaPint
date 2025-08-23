@@ -106,8 +106,6 @@ internal class VersionCompatibility : EditorWindowBase
         
         root.ActivateLinks(evt =>
         {
-            Debug.Log(evt.linkText);
-            
             switch (evt.linkText)
             {
                 case "report":
