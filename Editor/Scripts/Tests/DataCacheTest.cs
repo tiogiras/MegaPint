@@ -1,5 +1,7 @@
 ﻿#if UNITY_EDITOR
 #if UNITY_INCLUDE_TESTS
+using System;
+using MegaPint.Editor.Scripts.GUI.Utility;
 using MegaPint.Editor.Scripts.PackageManager.Cache;
 using MegaPint.Editor.Scripts.PackageManager.Packages;
 using MegaPint.Editor.Scripts.Tests.Utility;
@@ -42,6 +44,20 @@ internal class DataCacheTest
         }
 
         Assert.IsTrue(isValid);
+    }
+    
+    [Test] [Order(2)]
+    public void Versions()
+    {
+        foreach (PackageKey key in (PackageKey[])Enum.GetValues(typeof(PackageKey)))
+        {
+            if (VersionUtility.Prefixes.ContainsKey(key))
+                continue;
+
+            Assert.Fail($"The PackageKey [{key}] was not defined in the version prefix dictionary");
+        }
+        
+        Assert.Pass();
     }
 
     #endregion

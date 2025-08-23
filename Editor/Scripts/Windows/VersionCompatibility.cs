@@ -104,6 +104,18 @@ internal class VersionCompatibility : EditorWindowBase
         _loadingPanel.style.display = DisplayStyle.Flex;
         _errorPanel.style.display = DisplayStyle.None;
         
+        root.ActivateLinks(evt =>
+        {
+            Debug.Log(evt.linkText);
+            
+            switch (evt.linkText)
+            {
+                case "report":
+                    ContextMenu.BasePackage.OpenBaseWindowPerLink("Info/Report");
+                    break;
+            }
+        });
+        
         RegisterCallbacks();
     }
 
@@ -149,7 +161,7 @@ internal class VersionCompatibility : EditorWindowBase
             return;
         }
         
-        request = UnityWebRequest.Get($"https://tiogiras.games/megapint_api/get_version_compatibility.php?prefix={GetPrefix(package)}");
+        request = UnityWebRequest.Get($"https://tiogiras.games/megapint_api/get_version_compatibility.php?prefix={VersionUtility.GetPrefix(package)}");
         
         operation = request.SendWebRequest();
         
@@ -197,8 +209,9 @@ internal class VersionCompatibility : EditorWindowBase
             
             var tab = new Tab(versionName);
             tabView.Add(tab);
-            
+
             tab.SetMargin(20);
+            tab.style.marginBottom = 0;
 
             var content = new VisualElement
             {
@@ -265,22 +278,6 @@ internal class VersionCompatibility : EditorWindowBase
         previousComp.unity_versions = $"{comps[^1]} - {comps[0]}";
 
         source.RemoveAt(source.IndexOf(comp));
-    }
-    
-    private static string GetPrefix(PackageKey package)
-    {
-        return package switch
-               {
-                   PackageKey.Undefined => "",
-                   PackageKey.AutoSave => "mp-save",
-                   PackageKey.Validators => "mp-val_",
-                   PackageKey.AlphaButton => "mp-ab_",
-                   PackageKey.PlayModeStartScene => "mp-pms_",
-                   PackageKey.NotePad => "mp-note_",
-                   PackageKey.Screenshot => "mp-scr_",
-                   PackageKey.BATesting => "",
-                   var _ => throw new ArgumentOutOfRangeException(nameof(package), package, null)
-               };
     }
 
     #endregion

@@ -21,7 +21,7 @@ namespace MegaPint.Editor.Scripts.Windows.BaseWindowContent.InfoTabContent
 /// <summary> Contains logic for displaying the info tabs </summary>
 internal static class InfosTabDisplay
 {
-    [System.Serializable]
+    [Serializable]
     public class ReportData
     {
         public string title;
@@ -30,6 +30,19 @@ internal static class InfosTabDisplay
         public string mpVersion;
         public string package;
         public string packageVersion;
+    }
+    
+    [Serializable]
+    public class VersionData
+    {
+        public string prefix;
+        public List<string> versions;
+    }
+    
+    [Serializable]
+    public class VersionDataWrapper
+    {
+        public List<VersionData> items;
     }
     
     private static string s_basePath;
@@ -154,7 +167,11 @@ internal static class InfosTabDisplay
         contentPanel.style.display = DisplayStyle.Flex;
         
         ReportSuggestionLogic(contentPanel.Q("Suggestion"));
-        ReportIssueLogic(contentPanel.Q("Issue"));
+
+        var versionsJson = "{ \"items\": " + request.downloadHandler.text + "}";
+        List <VersionData> versions = JsonUtility.FromJson <VersionDataWrapper>(versionsJson).items;
+        
+        ReportIssueLogic(contentPanel.Q("Issue"), versions);
     }
 
     /// <summary> Holds the logic for setting up the make a suggestion tab </summary>
@@ -189,14 +206,15 @@ internal static class InfosTabDisplay
             if (!hasTitle || !hasMessage)
                 return;
 
-            _ = PostReport(btnSend, title, message, "Suggestion", string.Empty, string.Empty, success, fail);
+            _ = PostReport(btnSend, title, message, null, "Suggestion", string.Empty, string.Empty, success, fail);
         });
     }
 
     private static async Task PostReport(
         Button button, 
         TextField title, 
-        TextField message, 
+        TextField message,
+        DropdownField packageDropdown,
         string type, 
         string package, 
         string packageVersion, 
@@ -236,6 +254,9 @@ internal static class InfosTabDisplay
         title.value = string.Empty;
         message.value = string.Empty;
         
+        if (packageDropdown != null)
+            packageDropdown.index = 0;
+        
         await FadeResult(success, button);
     }
     
@@ -261,10 +282,11 @@ internal static class InfosTabDisplay
         button.SetEnabled(true);
     }
 
-    
+
     /// <summary> Holds the logic for setting up the report an issue tab </summary>
     /// <param name="root"> Root element of the tab </param>
-    private static void ReportIssueLogic(VisualElement root)
+    /// <param name="versions"> Versions of all Megapint packages </param>
+    private static void ReportIssueLogic(VisualElement root, List <VersionData> versions)
     {
         var noTitle = root.Q <Label>("NoTitle");
         var noMessage = root.Q <Label>("NoMessage");
@@ -281,15 +303,32 @@ internal static class InfosTabDisplay
         var packageDropdown = root.Q <DropdownField>("Package");
         var packageVersionDropdown = root.Q <DropdownField>("Version");
 
-        List <string> packageChoices = new ();
-
-        foreach (PackageKey value in (PackageKey[])Enum.GetValues(typeof(PackageKey)))
+        packageDropdown.RegisterValueChangedCallback(evt =>
         {
-            if (value is PackageKey.Undefined or PackageKey.BATesting)
-                continue;
+            if (string.IsNullOrEmpty(evt.newValue))
+            {
+                packageVersionDropdown.choices = new List <string>();
+                packageVersionDropdown.index = 0;
+                
+                return;
+            }
             
-            packageChoices.Add(PackageCache.Get(value).DisplayName);
-        }
+            var prefix = VersionUtility.GetPrefixByDisplayName(evt.newValue);
+            var currentVersion = VersionUtility.GetCurrentVersionByDisplayName(evt.newValue);
+            
+            packageVersionDropdown.choices = versions.First(v => v.prefix.Equals(prefix)).versions;
+            packageVersionDropdown.index = packageVersionDropdown.choices.IndexOf(currentVersion);
+        });
+        
+        List <string> packageChoices = (
+            from value in
+                (PackageKey[])Enum.GetValues(
+                    typeof(PackageKey))
+            where value is not (PackageKey.Undefined or PackageKey.BATesting)
+            select PackageCache.Get(value).DisplayName).ToList();
+        
+        packageChoices.Insert(0, "MegaPint - BasePackage");
+        packageChoices.Insert(0, string.Empty);
 
         packageDropdown.choices = packageChoices;
         packageDropdown.index = 0;
@@ -310,7 +349,7 @@ internal static class InfosTabDisplay
             if (!hasTitle || !hasMessage)
                 return;
 
-            _ = PostReport(btnSend, title, message, "Issue", packageDropdown.value, packageVersionDropdown.value, success, fail);
+            _ = PostReport(btnSend, title, message, packageDropdown, "Issue", packageDropdown.value, packageVersionDropdown.value, success, fail);
         });
     }
     
