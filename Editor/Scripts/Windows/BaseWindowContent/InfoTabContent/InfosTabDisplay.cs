@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using MegaPint.Editor.Scripts.GUI.Utility;
@@ -78,7 +77,7 @@ internal static class InfosTabDisplay
                 break;
             
             case InfosTabData.InfoKey.Report:
-                ReportLogic(root);
+                _ = ReportLogic(root);
 
                 break;
 
