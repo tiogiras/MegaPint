@@ -27,7 +27,7 @@ internal static class InfosTabData
 
     public enum InfoKey
     {
-        Contact, UpdateBasePackage, ManagePackages, UsePackages, Shortcuts
+        Contact, Report, UpdateBasePackage, ManagePackages, UsePackages, Shortcuts
     }
 
     public static readonly List <Info> Infos = new()
@@ -72,7 +72,8 @@ internal static class InfosTabData
                 }
             }
         },
-        new Info {infoKey = InfoKey.Contact, infoName = "Contact", intendLevel = 0}
+        new Info {infoKey = InfoKey.Contact, infoName = "Contact", intendLevel = 0},
+        new Info {infoKey = InfoKey.Report, infoName = "Report", intendLevel = 0}
     };
 }
 
