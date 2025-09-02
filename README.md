@@ -1,4 +1,4 @@
-# 🍷 MegaPint of Code – Unity Editor Tools Collection
+# 🍷 MegaPint of Code - Unity Editor Tools Collection
 
 ![Unity](https://img.shields.io/badge/Unity-2022%2B-blue.svg?logo=unity)
 ![Status](https://img.shields.io/badge/status-active-success.svg)
@@ -27,7 +27,7 @@ It acts as a **hub** for all other MegaPint tools by:
 MegaPint is under **continuous development**.  
 New features, improvements and announcements are published on my official blog:
 
-🔗 [Tiogiras Games – Tool Development](https://tiogiras.games/category/tool-development)
+🔗 [Tiogiras Games - Tool Development](https://tiogiras.games/category/tool-development)
 
 **Feedback is welcome!**  
 You can share suggestions or report issues via:
