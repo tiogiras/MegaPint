@@ -1,10 +1,57 @@
-A collection of smaller packages that brings you utility functions and new systems that aim to improve your Unity Editor workflow.
+# 🍷 MegaPint of Code – Unity Editor Tools Collection
 
-All further information can be found after installing the package.
+![Unity](https://img.shields.io/badge/Unity-2022%2B-blue.svg?logo=unity)
+![Status](https://img.shields.io/badge/status-active-success.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-How to install the package into unity:
-  1. Copy the git url and open the package-manager in unity
-  2. Press the + symbol and choose Add package from git URL...
-  3. Paste the copied git url and wait until the package is installed
+## What is MegaPint?
 
-After installing the package open the main window by clicking MegaPint/Open. You will be promted with creating a settings asset. This asset is needed to hold all your settings and preferences.
+**MegaPint** is a collection of **Editor Tools for the Unity Engine**.  
+Its primary goal is to **streamline and enhance your workflow inside the Unity Editor**, so you can focus more on creating and less on repetitive tasks.
+
+## What is this Package?
+
+This repository contains the **base package** of the MegaPint collection.  
+It acts as a **hub** for all other MegaPint tools by:
+
+- Providing a shared foundation for common functionality  
+- Simplifying the installation and management of additional tools  
+- Ensuring compatibility across the entire MegaPint ecosystem  
+
+⚠️ **Important:** None of the other MegaPint packages will function without this **base package** installed.
+
+---
+
+## Active Development
+
+MegaPint is under **continuous development**.  
+New features, improvements and announcements are published on my official blog:
+
+🔗 [Tiogiras Games – Tool Development](https://tiogiras.games/category/tool-development)
+
+**Feedback is welcome!**  
+You can share suggestions or report issues via:
+- GitHub Issues  
+- The built-in MegaPint report tool  
+- Or by reaching out directly  
+
+I aim to address any problems as quickly as I can.
+
+---
+
+## ⚙️ Installation
+
+1. Copy the Git URL of this repository.  
+2. Open **Unity Package Manager** (`Window > Package Manager`).  
+3. Press the ➕ icon and choose **Add package from git URL...**  
+4. Paste the URL and wait for Unity to install the package.  
+
+After installation, open the main window via:  
+**`MegaPint > Open`**  
+
+📌 On first launch, you will be prompted to create a **Settings Asset**.  
+This asset is required to store your preferences and configuration.
+
+##
+
+Once the base package is installed, you can easily **browse, install, and manage** additional MegaPint tools directly from the **internal MegaPint Package Manager**.
