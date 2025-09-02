@@ -55,3 +55,12 @@ This asset is required to store your preferences and configuration.
 ##
 
 Once the base package is installed, you can easily **browse, install, and manage** additional MegaPint tools directly from the **internal MegaPint Package Manager**.
+
+## Available MegaPint Tools
+
+- [Validators](https://github.com/tiogiras/MegaPint-Validators) - Keep your projects inline with your standards.
+- [Screenshot](https://github.com/tiogiras/MegaPint-Screenshot) - Take marketing ready screenshots right inside the editor.
+- [Auto Save](https://github.com/tiogiras/MegaPint-AutoSave) - Automatically save your scenes.
+- [PlayMode Start Scene](https://github.com/tiogiras/MegaPint-PlayModeStartScene) - Never bother switching to the main menu ever again.
+- [Alpha Button](https://github.com/tiogiras/MegaPint-AlphaButton) - Create buttons in any shape not only rectangles.
+- [NotePad](https://github.com/tiogiras/MegaPint-NotePad) - Take notes directly where they belong.
