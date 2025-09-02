@@ -2,7 +2,7 @@
 
 ![Unity](https://img.shields.io/badge/Unity-2022%2B-blue.svg?logo=unity)
 ![Status](https://img.shields.io/badge/status-active-success.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)
 
 ## What is MegaPint?
 
