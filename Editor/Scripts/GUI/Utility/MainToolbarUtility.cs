@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.Toolbars;
@@ -38,7 +39,7 @@ internal static class MainToolbarUtility
 
             if (InvokeMainToolbarShowAll(path))
                 onSuccess?.Invoke();
-                
+
             MainToolbar.Refresh(path);
         }
     }
@@ -65,7 +66,7 @@ internal static class MainToolbarUtility
 
         if (method == null)
             return false;
-        
+
         method.Invoke(null, new object[]
         {
             prefix,
@@ -75,3 +76,4 @@ internal static class MainToolbarUtility
     }
 }
 }
+#endif
