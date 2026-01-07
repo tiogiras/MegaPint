@@ -14,10 +14,10 @@ internal static class PackageDataPlayModeStartScene
         return new PackageData
         {
             key = PackageKey.PlayModeStartScene,
-            reqMpVersion = "1.3.0 or higher",
-            version = "1.1.0",
-            unityVersion = "2022.3.15f1",
-            lastUpdate = "03.08.2024",
+            reqMpVersion = "1.3.4 or higher",
+            version = "1.1.1",
+            unityVersion = "6000.3.2f1",
+            lastUpdate = "07.01.2026",
             name = "com.tiogiras.megapint-playmodestartscene",
             displayName = "PlayMode Start Scene",
             description =
